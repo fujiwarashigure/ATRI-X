@@ -59,7 +59,7 @@ func (ReadAtrixSkillTool) Info() tool.Info {
 	return tool.NewBuilder(ReadAtrixSkillName).
 		Description("按行读取 ATRI-X 原生 Atriyph skill 的 SKILL.atriyph，返回 1-based 行号，供修改前定位使用。").
 		Source(tool.SourceBuiltin).
-		Risk(tool.RiskLow).
+		Risk(tool.RiskMedium).
 		BuildInfo()
 }
 
