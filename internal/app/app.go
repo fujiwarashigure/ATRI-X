@@ -19,7 +19,6 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/llm/openai"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/maintenance"
-	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	platformbuiltin "github.com/fujiwarashigure/ATRI-X/internal/platform/builtin"
@@ -27,9 +26,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
-	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/builtin"
-	"github.com/fujiwarashigure/ATRI-X/internal/tool/skill"
 )
 
 type Options struct {
@@ -211,12 +208,13 @@ func Run(ctx context.Context, opts Options) error {
 	if err := cronManager.RegisterHandler(elcron.UserHandlerName, cronService.Handler); err != nil {
 		return err
 	}
-	toolRegistry := tool.NewRegistry()
-	residentStore := resident.NewStore(filepath.Join(filepath.Dir(cfg.ConfigPath), "memories.toml"))
-	skillManager := skill.NewManager("", toolRegistry)
-	if err := builtin.RegisterAll(toolRegistry, builtin.RegisterOptions{ResidentMemoryStore: residentStore, SkillManager: skillManager, CronService: cronService}); err != nil {
+	toolRuntime, err := builtin.NewRuntime(builtin.RuntimeOptions{ConfigDir: filepath.Dir(cfg.ConfigPath), CronService: cronService})
+	if err != nil {
 		return err
 	}
+	toolRegistry := toolRuntime.Registry
+	residentStore := toolRuntime.ResidentMemoryStore
+	skillManager := toolRuntime.SkillManager
 	profiler.Mark("builtin tools register")
 	if err := skillManager.Reload(ctx); err != nil {
 		return err
