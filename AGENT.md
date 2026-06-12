@@ -142,6 +142,7 @@
 - `internal/tool/skill/catalog.go`：skill catalog；记录 py/go skill 的名称、详情格式、风险、根目录和 Go binary 路径，供隐藏包装工具按名称查找。
 - `internal/tool/skill/creator.go`：`create_atrix_skill` 内置元工具；用结构化参数 `name/description/risk/atriyph/go_source` 创建 ATRI-X 原生 skill，写入 `SKILL.atriyph`，可选写入 `main.go` 并编译，创建前用 Atriyph parser/linter 校验，成功后自动 reload；不再要求 LLM 拼 `SKILL.md` front matter，未提供源码时创建纯 Atriyph 文本 skill。
 - `internal/tool/skill/atriyph_modifier.go`：`read_atrix_skill`/`modify_atrix_skill` 内置元工具；按行读取 `SKILL.atriyph`，并支持完整 `content` 覆盖或 1-based 行 patch 修改，写入前严格校验 Atriyph 语法并 reload。
+- `internal/tool/skill/go_modifier.go`：隐藏 Go skill 源码维护工具；`read_go_skill` 按行读取 `main.go`，`modify_go_skill` 覆盖/patch 源码后自动 `go build` 并 reload，作为 `create_atrix_skill` 依赖 schema 暴露。
 
 - `internal/tool/skill/descriptor.go`：skill 描述对象；让 py/go skill 可被 `discover_tool` 查到详情，Atriyph skill detail 会按需前置短规则卡，Markdown skill 不注入；skill 本体不作为可直接调用 schema 暴露。
 - `internal/tool/skill/scanner.go`：skill 文件系统扫描与 reload；默认根目录为 Windows `%APPDATA%/ATRI-X/skills` 或 Linux XDG data `atri-x/skills`；Go skill 必须使用 `go/<skill>/SKILL.atriyph`，可选 binary；Python skill 优先读 `SKILL.atriyph` 覆写 Agent 可读说明，否则回退 `SKILL.md`；同步新增/删除 skill 并更新 catalog。

@@ -46,6 +46,7 @@ func (CreateAtrixSkillTool) Info() tool.Info {
 		Description("创建 ATRI-X 原生 Atriyph skill。只有可复用经验、固定流程或稳定能力才应创建 skill；一次性任务不要创建。可只写 SKILL.atriyph，也可附带 Go 源码并通过 go_skill_run 调用。").
 		Source(tool.SourceBuiltin).
 		Risk(tool.RiskHigh).
+		DependsOn(ReadGoSkillName, ModifyGoSkillName).
 		BuildInfo()
 }
 
