@@ -3,6 +3,7 @@ package builtin
 import (
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
+	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/skill"
 )
@@ -11,6 +12,7 @@ type RegisterOptions struct {
 	ResidentMemoryStore *resident.Store
 	SkillManager        *skill.Manager
 	CronService         *elcron.Service
+	ChatHistory         storage.ChatHistoryRepository
 	LongMemoryDir       string
 	ArtifactManager     *ArtifactManager
 }
@@ -41,6 +43,17 @@ func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
 	}
 	if opts.ArtifactManager != nil {
 		if err := registry.Register(NewSendFileTool(opts.ArtifactManager)); err != nil {
+			return err
+		}
+	}
+	if opts.ChatHistory != nil {
+		if err := registry.Register(NewSearchChatHistoryTool(opts.ChatHistory)); err != nil {
+			return err
+		}
+		if err := registry.Register(NewGetChatHistoryAroundTool(opts.ChatHistory)); err != nil {
+			return err
+		}
+		if err := registry.Register(NewReplyToChatHistoryMessageTool(opts.ChatHistory)); err != nil {
 			return err
 		}
 	}

@@ -5,7 +5,9 @@ providers = "providers.toml"
 state = "state.toml"
 
 [storage]
-sqlite_path = "../data/atrix_sessions.db"
+# 留空使用平台默认数据目录：Windows %APPDATA%/ATRI-X/data；Linux $XDG_DATA_HOME/atri-x 或 ~/.local/share/atri-x。
+sessions_sqlite_path = ""
+chat_history_sqlite_path = ""
 
 [runtime]
 log_level = "info"
@@ -19,8 +21,14 @@ schedule = "0 3 * * *"
 enabled = true
 schedule = "0 4 * * *"
 
+[maintenance.chat_history_cleanup]
+enabled = true
+schedule = "0 35 4 * * *"
+retention_days = 180
+
 [sandbox]
-root = "../data/sandbox"
+# 留空使用平台默认数据目录下的 sandbox 子目录。
+root = ""
 
 [artifact]
 retention_days = 7
