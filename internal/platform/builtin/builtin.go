@@ -7,6 +7,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform/cli"
 	qqonebot "github.com/fujiwarashigure/ATRI-X/internal/platform/qq-onebot"
+	qqofficial "github.com/fujiwarashigure/ATRI-X/internal/platform/qqofficial"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
@@ -21,6 +22,15 @@ func New(cfg *config.Config, store storage.Store, chatHistory storage.ChatHistor
 	bundle := Bundle{Primary: cliAdapter, Runtimes: []platform.Runtime{cliAdapter}}
 	if cfg == nil {
 		return bundle, nil
+	}
+	if raw, ok := cfg.Platform["qqofficial"]; ok {
+		adapter, err := qqofficial.NewFromPlatformConfig(raw, logger, cfg.Security.Superadmins["qqofficial"])
+		if err != nil {
+			return Bundle{}, err
+		}
+		if adapter.Enabled() {
+			bundle.Runtimes = append(bundle.Runtimes, adapter)
+		}
 	}
 	if raw, ok := cfg.Platform["qqonebot"]; ok {
 		adapter, err := qqonebot.NewFromPlatformConfig(raw, store, chatHistory, logger, cfg.Security.Superadmins["qqonebot"], cfg.Commands.Prefixes)
