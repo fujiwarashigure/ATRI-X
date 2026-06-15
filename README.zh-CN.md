@@ -19,7 +19,9 @@ ATRI-X 当前本地启动耗时约 2ms，常驻内存约 30MB。
 ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是仅暴露 `discover_tool` 和当前可用工具名称。模型需要使用工具时，先按需发现工具详情，再由 Agent 注入对应 schema。极大程度减少无效上下文开销。
 
 个人日常使用，一次请求token消耗：
+
 work模式：<1000
+
 chat模式：<500
 
 ### 2. Chat / Work 双模式
@@ -62,7 +64,7 @@ ATRI-X 内置 `create_atrix_skill` 元工具，允许 LLM 将可复用经验沉�
 
 ### 10. 多平台与富输出抽象
 
-ATRI-X 抽象了平台层与输出层，支持 CLI 和 QQ OneBot，并预留扩展其他平台的空间。
+ATRI-X 抽象了平台层与输出层，目前支持 CLI 、QQ OneBot 和 QQ Official，并预留扩展其他平台的空间。
 
 ### 11. 会话、Fork 与上下文压缩
 
