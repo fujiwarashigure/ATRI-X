@@ -69,8 +69,30 @@ ATRI-X 的工具系统内置风险等级、权限判断和高风险确认流程�
 
 ## 使用方法
 
-TODO
+开发期可以直接从源码启动 CLI：
+
+```bash
+go run ./cmd/atri-x --config config/app.toml
+```
+
+最小使用流程：
+
+1. 在 `config/providers.toml` 配置 OpenAI-compatible Provider。
+2. 通过系统环境变量或配置目录 `.env` 设置 `api_key_env` 对应的 API Key。
+3. 在 `config/state.toml` 选择默认 `chat` / `work` 模式和模型。
+4. 启动后输入 `/help` 查看命令，或直接开始对话。
+
+详细说明见：
+
+- [快速开始](docs/getting-started.md)
+- [配置说明](docs/configuration.md)
+- [命令速查](docs/commands.md)
+- [核心概念](docs/concepts.md)
+
+开发计划和任务拆分已移到 [devdocs](devdocs/)。
 
 ## 开发状态
 
-ATRI-X 仍在快速开发中，接口、配置和内部实现可能继续调整。当前更适合作为个人 Agent/机器人框架探索使用，后续会逐步完善安装说明、配置示例、插件开发文档和部署指南。
+ATRI-X 仍在快速开发中，接口、配置和内部实现可能继续调整。当前更适合作为个人 Agent/机器人框架探索使用。
+
+文档维护策略：README 只保留项目入口和最小启动路径；用户文档放在 `docs/`，开发计划和内部资料放在 `devdocs/`。新增用户可见功能时，优先更新对应专题文档。
