@@ -13,7 +13,7 @@ This document is used to get ATRI-X up and running and complete your first CLI c
 ## Get the Code
 
 ```bash
-git clone <your-atri-x-repo-url>
+git clone https://github.com/Elflare/elbot/
 cd atri-x
 ```
 
@@ -63,6 +63,7 @@ model = "deepseek-chat"
 ```
 
 If using other Providers, you need to synchronously modify `provider` and `model`.
+`default_mode` is set manually; other settings can be configured using commands in the CLI.
 
 ## Start CLI
 
@@ -84,7 +85,7 @@ Build binary:
 go build -o atri-x ./cmd/atri-x
 ```
 
-On Windows, if using Git Bash, the built file may need to be named `atri-x.exe`:
+On Windows:
 
 ```bash
 go build -o atri-x.exe ./cmd/atri-x
