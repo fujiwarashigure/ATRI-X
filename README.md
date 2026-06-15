@@ -58,9 +58,9 @@ ATRI-X has a built-in Cron Runtime and an LLM-orchestratable Cron service. Stand
 
 ATRI-X introduces Atriyph Task Notation to describe LLM Cron and native Skills. The goal of Atriyph is to reduce ambiguity in natural language task descriptions, using shorter and more stable structures to express inputs, outputs, steps, conditions, and constraints. Compared to arbitrary Markdown, Atriyph is better suited for reusing and passing tasks between LLMs, and is also easier for linting, auditing, and subsequent tooling.
 
-### 8. ATRI-X Skills that can be created by LLMs
+### 8. ATRI-X Skills that can be created by LLM
 
-ATRI-X has a built-in `create_atrix_skill` meta-tool, allowing LLMs to crystallize reusable experience into ATRI-X Skills.
+ATRI-X features a built-in `create_atrix_skill` meta-tool, allowing LLMs to crystallize reusable experience into ATRI-X Skills.
 
 ### 9. Compatible with Internet Python Skills
 
