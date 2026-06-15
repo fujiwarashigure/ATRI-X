@@ -9,13 +9,18 @@ ATRI-X 是一个使用 Go 编写的轻量级 Agent/Chatbot 框架，目标是在
 
 ### 0. 轻量高效的 Go 实现
 
-ATRI-X 当前本地启动耗时约 2ms，常驻内存约 20MB。
+ATRI-X 当前本地启动耗时约 2ms，常驻内存约 30MB。
 
 ### 1. 极致节省 Token 的工具发现机制
 
-研究表明，许多普通用户仍主要将 ChatGPT 类产品用作更高级的搜索引擎、写作助手和倾听对象，频繁工具调用并不是所有对话的常态。ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是仅暴露 `discover_tool` 和当前可用工具名称。模型需要使用工具时，先按需发现工具详情，再由 Agent 注入对应 schema。这种设计减少了绝大多数普通聊天中的无效上下文开销。
-
+研究表明，许多普通用户仍主要将 LLM 类产品用作更高级的搜索引擎、写作助手和倾听对象，频繁工具调用并不是所有对话的常态。
 参考：Chatterji et al., *How People Use ChatGPT*, NBER, 2025；Yan et al., *ShareChat: A Dataset of Chatbot Conversations in the Wild*, arXiv:2512.17843, 2025。
+
+ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是仅暴露 `discover_tool` 和当前可用工具名称。模型需要使用工具时，先按需发现工具详情，再由 Agent 注入对应 schema。极大程度减少无效上下文开销。
+
+个人日常使用，一次请求token消耗：
+work模式：<1000
+chat模式：<500
 
 ### 2. Chat / Work 双模式
 
