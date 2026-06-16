@@ -12,6 +12,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
+	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -78,7 +79,7 @@ func (a *Agent) executeToolCalls(ctx context.Context, session *storage.Session, 
 		if a.isCLIContext(ctx) || strings.TrimSpace(assistantText) == "" {
 			a.sendPreview(ctx, fmt.Sprintf("正在调用 %s：%s", call.Name, previewArguments(call.Arguments)))
 		}
-		_, toolCtx, done, err := a.requests.Start(ctx, request.StartRequest{SessionID: sessionID, Kind: request.KindTool, Label: call.Name})
+		toolReq, toolCtx, done, err := a.requests.Start(ctx, request.StartRequest{SessionID: sessionID, Kind: request.KindTool, Label: call.Name})
 		if err != nil {
 			content := fmt.Sprintf("tool call %s failed: %v", call.Name, err)
 			message := toolMessage(call.Name, call.ID, content)
@@ -87,6 +88,7 @@ func (a *Agent) executeToolCalls(ctx context.Context, session *storage.Session, 
 			transcript = append(transcript, toolResultStorageMessage(sessionID, message))
 			continue
 		}
+		a.updateRuntimeStatus(ctx, runtimestatus.Snapshot{SessionID: sessionID, Phase: runtimestatus.PhaseTool, RequestID: toolReq.ID, Kind: request.KindTool, Label: call.Name, ToolName: call.Name, StageStartedAt: toolReq.StartedAt})
 		if allowed, extra, message, stopped := a.confirmToolCallIfNeeded(ctx, sessionID, call); !allowed {
 			done()
 			if stopped {

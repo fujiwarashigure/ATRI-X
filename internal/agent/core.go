@@ -20,6 +20,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
+	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
@@ -62,6 +63,8 @@ type Agent struct {
 	namingModel                 config.ModelSelection
 	usageMu                     sync.Mutex
 	lastUsage                   map[string]*llm.Usage
+	statusMu                    sync.Mutex
+	runtimeStatus               map[string]runtimestatus.Snapshot
 	pendingCompact              map[string]bool
 	lastSessionIDs              []string
 	sessionListPageSize         int
@@ -134,6 +137,7 @@ func NewWithRequestConfig(p platform.PlatformAdapter, client llm.LLM, providerNa
 		compactModel:           config.ModelSelection{},
 		namingModel:            namingSelection,
 		lastUsage:              map[string]*llm.Usage{},
+		runtimeStatus:          map[string]runtimestatus.Snapshot{},
 		pendingCompact:         map[string]bool{},
 		autoConfirmSession:     map[string]bool{},
 		autoConfirmTools:       map[string]map[string]bool{},
