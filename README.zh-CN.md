@@ -78,11 +78,22 @@ ATRI-X 的工具系统内置风险等级、权限判断和高风险确认流程�
 
 ## 使用方法
 
-开发期可以直接从源码启动 CLI：
+开发期可以直接从源码启动：
 
 ```bash
 go run ./cmd/atri-x --config config/app.toml
 ```
+
+常用启动方式：
+
+```bash
+atri-x              # 自动模式：Linux 检测到 service 时进入本地 CLI-only，否则完整前台启动
+atri-x run          # 完整前台：CLI + 已启用平台 + Cron
+atri-x cli          # 本地 CLI-only：只启动 CLI，不启动平台和 Cron
+atri-x service run  # Linux/headless 服务模式：不启动 CLI，启动已启用平台和 Cron
+```
+
+Shell 补全可通过 `atri-x completion <shell>` 生成，支持 `bash`、`zsh`、`fish`、`nushell`、`powershell` 和 `auto`。
 
 最小使用流程：
 
