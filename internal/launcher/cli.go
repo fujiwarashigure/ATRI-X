@@ -77,7 +77,7 @@ func ParseArgs(args []string) (Options, error) {
 		opts.Mode = app.RunModeService
 	case "completion":
 		if len(positionals) != 2 || !SupportedCompletionShell(positionals[1]) {
-			return Options{}, fmt.Errorf("usage: atri-x completion [auto|bash|zsh|fish|powershell]")
+			return Options{}, fmt.Errorf("usage: atri-x completion [auto|bash|zsh|fish|nushell|powershell]")
 		}
 		opts.Command = CommandCompletion
 		opts.Completion = positionals[1]
@@ -89,7 +89,7 @@ func ParseArgs(args []string) (Options, error) {
 
 func SupportedCompletionShell(shell string) bool {
 	switch shell {
-	case "auto", "bash", "zsh", "fish", "powershell", "pwsh":
+	case "auto", "bash", "zsh", "fish", "nu", "nushell", "powershell", "pwsh":
 		return true
 	default:
 		return false
@@ -102,7 +102,7 @@ func WriteUsage(w io.Writer) {
   atri-x run [--config path]
   atri-x cli [--config path]
   atri-x service run [--config path]
-  atri-x completion [auto|bash|zsh|fish|powershell]
+  atri-x completion [auto|bash|zsh|fish|nushell|powershell]
 
 Commands:
   run          Run full foreground mode: CLI plus enabled platforms and cron.
@@ -128,10 +128,12 @@ func WriteCompletion(w io.Writer, shell string) error {
 		writeZshCompletion(w)
 	case "fish":
 		writeFishCompletion(w)
+	case "nu", "nushell":
+		writeNushellCompletion(w)
 	case "powershell", "pwsh":
 		writePowerShellCompletion(w)
 	default:
-		return fmt.Errorf("cannot detect shell; specify bash, zsh, fish, or powershell")
+		return fmt.Errorf("cannot detect shell; specify bash, zsh, fish, nushell, or powershell")
 	}
 	return nil
 }
@@ -141,6 +143,8 @@ func detectCompletionShell() string {
 	switch {
 	case strings.Contains(shell, "fish"):
 		return "fish"
+	case strings.Contains(shell, "nu"):
+		return "nushell"
 	case strings.Contains(shell, "zsh"):
 		return "zsh"
 	case strings.Contains(shell, "bash"):
@@ -166,7 +170,7 @@ _atrix_completion() {
       return 0
       ;;
     completion)
-      COMPREPLY=( $(compgen -W "auto bash zsh fish powershell" -- "$cur") )
+      COMPREPLY=( $(compgen -W "auto bash zsh fish nushell powershell" -- "$cur") )
       return 0
       ;;
     service)
@@ -194,7 +198,7 @@ case $words[2] in
     _values 'service command' run
     ;;
   completion)
-    _values 'shell' auto bash zsh fish powershell
+    _values 'shell' auto bash zsh fish nushell powershell
     ;;
 esac
 `)
@@ -207,10 +211,49 @@ complete -c atri-x -n "__fish_use_subcommand" -a "cli" -d "Run local CLI-only mo
 complete -c atri-x -n "__fish_use_subcommand" -a "service" -d "Service commands"
 complete -c atri-x -n "__fish_use_subcommand" -a "completion" -d "Generate shell completions"
 complete -c atri-x -n "__fish_seen_subcommand_from service" -a "run" -d "Run headless service mode"
-complete -c atri-x -n "__fish_seen_subcommand_from completion" -a "auto bash zsh fish powershell"
+complete -c atri-x -n "__fish_seen_subcommand_from completion" -a "auto bash zsh fish nushell powershell"
 complete -c atri-x -l config -r -d "Path to TOML config file"
 complete -c atri-x -s h -l help -d "Show help"
 complete -c atri-x -l version -d "Show version"
+`)
+}
+
+func writeNushellCompletion(w io.Writer) {
+	fmt.Fprint(w, `def "nu-complete atri-x commands" [] {
+  [
+    {value: "run", description: "Run full foreground mode"}
+    {value: "cli", description: "Run local CLI-only mode"}
+    {value: "service", description: "Service commands"}
+    {value: "completion", description: "Generate shell completions"}
+  ]
+}
+
+def "nu-complete atri-x service" [] {
+  [{value: "run", description: "Run headless service mode"}]
+}
+
+def "nu-complete atri-x completion" [] {
+  [auto bash zsh fish nushell powershell]
+}
+
+export extern "atri-x" [
+  command?: string@"nu-complete atri-x commands"
+  subcommand?: string
+  --config: path
+  --help(-h)
+  --version
+]
+
+export extern "atri-x service" [
+  command?: string@"nu-complete atri-x service"
+  --config: path
+  --help(-h)
+  --version
+]
+
+export extern "atri-x completion" [
+  shell?: string@"nu-complete atri-x completion"
+]
 `)
 }
 
