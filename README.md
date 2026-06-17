@@ -56,25 +56,33 @@ ATRI-X has a built-in Cron Runtime and an LLM-orchestratable Cron service. Stand
 
 ### 7. Atriyph: Task Representation for LLM Collaboration
 
-ATRI-X introduces Atriyph Task Notation to describe LLM Cron and native Skills. The goal of Atriyph is to reduce ambiguity in natural language task descriptions, using shorter and more stable structures to express inputs, outputs, steps, conditions, and constraints. Compared to arbitrary Markdown, Atriyph is better suited for reusing and passing tasks between LLMs, and is also easier for linting, auditing, and subsequent tooling.
+ATRI-X introduces Atriyph Task Notation (Task Notation) to describe LLM Cron and native skills. The goal of Atriyph is to reduce ambiguity in natural language task descriptions, using shorter and more stable structures to express inputs, outputs, steps, conditions, and constraints. Compared to arbitrary Markdown, Atriyph is better suited for reusing and passing tasks between LLMs, and is also easier for linting, auditing, and subsequent tooling.
 
-### 8. ATRI-X Skills that can be created by LLM
+### 8. Atrinis / Atriwisp / Atriena: Let ATRI-X Control Everything
+
+Traditional Agents usually only wait for user input; Cron can only respond to time. Atrinis provides ATRI-X with another trigger method: external events.
+
+Atrinis is the listening hub of ATRI-X; Atriwisp consists of listeners distributed everywhere, responsible for observing the world.
+
+Server changes, RSS updates, Webhook alerts, log changes, game events, local scripts, or even other computing devices can all be converted by Atriwisp into Atriena events and sent to Atrinis. ATRI-X then centrally decides whether to record, call an LLM for analysis, or execute background tasks, and finally notify the user.
+
+### 9. ATRI-X Skills that can be created by LLMs
 
 ATRI-X features a built-in `create_atrix_skill` meta-tool, allowing LLMs to crystallize reusable experience into ATRI-X Skills.
 
-### 9. Compatible with Internet Python Skills
+### 10. Compatible with Internet Python Skills
 
 In addition to native ATRI-X Skills, ATRI-X is also compatible with common external Python skill structures. Automatically scan the `SKILL.md` or `SKILL.atriyph` of Python skills, read the name, description, applicable scenarios, and risk level, and execute them through hidden wrapper tools.
 
-### 10. Multi-platform and Rich Output Abstraction
+### 11. Multi-platform and Rich Output Abstraction
 
 ATRI-X abstracts the platform and output layers, currently supporting CLI, QQ OneBot, and QQ Official, and reserves space for extending to other platforms.
 
-### 11. Session, Fork, and Context Compaction
+### 12. Session, Fork and Context Compaction
 
 ATRI-X has a built-in persistent Session service, supporting Session recovery, archiving, pinning, forking, deletion, paginated viewing, and platform isolation.
 
-### 12. Security Policies and Risk Confirmation
+### 13. Security Policy and Risk Confirmation
 
 ATRI-X's tool system has built-in risk levels, permission judgments, and high-risk confirmation processes. Regular users can only discover and call tools within the low-risk range, and superadmins also need confirmation when calling high-risk tools.
 
@@ -110,6 +118,8 @@ For detailed instructions, see:
 - [Configuration Guide](docs.en/configuration.md)
 - [Command Cheat Sheet](docs.en/commands.md)
 - [Core Concepts](docs.en/concepts.md)
+- [Atrinis Listening Hub](docs.en/atrinis.md)
+- [Atrinis Configuration and Usage](docs.en/atrinis-usage.md)
 
 Development plans and task breakdowns have been moved to [devdocs](devdocs/).
 
