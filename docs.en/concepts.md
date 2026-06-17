@@ -200,6 +200,14 @@ ATRI-X includes two layers of Cron capabilities:
 
 Background Cron has independent Session and sandbox constraints. LLM Cron can pre-inject tool names, allowing the model to stably use specified tools in background tasks.
 
+## Atrinis / Atriwisp / Atriena
+
+Atrinis is ATRI-X's listening hub, used for receiving external events. Atriwisp is an external sub-listener responsible for observing the external world, such as servers, Webhooks, RSS, logs, or script outputs. Atriena is the event protocol used by Atriwisp to deliver events to Atrinis.
+
+Their division of labor is: Atriwisp observes everything, Atrinis manages everything, and ATRI-X controls the final execution and delivery.
+
+Atrinis does not serve as a chat platform, nor does it replace Cron. Cron handles "time-triggered" tasks, while Atrinis handles "external event-triggered" tasks. For a full introduction, see [Atrinis Listening Hub](atrinis.md); for configuration and request examples, see [Atrinis Configuration and Usage](atrinis-usage.md).
+
 ## Skill and Atriyph
 
 ATRI-X supports Skill extensions and introduces Atriyph Task Notation to describe reusable tasks.
