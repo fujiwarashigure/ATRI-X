@@ -9,7 +9,7 @@ ATRI-X 是一个使用 Go 编写的轻量级 Agent/Chatbot 框架，目标是在
 
 ### 0. 轻量高效的 Go 实现
 
-ATRI-X 当前本地启动耗时约 2ms（N5105，sata固态），常驻内存约 30MB。
+ATRI-X 当前本地启动耗时 <10ms（N5105，sata固态），常驻内存约 30MB。
 
 ### 1. 极致节省 Token 的工具发现机制
 
