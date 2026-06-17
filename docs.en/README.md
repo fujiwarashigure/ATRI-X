@@ -10,6 +10,8 @@ This is the user-facing ATRI-X documentation. Development plans, task breakdowns
 2. [Configuration Guide](configuration.md): Learn about configuration files, path rules, Providers, runtime data, and plugin directories.
 3. [Command Cheat Sheet](commands.md): View common slash commands and Session management methods.
 4. [Core Concepts](concepts.md): Understand Chat / Work modes, tool discovery, Session, Hook, Cron, Skill, and security policies.
+5. [Atrinis Listening Hub](atrinis.md): Learn about Atrinis, Atriwisp, Atriena, and external event access.
+6. [Atrinis Configuration and Usage](atrinis-usage.md): Enable Atrinis, configure Atriwisp, and deliver events using Atriena.
 
 ## Documentation Maintenance Conventions
 
