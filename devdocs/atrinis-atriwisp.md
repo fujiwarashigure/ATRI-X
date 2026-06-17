@@ -316,7 +316,7 @@ model = "gpt-4.1"
 
 Atrinis 不应直接把 Atriwisp 工具和 ATRI-X 内置工具混在同一个扁平列表里，也不应让 LLM 感知工具来自哪里。LLM 只接触被注入到当前上下文中的工具描述和少量运行态信息；它不知道这些工具来自 CLI、消息平台、cron、Atriwisp 还是其他 transport。
 
-建议引入专门的 `ToolRun` 中间层或 manager，位于 LLM 与具体工具执行器之间，职责包括：
+已新增 `internal/toolrun` 作为 ToolRun 中间层地基，位于 LLM/Agent 与具体工具执行器之间。ToolRun 不替代 Tool Runtime；它负责当前 session 的工具视图、缓存、解析、权限风险、确认、执行编排、记录和失效提示。职责包括：
 
 - 聚合当前上下文可见的工具。
 - 区分 ATRI-X 内置工具命名空间与 Atriwisp 工具命名空间。
@@ -326,8 +326,9 @@ Atrinis 不应直接把 Atriwisp 工具和 ATRI-X 内置工具混在同一个扁
 
 推荐的命名空间策略：
 
-- `builtin.*` 或空前缀：ATRI-X 内置工具。
-- `atriwisp.<name>`：Atriwisp 注入工具。
+- 无前缀：ATRI-X native 工具，包括 builtin、skill、隐藏包装工具和未来 MCP 等所有非 Atriwisp 工具。
+- `atriwisp.<atriwisp-name>.<tool-name>`：Atriwisp 通过 Atriena 协议显式注入的工具。
+- Atriwisp 工具不能通过 `discover_tool` 发现，必须由协议 payload 注入并缓存到对应 session。
 - 后续若有平台私有工具，可再独立 namespace，但不要和业务工具共享一个无前缀平面。
 
 工具路由原则：
@@ -387,10 +388,10 @@ data/sandbox/atrinis/<atriwisp-name>/
 
 风险策略建议：
 
-- critical 风险后台直接拒绝。
-- shell 等文件/命令工具只能在 sandbox 约束下自动执行低风险或中风险操作。
-- 高风险工具首期不自动确认，除非后续增加明确后台自动确认配置。
-- 工具结果、拒绝原因和风险等级继续进入工具调用记录与审计。
+- native 工具继续使用 ATRI-X 的 Security Policy、风险评估、高风险确认和 cron 后台 sandbox 特例。
+- Atriwisp 工具在 Atrinis 侧按无人值守外部工具处理，默认视为 low，不触发 ATRI-X 高风险确认；执行影响由 Atriwisp 所在环境自行负责。
+- 恢复历史 Atriwisp session 时，即使原 Atriwisp 工具已不可用，ToolRun 仍保留缓存 schema；若 LLM 再调用，应返回工具已失效或当前不可用提示。
+- 工具结果、拒绝原因、风险等级、source 和 canonical name 继续进入工具调用记录与审计。
 
 ## 存储设计
 
