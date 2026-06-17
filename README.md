@@ -64,7 +64,7 @@ Traditional Agents usually only wait for user input; Cron can only respond to ti
 
 Atrinis is the listening hub of ATRI-X; Atriwisp consists of listeners distributed everywhere, responsible for observing the world.
 
-Server changes, RSS updates, Webhook alerts, log changes, game events, local scripts, or even other computing devices can all be converted by Atriwisp into Atriena events and sent to Atrinis. ATRI-X then centrally decides whether to record, call an LLM for analysis, or execute background tasks, and finally notify the user.
+Server changes, RSS updates, Webhook alerts, log changes, game events, local scripts, and even other computing devices can all be sent to Atrinis. ATRI-X then centrally decides whether to record, call an LLM for analysis, or execute background tasks, and finally notify the user.
 
 ### 9. ATRI-X Skills that can be created by LLMs
 
