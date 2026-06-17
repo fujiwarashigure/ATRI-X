@@ -82,10 +82,10 @@ go run ./cmd/atri-x --config config/app.toml
 Common running modes:
 
 ```bash
-atri-x              # 自动模式
-atri-x run          # 完整前台：CLI + 已启用平台 + Cron
-atri-x cli          # 本地 CLI-only：只启动 CLI，不启动平台和 Cron
-atri-x service run  # Linux/headless 服务模式：不启动 CLI，启动已启用平台和 Cron
+atri-x              # Automatic mode
+atri-x run          # Full foreground: CLI + enabled platforms + Cron
+atri-x cli          # Local CLI-only: start CLI only, without platforms and Cron
+atri-x service run  # Linux/headless service mode: do not start CLI, start enabled platforms and Cron
 ```
 
 In automatic mode, if Linux detects that the current user already has `atri-x service run` running, it will enter local CLI-only mode to avoid duplicate platform connections or duplicate Cron executions; Otherwise, it will enter full foreground mode. Windows does not perform service detection and starts in full foreground mode by default.
