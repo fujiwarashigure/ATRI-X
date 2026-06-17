@@ -60,9 +60,9 @@ ATRI-X 引入 Atriyph Task Notation（任务表示法），用于描述 LLM Cron
 
 传统 Agent 通常只会等待用户输入；Cron 只能响应时间。Atrinis 让 ATRI-X 多了一种触发方式：外部事件。
 
-Atrinis 是 ATRI-X 的监听枢纽；Atriwisp 是分布在各处的监听器，负责观世界。
+Atrinis 是 ATRI-X 的监听枢纽；Atriwisp 是分布在各处的监听器，负责观测世界。
 
-服务器变化、RSS 更新、Webhook 告警、日志变化、游戏事件、本地脚本甚至其他计算机设备，都可以由 Atriwisp 转成 Atriena 事件送入 Atrinis。ATRI-X 再统一决定是否记录、调用 LLM 分析或执行后台任务，最终通知用户。
+服务器变化、RSS 更新、Webhook 告警、日志变化、游戏事件、本地脚本甚至其他计算机设备，都可以送入 Atrinis。ATRI-X 再统一决定是否记录、调用 LLM 分析或执行后台任务，最终通知用户。
 
 ### 9. 可由 LLM 创建的 ATRI-X Skill
 
