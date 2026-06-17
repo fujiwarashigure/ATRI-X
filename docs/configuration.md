@@ -201,6 +201,44 @@ cli = ["local"]
 - 超级管理员调用高风险工具时也需要确认。
 - CLI 默认本地用户 `local` 是超级管理员。
 
+## Atrinis 监听中台
+
+Atrinis 默认关闭。启用后，ATRI-X 会启动本地 HTTP ingress，接收 Atriwisp 按 Atriena 协议投递的事件。
+
+```toml
+[atrinis]
+enabled = true
+
+[atrinis.http]
+addr = "127.0.0.1:32170"
+max_body_bytes = 1048576
+queue_size = 128
+workers = 2
+
+[atrinis.tokens.home]
+token_env = ["ATRINIS_HOME_TOKEN", "ATRINIS_HOME_TOKEN_ALT"]
+
+[atrinis.delivery]
+default_platforms = ["cli"]
+allow_superadmins = true
+
+[atrinis.atriwisps.server-watchdog]
+enabled = true
+allowed_tokens = ["home"]
+
+[atrinis.atriwisps.server-watchdog.delivery]
+default_platforms = ["cli"]
+allow_superadmins = true
+```
+
+说明：
+
+- `atrinis.atriwisps` 可不配置；留空表示当前不启用任何 Atriwisp。
+- token 从系统环境变量或配置目录 `.env` 读取，日志只记录 token name，不记录 token 原文。
+- `token_env` 支持写成列表，按顺序尝试多个环境变量名；适合临时切换 token 或做多环境兼容。
+- 首期支持 `record` 和 `direct` 模式；`llm` 模式预留给后续 background runner。
+- `direct` 模式只支持按 Atrinis 裁决后的平台发送给 superadmins，不支持任意 user/group 目标。
+
 ## 平台配置
 
 CLI 默认启用：

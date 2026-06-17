@@ -39,6 +39,7 @@ type Config struct {
 	Sandbox             SandboxConfig             `toml:"sandbox"`
 	Artifact            ArtifactConfig            `toml:"artifact"`
 	Platform            PlatformConfig            `toml:"platform"`
+	Atrinis               AtrinisConfig               `toml:"atrinis"`
 	Soul                SoulConfig                `toml:"soul"`
 	ConfigPath          string                    `toml:"-"`
 	ProvidersConfigPath string                    `toml:"-"`
@@ -153,6 +154,36 @@ type ArtifactConfig struct {
 }
 
 type PlatformConfig map[string]map[string]any
+
+type AtrinisConfig struct {
+	Enabled  bool                         `toml:"enabled"`
+	HTTP     AtrinisHTTPConfig              `toml:"http"`
+	Tokens   map[string]AtrinisTokenConfig  `toml:"tokens"`
+	Delivery AtrinisDeliveryConfig          `toml:"delivery"`
+	Atriwisps  map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
+}
+
+type AtrinisHTTPConfig struct {
+	Addr         string `toml:"addr"`
+	MaxBodyBytes int64  `toml:"max_body_bytes"`
+	QueueSize    int    `toml:"queue_size"`
+	Workers      int    `toml:"workers"`
+}
+
+type AtrinisTokenConfig struct {
+	TokenEnv []string `toml:"token_env"`
+}
+
+type AtrinisDeliveryConfig struct {
+	DefaultPlatforms []string `toml:"default_platforms"`
+	AllowSuperadmins bool     `toml:"allow_superadmins"`
+}
+
+type AtrinisAtriwispConfig struct {
+	Enabled       bool                `toml:"enabled"`
+	AllowedTokens []string            `toml:"allowed_tokens"`
+	Delivery      AtrinisDeliveryConfig `toml:"delivery"`
+}
 
 type CronTaskConfig struct {
 	Enabled  bool   `toml:"enabled"`
@@ -433,6 +464,24 @@ func (c *Config) applyAppDefaults() {
 	}
 	if c.Platform == nil {
 		c.Platform = PlatformConfig{}
+	}
+	if c.Atrinis.HTTP.Addr == "" {
+		c.Atrinis.HTTP.Addr = "127.0.0.1:32170"
+	}
+	if c.Atrinis.HTTP.MaxBodyBytes <= 0 {
+		c.Atrinis.HTTP.MaxBodyBytes = 1024 * 1024
+	}
+	if c.Atrinis.HTTP.QueueSize <= 0 {
+		c.Atrinis.HTTP.QueueSize = 128
+	}
+	if c.Atrinis.HTTP.Workers <= 0 {
+		c.Atrinis.HTTP.Workers = 2
+	}
+	if c.Atrinis.Tokens == nil {
+		c.Atrinis.Tokens = map[string]AtrinisTokenConfig{}
+	}
+	if c.Atrinis.Atriwisps == nil {
+		c.Atrinis.Atriwisps = map[string]AtrinisAtriwispConfig{}
 	}
 	if c.Session.NonSuperadminIdleTTLMinutes < 0 {
 		c.Session.NonSuperadminIdleTTLMinutes = 0

@@ -188,6 +188,40 @@ SET platform = 'qqonebot'
 WHERE platform = 'qq';
 `,
 	},
+	{
+		version: 7,
+		name:    "create_atrinis_events",
+		sql: `
+CREATE TABLE atrinis_events (
+    id TEXT PRIMARY KEY,
+    event_key TEXT NOT NULL,
+    token_name TEXT NOT NULL,
+    atriwisp_name TEXT NOT NULL,
+    source TEXT NOT NULL,
+    source_id TEXT NOT NULL,
+    tags TEXT NULL,
+    mode TEXT NOT NULL,
+    model_slot TEXT NULL,
+    content_hash TEXT NOT NULL,
+    requested_targets TEXT NULL,
+    resolved_targets TEXT NULL,
+    status TEXT NOT NULL,
+    session_id TEXT NULL,
+    result TEXT NULL,
+    error TEXT NULL,
+    received_at TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(atriwisp_name, source, source_id)
+);
+
+CREATE INDEX idx_atrinis_events_status_updated_at
+ON atrinis_events(status, updated_at);
+
+CREATE INDEX idx_atrinis_events_atriwisp_received_at
+ON atrinis_events(atriwisp_name, received_at);
+`,
+	},
 }
 
 func runMigrations(ctx context.Context, db *sql.DB) error {

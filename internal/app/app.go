@@ -16,6 +16,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/completion"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
+	"github.com/fujiwarashigure/ATRI-X/internal/atrinis"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	hookbuiltin "github.com/fujiwarashigure/ATRI-X/internal/hook/builtin"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm/openai"
@@ -317,6 +318,31 @@ func Run(ctx context.Context, opts Options) error {
 	}
 	profiler.Mark("agent init")
 
+	if cfg.Atrinis.Enabled {
+		atrinisTokens, err := resolveAtrinisTokens(cfg)
+		if err != nil {
+			return err
+		}
+		atrinisService, err := atrinis.NewService(atrinis.Options{
+			Config: cfg.Atrinis,
+			Tokens: atrinisTokens,
+			Store:  store,
+			Logger: logs.Atrinis(),
+			Audit: func(event string, attrs ...any) {
+				logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
+			},
+			Send: func(ctx context.Context, target output.Target, out output.Output) error {
+				_, err := agt.SendNoticeOutput(ctx, target, out)
+				return err
+			},
+		})
+		if err != nil {
+			return err
+		}
+		platforms.Runtimes = append(platforms.Runtimes, atrinisRuntimeAdapter{runtime: atrinis.NewRuntime(cfg.Atrinis.HTTP, atrinisService)})
+		profiler.Mark("atrinis init")
+	}
+
 	registerCompletionPlatforms(agt, platforms.Runtimes)
 	registerPlatformHooks(agt, platforms.Runtimes)
 	profiler.Mark("platform hooks")
@@ -333,6 +359,24 @@ func Run(ctx context.Context, opts Options) error {
 }
 
 type platformRuntime = platform.Runtime
+
+type atrinisRuntimeAdapter struct {
+	runtime *atrinis.Runtime
+}
+
+func (a atrinisRuntimeAdapter) Name() string { return "atrinis" }
+
+func (a atrinisRuntimeAdapter) Run(ctx context.Context, handler platform.PlatformHandler) error {
+	return a.runtime.Run(ctx)
+}
+
+func (a atrinisRuntimeAdapter) SendChat(ctx context.Context, out output.Output) (platform.Receipt, error) {
+	return platform.Receipt{}, fmt.Errorf("atrinis cannot send chat output")
+}
+
+func (a atrinisRuntimeAdapter) SendNotice(ctx context.Context, target output.Target, out output.Output) (platform.Receipt, error) {
+	return platform.Receipt{}, fmt.Errorf("atrinis cannot send notice output")
+}
 
 type platformLifecycle interface {
 	StopAppOnExit() bool
@@ -456,6 +500,32 @@ func runPlatforms(ctx context.Context, handler platform.PlatformHandler, logger 
 	case <-done:
 		return nil
 	}
+}
+
+func resolveAtrinisTokens(cfg *config.Config) (map[string]string, error) {
+	out := map[string]string{}
+	configDir := filepath.Dir(cfg.ConfigPath)
+	for name, tokenCfg := range cfg.Atrinis.Tokens {
+		name = strings.TrimSpace(name)
+		if name == "" {
+			continue
+		}
+		for _, envName := range tokenCfg.TokenEnv {
+			envName = strings.TrimSpace(envName)
+			if envName == "" {
+				continue
+			}
+			value, ok, err := config.ConfigEnv(envName, configDir)
+			if err != nil {
+				return nil, fmt.Errorf("resolve atrinis token %q from %s: %w", name, envName, err)
+			}
+			if ok && strings.TrimSpace(value) != "" {
+				out[name] = strings.TrimSpace(value)
+				break
+			}
+		}
+	}
+	return out, nil
 }
 
 func enabledCronPlatforms(cfg *config.Config) []elcron.PlatformTarget {

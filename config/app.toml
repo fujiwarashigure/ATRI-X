@@ -81,6 +81,33 @@ trigger_step = 3
 enabled = false
 retention_days = 30
 
+# [atrinis]
+# enabled = false
+#
+# [atrinis.http]
+# addr = "127.0.0.1:32170"
+# max_body_bytes = 1048576
+# queue_size = 128
+# workers = 2
+#
+# [atrinis.tokens.home]
+# token_env = ["ATRINIS_HOME_TOKEN", "ATRINIS_HOME_TOKEN_ALT"]
+#
+# [atrinis.delivery]
+# default_platforms = ["cli"]
+# allow_superadmins = true
+#
+# [atrinis.atriwisps.server-watchdog]
+# enabled = true
+# allowed_tokens = ["home"]
+#
+# [atrinis.atriwisps.server-watchdog.delivery]
+# default_platforms = ["cli"]
+# allow_superadmins = true
+#
+# [atrinis.atriwisps.spike-checker]
+# enabled = false
+
 [platform.cli]
 enabled = true
 
