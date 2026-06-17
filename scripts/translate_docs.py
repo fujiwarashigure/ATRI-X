@@ -59,6 +59,9 @@ DEFAULT_GLOSSARY = {
     "会话": "Session",
     "工具": "tool",
     "技能": "Skill",
+    "艾露妮丝": "Atrinis",
+    "艾露维娜": "Atriena",
+    "艾露维丝": "Atriwisp",
 }
 
 CODE_FENCE_RE = re.compile(r"^\s*(```|~~~)(.*)$")
