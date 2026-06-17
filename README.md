@@ -11,7 +11,7 @@ It supports general chat, tool calling, Hook extensions, long-term task scheduli
 
 ### 0. Lightweight and Efficient Go Implementation
 
-ATRI-X's current local startup time is approximately 2ms (N5105, SATA SSD), with resident memory of about 30MB.
+ATRI-X currently takes <10ms for local startup (N5105, SATA SSD), with resident memory of about 30MB.
 
 ### 1. Token-Efficient Tool Discovery Mechanism
 
@@ -89,10 +89,10 @@ go run ./cmd/atri-x --config config/app.toml
 Common startup methods:
 
 ```bash
-atri-x              # 自动模式：Linux 检测到 service 时进入本地 CLI-only，否则完整前台启动
-atri-x run          # 完整前台：CLI + 已启用平台 + Cron
-atri-x cli          # 本地 CLI-only：只启动 CLI，不启动平台和 Cron
-atri-x service run  # Linux/headless 服务模式：不启动 CLI，启动已启用平台和 Cron
+atri-x              # Automatic mode: enters local CLI-only when Linux detects a service, otherwise starts in full foreground
+atri-x run          # Full foreground: CLI + enabled platforms + Cron
+atri-x cli          # Local CLI-only: only starts CLI, does not start platforms and Cron
+atri-x service run  # Linux/headless service mode: does not start CLI, starts enabled platforms and Cron
 ```
 
 Shell completion can be generated via `atri-x completion <shell>`, supporting `bash`, `zsh`, `fish`, `nushell`, `powershell`, and `auto`.
