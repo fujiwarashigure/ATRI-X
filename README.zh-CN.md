@@ -54,25 +54,33 @@ ATRI-X 内置 Cron Runtime 和 LLM 可编排 Cron 服务。普通 Cron 可以按
 
 ### 7. Atriyph：面向 LLM 协作的任务表示
 
-ATRI-X 引入 Atriyph Task Notation，用于描述 LLM Cron 与原生 skill。Atriyph 的目标是减少自然语言任务描述中的歧义，用更短、更稳定的结构表达输入、输出、步骤、条件和约束。相比随意 Markdown，Atriyph 更适合 LLM 之间复用和传递任务，也便于 lint、审计和后续工具化处理。
+ATRI-X 引入 Atriyph Task Notation（任务表示法），用于描述 LLM Cron 与原生 skill。Atriyph 的目标是减少自然语言任务描述中的歧义，用更短、更稳定的结构表达输入、输出、步骤、条件和约束。相比随意 Markdown，Atriyph 更适合 LLM 之间复用和传递任务，也便于 lint、审计和后续工具化处理。
 
-### 8. 可由 LLM 创建的 ATRI-X Skill
+### 8. Atrinis / Atriwisp / Atriena：让 ATRI-X 掌控一切
+
+传统 Agent 通常只会等待用户输入；Cron 只能响应时间。Atrinis 让 ATRI-X 多了一种触发方式：外部事件。
+
+Atrinis 是 ATRI-X 的监听枢纽；Atriwisp 是分布在各处的监听器，负责观世界。
+
+服务器变化、RSS 更新、Webhook 告警、日志变化、游戏事件、本地脚本甚至其他计算机设备，都可以由 Atriwisp 转成 Atriena 事件送入 Atrinis。ATRI-X 再统一决定是否记录、调用 LLM 分析或执行后台任务，最终通知用户。
+
+### 9. 可由 LLM 创建的 ATRI-X Skill
 
 ATRI-X 内置 `create_atrix_skill` 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。
 
-### 9. 兼容互联网 Python Skill
+### 10. 兼容互联网 Python Skill
 
 除了原生 ATRI-X Skill，ATRI-X 也兼容常见的 Python 外置 skill 结构。自动扫描 Python skill 的 `SKILL.md` 或 `SKILL.atriyph`，读取名称、描述、适用场景和风险等级，并通过隐藏包装工具执行。
 
-### 10. 多平台与富输出抽象
+### 11. 多平台与富输出抽象
 
 ATRI-X 抽象了平台层与输出层，目前支持 CLI 、QQ OneBot 和 QQ Official，并预留扩展其他平台的空间。
 
-### 11. 会话、Fork 与上下文压缩
+### 12. 会话、Fork 与上下文压缩
 
 ATRI-X 内置持久化 Session 服务，支持会话恢复、归档、置顶、fork、删除、分页查看和平台隔离。
 
-### 12. 安全策略与风险确认
+### 13. 安全策略与风险确认
 
 ATRI-X 的工具系统内置风险等级、权限判断和高风险确认流程。普通用户只能发现和调用低风险范围内的工具，超级管理员调用高风险工具时也需要确认。
 
@@ -108,6 +116,8 @@ Shell 补全可通过 `atri-x completion <shell>` 生成，支持 `bash`、`zsh`
 - [配置说明](docs/configuration.md)
 - [命令速查](docs/commands.md)
 - [核心概念](docs/concepts.md)
+- [Atrinis 监听枢纽](docs/atrinis.md)
+- [Atrinis 配置与使用](docs/atrinis-usage.md)
 
 开发计划和任务拆分已移到 [devdocs](devdocs/)。
 

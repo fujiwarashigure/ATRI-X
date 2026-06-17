@@ -62,6 +62,36 @@ func TestHandleAllowsUnconfiguredAtriwisp(t *testing.T) {
 	}
 }
 
+func TestHandleAllowsConfiguredAtriwispWithoutEnabled(t *testing.T) {
+	service, cleanup := newTestService(t, nil)
+	defer cleanup()
+
+	req := testRequest(ModeRecord)
+	req.Atriwisp.Name = "configured"
+	resp, err := service.Handle(context.Background(), "secret", req)
+	if err != nil {
+		t.Fatalf("Handle configured atriwisp without enabled: %v", err)
+	}
+	if !resp.Accepted || resp.Status != StatusCompleted {
+		t.Fatalf("response = %#v", resp)
+	}
+}
+
+func TestHandleAllowsExplicitEnabledAtriwisp(t *testing.T) {
+	service, cleanup := newTestService(t, nil)
+	defer cleanup()
+
+	req := testRequest(ModeRecord)
+	req.Atriwisp.Name = "enabled"
+	resp, err := service.Handle(context.Background(), "secret", req)
+	if err != nil {
+		t.Fatalf("Handle explicitly enabled atriwisp: %v", err)
+	}
+	if !resp.Accepted || resp.Status != StatusCompleted {
+		t.Fatalf("response = %#v", resp)
+	}
+}
+
 func TestHandleRejectsDisabledAtriwisp(t *testing.T) {
 	service, cleanup := newTestService(t, nil)
 	defer cleanup()
@@ -71,6 +101,20 @@ func TestHandleRejectsDisabledAtriwisp(t *testing.T) {
 	resp, err := service.Handle(context.Background(), "secret", req)
 	if err == nil {
 		t.Fatal("expected disabled atriwisp error")
+	}
+	if resp.Accepted || resp.Status != StatusFailed {
+		t.Fatalf("response = %#v", resp)
+	}
+}
+
+func TestHandleRejectsTokenNotAllowedForAtriwisp(t *testing.T) {
+	service, cleanup := newTestService(t, nil)
+	defer cleanup()
+
+	req := testRequest(ModeRecord)
+	resp, err := service.Handle(context.Background(), "alt-secret", req)
+	if err == nil {
+		t.Fatal("expected token restriction error")
 	}
 	if resp.Accepted || resp.Status != StatusFailed {
 		t.Fatalf("response = %#v", resp)
@@ -228,11 +272,13 @@ func newTestServiceWithRunner(t *testing.T, runner background.Runner, send Sende
 				AllowSuperadmins: true,
 			},
 			Atriwisps: map[string]config.AtrinisAtriwispConfig{
-				"watcher":  {Enabled: true, AllowedTokens: []string{"home"}},
-				"disabled": {Enabled: false},
+				"watcher":    {AllowedTokens: []string{"home"}},
+				"configured": {},
+				"enabled":    {Enabled: boolPtr(true)},
+				"disabled":   {Enabled: boolPtr(false)},
 			},
 		},
-		Tokens: map[string]string{"home": "secret"},
+		Tokens: map[string]string{"home": "secret", "alt": "alt-secret"},
 		Store:  store,
 		Send:   send,
 		Runner: runner,
@@ -241,6 +287,10 @@ func newTestServiceWithRunner(t *testing.T, runner background.Runner, send Sende
 		t.Fatalf("NewService: %v", err)
 	}
 	return service, func() { _ = store.Close() }
+}
+
+func boolPtr(value bool) *bool {
+	return &value
 }
 
 type fakeBackgroundRunner struct {

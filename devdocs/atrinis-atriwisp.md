@@ -2,7 +2,7 @@
 
 ## 目标
 
-Atrinis（艾露妮丝）是 ATRI-X 内部的通用监听中台，负责接收外部监听消息、执行 Atriena 协议、做鉴权、规范化、去重、审计和分发。Atriwisp（艾露维丝）是外部子监听器集群，负责观察具体世界，例如服务器状态、系统事件、RSS、Webhook、日志、脚本输出等。
+Atrinis（艾露妮斯）是 ATRI-X 内部的通用监听枢纽，负责接收外部监听消息、执行 Atriena 协议、做鉴权、规范化、去重、审计和分发。Atriwisp（艾露维丝）是外部子监听器集群，负责观察具体世界，例如服务器状态、系统事件、RSS、Webhook、日志、脚本输出等。
 
 核心目标是：ATRI-X 掌控最终执行与投递；Atriwisp 只按 Atriena（艾露维娜）协议投递事件；Atrinis 不预设事件类型，也不把复杂业务规则写死在核心里。
 
@@ -253,7 +253,7 @@ Atriwisp 可以声明它希望发给谁，但 Atrinis 必须拥有最终控制�
 
 暂不支持任意 user/group scope 投递，除非后续安全模型明确，否则容易让外部监听器变成任意消息发送器。
 
-Atrinis 配置应支持 allowlist，且 `atriwisps` 是可选项：
+Atrinis 配置应支持按 Atriwisp 设置额外策略，且 `atriwisps` 是可选项：
 
 ```toml
 [atrinis.delivery]
@@ -261,19 +261,21 @@ default_platforms = ["cli"]
 allow_superadmins = true
 
 [atrinis.atriwisps.server-watchdog]
-enabled = true
 allowed_tokens = ["server"]
 
 [atrinis.atriwisps.server-watchdog.delivery]
-allowed_platforms = ["cli", "qqofficial"]
+default_platforms = ["cli", "qqofficial"]
 allow_superadmins = true
+
+[atrinis.atriwisps.spike-checker]
+enabled = false
 ```
 
 说明：
 
-- `atrinis.atriwisps` 整体可为空，未配置时表示暂不启用任何 Atriwisp。
-- 单个 Atriwisp 只有在显式启用时才参与接收、鉴权和投递。
-- 配置层面可以临时禁用某个 Atriwisp，而不需要删除整套 Atrinis 配置。
+- Atriwisp 默认启用；未配置单个 Atriwisp 时，也会接收通过 Atrinis token 认证的事件。
+- 单个 Atriwisp 配置只用于限制 token、覆盖投递策略或显式禁用。
+- 只有显式 `enabled=false` 才会禁用某个 Atriwisp。
 
 最终目标计算：
 
@@ -496,20 +498,22 @@ default_platforms = ["cli"]
 allow_superadmins = true
 
 [atrinis.atriwisps.server-watchdog]
-enabled = true
 allowed_tokens = ["server"]
 
 [atrinis.atriwisps.server-watchdog.delivery]
-allowed_platforms = ["cli"]
+default_platforms = ["cli"]
 allow_superadmins = true
+
+[atrinis.atriwisps.spike-checker]
+enabled = false
 ```
 
 配置原则：
 
 - `enabled=false` 时不启动 Atrinis runtime。
 - `tokens` 只保存 token 名和读取方式，不保存 token 明文。
-- `atriwisps.<name>` 可按 Atriwisp 名做 allowlist。
-- 未配置的 Atriwisp 默认拒绝还是默认允许，需要首期实现前明确；推荐默认拒绝，减少误接入。
+- `atriwisps.<name>` 可按 Atriwisp 名限制 token、覆盖投递策略或显式禁用。
+- Atriwisp 默认启用；只有显式 `enabled=false` 才会禁用对应 Atriwisp。
 
 ## HTTP Runtime
 

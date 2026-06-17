@@ -239,7 +239,7 @@ func (s *Service) authorizeAtriwisp(event Event) error {
 	if !ok {
 		return nil
 	}
-	if !policy.Enabled {
+	if policy.Enabled != nil && !*policy.Enabled {
 		return fmt.Errorf("atriwisp %q is disabled", event.Request.Atriwisp.Name)
 	}
 	allowedTokens := trimStrings(policy.AllowedTokens)

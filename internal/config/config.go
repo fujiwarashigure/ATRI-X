@@ -180,7 +180,7 @@ type AtrinisDeliveryConfig struct {
 }
 
 type AtrinisAtriwispConfig struct {
-	Enabled       bool                `toml:"enabled"`
+	Enabled       *bool               `toml:"enabled"`
 	AllowedTokens []string            `toml:"allowed_tokens"`
 	Delivery      AtrinisDeliveryConfig `toml:"delivery"`
 }

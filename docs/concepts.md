@@ -198,9 +198,17 @@ ATRI-X 包含两层 Cron 能力：
 
 后台 Cron 有独立 Session 和 sandbox 约束。LLM Cron 可以预注入工具名称，让模型在后台任务中稳定使用指定工具。
 
+## Atrinis / Atriwisp / Atriena
+
+Atrinis 是 ATRI-X 的监听枢纽，用于接收外部事件。Atriwisp 是外部子监听器，负责观察服务器、Webhook、RSS、日志或脚本输出等外部世界。Atriena 是 Atriwisp 向 Atrinis 投递事件的协议。
+
+它们的分工是：Atriwisp 观测一切，Atrinis 管理一切，ATRI-X 掌控最终执行与投递。
+
+Atrinis 不作为聊天平台，也不替代 Cron。Cron 处理“按时间触发”的任务，Atrinis 处理“按外部事件触发”的任务。完整介绍见 [Atrinis 监听枢纽](atrinis.md)，配置和请求示例见 [Atrinis 配置与使用](atrinis-usage.md)。
+
 ## Skill 与 Atriyph
 
-ATRI-X 支持 Skill 扩展，并引入 Atriyph Task Notation 描述可复用任务。
+ATRI-X 支持 Skill 扩展，并引入 Atriyph Task Notation（任务表示法）描述可复用任务。
 
 Skill 类型：
 
