@@ -10,9 +10,10 @@ The default source configuration directory contains:
 
 | File or Directory | Responsibility |
 | --- | --- |
-| `config/app.toml` | Main configuration entry, saving application-level configurations such as storage, runtime, context, commands, tools, security, and platform. |
+| `config/app.toml` | Main configuration entry, saving storage, runtime, context, commands, tools, security, platform, and configuration file paths. |
 | `config/providers.toml` | LLM Provider, model list, default request parameters, and model metadata. |
 | `config/state.toml` | Runtime state, e.g., default Session mode, chat/work/compact/naming model selection. |
+| `config/atrinis.toml` | Atrinis listening hub configuration, saving HTTP, token, delivery, allowed_tools, and Atriwisp policies. |
 | `config/SOUL.md` | The System Prompt source file for the Agent. |
 | `config/.env` | Optional, local key file; not recommended to be committed. |
 | `config/plugins/` | Hook and plugin configuration directory. |
@@ -45,6 +46,7 @@ For example, when using `config/app.toml`:
 [config_files]
 providers = "providers.toml"
 state = "state.toml"
+atrinis = "atrinis.toml"
 
 [soul]
 path = "SOUL.md"
@@ -205,34 +207,46 @@ cli = ["local"]
 
 ## Atrinis listening hub
 
-Atrinis is disabled by default. Once enabled, ATRI-X will start a local HTTP ingress to receive events delivered by Atriwisp according to the Atriena protocol.
+Atrinis is disabled by default. Once enabled, ATRI-X will start a local HTTP ingress to receive events delivered by Atriwisp according to the Atriena protocol. It is recommended to split the Atrinis configuration into a separate `config/atrinis.toml`, while `app.toml` only retains the entry path.
 
 ```toml
-[atrinis]
-enabled = true
+[config_files]
+atrinis = "atrinis.toml"
 
-[atrinis.http]
+# config/atrinis.toml
+enabled = true
+allowed_tools = ["shell", "web_search"]
+
+[http]
 addr = "127.0.0.1:32170"
 max_body_bytes = 1048576
 queue_size = 128
 workers = 2
 
-[atrinis.tokens.home]
+[tokens.home]
 token_env = ["ATRINIS_HOME_TOKEN", "ATRINIS_HOME_TOKEN_ALT"]
 
-[atrinis.delivery]
+[delivery]
 default_platforms = ["cli"]
 allow_superadmins = true
+
+[atriwisps.server-watchdog]
+allowed_tokens = ["home"]
+allowed_tools = ["shell"]
+disabled_external_tools = ["danger_tool"]
 ```
 
 Note:
 
+- `allowed_tools` is the Atrinis internal tool whitelist; Atriwisps without separate configurations inherit the global default.
+- If a single Atriwisp configures `allowed_tools`, it will override the global default.
+- External tools are allowed by default; specified external tools are only disabled when a single Atriwisp configures `disabled_external_tools`.
 - The token is read from system environment variables or the configuration directory `.env`. Logs only record the token name, not the raw token.
 - `token_env` can be written as a list to try multiple environment variable names in order; this is suitable for temporarily switching tokens or achieving multi-environment compatibility.
 - Atriwisp is enabled by default; the corresponding Atriwisp will only be disabled if `enabled=false` is explicitly configured.
 - Currently, `record`, `direct`, and `llm` modes are supported; `llm` mode is executed using a background Session runner.
 - `direct` and `llm` reports only support sending to superadmins via the platform decided by Atrinis, and do not support arbitrary user/group targets.
-- The `tools` declaration in Atriena requests is still a feature under development and is not recommended as a stable interface dependency.
+- The `tools` declaration in Atriena requests is a capability under development, but it has already entered the validation, persistence, and execution pipelines; external tool names still need to be controlled by the denylist of an individual Atriwisp.
 
 For more information, see [Atrinis Configuration and Usage](atrinis-usage.md).
 
