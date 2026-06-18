@@ -4,6 +4,7 @@
 providers = "providers.toml"
 state = "state.toml"
 atrinis = "atrinis.toml"
+tool_tags = "tool_tags.toml"
 
 [storage]
 # 留空使用平台默认数据目录：Windows %APPDATA%/ATRI-X/data；Linux $XDG_DATA_HOME/atri-x 或 ~/.local/share/atri-x。
