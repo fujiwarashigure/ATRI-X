@@ -11,6 +11,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 | `config/app.toml` | 主配置入口，保存 storage、runtime、context、commands、tools、security、platform 和配置文件路径。 |
 | `config/providers.toml` | LLM Provider、模型列表、默认请求参数和模型 metadata。 |
 | `config/state.toml` | 运行态状态，例如默认 Session 模式、chat/work/compact/naming 模型选择。 |
+| `config/tool_tags.md` | 给工具添加 tag 和prompt的配置文件。 |
 | `config/atrinis.toml` | Atrinis 监听枢纽配置，保存 HTTP、token、delivery、allowed_tools 和 Atriwisp 策略。 |
 | `config/SOUL.md` | Agent 的 System Prompt 来源文件。 |
 | `config/.env` | 可选，本地密钥文件，不建议提交。 |
