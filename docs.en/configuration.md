@@ -105,9 +105,38 @@ OPENAI_API_KEY=your-api-key
 
 Do not commit actual keys to the repository.
 
+## Go Skill Compiler Path
+
+After modifying the `code_source` of the Go Skill, ATRI-X will automatically execute `gofmt`, `go build`, and reload. If ATRI-X is running as a Linux service, the service environment may not have loaded the `PATH` of the interactive shell, causing the `go` available in the terminal to be invisible to ATRI-X.
+
+It is recommended to specify the Go executable in the configuration directory `.env`:
+
+```dotenv
+ATRIX_GO_BINARY=/usr/local/go/bin/go
+```
+
+Lookup order:
+
+1. System environment variable `ATRIX_GO_BINARY`.
+2. `ATRIX_GO_BINARY` in the configuration directory `.env`.
+3. `GOROOT/bin/go`, if `GOROOT` is configured in the service environment.
+4. `go` in the ATRI-X process `PATH`.
+
+If using asdf, mise, Nix, Linuxbrew, Snap, or a custom installation path, it is recommended to write the actual `go` path directly into `ATRIX_GO_BINARY`, rather than relying on the initialization scripts of an interactive shell.
+
+After modifying `.env` or the systemd environment, the ATRI-X service needs to be restarted.
+
+For advanced deployments, this can also be specified in the systemd service:
+
+```ini
+[Service]
+Environment=ATRIX_GO_BINARY=/usr/local/go/bin/go
+```
+
 ## Model Status Configuration
 
 `state.toml` saves the runtime model selection:
+
 
 ```toml
 [session]
