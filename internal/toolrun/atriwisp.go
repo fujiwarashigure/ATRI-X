@@ -2,10 +2,13 @@ package toolrun
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 )
+
+var atriwispToolNameReplacer = regexp.MustCompile(`[^a-zA-Z0-9_-]+`)
 
 type AtriwispToolDeclaration struct {
 	Name           string         `json:"name"`
@@ -32,20 +35,24 @@ func CachedToolsFromAtriwisp(injection AtriwispInjection) []CachedTool {
 		if name == "" {
 			continue
 		}
-		canonical := fmt.Sprintf("atriwisp.%s.%s", atriwispName, name)
+		canonical := atriwispToolName(atriwispName, name)
 		out = append(out, CachedTool{
-			Name:          name,
-			CanonicalName: canonical,
-			Source:        SourceKindAtriwisp,
-			Description:   declared.Description,
-			Schema: llm.ToolSchema{Type: "function", Function: llm.ToolFunctionSchema{
-				Name:        canonical,
-				Description: declared.Description,
-				Parameters:  declared.Schema,
-			}},
-			AtriwispName: atriwispName,
-			EventKey:   injection.EventKey,
+			Name:           name,
+			CanonicalName:  canonical,
+			Source:         SourceKindAtriwisp,
+			Description:    declared.Description,
+			Schema:         llm.ToolSchema{Type: "function", Function: llm.ToolFunctionSchema{Name: canonical, Description: declared.Description, Parameters: declared.Schema}},
+			AtriwispName:     atriwispName,
+			EventKey:       injection.EventKey,
+			Endpoint:       strings.TrimSpace(declared.Endpoint),
+			TimeoutSeconds: declared.TimeoutSeconds,
 		})
 	}
 	return NormalizeCachedTools(out)
+}
+
+func atriwispToolName(atriwispName, name string) string {
+	atriwispName = atriwispToolNameReplacer.ReplaceAllString(strings.TrimSpace(atriwispName), "_")
+	name = atriwispToolNameReplacer.ReplaceAllString(strings.TrimSpace(name), "_")
+	return fmt.Sprintf("atriwisp_%s_%s", atriwispName, name)
 }

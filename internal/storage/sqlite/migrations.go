@@ -222,6 +222,14 @@ CREATE INDEX idx_atrinis_events_atriwisp_received_at
 ON atrinis_events(atriwisp_name, received_at);
 `,
 	},
+	{
+		version: 8,
+		name:    "add_atrinis_tool_declarations",
+		sql: `
+ALTER TABLE atrinis_events ADD COLUMN tool_declarations TEXT NULL;
+ALTER TABLE atrinis_events ADD COLUMN tool_hash TEXT NULL;
+`,
+	},
 }
 
 func runMigrations(ctx context.Context, db *sql.DB) error {

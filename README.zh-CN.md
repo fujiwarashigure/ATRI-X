@@ -56,7 +56,7 @@ ATRI-X 内置 Cron Runtime 和 LLM 可编排 Cron 服务。普通 Cron 可以按
 
 ATRI-X 引入 Atriyph Task Notation（任务表示法），用于描述 LLM Cron 与原生 skill。Atriyph 的目标是减少自然语言任务描述中的歧义，用更短、更稳定的结构表达输入、输出、步骤、条件和约束。相比随意 Markdown，Atriyph 更适合 LLM 之间复用和传递任务，也便于 lint、审计和后续工具化处理。
 
-### 8. Atrinis / Atriwisp / Atriena：让 ATRI-X 掌控一切
+### 8. Atrinis / Atriwisp / Atriena：让 ATRI-X 感知一切
 
 传统 Agent 通常只会等待用户输入；Cron 只能响应时间。Atrinis 让 ATRI-X 多了一种触发方式：外部事件。
 

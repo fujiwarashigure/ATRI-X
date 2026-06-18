@@ -8,9 +8,10 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 | 文件或目录 | 职责 |
 | --- | --- |
-| `config/app.toml` | 主配置入口，保存 storage、runtime、context、commands、tools、security、platform 等应用级配置。 |
+| `config/app.toml` | 主配置入口，保存 storage、runtime、context、commands、tools、security、platform 和配置文件路径。 |
 | `config/providers.toml` | LLM Provider、模型列表、默认请求参数和模型 metadata。 |
 | `config/state.toml` | 运行态状态，例如默认 Session 模式、chat/work/compact/naming 模型选择。 |
+| `config/atrinis.toml` | Atrinis 监听枢纽配置，保存 HTTP、token、delivery、allowed_tools 和 Atriwisp 策略。 |
 | `config/SOUL.md` | Agent 的 System Prompt 来源文件。 |
 | `config/.env` | 可选，本地密钥文件，不建议提交。 |
 | `config/plugins/` | Hook 和插件配置目录。 |
@@ -43,6 +44,7 @@ go run ./cmd/atri-x --config config/app.toml
 [config_files]
 providers = "providers.toml"
 state = "state.toml"
+atrinis = "atrinis.toml"
 
 [soul]
 path = "SOUL.md"
@@ -203,34 +205,46 @@ cli = ["local"]
 
 ## Atrinis 监听枢纽
 
-Atrinis 默认关闭。启用后，ATRI-X 会启动本地 HTTP ingress，接收 Atriwisp 按 Atriena 协议投递的事件。
+Atrinis 默认关闭。启用后，ATRI-X 会启动本地 HTTP ingress，接收 Atriwisp 按 Atriena 协议投递的事件。Atrinis 配置建议拆到独立 `config/atrinis.toml`，`app.toml` 只保留入口路径。
 
 ```toml
-[atrinis]
-enabled = true
+[config_files]
+atrinis = "atrinis.toml"
 
-[atrinis.http]
+# config/atrinis.toml
+enabled = true
+allowed_tools = ["shell", "web_search"]
+
+[http]
 addr = "127.0.0.1:32170"
 max_body_bytes = 1048576
 queue_size = 128
 workers = 2
 
-[atrinis.tokens.home]
+[tokens.home]
 token_env = ["ATRINIS_HOME_TOKEN", "ATRINIS_HOME_TOKEN_ALT"]
 
-[atrinis.delivery]
+[delivery]
 default_platforms = ["cli"]
 allow_superadmins = true
+
+[atriwisps.server-watchdog]
+allowed_tokens = ["home"]
+allowed_tools = ["shell"]
+disabled_external_tools = ["danger_tool"]
 ```
 
 说明：
 
+- `allowed_tools` 是 Atrinis 内部工具白名单；未单独配置的 Atriwisp 继承全局默认。
+- 单个 Atriwisp 若配置 `allowed_tools`，会覆盖全局默认。
+- 外部工具默认允许；只有单个 Atriwisp 配置 `disabled_external_tools` 时才禁用指定外部工具。
 - token 从系统环境变量或配置目录 `.env` 读取，日志只记录 token name，不记录 token 原文。
 - `token_env` 支持写成列表，按顺序尝试多个环境变量名；适合临时切换 token 或做多环境兼容。
 - Atriwisp 默认启用；只有显式配置 `enabled=false` 才会禁用对应 Atriwisp。
 - 当前支持 `record`、`direct` 和 `llm` 模式；`llm` 模式使用后台 Session runner 执行。
 - `direct` 和 `llm` 报告只支持按 Atrinis 裁决后的平台发送给 superadmins，不支持任意 user/group 目标。
-- Atriena 请求中的 `tools` 声明仍是开发中能力，不建议作为稳定接口依赖。
+- Atriena 请求中的 `tools` 声明是开发中能力，但已进入校验、持久化和执行链路；外部工具名仍需由单个 Atriwisp 的禁用列表控制。
 
 更多说明见 [Atrinis 配置与使用](atrinis-usage.md)。
 

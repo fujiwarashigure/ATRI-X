@@ -44,11 +44,13 @@ type Config struct {
 	ConfigPath          string                    `toml:"-"`
 	ProvidersConfigPath string                    `toml:"-"`
 	StateConfigPath     string                    `toml:"-"`
+	AtrinisConfigPath     string                    `toml:"-"`
 }
 
 type ConfigFilesConfig struct {
 	Providers string `toml:"providers"`
 	State     string `toml:"state"`
+	Atrinis     string `toml:"atrinis"`
 }
 
 type ModelSelection struct {
@@ -156,11 +158,12 @@ type ArtifactConfig struct {
 type PlatformConfig map[string]map[string]any
 
 type AtrinisConfig struct {
-	Enabled  bool                         `toml:"enabled"`
-	HTTP     AtrinisHTTPConfig              `toml:"http"`
-	Tokens   map[string]AtrinisTokenConfig  `toml:"tokens"`
-	Delivery AtrinisDeliveryConfig          `toml:"delivery"`
-	Atriwisps  map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
+	Enabled      bool                         `toml:"enabled"`
+	AllowedTools []string                     `toml:"allowed_tools"`
+	HTTP         AtrinisHTTPConfig              `toml:"http"`
+	Tokens       map[string]AtrinisTokenConfig  `toml:"tokens"`
+	Delivery     AtrinisDeliveryConfig          `toml:"delivery"`
+	Atriwisps      map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
 }
 
 type AtrinisHTTPConfig struct {
@@ -180,9 +183,11 @@ type AtrinisDeliveryConfig struct {
 }
 
 type AtrinisAtriwispConfig struct {
-	Enabled       *bool               `toml:"enabled"`
-	AllowedTokens []string            `toml:"allowed_tokens"`
-	Delivery      AtrinisDeliveryConfig `toml:"delivery"`
+	Enabled               *bool               `toml:"enabled"`
+	AllowedTokens         []string            `toml:"allowed_tokens"`
+	AllowedTools          []string            `toml:"allowed_tools"`
+	DisabledExternalTools []string            `toml:"disabled_external_tools"`
+	Delivery              AtrinisDeliveryConfig `toml:"delivery"`
 }
 
 type CronTaskConfig struct {
@@ -331,6 +336,17 @@ func Load(path string) (*Config, error) {
 		cfg.applyState(stateCfg)
 	}
 
+	atrinisPath := resolveRelative(configPath, cfg.ConfigFiles.Atrinis)
+	atrinisCfg := &AtrinisConfig{}
+	if err := loadTOML(atrinisPath, atrinisCfg); err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
+			return nil, err
+		}
+	} else {
+		cfg.Atrinis = *atrinisCfg
+	}
+	cfg.applyAtrinisDefaults()
+
 	if err := cfg.validateModeModels(); err != nil {
 		return nil, err
 	}
@@ -341,6 +357,7 @@ func Load(path string) (*Config, error) {
 	cfg.ConfigPath = configPath
 	cfg.ProvidersConfigPath = providersPath
 	cfg.StateConfigPath = statePath
+	cfg.AtrinisConfigPath = atrinisPath
 	return cfg, nil
 }
 
@@ -417,6 +434,9 @@ func (c *Config) applyAppDefaults() {
 	if c.ConfigFiles.State == "" {
 		c.ConfigFiles.State = "state.toml"
 	}
+	if c.ConfigFiles.Atrinis == "" {
+		c.ConfigFiles.Atrinis = "atrinis.toml"
+	}
 	if c.Storage.SessionsSQLitePath == "" {
 		c.Storage.SessionsSQLitePath = filepath.Join(platformDefaultDataDir(), "atrix_sessions.db")
 	}
@@ -465,24 +485,7 @@ func (c *Config) applyAppDefaults() {
 	if c.Platform == nil {
 		c.Platform = PlatformConfig{}
 	}
-	if c.Atrinis.HTTP.Addr == "" {
-		c.Atrinis.HTTP.Addr = "127.0.0.1:32170"
-	}
-	if c.Atrinis.HTTP.MaxBodyBytes <= 0 {
-		c.Atrinis.HTTP.MaxBodyBytes = 1024 * 1024
-	}
-	if c.Atrinis.HTTP.QueueSize <= 0 {
-		c.Atrinis.HTTP.QueueSize = 128
-	}
-	if c.Atrinis.HTTP.Workers <= 0 {
-		c.Atrinis.HTTP.Workers = 2
-	}
-	if c.Atrinis.Tokens == nil {
-		c.Atrinis.Tokens = map[string]AtrinisTokenConfig{}
-	}
-	if c.Atrinis.Atriwisps == nil {
-		c.Atrinis.Atriwisps = map[string]AtrinisAtriwispConfig{}
-	}
+	c.applyAtrinisDefaults()
 	if c.Session.NonSuperadminIdleTTLMinutes < 0 {
 		c.Session.NonSuperadminIdleTTLMinutes = 0
 	}
@@ -518,6 +521,27 @@ func (c *Config) applyAppDefaults() {
 	}
 	if c.Session.Naming.TriggerStep <= 0 {
 		c.Session.Naming.TriggerStep = 1
+	}
+}
+
+func (c *Config) applyAtrinisDefaults() {
+	if c.Atrinis.HTTP.Addr == "" {
+		c.Atrinis.HTTP.Addr = "127.0.0.1:32170"
+	}
+	if c.Atrinis.HTTP.MaxBodyBytes <= 0 {
+		c.Atrinis.HTTP.MaxBodyBytes = 1024 * 1024
+	}
+	if c.Atrinis.HTTP.QueueSize <= 0 {
+		c.Atrinis.HTTP.QueueSize = 128
+	}
+	if c.Atrinis.HTTP.Workers <= 0 {
+		c.Atrinis.HTTP.Workers = 2
+	}
+	if c.Atrinis.Tokens == nil {
+		c.Atrinis.Tokens = map[string]AtrinisTokenConfig{}
+	}
+	if c.Atrinis.Atriwisps == nil {
+		c.Atrinis.Atriwisps = map[string]AtrinisAtriwispConfig{}
 	}
 }
 
@@ -578,6 +602,9 @@ func (c *Config) validateModeModels() error {
 	}
 	if c.Session.DefaultMode != "work" && c.Session.DefaultMode != "chat" {
 		return fmt.Errorf("session.default_mode must be work or chat, got %q", c.Session.DefaultMode)
+	}
+	if c.ModeModels == nil {
+		c.ModeModels = map[string]ModelSelection{}
 	}
 	for _, mode := range []string{"work", "chat"} {
 		selected := c.ModeModels[mode]

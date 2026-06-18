@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
+	"github.com/fujiwarashigure/ATRI-X/internal/toolrun"
 )
 
 type Kind string
@@ -30,6 +31,7 @@ type RunRequest struct {
 	Prompt        string
 	RetryPrompt   string
 	ToolListNames []string
+	CachedTools   []toolrun.CachedTool
 	SandboxSubdir string
 	Metadata      map[string]string
 }

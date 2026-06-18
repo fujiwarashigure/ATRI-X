@@ -253,21 +253,25 @@ Atriwisp 可以声明它希望发给谁，但 Atrinis 必须拥有最终控制�
 
 暂不支持任意 user/group scope 投递，除非后续安全模型明确，否则容易让外部监听器变成任意消息发送器。
 
-Atrinis 配置应支持按 Atriwisp 设置额外策略，且 `atriwisps` 是可选项：
+Atrinis 配置独立放在 `atrinis.toml`，支持按 Atriwisp 设置额外策略，且 `atriwisps` 是可选项：
 
 ```toml
-[atrinis.delivery]
+allowed_tools = ["web_search", "web_extract"]
+
+[delivery]
 default_platforms = ["cli"]
 allow_superadmins = true
 
-[atrinis.atriwisps.server-watchdog]
+[atriwisps.server-watchdog]
 allowed_tokens = ["server"]
+allowed_tools = ["shell", "web_search"]
+disabled_external_tools = ["danger_tool"]
 
-[atrinis.atriwisps.server-watchdog.delivery]
+[atriwisps.server-watchdog.delivery]
 default_platforms = ["cli", "qqofficial"]
 allow_superadmins = true
 
-[atrinis.atriwisps.spike-checker]
+[atriwisps.spike-checker]
 enabled = false
 ```
 
@@ -478,33 +482,35 @@ atrinis.llm_failed
 ## 配置草案
 
 ```toml
-[atrinis]
 enabled = true
+allowed_tools = ["web_search", "web_extract"]
 
-[atrinis.http]
+[http]
 addr = "127.0.0.1:32170"
 max_body_bytes = 1048576
 queue_size = 128
 workers = 2
 
-[atrinis.tokens.home]
+[tokens.home]
 token_env = ["ATRINIS_HOME_TOKEN", "ATRINIS_HOME_TOKEN_ALT"]
 
-[atrinis.tokens.server]
+[tokens.server]
 token_env = ["ATRINIS_SERVER_TOKEN"]
 
-[atrinis.delivery]
+[delivery]
 default_platforms = ["cli"]
 allow_superadmins = true
 
-[atrinis.atriwisps.server-watchdog]
+[atriwisps.server-watchdog]
 allowed_tokens = ["server"]
+allowed_tools = ["shell", "web_search"]
+disabled_external_tools = ["danger_tool"]
 
-[atrinis.atriwisps.server-watchdog.delivery]
+[atriwisps.server-watchdog.delivery]
 default_platforms = ["cli"]
 allow_superadmins = true
 
-[atrinis.atriwisps.spike-checker]
+[atriwisps.spike-checker]
 enabled = false
 ```
 
@@ -512,6 +518,8 @@ enabled = false
 
 - `enabled=false` 时不启动 Atrinis runtime。
 - `tokens` 只保存 token 名和读取方式，不保存 token 明文。
+- 顶层 `allowed_tools` 是 ATRI-X 内部工具默认白名单；单 Atriwisp `allowed_tools` 存在时覆盖默认值。
+- Atriwisp 外部工具默认允许；单 Atriwisp `disabled_external_tools` 可禁用指定外部工具。
 - `atriwisps.<name>` 可按 Atriwisp 名限制 token、覆盖投递策略或显式禁用。
 - Atriwisp 默认启用；只有显式 `enabled=false` 才会禁用对应 Atriwisp。
 
