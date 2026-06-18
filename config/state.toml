@@ -8,3 +8,17 @@ model = "deepseek-chat"
 [mode_models.chat]
 provider = "deepseek"
 model = "deepseek-chat"
+
+# Optional Atrinis LLM model slots. If omitted, each slot falls back to work.
+[mode_models.atriwisp1]
+provider = "deepseek"
+model = "deepseek-chat"
+
+[mode_models.atriwisp2]
+provider = "deepseek"
+model = "deepseek-chat"
+
+[mode_models.atriwisp3]
+provider = "deepseek"
+model = "deepseek-chat"
+

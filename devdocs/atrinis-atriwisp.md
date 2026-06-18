@@ -310,13 +310,15 @@ provider = "openai"
 model = "gpt-4.1"
 ```
 
-`/model` 后续应支持：
+`/model` 已支持：
 
 ```text
 /model --atriwisp1 gpt-4o-mini
 /model --atriwisp2 openai/gpt-4.1
 /model --atriwisp3 gpt-4.1
 ```
+
+Atrinis LLM payload 的 `model_slot` 可指定 `atriwisp1`、`atriwisp2` 或 `atriwisp3`；未指定或对应槽位未配置时 fallback 到 `work`。
 
 更通用的 `/model --mode atriwisp2 <model>` 可作为后续扩展。首期先做固定槽位，避免命令解析过度复杂。
 
@@ -578,10 +580,10 @@ GET  /healthz
 
 ### Phase 3：模型槽位与命令
 
-- 支持 `atriwisp1`、`atriwisp2`、`atriwisp3` 模型槽位。
+- 已支持 `atriwisp1`、`atriwisp2`、`atriwisp3` 模型槽位。
 - `/model` 支持 `--atriwisp1`、`--atriwisp2`、`--atriwisp3`。
 - `/models` 输出标记 Atrinis 槽位当前模型。
-- Atrinis payload `model_slot` 使用对应槽位，未配置 fallback `work`。
+- Atrinis payload `model_slot` 使用对应槽位；未指定或对应槽位未配置时 fallback 到 `work`。
 
 ### Phase 4：文档与运维能力
 

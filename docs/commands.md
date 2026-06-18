@@ -26,6 +26,9 @@ ATRI-X 的 slash 命令由 Agent Core 统一处理，CLI、QQ、后续平台共�
 | `/model <编号或名称>` | 切换当前 Session 模式使用的模型。 |
 | `/model --chat <模型>` | 切换 chat 模式模型。 |
 | `/model --work <模型>` | 切换 work 模式模型。 |
+| `/model --atriwisp1 <模型>` | 切换 Atrinis atriwisp1 模型槽位。 |
+| `/model --atriwisp2 <模型>` | 切换 Atrinis atriwisp2 模型槽位。 |
+| `/model --atriwisp3 <模型>` | 切换 Atrinis atriwisp3 模型槽位。 |
 | `/model --compact <模型>` | 切换上下文压缩模型。 |
 | `/model --naming <模型>` | 切换 Session 自动命名模型。 |
 | `/checkmodel [关键词]` | 查看或搜索模型。 |
@@ -41,6 +44,7 @@ ATRI-X 的 slash 命令由 Agent Core 统一处理，CLI、QQ、后续平台共�
 /model 2
 /model --work deepseek/deepseek-chat
 /model --chat openai/gpt-4o-mini
+/model --atriwisp2 openai/gpt-4.1
 /checkmodel deepseek
 ```
 
