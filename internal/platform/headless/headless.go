@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 )
 
@@ -20,10 +20,10 @@ func (a *Adapter) Run(ctx context.Context, handler platform.PlatformHandler) err
 	return ctx.Err()
 }
 
-func (a *Adapter) SendChat(ctx context.Context, out output.Output) (platform.Receipt, error) {
-	return platform.Receipt{}, fmt.Errorf("service platform cannot send chat output without a target platform")
+func (a *Adapter) SendChat(ctx context.Context, out delivery.Output) (delivery.Receipt, error) {
+	return delivery.Receipt{}, fmt.Errorf("service platform cannot send chat output without a target platform")
 }
 
-func (a *Adapter) SendNotice(ctx context.Context, target output.Target, out output.Output) (platform.Receipt, error) {
-	return platform.Receipt{}, fmt.Errorf("service platform cannot send notice without a target platform")
+func (a *Adapter) SendNotice(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
+	return delivery.Receipt{}, fmt.Errorf("service platform cannot send notice without a target platform")
 }

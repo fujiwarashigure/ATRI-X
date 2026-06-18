@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 )
@@ -61,7 +61,7 @@ func TestSendFileSendsSandboxFileWithoutCopying(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Outputs) != 1 || result.Outputs[0].Kind != output.KindFile {
+	if len(result.Outputs) != 1 || result.Outputs[0].Kind != delivery.KindFile {
 		t.Fatalf("outputs = %#v", result.Outputs)
 	}
 	if result.Outputs[0].Target.Platform != "qqonebot" || !result.Outputs[0].Target.Superadmins {

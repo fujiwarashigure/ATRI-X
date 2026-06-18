@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -228,7 +228,7 @@ func (t ReplyToChatHistoryMessageTool) Call(ctx context.Context, req tool.CallRe
 	}
 	return &tool.Result{
 		Content: fmt.Sprintf("已引用回复 [#%s] %s(%s): %s\n回复内容已发送到当前聊天，请不要重复发送。", target.PlatformMessageID, target.SenderName, target.SenderID, truncateChatHistoryMessage(target.Text)),
-		Outputs: []output.Output{output.Reply(messageID, replyText)},
+		Outputs: []delivery.Output{delivery.Reply(messageID, replyText)},
 	}, nil
 }
 

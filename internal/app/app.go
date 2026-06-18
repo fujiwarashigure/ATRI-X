@@ -16,13 +16,13 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/completion"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/atrinis"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	hookbuiltin "github.com/fujiwarashigure/ATRI-X/internal/hook/builtin"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm/openai"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/maintenance"
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	platformbuiltin "github.com/fujiwarashigure/ATRI-X/internal/platform/builtin"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
@@ -245,7 +245,7 @@ func Run(ctx context.Context, opts Options) error {
 			startupHookNotices = append(startupHookNotices, text)
 			return
 		}
-		_, _ = agt.SendNoticeOutput(ctx, output.Target{}, output.Text(text))
+		_, _ = agt.SendNoticeOutput(ctx, delivery.Target{}, delivery.Text(text))
 	}
 	cronService := elcron.NewService(elcron.Options{
 		Manager:          cronManager,
@@ -255,7 +255,7 @@ func Run(ctx context.Context, opts Options) error {
 		Audit: func(event string, attrs ...any) {
 			logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
 		},
-		SendTarget: func(ctx context.Context, target output.Target, out output.Output) error {
+		SendTarget: func(ctx context.Context, target delivery.Target, out delivery.Output) error {
 			if agt == nil {
 				return fmt.Errorf("agent is not ready")
 			}
@@ -302,7 +302,7 @@ func Run(ctx context.Context, opts Options) error {
 	profiler.Mark("hook register")
 	agt = agent.NewWithRequestConfig(platforms.Primary, adapter, workModel.Provider, cfg.ModeModels, cfg.Providers, cfg.StateConfigPath, store, cfg.Commands.Prefixes, session.Config{NamingConfig: session.NamingConfig{TriggerStep: cfg.Session.Naming.TriggerStep}, DefaultMode: cfg.Session.DefaultMode}, cfg.NamingModel, namingAdapter, namingModel, namingLogger{logger: logger}, cfg.Soul.Path, cfg.LLMRequest)
 	agt.SetHookManager(hooks)
-	agt.SetOutputManager(output.NewManager(nil, logger))
+	agt.SetOutputManager(delivery.NewManager(nil, logger))
 	agt.SetSessionListPageSize(cfg.View.SessionListPageSize)
 	agt.SetCleanupRetentionDays(cfg.Session.Cleanup.RetentionDays)
 	agt.SetNonSuperadminIdleTTLMinutes(cfg.Session.NonSuperadminIdleTTLMinutes)
@@ -331,7 +331,7 @@ func Run(ctx context.Context, opts Options) error {
 			Audit: func(event string, attrs ...any) {
 				logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
 			},
-			Send: func(ctx context.Context, target output.Target, out output.Output) error {
+			Send: func(ctx context.Context, target delivery.Target, out delivery.Output) error {
 				_, err := agt.SendNoticeOutput(ctx, target, out)
 				return err
 			},
@@ -371,12 +371,12 @@ func (a atrinisRuntimeAdapter) Run(ctx context.Context, handler platform.Platfor
 	return a.runtime.Run(ctx)
 }
 
-func (a atrinisRuntimeAdapter) SendChat(ctx context.Context, out output.Output) (platform.Receipt, error) {
-	return platform.Receipt{}, fmt.Errorf("atrinis cannot send chat output")
+func (a atrinisRuntimeAdapter) SendChat(ctx context.Context, out delivery.Output) (delivery.Receipt, error) {
+	return delivery.Receipt{}, fmt.Errorf("atrinis cannot send chat output")
 }
 
-func (a atrinisRuntimeAdapter) SendNotice(ctx context.Context, target output.Target, out output.Output) (platform.Receipt, error) {
-	return platform.Receipt{}, fmt.Errorf("atrinis cannot send notice output")
+func (a atrinisRuntimeAdapter) SendNotice(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
+	return delivery.Receipt{}, fmt.Errorf("atrinis cannot send notice output")
 }
 
 type platformLifecycle interface {
@@ -384,7 +384,7 @@ type platformLifecycle interface {
 }
 
 type platformHookAgent interface {
-	RegisterPlatformSender(name string, sender platform.MessageSender)
+	RegisterPlatformSender(name string, sender delivery.MessageSender)
 	NotifyPlatformConnected(ctx context.Context, platformName string)
 }
 

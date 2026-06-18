@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
@@ -122,7 +122,7 @@ func (d agentToolRunDeps) SendPreview(ctx context.Context, text string) {
 	d.output.SendPreview(ctx, text)
 }
 
-func (d agentToolRunDeps) SendOutputs(ctx context.Context, outputs []output.Output) error {
+func (d agentToolRunDeps) SendOutputs(ctx context.Context, outputs []delivery.Output) error {
 	return d.output.SendOutputs(ctx, outputs)
 }
 

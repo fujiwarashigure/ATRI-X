@@ -10,7 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
@@ -22,12 +22,12 @@ type cronModelSelectionKey struct{}
 
 type discardSender struct{}
 
-func (discardSender) SendChat(ctx context.Context, out output.Output) (platform.Receipt, error) {
-	return platform.Receipt{}, nil
+func (discardSender) SendChat(ctx context.Context, out delivery.Output) (delivery.Receipt, error) {
+	return delivery.Receipt{}, nil
 }
 
-func (discardSender) SendNotice(ctx context.Context, target output.Target, out output.Output) (platform.Receipt, error) {
-	return platform.Receipt{}, nil
+func (discardSender) SendNotice(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
+	return delivery.Receipt{}, nil
 }
 
 func (a *Agent) RunCronMessage(ctx context.Context, req elcron.RunCronMessageRequest) (elcron.RunCronMessageResult, error) {

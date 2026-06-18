@@ -14,10 +14,10 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/completion"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/contextmgr"
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
@@ -39,7 +39,7 @@ type LogManager interface {
 // Agent is the minimal agent core that handles messages and commands.
 type Agent struct {
 	platform                    platform.PlatformAdapter
-	platformSenders             map[string]platform.MessageSender
+	platformSenders             map[string]delivery.MessageSender
 	modelRuntime                modelRuntimeState
 	statePath                   string
 	stateModTime                time.Time
@@ -58,7 +58,7 @@ type Agent struct {
 	compressor                  contextmgr.Compressor
 	contextConfig               config.ContextConfig
 	hooks                       hook.Manager
-	outputs                     output.Manager
+	outputs                     delivery.Manager
 	modelMetadata               config.ModelMetadataConfig
 	compactModel                config.ModelSelection
 	namingModel                 config.ModelSelection
@@ -122,7 +122,7 @@ func NewWithRequestConfig(p platform.PlatformAdapter, client llm.LLM, providerNa
 	stateModTime := initialStateModTime(statePath)
 	a := &Agent{
 		platform:               p,
-		platformSenders:        map[string]platform.MessageSender{},
+		platformSenders:        map[string]delivery.MessageSender{},
 		modelRuntime:           newModelRuntimeState(client, workModel.Model, workModel.Provider, provider, llmRequestConfig, providers, modeModels, clients),
 		statePath:              statePath,
 		stateModTime:           stateModTime,
@@ -136,7 +136,7 @@ func NewWithRequestConfig(p platform.PlatformAdapter, client llm.LLM, providerNa
 		contextLoader:          contextmgr.Loader{Store: store},
 		contextConfig:          config.Default().Context,
 		hooks:                  hook.NoopManager{},
-		outputs:                output.NewManager(nil, nil),
+		outputs:                delivery.NewManager(nil, nil),
 		compactModel:           config.ModelSelection{},
 		namingModel:            namingSelection,
 		lastUsage:              map[string]*llm.Usage{},
@@ -277,7 +277,7 @@ func (a *Agent) HandleMessage(ctx context.Context, text string) (err error) {
 			return dispatchErr
 		}
 		if result != nil && result.Content != "" {
-			if err := a.sendNoticeOutput(ctx, output.Target{}, output.Text(result.Content)); err != nil {
+			if err := a.sendNoticeOutput(ctx, delivery.Target{}, delivery.Text(result.Content)); err != nil {
 				return err
 			}
 		}
@@ -428,7 +428,7 @@ func (a *Agent) auditLog(level slog.Level, event string, attrs ...any) {
 	a.auditLogger.Log(context.Background(), level, "audit event", attrs...)
 }
 
-func (a *Agent) SetOutputManager(manager output.Manager) {
+func (a *Agent) SetOutputManager(manager delivery.Manager) {
 	a.outputs = manager
 }
 

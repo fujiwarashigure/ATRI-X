@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
-	"github.com/fujiwarashigure/ATRI-X/internal/output"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 )
@@ -74,15 +74,15 @@ func (t SendFileTool) Call(ctx context.Context, req tool.CallRequest) (*tool.Res
 	if err != nil {
 		return nil, err
 	}
-	out := output.FilePath(prepared.Path)
+	out := delivery.FilePath(prepared.Path)
 	out.Name = prepared.Name
 	out.Source.MIMEType = prepared.MIMEType
 	if sandbox.BackgroundKind == tool.BackgroundKindCron {
 		if msg, ok := platform.MessageContextFrom(ctx); ok && strings.TrimSpace(msg.Platform) != "" {
-			out.Target = output.Target{Platform: msg.Platform, Superadmins: true}
+			out.Target = delivery.Target{Platform: msg.Platform, Superadmins: true}
 		}
 	}
-	return &tool.Result{Content: fmt.Sprintf("已发送文件：%s", prepared.Name), Outputs: []output.Output{out}}, nil
+	return &tool.Result{Content: fmt.Sprintf("已发送文件：%s", prepared.Name), Outputs: []delivery.Output{out}}, nil
 }
 
 func (t SendFileTool) isExternalPath(sandbox tool.SandboxContext, hasSandbox bool, path string) bool {
