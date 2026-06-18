@@ -39,7 +39,8 @@ Atrinis 是 app 层 runtime，和平台 runtime、cron runtime 同级装配。�
 - 后台 Session 构造与运行。
 - 后台 MessageContext 与 discard sender。
 - 后台 sandbox 设置。
-- 工具预加载 `tool_list_names`。
+- 工具/Skill 预加载 `tool_list_names`。
+
 - 后台 LLM 最终 JSON 结果格式要求、解析与重试。
 - 后台任务结果报告与错误报告格式。
 
@@ -138,7 +139,8 @@ background runner 的输入应同时携带：
 | `format` | 否 | `atriyph` 或 `text`，默认 `text`。 |
 | `content` | 是 | 事件主体。LLM 模式推荐使用 Atriyph `#task`。 |
 | `model_slot` | 否 | 模型槽位，例如 `atriwisp1`、`atriwisp2`、`atriwisp3`。 |
-| `tool_list_names` | 否 | 请求预加载的工具名。实际可用性仍由 Atrinis/ToolRun/Security 裁决；`discover_tool` 会被静默忽略，后台任务不注入发现入口。 |
+| `tool_list_names` | 否 | 请求预加载的工具名或 Skill 名。普通工具注入 schema，Skill 注入后台任务 prompt 并自动注入对应 runner；实际可用性仍由 Atrinis/ToolRun/Security 裁决；`discover_tool` 会被静默忽略，后台任务不注入发现入口。 |
+
 | `tools` | 否 | Atriwisp 额外声明的工具信息，包含名称、描述、Schema、调用端点或执行方式、风险与超时等。 |
 | `targets` | 否 | Atriwisp 期望投递目标。最终投递目标由 Atrinis 配置裁决。 |
 | `meta` | 否 | 原始补充数据，只做记录与 prompt 附加，不让核心理解事件类型。 |
@@ -208,7 +210,8 @@ direct 内容默认使用 `title + content` 组合为通知文本。未来可扩
 2. worker 将状态置为 `running`。
 3. 根据 `model_slot` 选择模型，未配置则 fallback 到 `work`。
 4. 生成不暴露来源身份的 background prompt。
-5. 将 `tool_list_names` 和 `tools` 交给 ToolRun 做工具聚合、命名空间解析、可见性过滤和 schema 注入。
+5. 将 `tool_list_names` 和 `tools` 交给后台 runner/ToolRun 做工具聚合、Skill prompt 注入、命名空间解析、可见性过滤和 schema 注入。
+
 6. 使用 Atrinis sandbox 子目录运行 ATRI-X 内置工具；Atriwisp 工具由 ToolRun 路由到对应 Atriwisp 调用端点或后续多轮通道。
 7. 要求 LLM 最终输出严格 JSON。
 8. 解析结果并更新事件状态。

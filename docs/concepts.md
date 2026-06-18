@@ -197,7 +197,8 @@ ATRI-X 包含两层 Cron 能力：
 | Direct Cron | 按计划直接发送固定内容。 |
 | LLM Cron | 按任务描述驱动模型执行，并可使用工具。 |
 
-后台 Cron 有独立 Session 和 sandbox 约束。LLM Cron 可以预注入工具名称，让模型在后台任务中稳定使用指定工具。
+后台 Cron 有独立 Session 和 sandbox 约束。LLM Cron 可以通过 `tool_list_names` 预注入工具名或 Skill 名：普通工具会注入 schema，Skill 会把说明注入后台任务 prompt，并自动注入对应 runner。
+
 
 ## Atrinis / Atriwisp / Atriena
 
@@ -213,9 +214,9 @@ ATRI-X 支持 Skill 扩展，并引入 Atriyph Task Notation（任务表示法�
 
 Skill 类型：
 
-- 原生 ATRI-X Skill：使用 `SKILL.atriyph` 描述任务，可选 Go 源码实现。
-- Python Skill：兼容常见外部 Python skill 目录结构。
-- Go Skill：可通过二进制执行，并从 stdin 接收 JSON payload。
+- AgentSkill：放在 `skills/agent/<skill>/`，遵从或兼容 agentskills.io 风格 `SKILL.md`，也可用 `SKILL.atriyph` 覆写 Agent 可读说明；当前可通过 `python_skill_run` 执行附带 Python 脚本。
+- Go Skill：放在 `skills/go/<skill>/`，使用 `SKILL.atriyph` 描述任务；存在二进制时可通过 `go_skill_run` 执行，并从 stdin 接收 JSON payload。
+
 
 Atriyph 的目标是用更短、更稳定的结构表达输入、输出、步骤、条件和约束，减少自然语言任务描述的歧义。完整语法见 [Atriyph 任务表示法](atriyph.md)。
 

@@ -148,7 +148,8 @@ curl -sS http://127.0.0.1:32170/atriena/v1/events \
 | `format` | 否 | `text` 或 `atriyph`，默认 `text`。 |
 | `content` | 是 | 事件主体。LLM 模式推荐使用 Atriyph Task Notation（任务表示法）`#task`。 |
 | `model_slot` | 否 | Atrinis LLM 模型槽位，仅支持 `atriwisp1`、`atriwisp2`、`atriwisp3`；未填写或对应槽位未配置时回退到 `work`。 |
-| `tool_list_names` | 否 | 后台任务预加载的 ATRI-X 内部工具名；必须在 Atrinis `allowed_tools` 裁决范围内，`discover_tool` 会被忽略。 |
+| `tool_list_names` | 否 | 后台任务预加载的 ATRI-X 内部工具名或 Skill 名；普通工具注入 schema，Skill 注入任务说明并自动注入对应 runner；必须在 Atrinis `allowed_tools` 裁决范围内，`discover_tool` 会被忽略。 |
+
 | `tools` | 否 | Atriwisp 随事件声明的外部工具；默认允许，命中该 Atriwisp 的 `disabled_external_tools` 时拒绝。 |
 | `targets` | 否 | Atriwisp 期望投递目标，最终仍由 Atrinis 裁决。 |
 | `meta` | 否 | 原始补充数据，只做记录和 prompt 附加。 |
@@ -192,6 +193,7 @@ Atriwisp 可以在 `targets` 中声明期望目标，但最终目标由 Atrinis 
 - token 原文不写日志。
 - `model_slot` 只能选择 `atriwisp1`、`atriwisp2`、`atriwisp3`，不能指定任意内部模式名。
 - Atriwisp 不能直接发送平台消息。
-- Atriwisp 不能绕过 Tool Runtime 和 Security Policy 调用 ATRI-X 内部工具；`tool_list_names` 会经过 Atrinis `allowed_tools` 裁决。
+- Atriwisp 不能绕过 Tool Runtime 和 Security Policy 调用 ATRI-X 内部工具；`tool_list_names` 中的工具名或 Skill 名都会经过 Atrinis `allowed_tools` 裁决。
+
 - Atriwisp 声明的外部 `tools` 默认允许，并通过 ToolRun 以 `atriwisp_<atriwisp>_<tool>` 形式注入为模型可调用函数名；单个 Atriwisp 可用 `disabled_external_tools` 禁用指定工具。
 - 外部工具调用由 Atrinis 对声明的 endpoint 发起 HTTP JSON POST；外部工具自身负责实际风险边界，Atrinis 侧按 low 风险处理。

@@ -16,7 +16,8 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 | `config/SOUL.md` | Agent 的 System Prompt 来源文件。 |
 | `config/.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
 | `config/plugins/` | Hook 和插件配置目录。 |
-| `config/skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/py/` 和 `skills/go/`。 |
+| `config/skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。 |
+
 | `config/memories.toml` | 常驻记忆文件，默认位于配置目录下。 |
 | `config/long_memory/` | 长期记忆 Markdown 源数据目录，默认位于配置目录下。 |
 
@@ -32,7 +33,8 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/py/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
+
 
 示例：
 

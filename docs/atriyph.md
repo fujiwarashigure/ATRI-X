@@ -18,7 +18,9 @@ Atriyph 用固定的语法替代冗长的自然语言说明，让任务描述更
 
 | 场景 | 文件 | 说明 |
 | --- | --- | --- |
-| 原生 ATRI-X Skill | `SKILL.atriyph` | 放在 skill 目录下，定义 skill 的核心逻辑。 |
+| AgentSkill | `skills/agent/<skill>/SKILL.atriyph` 或 `SKILL.md` | 外置文档型 Skill；`SKILL.atriyph` 会覆写 Agent 可读说明，`SKILL.md` 兼容 agentskills.io 风格说明。 |
+| Go Skill | `skills/go/<skill>/SKILL.atriyph` | ATRI-X 原生 Skill；可选 Go 二进制用于执行。 |
+
 | LLM Cron 任务 | 任务条 | 在 `/cron write` 中用 `#task` 头描述后台任务。 |
 
 ## 语法速查
@@ -243,10 +245,11 @@ each($city in $cities, limit=5) {
 
 ## 与 Skill 的关系
 
-- 原生 ATRI-X Skill 的 `SKILL.atriyph` 文件使用 `#skill` header。
-- `SKILL.atriyph` 放在 skill 目录（`skills/<name>/SKILL.atriyph`）下。
-- 如果同时存在 `SKILL.md`，Atriyph 文件的描述会优先被 Agent 使用。
-- Python skill 也可以用 `SKILL.atriyph` 覆写 Agent 可读的说明。
+- Skill 的 `SKILL.atriyph` 文件使用 `#skill` header。
+- AgentSkill 放在 `skills/agent/<skill>/`，可用 `SKILL.atriyph` 覆写 `SKILL.md` 的 Agent 可读说明。
+- Go Skill 放在 `skills/go/<skill>/`，必须使用 `SKILL.atriyph`，可选 Go 二进制用于执行。
+- 如果同一 AgentSkill 同时存在 `SKILL.md` 和 `SKILL.atriyph`，Atriyph 文件的描述会优先被 Agent 使用。
+
 
 更多 skill 管理操作见 [命令速查](commands.md) 的 `/tools` 部分。
 

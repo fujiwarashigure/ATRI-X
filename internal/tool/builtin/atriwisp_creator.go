@@ -80,7 +80,7 @@ Atriyph is ATRI-X's lightweight task notation. In Atrinis llm mode, use Atriyph 
 4. Decide target request:
    - platforms: normally ["cli"] or ["all"].
    - superadmins: normally true.
-5. Decide whether the background task needs ATRI-X internal tools with tool_list_names.
+5. Decide whether the background task needs ATRI-X internal tools or Skills with tool_list_names.
 6. Decide whether the Atriwisp needs to declare external tools in tools.
 7. Inspect existing config with read_file before editing app.toml or atrinis.toml.
 8. Use edit_file to create listener code, config snippets, and tests.
@@ -122,7 +122,7 @@ Common optional fields:
 - title: notification/session title.
 - format: "text" or "atriyph". Default is text.
 - model_slot: llm mode slot, one of atriwisp1, atriwisp2, atriwisp3. Falls back to work when unset or unconfigured.
-- tool_list_names: ATRI-X internal tools requested for background llm mode. Atrinis allowed_tools still decides final availability. discover_tool is ignored in background.
+- tool_list_names: ATRI-X internal tool names or Skill names requested for background llm mode. Tools inject schemas; Skills inject task instructions and activate their runner. Atrinis allowed_tools still decides final availability. discover_tool is ignored in background.
 - tools: external tool declarations supplied by Atriwisp for this event.
 - targets: desired delivery target. Atrinis still resolves final target.
 - meta: original extra metadata; useful for host, severity, URL, path, commit id, etc.
