@@ -28,39 +28,40 @@ Atrinis 让 ATRI-X 可以响应外部世界。
 
 ```mermaid
 flowchart LR
-    subgraph sources[外部世界 + Atriwisp]
+    subgraph sources[External World + Atriwisp]
         direction TB
-        server[服务器 / 日志<br/>Atriwisp]
-        rss[RSS / 网页<br/>Atriwisp]
-        webhook[Webhook / 业务告警<br/>Atriwisp]
-        game[游戏事件<br/>Atriwisp]
-        script[本地脚本 / 设备<br/>Atriwisp]
+        server[Server / Log<br/>Atriwisp]
+        rss[RSS / Webpage<br/>Atriwisp]
+        webhook[Webhook / Business Alert<br/>Atriwisp]
+        game[Game Event<br/>Atriwisp]
+        script[Local Script / Device<br/>Atriwisp]
+        other[Other Computer Devices<br/>Atriwisp]
         more[More ...<br/>Atriwisp]
     end
 
-    atriena[Atriena<br/>事件内容 / 目标期望 / 工具声明]
+    atriena[Atriena<br/>Event Content / Goal Expectation / Tool Declaration]
 
-    subgraph atrinis[Atrinis 监听枢纽]
+    subgraph atrinis[Atrinis Listening Hub]
         ingress[HTTP Ingress]
-        auth[Token 鉴权<br/>协议校验]
-        dedupe[事件去重<br/>审计与日志]
-        route[目标裁决<br/>模式分发]
+        auth[Token Auth<br/>Protocol Check]
+        dedupe[Event Dedup<br/>Audit & Log]
+        route[Goal Judgment<br/>Mode Dispatch]
     end
 
-    record[record<br/>只记录事件]
-    direct[direct<br/>直接通知]
-    llm[llm<br/>后台 LLM Session]
+    record[record<br/>Log Event Only]
+    direct[direct<br/>Direct Notification]
+    llm[llm<br/>Background LLM Session]
 
-    subgraph atri-x[ATRI-X 控制层]
+    subgraph atri-x[ATRI-X Control Layer]
         agent[Agent]
-        toolrun[ToolRun<br/>工具视图 / 风险确认 / 调用记录]
-        internalTools[ATRI-X 内置工具]
-        externalTools[Atriwisp 外部工具]
+        toolrun[ToolRun<br/>Tool View / Risk Confirmation / Call Record]
+        internalTools[ATRI-X Built-in Tools]
+        externalTools[Atriwisp External Tools]
         security[Security Policy]
         output[Output Layer]
     end
 
-    platforms[目标平台<br/>CLI / QQ / 其他平台]
+    platforms[Target Platforms<br/>CLI / QQ / Other Platforms]
 
     server --> atriena
     rss --> atriena
@@ -73,7 +74,7 @@ flowchart LR
     route --> direct --> output
     route --> llm --> agent
 
-    atriena -. 工具声明 / 预加载工具名 .-> toolrun
+    atriena -. Tool Declaration / Preload Tool Names .-> toolrun
     agent -->|tool calls| toolrun
     toolrun -->|tool results| agent
     toolrun --> security
@@ -150,7 +151,7 @@ Atrinis 收到事件后，会按 `mode` 决定处理方式。
 {
   "completed": true,
   "need_report": true,
-  "report": "处理结果"
+  "report": "result"
 }
 ```
 
