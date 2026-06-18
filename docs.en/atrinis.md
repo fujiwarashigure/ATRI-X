@@ -182,12 +182,14 @@ Example:
 
 Simply put: Cron is responsible for "when to do it", Atrinis is responsible for "what happened outside", Atriyph is responsible for "how the task is described", and Skill is responsible for "how capabilities are reused".
 
+## Creating Atriwisp Auxiliary Tools
+
+In work mode, the superadmin can let ATRI-X use the built-in tool `atriwisp_creator` to assist in creating Atriwisp. This tool returns creation guides, Atriena event templates, Atrinis configuration snippets, listener scaffolds, curl test commands, and security checklists; The actual writing of files or execution of commands is still handled by the file tool and shell tool.
+
 ## Current Limitations and Future Directions
 
-Currently, Atrinis supports record, direct, and llm modes. The following capabilities are still under development or planning:
+Currently, Atrinis supports record, direct, and llm modes, as well as Atriwisp declaring external tools along with events. The following capabilities are still under development or planning:
 
-- Atriwisp declares tools along with events and is called securely by Atrinis.
-- Built-in Skills or tools for "creating Atriwisp".
 - Multiple message segments.
 - Multi-turn communication between Atrinis and Atriwisp.
 - Non-HTTP transports such as stdio, pipe, etc.
