@@ -164,6 +164,7 @@ In work mode, the LLM can discover tool details on demand via `discover_tool`. I
 | --- | --- |
 | `/log [options]` | Query runtime logs. |
 | `/audit [options]` | Query audit logs. |
+| `/atriwisp [name] [options]` | Query Atrinis/Atriwisp event logs. |
 
 Common options:
 
@@ -188,6 +189,19 @@ Common options:
 | `--session <id>` | Filter by Session ID. |
 | `--tool <name>` | Filter by tool name. |
 
+`/atriwisp` queries `atrinis-YYYY-MM-DD.log`, with additional support for:
+
+| Option | Function |
+| --- | --- |
+| `[name]` | Filter by Atriwisp name, equivalent to `--name`. |
+| `--name <name>` or `--atriwisp <name>` | Filter by Atriwisp name. |
+| `--source <source>` | Filter by event source. |
+| `--id <id>` or `--source-id <id>` | Filter by external event ID. |
+| `--mode <record|direct|llm>` | Filter by event mode. |
+| `--event-key <key>` | Filter by Atrinis event key. |
+| `--event-id <id>` | Filter by internal Atrinis event ID. |
+| `--token <name>` | Filter by token name, excluding the original token text. |
+
 Example:
 
 ```text
@@ -196,6 +210,9 @@ Example:
 /log --msg startup --days 3
 /audit --event tool_call --risk high -n 10
 /audit --actor cli:local --since 24h
+/atriwisp
+/atriwisp server-watchdog -n 20
+/atriwisp --source minecraft-main --mode llm --since 2h
 ```
 
 ## High-risk Tool Confirmation

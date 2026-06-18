@@ -159,6 +159,18 @@ HTTP requests in `llm` mode will return quickly, and the actual processing is ex
 
 During `need_report=true`, Atrinis will send `report` according to the adjudicated target.
 
+## View Atriwisp logs
+
+You can use `/atriwisp` to view Atrinis/Atriwisp event logs. It reads `atrinis-YYYY-MM-DD.log` and supports filtering by Atriwisp name, event source, event ID, mode, and time range.
+
+Example:
+
+```text
+/atriwisp
+/atriwisp server-watchdog -n 20
+/atriwisp --source minecraft-main --mode llm --since 2h
+```
+
 ## Relationship with Cron, Atriyph, and Skill
 
 | Capability | Trigger Source | Function |
