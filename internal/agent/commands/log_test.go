@@ -60,6 +60,27 @@ func TestLogCommandDefaultsToDebugAndFiveEntries(t *testing.T) {
 	}
 }
 
+func TestAtriwispCommandDefaultsToAtrinisDebugAndFiveEntries(t *testing.T) {
+	service := &fakeLogService{entries: []logging.LogEntry{{
+		Time:    time.Date(2026, 6, 18, 12, 0, 0, 0, time.Local),
+		Level:   "INFO",
+		Message: "atrinis event accepted",
+		Fields:  map[string]string{"atriwisp_name": "server-watchdog", "source": "minecraft-main", "source_id": "cpu-alert-001", "mode": "llm"},
+	}}}
+	result, err := NewAtriwisp(Deps{Logs: service}).Handle(context.Background(), command.Request{})
+	if err != nil {
+		t.Fatalf("atriwisp handle: %v", err)
+	}
+	if service.query.Prefix != "atrinis" || service.query.Limit != defaultLogListLimit || service.query.Days != 1 || strings.ToLower(service.query.MinLevel) != "debug" {
+		t.Fatalf("query = %#v", service.query)
+	}
+	for _, want := range []string{"atriwisp logs:", "atrinis event accepted", "atriwisp=server-watchdog", "source=minecraft-main", "id=cpu-alert-001", "mode=llm"} {
+		if !strings.Contains(result.Content, want) {
+			t.Fatalf("content missing %q:\n%s", want, result.Content)
+		}
+	}
+}
+
 func TestLogCommandShowsStructuredRuntimeFields(t *testing.T) {
 	service := &fakeLogService{entries: []logging.LogEntry{{
 		Time:    time.Date(2026, 6, 6, 19, 19, 1, 0, time.Local),
@@ -89,6 +110,28 @@ func TestLogCommandShowsStructuredRuntimeFields(t *testing.T) {
 		if strings.Contains(result.Content, hidden) {
 			t.Fatalf("content should hide %q:\n%s", hidden, result.Content)
 		}
+	}
+}
+
+func TestAtriwispCommandParsesFiltersAndPositionalName(t *testing.T) {
+	service := &fakeLogService{entries: []logging.LogEntry{{Message: "atrinis llm completed", Fields: map[string]string{"atriwisp_name": "server-watchdog"}}}}
+	_, err := NewAtriwisp(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `server-watchdog --source minecraft-main --id cpu-alert-001 --mode llm --event-key server-watchdog/minecraft-main/cpu-alert-001 --event-id evt-1 --token home -n 3 --since 2h`})
+	if err != nil {
+		t.Fatalf("atriwisp handle: %v", err)
+	}
+	if service.query.Fields["atriwisp_name"] != "server-watchdog" || service.query.Fields["source"] != "minecraft-main" || service.query.Fields["source_id"] != "cpu-alert-001" || service.query.Fields["mode"] != "llm" {
+		t.Fatalf("fields = %#v", service.query.Fields)
+	}
+	if service.query.Fields["event_key"] != "server-watchdog/minecraft-main/cpu-alert-001" || service.query.Fields["event_id"] != "evt-1" || service.query.Fields["token_name"] != "home" {
+		t.Fatalf("fields = %#v", service.query.Fields)
+	}
+	if service.query.Limit != 3 || service.query.Since == nil {
+		t.Fatalf("query = %#v", service.query)
+	}
+
+	_, err = NewAtriwisp(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `foo --name bar`})
+	if err == nil {
+		t.Fatal("conflicting atriwisp names should fail")
 	}
 }
 
@@ -176,6 +219,16 @@ func TestLogAndAuditCommandsCompleteOptionsAndValues(t *testing.T) {
 		t.Fatalf("log level Complete = %#v", got)
 	}
 
+	atriwispCmd := NewAtriwisp(Deps{}).(command.Completer)
+	got = atriwispCmd.Complete(context.Background(), command.CompletionRequest{Raw: "/atriwisp --mo", Prefix: "/", Name: "atriwisp", Args: "--mo", Cursor: len("/atriwisp --mo")})
+	if len(got) != 1 || got[0].Text != "--mode" {
+		t.Fatalf("atriwisp option Complete = %#v", got)
+	}
+	got = atriwispCmd.Complete(context.Background(), command.CompletionRequest{Raw: "/atriwisp --mode l", Prefix: "/", Name: "atriwisp", Args: "--mode l", Cursor: len("/atriwisp --mode l")})
+	if len(got) != 1 || got[0].Text != "llm" || got[0].Kind != "atrinis_mode" {
+		t.Fatalf("atriwisp mode Complete = %#v", got)
+	}
+
 	auditCmd := NewAudit(Deps{Tools: &fakeToolService{infos: []tool.Info{{Name: "shell"}, {Name: "web_search"}}}}).(command.Completer)
 	got = auditCmd.Complete(context.Background(), command.CompletionRequest{Raw: "/audit --risk h", Prefix: "/", Name: "audit", Args: "--risk h", Cursor: len("/audit --risk h")})
 	if len(got) != 1 || got[0].Text != "high" {
@@ -203,6 +256,24 @@ func TestLogCommandHelpAndRawDebug(t *testing.T) {
 		t.Fatalf("log raw: %v", err)
 	}
 	if !service.query.Raw || !strings.Contains(result.Content, "raw debug") {
+		t.Fatalf("query = %#v content = %q", service.query, result.Content)
+	}
+}
+
+func TestAtriwispCommandDebugShowsRawEntries(t *testing.T) {
+	raw := `time="2026-06-18 12:00:00" level=DEBUG msg="atrinis llm queued" atriwisp_name=server-watchdog source=minecraft-main`
+	service := &fakeLogService{entries: []logging.LogEntry{{
+		Time:    time.Date(2026, 6, 18, 12, 0, 0, 0, time.Local),
+		Level:   "DEBUG",
+		Message: "atrinis llm queued",
+		Fields:  map[string]string{"atriwisp_name": "server-watchdog"},
+		Raw:     raw,
+	}}}
+	result, err := NewAtriwisp(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "-d"})
+	if err != nil {
+		t.Fatalf("atriwisp handle: %v", err)
+	}
+	if !service.query.Raw || !strings.Contains(result.Content, raw) {
 		t.Fatalf("query = %#v content = %q", service.query, result.Content)
 	}
 }

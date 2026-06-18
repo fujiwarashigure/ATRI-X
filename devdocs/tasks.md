@@ -856,6 +856,7 @@
 
 ### Phase 4：文档、运维与后续预留
 
+- [x] 增加 `/atriwisp` 命令查询 Atrinis/Atriwisp 事件日志，支持按 Atriwisp、source、事件 ID、模式、时间和等级过滤。
 - [ ] 增加 Atrinis 事件查询、失败重试或禁用能力。
 - [ ] 内置“创建 Atriwisp”的 Skill/工具，帮助用户生成 Atriwisp 配置、事件模板和最小监听器脚手架。
 - [ ] 支持多种消息segment

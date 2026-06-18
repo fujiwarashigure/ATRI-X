@@ -242,7 +242,7 @@ func isManagedLogFile(name string) bool {
 	if !strings.HasSuffix(name, ".log") {
 		return false
 	}
-	return strings.HasPrefix(name, "atri-x-") || strings.HasPrefix(name, "audit-")
+	return strings.HasPrefix(name, "atri-x-") || strings.HasPrefix(name, "audit-") || strings.HasPrefix(name, "atrinis-")
 }
 
 func parseLevel(level string) slog.Level {

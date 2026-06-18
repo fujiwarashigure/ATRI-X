@@ -162,6 +162,7 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 | --- | --- |
 | `/log [options]` | 查询运行日志。 |
 | `/audit [options]` | 查询审计日志。 |
+| `/atriwisp [name] [options]` | 查询 Atrinis/Atriwisp 事件日志。 |
 
 常用选项：
 
@@ -186,6 +187,19 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 | `--session <id>` | 按 Session ID 过滤。 |
 | `--tool <name>` | 按工具名过滤。 |
 
+`/atriwisp` 查询 `atrinis-YYYY-MM-DD.log`，额外支持：
+
+| 选项 | 作用 |
+| --- | --- |
+| `[name]` | 按 Atriwisp 名称过滤，等同于 `--name`。 |
+| `--name <name>` 或 `--atriwisp <name>` | 按 Atriwisp 名称过滤。 |
+| `--source <source>` | 按事件来源过滤。 |
+| `--id <id>` 或 `--source-id <id>` | 按外部事件 ID 过滤。 |
+| `--mode <record|direct|llm>` | 按事件模式过滤。 |
+| `--event-key <key>` | 按 Atrinis event key 过滤。 |
+| `--event-id <id>` | 按内部 Atrinis event ID 过滤。 |
+| `--token <name>` | 按 token name 过滤，不包含 token 原文。 |
+
 示例：
 
 ```text
@@ -194,6 +208,9 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 /log --msg startup --days 3
 /audit --event tool_call --risk high -n 10
 /audit --actor cli:local --since 24h
+/atriwisp
+/atriwisp server-watchdog -n 20
+/atriwisp --source minecraft-main --mode llm --since 2h
 ```
 
 ## 高风险工具确认

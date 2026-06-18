@@ -144,7 +144,11 @@ curl -sS http://127.0.0.1:32170/atriena/v1/events \
 | `targets` | 否 | Atriwisp 期望投递目标，最终仍由 Atrinis 裁决。 |
 | `meta` | 否 | 原始补充数据，只做记录和 prompt 附加。 |
 
+
+> **注：**：Atriena 基于 JSON，内容必须使用 UTF-8 编码。
+
 HTTP 响应只表示 Atrinis 已接收或拒绝请求，不等待 LLM 完成。
+
 
 ```json
 {
