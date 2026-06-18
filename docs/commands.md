@@ -160,6 +160,8 @@ Fork 会保留原会话，并从指定 assistant 消息位置创建新的上下�
 
 LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。聊天中也可以用 `@tool:<name-or-tag>` 预载工具。
 
+内置工具 `atriwisp_creator` 可帮助超级管理员生成 Atriwisp 配置、Atriena 事件模板、监听器脚手架和测试命令；它本身无参数、无副作用，实际写文件或运行命令仍会继续使用文件工具和 shell 工具并走对应风险确认。
+
 ## 日志和审计
 
 | 命令 | 作用 |

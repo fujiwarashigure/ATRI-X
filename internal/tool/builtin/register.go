@@ -72,6 +72,9 @@ func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
 	if err := registry.Register(NewShellTool()); err != nil {
 		return err
 	}
+	if err := registry.Register(NewAtriwispCreatorTool()); err != nil {
+		return err
+	}
 	catalog := (*skill.Catalog)(nil)
 	if opts.SkillManager != nil {
 		catalog = opts.SkillManager.Catalog

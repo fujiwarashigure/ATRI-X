@@ -180,12 +180,14 @@ Atrinis 收到事件后，会按 `mode` 决定处理方式。
 
 简单说：Cron 负责“什么时候做”，Atrinis 负责“外面发生了什么”，Atriyph 负责“任务怎么描述”，Skill 负责“能力怎么复用”。
 
+## 创建 Atriwisp 辅助工具
+
+工作模式下，超级管理员可以让 ATRI-X 使用内置工具 `atriwisp_creator` 辅助创建 Atriwisp。该工具会返回创建指南、Atriena 事件模板、Atrinis 配置片段、监听器脚手架、curl 测试命令和安全检查清单；真正写文件或运行命令仍由文件工具和 shell 工具处理。
+
 ## 当前限制与后续方向
 
-当前 Atrinis 已支持 record、direct 和 llm 模式。以下能力仍在开发或规划中：
+当前 Atrinis 已支持 record、direct、llm 模式和 Atriwisp 随事件声明外部工具。以下能力仍在开发或规划中：
 
-- Atriwisp 随事件声明工具并由 Atrinis 安全调用。
-- 内置“创建 Atriwisp”的 Skill 或工具。
 - 多种消息 segment。
 - Atrinis 与 Atriwisp 多轮通信。
 - stdio、pipe 等非 HTTP transport。
