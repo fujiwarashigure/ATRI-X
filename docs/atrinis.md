@@ -90,7 +90,7 @@ flowchart LR
 
 Atrinis 是 ATRI-X 内部的事件入口 runtime，和平台 runtime、Cron runtime 同级装配。
 
-它统一接收外部事件，把事件接到记录、通知或后台 LLM；也像恒星，所有 Atriwisp 的信号都围绕它汇聚，但最终能量由 ATRI-X 控制。
+它统一接收外部事件，把事件接到记录、通知或后台 LLM；它像一颗恒星，所有 Atriwisp 的信号都围绕它汇聚，但最终能量由 ATRI-X 控制。
 
 Atrinis 负责：
 
@@ -118,7 +118,7 @@ Atriwisp 是外部子监听器。它可以是一个 shell 脚本、一个常驻�
 - 设备、传感器或本地脚本输出。
 - 任何计算机能接收、读取、监听或生成的内容。
 
-Atriwisp 像散布在外部世界的探机，也像 ATRI-X 的眼睛。它们可以很多、很小、很分散；职责只有一个：把外部世界发生了什么告诉 Atrinis。
+Atriwisp 是 ATRI-X 的眼睛，也像散布在外部世界的探机。它们可以很多、很小、很分散；职责只有一个：把外部世界发生了什么告诉 Atrinis。
 
 Atriwisp 只负责“看见并上报”。它不直接控制 ATRI-X，不直接向聊天平台发消息，也不决定最终是否调用 LLM 或工具。
 
@@ -191,11 +191,8 @@ Atrinis 收到事件后，会按 `mode` 决定处理方式。
 - 多种消息 segment。
 - Atrinis 与 Atriwisp 多轮通信。
 - stdio、pipe 等非 HTTP transport。
-- Atrinis 事件查询、失败重试或禁用能力。
 
 ## 下一步：配置与使用
-
-看完这里，就可以开始了解配置和投递事件。
 
 - [Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp 策略、发送 Atriena 请求，并了解请求字段和投递边界。
 
