@@ -65,6 +65,14 @@ Configuration description:
 - `default_platforms` is the default delivery platform allowed by the Atrinis policy.
 - `allow_superadmins=true` indicates that delivery to the target platform's superadmin is allowed.
 
+If you want ATRI-X to help you generate an Atriwisp listener, you can submit a request to the superadmin Session in work mode, for example:
+
+```text
+@tool:atriwisp_creator 帮我创建一个监听 RSS 更新并通过 Atrinis 投递摘要的 Atriwisp
+```
+
+`atriwisp_creator` will provide protocol descriptions, configuration snippets, event templates, code scaffolding, and test commands; actually writing files or running commands will still continue to use the corresponding tools.
+
 After starting ATRI-X, you can use curl to test a `direct` event:
 
 ```bash
@@ -100,6 +108,7 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
   "title": "服务器 CPU 异常",
   "format": "atriyph",
   "content": "#task investigate_cpu_alert - 检查服务器 CPU 异常并判断是否需要通知",
+  "model_slot": "atriwisp2",
   "tool_list_names": ["shell"],
   "tools": [
     {
@@ -140,7 +149,7 @@ Common fields:
 | `title` | No | Event title, used for notifications and background Session titles. |
 | `format` | No | `text` or `atriyph`, default `text`. |
 | `content` | Yes | Event body. For LLM mode, using Atriyph Task Notation `#task` is recommended. |
-| `model_slot` | No | Model slot, used subsequently for `atriwisp1`, `atriwisp2`, and `atriwisp3`. |
+| `model_slot` | No | Atrinis LLM model slot, only supporting `atriwisp1`, `atriwisp2`, and `atriwisp3`; if left blank or the corresponding slot is not configured, it will fall back to `work`. |
 | `tool_list_names` | No | The name of the ATRI-X internal tool preloaded by the background task; it must be within the adjudication range of Atrinis `allowed_tools`, and `discover_tool` will be ignored. |
 | `tools` | No | External tools declared by Atriwisp with events; allowed by default, rejected when hitting the `disabled_external_tools` of that Atriwisp. |
 | `targets` | No | The delivery target expected by Atriwisp; the final decision is still made by Atrinis. |
@@ -183,6 +192,7 @@ Security Conventions:
 
 - The token name is used only for logs and audit logs, and is not equivalent to the Atriwisp identity.
 - The original token text is not written to logs.
+- `model_slot` can only choose `atriwisp1`, `atriwisp2`, or `atriwisp3`, and cannot specify an arbitrary internal mode name.
 - Atriwisp cannot send platform messages directly.
 - Atriwisp cannot bypass Tool Runtime and Security Policy to call ATRI-X internal tools; `tool_list_names` will be adjudicated by Atrinis `allowed_tools`.
 - External `tools` declared by Atriwisp are allowed by default and are injected as model-callable function names in the form of `atriwisp_<atriwisp>_<tool>` via ToolRun; A single Atriwisp can use `disabled_external_tools` to disable specific tools.
