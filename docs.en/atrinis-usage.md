@@ -151,7 +151,6 @@ Common fields:
 | `content` | Yes | Event body. For LLM mode, using Atriyph Task Notation `#task` is recommended. |
 | `model_slot` | No | Atrinis LLM model slot, only supporting `atriwisp1`, `atriwisp2`, and `atriwisp3`; if left blank or the corresponding slot is not configured, it will fall back to `work`. |
 | `tool_list_names` | No | The ATRI-X internal tool name or Skill name preloaded for background tasks; Ordinary tools inject the schema, while Skills inject task descriptions and automatically inject the corresponding runner; Must be within the Atrinis `allowed_tools` adjudication range; `discover_tool` will be ignored. |
-
 | `tools` | No | External tools declared by Atriwisp with events; allowed by default, rejected when hitting the `disabled_external_tools` of that Atriwisp. |
 | `targets` | No | The delivery target expected by Atriwisp; the final decision is still made by Atrinis. |
 | `meta` | No | Original supplementary data, used only for recording and prompt attachment. |
@@ -194,7 +193,6 @@ Security Conventions:
 - The token name is used only for logs and audit logs, and is not equivalent to the Atriwisp identity.
 - The original token text is not written to logs.
 - `model_slot` can only choose `atriwisp1`, `atriwisp2`, or `atriwisp3`, and cannot specify an arbitrary internal mode name.
-- Atriwisp cannot send platform messages directly.
 - Atriwisp cannot bypass Tool Runtime and Security Policy to call ATRI-X internal tools; Tool names or Skill names in `tool_list_names` will all undergo Atrinis `allowed_tools` adjudication.
 
 - External `tools` declared by Atriwisp are allowed by default and are injected as model-callable function names in the form of `atriwisp_<atriwisp>_<tool>` via ToolRun; A single Atriwisp can use `disabled_external_tools` to disable specific tools.
