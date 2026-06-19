@@ -1,14 +1,13 @@
 # 配置说明
 
-ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行态状态。开发期不考虑旧配置兼容，建议直接按当前 `config/` 示例维护。
+ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行态状态。默认配置由程序内置 assets 生成到平台配置目录；已有配置文件不会被覆盖。
 
 ## 配置文件职责
 
-默认源码配置目录包含：
+源码中的 `config/` 目录只保留可独立维护的示例/辅助配置文件；主配置 `app.toml` 首次运行时由程序内置 assets 生成到平台配置目录。
 
 | 文件或目录 | 职责 |
 | --- | --- |
-| `config/app.toml` | 主配置入口，保存 storage、runtime、context、commands、tools、security、platform 和配置文件路径。 |
 | `config/providers.toml` | LLM Provider、模型列表、默认请求参数和模型 metadata。 |
 | `config/state.toml` | 运行态状态，例如默认 Session 模式、chat/work/compact/naming 模型选择。 |
 | `config/tool_tags.md` | 给工具添加 tag 和prompt的配置文件。 |
@@ -17,7 +16,6 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 | `config/.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
 | `config/plugins/` | Hook 和插件配置目录。 |
 | `config/skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。 |
-
 | `config/memories.toml` | 常驻记忆文件，默认位于配置目录下。 |
 | `config/long_memory/` | 长期记忆 Markdown 源数据目录，默认位于配置目录下。 |
 
@@ -28,25 +26,26 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 1. 命令行 `--config`。
 2. 环境变量 `ATRIX_CONFIG_FILE`。
 3. 平台配置目录：Windows `%APPDATA%/ATRI-X/app.toml`；Linux 使用 XDG 配置目录。
-4. 源码目录 `config/app.toml`。
-5. 若平台配置和源码示例配置都不存在，则自动在平台配置目录生成默认配置文件。
+4. 若平台配置不存在，则自动在平台配置目录生成默认配置文件。
 
-自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
+自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
 首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
 
 
-示例：
+开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
 
 ```bash
-go run ./cmd/atri-x --config config/app.toml
+go run ./cmd/atri-x
 ```
+
+如需使用临时配置文件，也可以显式指定 `--config`。
 
 ## 相对路径规则
 
 相对路径默认基于主配置文件所在目录解析。
 
-例如使用 `config/app.toml` 时：
+例如平台配置目录下的 `app.toml` 写入：
 
 ```toml
 [config_files]
@@ -58,7 +57,7 @@ atrinis = "atrinis.toml"
 path = "SOUL.md"
 ```
 
-这些路径都会解析到 `config/` 目录下。
+这些路径都会解析到主配置文件所在目录下；默认情况下就是平台配置目录。
 
 ## Provider 配置
 
@@ -202,7 +201,14 @@ enabled = true
 schedule = "0 3 * * *"
 ```
 
-Cron 表达式由内部 Cron Runtime 调度。默认维护任务包含日志、artifact 和聊天历史清理。
+Cron 表达式由内部 Cron Runtime 调度，使用 Linux crontab 风格的 5 字段格式：`分钟 小时 日 月 星期`。默认维护任务包含日志、artifact 和聊天历史清理，例如聊天历史默认每天 04:35 执行：
+
+```toml
+[maintenance.chat_history_cleanup]
+enabled = true
+schedule = "35 4 * * *"
+retention_days = 180
+```
 
 ## Context 与压缩
 

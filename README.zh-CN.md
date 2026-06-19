@@ -63,10 +63,10 @@ Atrinis 是 ATRI-X 的监听枢纽，Atriwisp 是分布在各地的外部监听�
 
 ## 使用方法
 
-开发期可以直接从源码启动：
+开发期可以直接从源码启动；首次运行会在平台配置目录自动生成默认配置，已有配置不会被覆盖：
 
 ```bash
-go run ./cmd/atri-x --config config/app.toml
+go run ./cmd/atri-x
 ```
 
 常用启动方式：
