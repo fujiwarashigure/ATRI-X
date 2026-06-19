@@ -95,6 +95,9 @@ func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
 		if err := registry.Register(skill.NewModifyAtrixSkillTool(opts.SkillManager)); err != nil {
 			return err
 		}
+		if err := registry.Register(skill.NewFinalizeAtrixSkillTool(opts.SkillManager)); err != nil {
+			return err
+		}
 	}
 
 	return nil

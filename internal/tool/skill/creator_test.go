@@ -170,7 +170,7 @@ func TestCreateAtrixSkillDoesNotOverwriteRegistryTool(t *testing.T) {
 func TestCreateAtrixSkillDiscoversMaintenanceTools(t *testing.T) {
 	registry := tool.NewRegistry()
 	manager := NewManager(t.TempDir(), registry)
-	for _, item := range []tool.Tool{NewCreateAtrixSkillTool(manager), NewReadAtrixSkillTool(manager), NewModifyAtrixSkillTool(manager)} {
+	for _, item := range []tool.Tool{NewCreateAtrixSkillTool(manager), NewReadAtrixSkillTool(manager), NewModifyAtrixSkillTool(manager), NewFinalizeAtrixSkillTool(manager)} {
 		if err := registry.Register(item); err != nil {
 			t.Fatal(err)
 		}
@@ -183,7 +183,7 @@ func TestCreateAtrixSkillDiscoversMaintenanceTools(t *testing.T) {
 	for _, detail := range details {
 		found[detail.Info.Name] = detail.Schema != nil
 	}
-	for _, name := range []string{CreateAtrixSkillName, ReadAtrixSkillName, ModifyAtrixSkillName} {
+	for _, name := range []string{CreateAtrixSkillName, ReadAtrixSkillName, ModifyAtrixSkillName, FinalizeAtrixSkillName} {
 		if !found[name] {
 			t.Fatalf("missing schema for %s in %#v", name, details)
 		}

@@ -34,7 +34,7 @@ ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是
 
 **Atriyph 任务表示法**： Atriyph 用于描述 LLM Cron 与原生 Skill。目标是减少自然语言任务描述中的歧义，用更短、更稳定的结构表达输入、输出、步骤、条件和约束。相比随意 Markdown，Atriyph 更适合 LLM 之间复用和传递任务，也便于 lint、审计和工具化处理。
 
-**可由 LLM 创建的 ATRI-X Skill**： ATRI-X 内置 `create_atrix_skill` 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。创建时自动校验 Atriyph 语法，可选附带 Go 源码并编译；创建后的纯 Atriyph 文本或 Go 源码由统一的 `read_atrix_skill` / `modify_atrix_skill` 维护。
+**可由 LLM 创建的 ATRI-X Skill**： ATRI-X 内置 `create_atrix_skill` 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。创建时自动校验 Atriyph 语法，可选附带 Go 源码并编译；创建后的纯 Atriyph 文本或 Go 源码由统一的 `read_atrix_skill` / `modify_atrix_skill` 维护，源码改完后通过 `finalize_atrix_skill` 统一格式化、编译并返回检查结果。
 
 **兼容外置 AgentSkill**： 除了原生 Go Skill，ATRI-X 也兼容遵从 agentskills.io 风格的外置 AgentSkill。自动扫描 `skills/agent/<skill>/SKILL.md` 或 `SKILL.atriyph`，读取名称、描述、适用场景和风险等级；当前可通过隐藏包装工具执行附带 Python 脚本。
 
