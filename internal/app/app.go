@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/agent"
+	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/completion"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
@@ -351,6 +352,7 @@ func Run(ctx context.Context, opts Options) error {
 	}
 
 	registerCompletionPlatforms(agt, platforms.Runtimes)
+	registerCommandCatalogs(agt, platforms.Runtimes)
 	registerPlatformHooks(agt, platforms.Runtimes)
 	profiler.Mark("platform hooks")
 	startupDuration := profiler.Flush()
@@ -398,6 +400,10 @@ type completionPlatform interface {
 	SetCompleter(*completion.Service)
 }
 
+type commandCatalogPlatform interface {
+	SetCommandCatalog([]command.Info)
+}
+
 func registerCompletionPlatforms(agent *agent.Agent, adapters []platformRuntime) {
 	if agent == nil {
 		return
@@ -425,6 +431,21 @@ func registerCronPlatformHook(hooks hook.Registrar, service *elcron.Service) err
 			return event, nil
 		}),
 	})
+}
+
+func registerCommandCatalogs(agent *agent.Agent, adapters []platformRuntime) {
+	if agent == nil {
+		return
+	}
+	commands := agent.CommandInfos()
+	for _, adapter := range adapters {
+		if adapter == nil {
+			continue
+		}
+		if catalog, ok := adapter.(commandCatalogPlatform); ok {
+			catalog.SetCommandCatalog(commands)
+		}
+	}
 }
 
 func registerPlatformHooks(agent platformHookAgent, adapters []platformRuntime) {

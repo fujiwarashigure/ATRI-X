@@ -10,6 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/platform/headless"
 	qqonebot "github.com/fujiwarashigure/ATRI-X/internal/platform/qq-onebot"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform/qqofficial"
+	"github.com/fujiwarashigure/ATRI-X/internal/platform/telegram"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
@@ -60,6 +61,15 @@ func New(opts Options, cfg *config.Config, store storage.Store, chatHistory stor
 	}
 	if raw, ok := cfg.Platform["qqonebot"]; ok {
 		adapter, err := qqonebot.NewFromPlatformConfig(raw, store, chatHistory, logger, cfg.Security.Superadmins["qqonebot"], cfg.Commands.Prefixes)
+		if err != nil {
+			return Bundle{}, err
+		}
+		if adapter.Enabled() {
+			bundle.Runtimes = append(bundle.Runtimes, adapter)
+		}
+	}
+	if raw, ok := cfg.Platform["telegram"]; ok {
+		adapter, err := telegram.NewFromPlatformConfig(raw, store, chatHistory, logger, cfg.Security.Superadmins["telegram"], cfg.Commands.Prefixes)
 		if err != nil {
 			return Bundle{}, err
 		}
