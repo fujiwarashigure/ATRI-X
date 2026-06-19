@@ -36,7 +36,7 @@ For personal daily use, token consumption per request:
 
 **Atriyph Task Notation**: Atriyph is used to describe LLM Cron and native skills. The goal is to reduce ambiguity in natural language task descriptions and use a shorter, more stable structure to express inputs, outputs, steps, conditions, and constraints. Compared to arbitrary Markdown, Atriyph is better suited for reusing and passing tasks between LLMs, and is also easier to lint, audit, and process with tools.
 
-**ATRI-X Skills creatable by LLM**: ATRI-X has a built-in `create_atrix_skill` meta-tool, allowing the LLM to crystallize reusable experience into ATRI-X Skills. Atriyph syntax is automatically validated upon creation, with the option to include and compile Go source code.
+**ATRI-X Skills creatable by LLM**: ATRI-X has a built-in `create_atrix_skill` meta-tool, allowing the LLM to crystallize reusable experience into ATRI-X Skills. Automatically validate Atriyph syntax upon creation, with optional Go source code attachment and compilation; Pure Atriyph text or Go source code created is maintained by a unified `read_atrix_skill` / `modify_atrix_skill`.
 
 **Compatible with external AgentSkills**: In addition to native Go Skills, ATRI-X is also compatible with external AgentSkills that follow the agentskills.io style. Automatically scan `skills/agent/<skill>/SKILL.md` or `SKILL.atriyph` to read the name, description, applicable scenarios, and risk level; Currently, bundled Python scripts can be executed via hidden wrapper tools.
 
@@ -65,10 +65,10 @@ For detailed information, see [Atrinis Listening Hub](docs.en/atrinis.md).
 
 ## Usage
 
-During the development phase, you can start directly from the source code:
+During the development phase, it can be started directly from the source code; the first run will automatically generate a default configuration in the platform configuration directory, and existing configurations will not be overwritten:
 
 ```bash
-go run ./cmd/atri-x --config config/app.toml
+go run ./cmd/atri-x
 ```
 
 Common startup methods:
