@@ -166,3 +166,26 @@ func TestCreateAtrixSkillDoesNotOverwriteRegistryTool(t *testing.T) {
 		t.Fatal("expected registry conflict error")
 	}
 }
+
+func TestCreateAtrixSkillDiscoversMaintenanceTools(t *testing.T) {
+	registry := tool.NewRegistry()
+	manager := NewManager(t.TempDir(), registry)
+	for _, item := range []tool.Tool{NewCreateAtrixSkillTool(manager), NewReadAtrixSkillTool(manager), NewModifyAtrixSkillTool(manager)} {
+		if err := registry.Register(item); err != nil {
+			t.Fatal(err)
+		}
+	}
+	details, errors := registry.DiscoverDetails([]string{CreateAtrixSkillName}, func(tool.Tool) bool { return true })
+	if len(errors) > 0 {
+		t.Fatalf("errors = %#v", errors)
+	}
+	found := map[string]bool{}
+	for _, detail := range details {
+		found[detail.Info.Name] = detail.Schema != nil
+	}
+	for _, name := range []string{CreateAtrixSkillName, ReadAtrixSkillName, ModifyAtrixSkillName} {
+		if !found[name] {
+			t.Fatalf("missing schema for %s in %#v", name, details)
+		}
+	}
+}

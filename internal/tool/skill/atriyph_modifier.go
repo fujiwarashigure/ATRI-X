@@ -12,11 +12,15 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
+	"github.com/fujiwarashigure/ATRI-X/internal/utils/fileops"
 )
 
 const (
 	ReadAtrixSkillName   = "read_atrix_skill"
 	ModifyAtrixSkillName = "modify_atrix_skill"
+
+	atrixSkillTargetAtriyph      = "skill_atriyph"
+	atrixSkillTargetCodeSource = "code_source"
 )
 
 type ReadAtrixSkillTool struct {
@@ -29,14 +33,17 @@ type ModifyAtrixSkillTool struct {
 
 type readAtrixSkillArgs struct {
 	Name      string `json:"name"`
+	Target    string `json:"target"`
 	StartLine int    `json:"start_line"`
 	EndLine   int    `json:"end_line"`
 }
 
 type modifyAtrixSkillArgs struct {
-	Name    string            `json:"name"`
-	Content string            `json:"content"`
-	Patches []modifyLinePatch `json:"patches"`
+	Name      string            `json:"name"`
+	Target    string            `json:"target"`
+	Content   string            `json:"content"`
+	Patches   []modifyLinePatch `json:"patches"`
+	TimeoutMS int               `json:"timeout_ms"`
 }
 
 type modifyLinePatch struct {
@@ -57,37 +64,48 @@ func (ReadAtrixSkillTool) Name() string { return ReadAtrixSkillName }
 
 func (ReadAtrixSkillTool) Info() tool.Info {
 	return tool.NewBuilder(ReadAtrixSkillName).
-		Description("按行读取 ATRI-X 原生 Atriyph skill 的 SKILL.atriyph，返回 1-based 行号，供修改前定位使用。").
+		Description("按行读取 ATRI-X 原生 ATRI-X Skill 的 SKILL.atriyph 或 main.go，返回 1-based 行号，供修改前定位使用。").
 		Source(tool.SourceBuiltin).
 		Risk(tool.RiskMedium).
 		BuildInfo()
 }
 
 func (ReadAtrixSkillTool) Schema() llm.ToolSchema {
-	return tool.NewBuilder(ReadAtrixSkillName).
-		Description("按行读取 ATRI-X 原生 Atriyph skill 的 SKILL.atriyph。start_line/end_line 为 1-based，可省略以读取全文。").
-		String("name", "skill 名称。", tool.Required()).
-		Integer("start_line", "可选，1-based 起始行，默认 1。").
-		Integer("end_line", "可选，1-based 结束行，默认文件末尾。").
-		BuildSchema()
+	return llm.ToolSchema{Type: "function", Function: llm.ToolFunctionSchema{
+		Name:        ReadAtrixSkillName,
+		Description: "按行读取 ATRI-X 原生 ATRI-X Skill 文件。target 可选：skill_atriyph 读取 SKILL.atriyph；code_source 读取 main.go。默认读取 SKILL.atriyph。start_line/end_line 为 1-based，可省略以读取全文。",
+		Parameters: map[string]any{
+			"type": "object",
+			"properties": map[string]any{
+				"name":       map[string]any{"type": "string", "description": "skill 名称。"},
+				"target":     map[string]any{"type": "string", "enum": []string{atrixSkillTargetAtriyph, atrixSkillTargetCodeSource}, "description": "读取目标：skill_atriyph 表示 SKILL.atriyph；code_source 表示 main.go。默认 skill_atriyph。"},
+				"start_line": map[string]any{"type": "integer", "description": "可选，1-based 起始行，默认 1。"},
+				"end_line":   map[string]any{"type": "integer", "description": "可选，1-based 结束行，默认文件末尾。"},
+			},
+			"required": []string{"name"},
+		},
+	}}
 }
 
 func (t ReadAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*tool.Result, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	var args readAtrixSkillArgs
 	if len(req.Arguments) > 0 {
 		if err := json.Unmarshal(req.Arguments, &args); err != nil {
 			return nil, fmt.Errorf("parse read_atrix_skill arguments: %w", err)
 		}
 	}
-	path, err := atrixSkillPath(t.Manager, strings.TrimSpace(args.Name))
+	path, _, err := atrixSkillTargetPath(t.Manager, strings.TrimSpace(args.Name), strings.TrimSpace(args.Target))
 	if err != nil {
 		return nil, err
 	}
-	data, err := os.ReadFile(path)
+	file, err := fileops.ReadFile(path, "")
 	if err != nil {
-		return nil, fmt.Errorf("read %s: %w", atriyph.SkillFileName, err)
+		return nil, err
 	}
-	lines := splitSkillLines(string(data))
+	lines := fileops.SplitLines(file.Text)
 	start := args.StartLine
 	if start <= 0 {
 		start = 1
@@ -110,7 +128,7 @@ func (ModifyAtrixSkillTool) Name() string { return ModifyAtrixSkillName }
 
 func (ModifyAtrixSkillTool) Info() tool.Info {
 	return tool.NewBuilder(ModifyAtrixSkillName).
-		Description("修改 ATRI-X 原生 Atriyph skill 的 SKILL.atriyph，支持完整 content 覆盖或按行 patch；写入前严格校验 Atriyph 语法。").
+		Description("修改 ATRI-X 原生 ATRI-X Skill 的 SKILL.atriyph 或 main.go；技能定义会校验 Atriyph 并 reload，源码会 gofmt、go build 并 reload。").
 		Source(tool.SourceBuiltin).
 		Risk(tool.RiskHigh).
 		BuildInfo()
@@ -119,12 +137,14 @@ func (ModifyAtrixSkillTool) Info() tool.Info {
 func (ModifyAtrixSkillTool) Schema() llm.ToolSchema {
 	return llm.ToolSchema{Type: "function", Function: llm.ToolFunctionSchema{
 		Name:        ModifyAtrixSkillName,
-		Description: "修改 ATRI-X 原生 Atriyph skill 的 SKILL.atriyph。content 用于全量写入；patches 用原文件 1-based 行号替换整行范围。content 与 patches 必须二选一。修改后必须通过 Atriyph 语法校验才会写入。",
+		Description: "修改 ATRI-X 原生 ATRI-X Skill 文件。target 可选：skill_atriyph 修改 SKILL.atriyph；code_source 修改 main.go；默认 skill_atriyph。content 用于全量写入；patches 用原文件 1-based 行号替换整行范围。content 与 patches 必须二选一。code_source 会自动 gofmt、go build 并 reload；skill_atriyph 会校验 Atriyph 并 reload。",
 		Parameters: map[string]any{
 			"type": "object",
 			"properties": map[string]any{
-				"name":    map[string]any{"type": "string", "description": "skill 名称。"},
-				"content": map[string]any{"type": "string", "description": "可选，完整新的 SKILL.atriyph 内容。"},
+				"name":       map[string]any{"type": "string", "description": "skill 名称。"},
+				"target":     map[string]any{"type": "string", "enum": []string{atrixSkillTargetAtriyph, atrixSkillTargetCodeSource}, "description": "修改目标：skill_atriyph 表示 SKILL.atriyph；code_source 表示 main.go。默认 skill_atriyph。"},
+				"content":    map[string]any{"type": "string", "description": "可选，完整新的文件内容。"},
+				"timeout_ms": map[string]any{"type": "integer", "description": "可选，仅 code_source 编译超时时间，默认 60000。"},
 				"patches": map[string]any{"type": "array", "description": "可选，按原文件行号替换整行范围；new_lines 为空数组表示删除。", "items": map[string]any{
 					"type": "object",
 					"properties": map[string]any{
@@ -148,7 +168,7 @@ func (t ModifyAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 		}
 	}
 	name := strings.TrimSpace(args.Name)
-	path, err := atrixSkillPath(t.Manager, name)
+	path, target, err := atrixSkillTargetPath(t.Manager, name, strings.TrimSpace(args.Target))
 	if err != nil {
 		return nil, err
 	}
@@ -157,44 +177,92 @@ func (t ModifyAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 	if hasContent == hasPatches {
 		return nil, fmt.Errorf("provide exactly one of content or patches")
 	}
-	currentData, err := os.ReadFile(path)
+	file, err := fileops.ReadFile(path, "")
 	if err != nil {
-		return nil, fmt.Errorf("read %s: %w", atriyph.SkillFileName, err)
+		return nil, err
 	}
 	next := args.Content
 	if hasPatches {
-		next, err = applyLinePatches(splitSkillLines(string(currentData)), args.Patches)
+		next, err = applyLinePatches(fileops.SplitLines(file.Text), args.Patches)
 		if err != nil {
 			return nil, err
 		}
 	}
+	switch target {
+	case atrixSkillTargetAtriyph:
+		return t.modifyAtriyph(ctx, name, path, file, next)
+	case atrixSkillTargetCodeSource:
+		return t.modifyCodeSource(ctx, name, path, file, next, args.TimeoutMS)
+	default:
+		return nil, fmt.Errorf("unsupported target %q", target)
+	}
+}
+
+func (t ModifyAtrixSkillTool) modifyAtriyph(ctx context.Context, name, path string, file fileops.File, next string) (*tool.Result, error) {
 	next = normalizeSkillContent(next)
 	if _, err := atriyph.ParseSkill(next, name); err != nil {
 		return nil, err
 	}
-	if err := os.WriteFile(path, []byte(next), 0o644); err != nil {
-		return nil, fmt.Errorf("write %s: %w", atriyph.SkillFileName, err)
+	diff := fileops.UnifiedDiff(path, fileops.SplitLines(fileops.NormalizeEditText(file.Text)), fileops.SplitLines(fileops.NormalizeEditText(next)), 3)
+	if _, err := fileops.WriteTextFile(path, file, next); err != nil {
+		return nil, err
 	}
 	if err := t.Manager.Reload(ctx); err != nil {
-		return nil, fmt.Errorf("Atriyph skill modified but reload failed: %w", err)
+		return nil, fmt.Errorf("ATRI-X skill modified but reload failed: %w", err)
 	}
-	return &tool.Result{Content: fmt.Sprintf("modified Atriyph skill %s", name)}, nil
+	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s", name, atrixSkillTargetAtriyph, diff)}, nil
 }
 
-func atrixSkillPath(manager *Manager, name string) (string, error) {
+func (t ModifyAtrixSkillTool) modifyCodeSource(ctx context.Context, name, path string, file fileops.File, next string, timeoutMS int) (*tool.Result, error) {
+	formatted, err := formatGoSource(next)
+	if err != nil {
+		return nil, err
+	}
+	if err := validateGoMainSource(formatted); err != nil {
+		return nil, err
+	}
+	diff := fileops.UnifiedDiff(path, fileops.SplitLines(fileops.NormalizeEditText(file.Text)), fileops.SplitLines(fileops.NormalizeEditText(formatted)), 3)
+	if _, err := fileops.WriteTextFile(path, file, formatted); err != nil {
+		return nil, err
+	}
+	if err := buildGoSkill(ctx, filepath.Dir(path), name, timeoutMS); err != nil {
+		if _, restoreErr := fileops.WriteTextFile(path, file, file.Text); restoreErr != nil {
+			return nil, fmt.Errorf("%w\nrestore original source failed: %v", err, restoreErr)
+		}
+		return nil, err
+	}
+	if err := t.Manager.Reload(ctx); err != nil {
+		return nil, fmt.Errorf("ATRI-X skill Go source rebuilt but reload failed: %w", err)
+	}
+	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s", name, atrixSkillTargetCodeSource, diff)}, nil
+}
+
+func atrixSkillTargetPath(manager *Manager, name, target string) (string, string, error) {
 	if manager == nil || manager.Registry == nil {
-		return "", fmt.Errorf("skill manager is not configured")
+		return "", "", fmt.Errorf("skill manager is not configured")
 	}
 	if err := validateSkillName(name); err != nil {
-		return "", err
+		return "", "", err
 	}
-	path := filepath.Join(manager.Root, "go", name, atriyph.SkillFileName)
+	if target == "" {
+		target = atrixSkillTargetAtriyph
+	}
+	filename := ""
+	switch target {
+	case atrixSkillTargetAtriyph:
+		filename = atriyph.SkillFileName
+	case atrixSkillTargetCodeSource:
+		filename = "main.go"
+	default:
+		return "", "", fmt.Errorf("invalid target %q; use %q or %q", target, atrixSkillTargetAtriyph, atrixSkillTargetCodeSource)
+	}
+	path := filepath.Join(manager.Root, "go", name, filename)
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return "", fmt.Errorf("Atriyph skill %q not found", name)
+		return "", "", fmt.Errorf("ATRI-X skill %s %q not found", target, name)
 	} else if err != nil {
-		return "", fmt.Errorf("stat %s: %w", atriyph.SkillFileName, err)
+		return "", "", fmt.Errorf("stat %s: %w", filename, err)
 	}
-	return path, nil
+	return path, target, nil
 }
 
 func splitSkillLines(text string) []string {

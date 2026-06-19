@@ -26,6 +26,20 @@ func TestReadAtrixSkillReadsLineRanges(t *testing.T) {
 	}
 }
 
+func TestReadAtrixSkillReadsCodeSource(t *testing.T) {
+	root := t.TempDir()
+	writeTestGoSkill(t, root, "reader_code", "package main\n\nfunc main() {}\n")
+	reader := NewReadAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+
+	result, err := reader.Call(context.Background(), tool.CallRequest{Arguments: []byte(`{"name":"reader_code","target":"code_source","start_line":1,"end_line":3}`)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.Content != "1: package main\n2: \n3: func main() {}" {
+		t.Fatalf("content = %q", result.Content)
+	}
+}
+
 func TestModifyAtrixSkillWritesFullContent(t *testing.T) {
 	root := t.TempDir()
 	writeTestSkill(t, root, "writer", "#skill writer - Old.\n** risk low\n<- $text:str!\n-> $result:str\n")
@@ -68,6 +82,73 @@ func TestModifyAtrixSkillPatchesLines(t *testing.T) {
 	want := "#skill patcher - New.\n** risk low\n<- $input:str!\n-> $result:str\n"
 	if got := readTestSkill(t, root, "patcher"); got != want {
 		t.Fatalf("content = %q want %q", got, want)
+	}
+}
+
+func TestModifyAtrixSkillPatchesCodeSourceBuildsAndReloads(t *testing.T) {
+	root := t.TempDir()
+	writeTestGoSkill(t, root, "patcher_code", "package main\n\nfunc main() {}\n")
+	registry := tool.NewRegistry()
+	modifier := NewModifyAtrixSkillTool(NewManager(root, registry))
+	args, _ := json.Marshal(map[string]any{
+		"name":   "patcher_code",
+		"target": "code_source",
+		"patches": []map[string]any{
+			{"start_line": 3, "end_line": 3, "new_lines": []string{"func main() { println(\"ok\") }"}},
+		},
+	})
+
+	if _, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: args}); err != nil {
+		t.Fatal(err)
+	}
+	content := readTestGoSource(t, root, "patcher_code")
+	if !strings.Contains(content, `println("ok")`) || !strings.HasSuffix(content, "\n") {
+		t.Fatalf("content = %q", content)
+	}
+	registered, ok := registry.Get("patcher_code")
+	if !ok || registered.Info().Source != tool.SourceSkillGo {
+		t.Fatalf("registered=%#v ok=%v", registered, ok)
+	}
+}
+
+func TestModifyAtrixSkillFormatsCodeSourceContent(t *testing.T) {
+	root := t.TempDir()
+	writeTestGoSkill(t, root, "formatter", "package main\n\nfunc main() {}\n")
+	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+	args, _ := json.Marshal(map[string]string{
+		"name":    "formatter",
+		"target":  "code_source",
+		"content": "package main\nfunc main(){println(\"ok\")}\n",
+	})
+
+	if _, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: args}); err != nil {
+		t.Fatal(err)
+	}
+	if got := readTestGoSource(t, root, "formatter"); got != "package main\n\nfunc main() { println(\"ok\") }\n" {
+		t.Fatalf("formatted source = %q", got)
+	}
+}
+
+func TestModifyAtrixSkillRestoresCodeSourceAfterBuildFailure(t *testing.T) {
+	root := t.TempDir()
+	writeTestGoSkill(t, root, "broken", "package main\n\nfunc main() {}\n")
+	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+	args, _ := json.Marshal(map[string]string{
+		"name":    "broken",
+		"target":  "code_source",
+		"content": "package main\n\nfunc main() { missing() }\n",
+	})
+
+	_, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: args})
+	if err == nil {
+		t.Fatal("expected build error")
+	}
+	text := err.Error()
+	if !strings.Contains(text, "go build failed") || !strings.Contains(text, "stderr:") {
+		t.Fatalf("err = %v", err)
+	}
+	if got := readTestGoSource(t, root, "broken"); got != "package main\n\nfunc main() {}\n" {
+		t.Fatalf("source was not restored: %q", got)
 	}
 }
 
