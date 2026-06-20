@@ -254,6 +254,7 @@ func Run(ctx context.Context, opts Options) error {
 		Store:            store,
 		Logger:           logger,
 		EnabledPlatforms: enabledCronPlatforms(cfg),
+		SandboxRoot:      cfg.Sandbox.Root,
 		Audit: func(event string, attrs ...any) {
 			logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
 		},
@@ -330,8 +331,8 @@ func Run(ctx context.Context, opts Options) error {
 			Config:      cfg.Atrinis,
 			SandboxRoot: cfg.Sandbox.Root,
 			Tokens:      atrinisTokens,
-			Store:  store,
-			Logger: logs.Atrinis(),
+			Store:       store,
+			Logger:      logs.Atrinis(),
 			Audit: func(event string, attrs ...any) {
 				logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
 			},
