@@ -230,6 +230,10 @@ token_env = ["ATRINIS_HOME_TOKEN", "ATRINIS_HOME_TOKEN_ALT"]
 default_platforms = ["cli"]
 allow_superadmins = true
 
+[segment]
+max_file_bytes = 104857600  # 100MB, max per image/file segment
+download_timeout_secs = 60
+
 # Atriwisp is enabled by default. Configure a named Atriwisp only when you need
 # token restrictions, tool overrides, delivery overrides, or explicit disable.
 # [atriwisps.server-watchdog]

@@ -186,9 +186,8 @@ Atrinis 收到事件后，会按 `mode` 决定处理方式。
 
 ## 当前限制与后续方向
 
-当前 Atrinis 已支持 record、direct、llm 模式和 Atriwisp 随事件声明外部工具。以下能力仍在开发或规划中：
+当前 Atrinis 已支持 record、direct、llm 模式、Atriwisp 随事件声明外部工具以及多模态消息段（text/image/file）。以下能力仍在开发或规划中：
 
-- 多种消息 segment。
 - Atrinis 与 Atriwisp 多轮通信。
 - stdio、pipe 等非 HTTP transport。
 
