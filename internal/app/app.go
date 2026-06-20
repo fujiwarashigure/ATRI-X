@@ -327,8 +327,9 @@ func Run(ctx context.Context, opts Options) error {
 			return err
 		}
 		atrinisService, err := atrinis.NewService(atrinis.Options{
-			Config: cfg.Atrinis,
-			Tokens: atrinisTokens,
+			Config:      cfg.Atrinis,
+			SandboxRoot: cfg.Sandbox.Root,
+			Tokens:      atrinisTokens,
 			Store:  store,
 			Logger: logs.Atrinis(),
 			Audit: func(event string, attrs ...any) {

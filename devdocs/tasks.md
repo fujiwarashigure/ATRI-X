@@ -862,7 +862,7 @@
 - [x] 增加 `/atriwisp` 命令查询 Atrinis/Atriwisp 事件日志，支持按 Atriwisp、source、事件 ID、模式、时间和等级过滤。
 - [ ] 增加 Atrinis 事件查询、失败重试或禁用能力。
 - [x] 内置 `atriwisp_creator` 工具，帮助用户生成 Atriwisp 配置、事件模板、监听器脚手架和测试命令。
-- [ ] 支持多种消息segment
+- [x] 支持多种消息segment
 - [ ] 可指定平台指定群聊或私聊
 - [ ] 待定：设计 Atrinis 与 Atriwisp 多轮通信协议。
 - [ ] 待定：评估 stdio/pipe transport。

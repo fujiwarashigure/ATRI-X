@@ -188,9 +188,8 @@ In work mode, the superadmin can let ATRI-X use the built-in tool `atriwisp_crea
 
 ## Current Limitations and Future Directions
 
-Currently, Atrinis supports record, direct, and llm modes, as well as Atriwisp declaring external tools along with events. The following capabilities are still under development or planning:
+Currently, Atrinis supports record, direct, and llm modes, Atriwisp declaring external tools with events, and multimodal message segments (text/image/file). The following capabilities are still under development or planning:
 
-- Multiple message segments.
 - Multi-turn communication between Atrinis and Atriwisp.
 - Non-HTTP transports such as stdio, pipe, etc.
 

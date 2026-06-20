@@ -174,7 +174,13 @@ type AtrinisConfig struct {
 	HTTP         AtrinisHTTPConfig              `toml:"http"`
 	Tokens       map[string]AtrinisTokenConfig  `toml:"tokens"`
 	Delivery     AtrinisDeliveryConfig          `toml:"delivery"`
+	Segment      AtrinisSegmentConfig           `toml:"segment"`
 	Atriwisps      map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
+}
+
+type AtrinisSegmentConfig struct {
+	MaxFileBytes        int64 `toml:"max_file_bytes"`
+	DownloadTimeoutSecs int   `toml:"download_timeout_secs"`
 }
 
 type AtrinisHTTPConfig struct {
@@ -571,6 +577,12 @@ func (c *Config) applyAtrinisDefaults() {
 	}
 	if c.Atrinis.Tokens == nil {
 		c.Atrinis.Tokens = map[string]AtrinisTokenConfig{}
+	}
+	if c.Atrinis.Segment.MaxFileBytes <= 0 {
+		c.Atrinis.Segment.MaxFileBytes = 100 * 1024 * 1024
+	}
+	if c.Atrinis.Segment.DownloadTimeoutSecs <= 0 {
+		c.Atrinis.Segment.DownloadTimeoutSecs = 60
 	}
 	if c.Atrinis.Atriwisps == nil {
 		c.Atrinis.Atriwisps = map[string]AtrinisAtriwispConfig{}
