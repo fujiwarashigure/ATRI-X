@@ -387,10 +387,10 @@ Atrinis LLM 模式必须复用现有 Tool Runtime、Security Policy 和工具风
 type SandboxContext struct {
     Root           string
     Dir            string
-    ArtifactDir    string
     Background     bool
     BackgroundKind string // cron / atriwisp
 }
+
 ```
 
 Atrinis 目录建议：
