@@ -135,6 +135,67 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
 }
 ```
 
+## Segments (Multimodal Message Segments)
+
+Atriena v1 supports sending images and files via the `segments` field. `content` is retained as a plain text fallback, fully compatible with the old Atriwisp.
+
+Behavior remains unchanged when `segments` is empty; when not empty, segments are rendered preferentially, and content serves as additional text.
+
+### Segment Fields
+
+| Field | Type | Required | Description |
+| --- | ---: | :---: | --- |
+| `kind` | string | Yes | `text`、`image`、`file`。 |
+| `text` | string | text (Required) | Plain text content, not persisted to disk. |
+| `url` | string | image/file (Required) | `http://`, `https://`, or `data:` base64 URI. |
+| `name` | string | No | File name, used for downloading, saving, and displaying. |
+| `mime_type` | string | No | MIME type hint. |
+
+### Download and Storage
+
+- Atrinis automatically downloads it to `sandbox/atrinis/<atriwisp名>/<事件id>/` upon receipt.
+- The original URL is used when sending to the LLM (multimodal models can view images directly), and a copy is kept in the sandbox.
+- Direct mode also supports image/file output; it automatically degrades to a text description if the platform does not support it.
+- File size is limited by `[segment].max_file_bytes` of `atrinis.toml` (default 100MB).
+- `data:` URIs only support base64 encoding and are similarly restricted after decoding.
+- Local protocols such as `file://` are prohibited.
+
+### Example
+
+```json
+{
+  "version": "atriena.v1",
+  "atriwisp": {"name": "monitor"},
+  "source": "prod-server",
+  "id": "cpu-chart-002",
+  "mode": "direct",
+  "title": "CPU 异常",
+  "content": "CPU 飙到 90%",
+  "segments": [
+    {"kind": "text",  "text": "服务器 CPU 飙到 90%，详见附图。"},
+    {"kind": "image", "url": "https://monitor.example.com/chart.png", "name": "cpu_chart.png"},
+    {"kind": "file",  "url": "https://logs.example.com/dump.txt", "name": "cpu_dump.txt"}
+  ],
+  "targets": {"platforms": ["cli"], "superadmins": true}
+}
+```
+
+### report_segments in LLM results
+
+After the background LLM processes an event, the `report_segments` of `JSONResult` can include image/file paths, which Atrinis will deliver together when the report is sent.
+
+```json
+{
+  "completed": true,
+  "need_report": true,
+  "report": "分析完成，见截图。",
+  "report_segments": [
+    {"type": "image", "url": "/data/sandbox/atrinis/monitor/evt-001/chart.png"}
+  ]
+}
+```
+
+
 Common fields:
 
 | Field | Required | Description |
