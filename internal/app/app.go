@@ -322,7 +322,10 @@ func Run(ctx context.Context, opts Options) error {
 	}
 	profiler.Mark("agent init")
 
-	if cfg.Atrinis.Enabled {
+	// if cfg.Atrinis.Enabled && mode == RunModeCLIOnly {
+	// 	logger.Info("atrinis disabled in cli-only mode")
+	// }
+	if cfg.Atrinis.Enabled && mode != RunModeCLIOnly {
 		atrinisTokens, err := resolveAtrinisTokens(cfg)
 		if err != nil {
 			return err
