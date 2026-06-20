@@ -138,6 +138,24 @@ retention_days = 30
 
 [platform.cli]
 enabled = true
+# Default CLI client profile. Used by atri-x/atri-x cli when -c is omitted.
+default_client = "local"
+# Default WebSocket URL for clients without their own clients.<name>.url.
+# To connect to another machine, set url under the client profile.
+default_url = "ws://127.0.0.1:32172/cli/v1/ws"
+
+# Used only when this ATRI-X runs as a CLI server. It listens here; clients connect via their url.
+[platform.cli.server]
+enabled = false
+listen = "127.0.0.1:32172"
+
+# Client ids allowed to log in to this CLI server and their token environment variables.
+[platform.cli.server.tokens]
+local = ["ATRIX_CLI_LOCAL_TOKEN"]
+
+# Client profile used by this command. For remote servers, add url = "ws://SERVER_IP:32172/cli/v1/ws".
+[platform.cli.clients.local]
+token_env = ["ATRIX_CLI_LOCAL_TOKEN"]
 
 # [platform.telegram]
 # enabled = false
@@ -248,6 +266,10 @@ OPENAI_API_KEY=
 # Platform secrets
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_PROXY_URL=
+
+# CLI remote client/server tokens
+ATRIX_CLI_LOCAL_TOKEN=
+ATRIX_CLI_WINDOWS_TOKEN=
 
 # Atrinis tokens
 ATRINIS_HOME_TOKEN=
