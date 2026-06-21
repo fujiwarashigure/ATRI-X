@@ -188,7 +188,9 @@ In work mode, the superadmin can let ATRI-X use the built-in tool `atriwisp_crea
 
 ## Current Limitations and Future Directions
 
-Currently, Atrinis supports record, direct, and llm modes, Atriwisp declaring external tools with events, and multimodal message segments (text/image/file). The following capabilities are still under development or planning:
+Currently, Atrinis supports record, direct, and llm modes, Atriwisp declaring external tools with events, and multimodal message segments (text/image/file). When a superadmin quotes and replies to an Atrinis LLM report notification within the platform, it will automatically resume to the corresponding background Session to continue the conversation; When a regular user quotes it, it will only be processed as ordinary quoted text.
+
+The following capabilities are still under development or planning:
 
 - Multi-turn communication between Atrinis and Atriwisp.
 - Non-HTTP transports such as stdio, pipe, etc.
