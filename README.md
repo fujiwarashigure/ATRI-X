@@ -53,31 +53,29 @@ For detailed information, see [Atrinis Listening Hub](docs.en/atrinis.md).
 
 **Multi-platform and Rich Output Abstraction**: ATRI-X abstracts the platform and output layers, currently supporting CLI, QQ OneBot, QQ Official, and Telegram, while reserving space for extending to other platforms.
 
+**CLI Client/Server Separation**: Supports using ATRI-X as a client on any computer to connect to the ATRI-X server.
+
 **Session, Fork, and Context Compaction**: Built-in persistent Session service, supporting Session recovery, archiving, pinning, Forking, deletion, paginated viewing, and platform isolation. Long conversations automatically trigger context compaction to keep the window controllable; normal conversation can continue after compaction.
 
 ### V. Secure and Reliable
 
 **Security Policies and Risk Confirmation**: The tool system has built-in risk levels, role permission checks, and high-risk confirmation processes. Regular users can only discover and invoke low-risk tools; even superadmins must confirm each item when invoking high-risk tools.
 
-**Lightweight Sandbox Isolation**: Background Shell execution is subject to AST-level sandbox constraints. Tool execution comes with its own sandbox context, and artifact files are temporarily stored in an isolated directory to avoid affecting system files.
+**Lightweight Sandbox Isolation**: Background Shell execution is subject to AST-level sandbox constraints. Background tasks have an independent sandbox working directory, reducing the impact of misoperations.
 
 **Comprehensive Logging and Auditing**: Distinguishes between runtime logs, Atriwisp logs, and audit logs, supporting structured fields, log queries, audit queries, and runtime debugging.
 
 ## Usage
 
-During the development phase, it can be started directly from the source code; the first run will automatically generate a default configuration in the platform configuration directory, and existing configurations will not be overwritten:
-
-```bash
-go run ./cmd/atri-x
-```
 
 Common startup methods:
 
 ```bash
-atri-x              # Automatic mode: enters local CLI-only when Linux detects a service, otherwise starts in full foreground
-atri-x run          # Full foreground: CLI + enabled platforms + Cron
-atri-x cli          # Local CLI-only: only starts CLI, does not start platforms and Cron
-atri-x service run  # Linux/headless service mode: does not start CLI, starts enabled platforms and Cron
+atri-x              # Automatic mode: Prioritize attempting the default remote CLI client; fall back to full foreground startup when local is unreachable
+atri-x run          # Full foreground: Local CLI + Enabled platforms + Cron
+atri-x cli [-c 名称] # Remote CLI client: Connect to a resident ATRI-X server
+atri-x -c 名称      # Connect to the server directly using a specified CLI client profile
+atri-x service run  # Linux/headless service mode: Do not start local CLI; remote CLI server, platforms, and Cron can be enabled
 ```
 
 Shell completion can be generated via `atri-x completion <shell>`, supporting `bash`, `zsh`, `fish`, `nushell`, `powershell`, and `auto`.

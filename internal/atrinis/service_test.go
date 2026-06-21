@@ -2,6 +2,7 @@ package atrinis
 
 import (
 	"context"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -304,6 +305,21 @@ func TestHandleRejectsInvalidModelSlot(t *testing.T) {
 	}
 }
 
+func TestHandleRejectsAtriwispNameWithDot(t *testing.T) {
+	service, cleanup := newTestService(t, nil)
+	defer cleanup()
+
+	req := testRequest(ModeLLM)
+	req.Atriwisp.Name = "foo.bar"
+	resp, err := service.Handle(context.Background(), "secret", req)
+	if err == nil {
+		t.Fatal("expected invalid atriwisp.name error")
+	}
+	if resp.Accepted || !strings.Contains(resp.Error, "atriwisp.name") {
+		t.Fatalf("response = %#v", resp)
+	}
+}
+
 func TestRunLLMEventCompletesAndReports(t *testing.T) {
 	runner := &fakeBackgroundRunner{text: `{"completed":true,"need_report":true,"report":"处理完成"}`}
 	sent := []string{}
@@ -338,6 +354,57 @@ func TestRunLLMEventCompletesAndReports(t *testing.T) {
 	}
 	if len(runner.requests) != 1 || runner.requests[0].Kind != background.KindAtrinis || runner.requests[0].SandboxSubdir != "atrinis/watcher" {
 		t.Fatalf("requests = %#v", runner.requests)
+	}
+}
+
+func TestRunLLMEventReportsSegmentsByRelativePath(t *testing.T) {
+	runner := &fakeBackgroundRunner{text: `{"completed":true,"need_report":true,"report":"见图","report_segments":[{"type":"image","url":"chart.png"}]}`}
+	sent := []delivery.Kind{}
+	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) error {
+		sent = append(sent, out.Kind)
+		return nil
+	})
+	defer cleanup()
+	if err := os.MkdirAll(filepath.Join(service.sandboxRoot, "atrinis", "watcher"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(service.sandboxRoot, "atrinis", "watcher", "chart.png"), []byte("png"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	var queued QueuedLLMEvent
+	service.SetLLMEnqueuer(func(ctx context.Context, event QueuedLLMEvent) error {
+		queued = event
+		return nil
+	})
+	req := testRequest(ModeLLM)
+	req.Targets = Targets{Platforms: []string{"cli"}, Superadmins: true}
+	if _, err := service.Handle(context.Background(), "secret", req); err != nil {
+		t.Fatalf("Handle llm: %v", err)
+	}
+	if err := service.RunLLMEvent(context.Background(), queued.Event, queued.EventID); err != nil {
+		t.Fatalf("RunLLMEvent: %v", err)
+	}
+	if len(sent) != 2 || sent[0] != delivery.KindText || sent[1] != delivery.KindImage {
+		t.Fatalf("sent kinds = %#v", sent)
+	}
+}
+
+func TestRunLLMEventRejectsAbsoluteReportSegmentPath(t *testing.T) {
+	runner := &fakeBackgroundRunner{text: `{"completed":true,"need_report":true,"report":"见图","report_segments":[{"type":"image","url":"/tmp/chart.png"}]}`}
+	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) error { return nil })
+	defer cleanup()
+	var queued QueuedLLMEvent
+	service.SetLLMEnqueuer(func(ctx context.Context, event QueuedLLMEvent) error {
+		queued = event
+		return nil
+	})
+	req := testRequest(ModeLLM)
+	req.Targets = Targets{Platforms: []string{"cli"}, Superadmins: true}
+	if _, err := service.Handle(context.Background(), "secret", req); err != nil {
+		t.Fatalf("Handle llm: %v", err)
+	}
+	if err := service.RunLLMEvent(context.Background(), queued.Event, queued.EventID); err == nil {
+		t.Fatal("expected absolute report segment path error")
 	}
 }
 
@@ -436,10 +503,11 @@ func newTestServiceWithRunner(t *testing.T, runner background.Runner, send Sende
 				"disabled":   {Enabled: boolPtr(false)},
 			},
 		},
-		Tokens: map[string]string{"home": "secret", "alt": "alt-secret"},
-		Store:  store,
-		Send:   send,
-		Runner: runner,
+		SandboxRoot: filepath.Join(t.TempDir(), "sandbox"),
+		Tokens:      map[string]string{"home": "secret", "alt": "alt-secret"},
+		Store:       store,
+		Send:        send,
+		Runner:      runner,
 		ResolveModel: func(slot string) config.ModelSelection {
 			return config.ModelSelection{Provider: "provider-" + slot, Model: "model-" + slot}
 		},
