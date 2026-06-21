@@ -28,19 +28,21 @@ workers = 2 # Number of background workers in LLM mode.
 [tokens.home]
 token_env = ["ATRINIS_HOME_TOKEN"] # Read from system environment variables or the .env file in the configuration directory.
 
-[delivery]
-default_platforms = ["cli"] # Default delivery platforms allowed by Atrinis policies.
-allow_superadmins = true # Whether delivery to the target platform's superadmin is allowed.
+[delivery_disabled]
+targets = [
+  # { platform = "telegram" }, # Disable all deliveries for the entire telegram platform.
+  # { platform = "telegram", type = "private", id = "123456789" },
+  # { platform = "qqonebot", type = "group", id = "987654321" },
+]
 
 # Atriwisp is enabled by default; configure it only when you need to limit tokens, override delivery policies, or disable it.
 [atriwisps.server-watchdog]
 allowed_tokens = ["home"]
 allowed_tools = ["shell", "web_search"] # Overrides the top-level allowed_tools when present.
 disabled_external_tools = ["danger_tool"] # External tools are allowed by default; only specified tools are disabled here.
-
-[atriwisps.server-watchdog.delivery]
-default_platforms = ["cli"]
-allow_superadmins = true
+disabled_targets = [
+  # { platform = "qqonebot", type = "group", id = "987654321" },
+]
 
 [atriwisps.spike-checker]
 enabled = false # This Atriwisp is disabled only when enabled=false is explicitly set.
@@ -56,7 +58,7 @@ Configuration description:
 
 - `enabled=false` will not start the Atrinis HTTP runtime.
 - `atri-x cli` is CLI-only mode; even with `enabled=true`, the Atrinis HTTP runtime will not start; Please use `atri-x run` or `atri-x service run` when you need to receive Atriena events.
-- Currently, `targets.platforms=["cli"]` is only applicable to scenarios where Atrinis and the CLI are in the same `atri-x run` foreground process; `atri-x service run` cannot currently deliver messages to another independent `atri-x cli` process.
+- Currently, `targets=[{"platform":"cli"}]` only applies to scenarios where Atrinis and the CLI are in the same `atri-x run` foreground process, or when the CLI remote server is enabled in service mode; Independent `atri-x cli` processes must connect to the server before they can receive notifications.
 - Do not write the token plaintext into the configuration; it is recommended to place it in system environment variables or the configuration directory `.env`.
 - `token_env` can contain multiple environment variable names, which will be tried in order.
 - Atriwisp is enabled by default; it will receive events if `[atriwisps.<name>]` is not specified, if it is specified but `enabled` is not, or if `enabled=true` is specified.
@@ -64,8 +66,7 @@ Configuration description:
 - `allowed_tokens` restricts which tokens can represent the Atriwisp to deliver events; if not specified, any authenticated token is allowed.
 - The top-level `allowed_tools` is the default whitelist for ATRI-X internal tools; it is overridden when `allowed_tools` of an individual Atriwisp exists.
 - External tools are allowed by default; an individual Atriwisp can use `disabled_external_tools` to disable specific external tools.
-- `default_platforms` is the default delivery platform allowed by the Atrinis policy.
-- `allow_superadmins=true` indicates that delivery to the target platform's superadmin is allowed.
+- Atrinis allows delivery by default; Only targets explicitly listed in `[delivery_disabled].targets` or a single Atriwisp `disabled_targets` will be prohibited.
 
 If you want ATRI-X to help you generate an Atriwisp listener, you can submit a request to the superadmin Session in work mode, for example:
 
@@ -78,18 +79,18 @@ If you want ATRI-X to help you generate an Atriwisp listener, you can submit a r
 After starting ATRI-X, you can use curl to test a `direct` event:
 
 ```bash
-curl -sS http://127.0.0.1:32170/atriena/v1/events \
+curl -sS http://127.0.0.1:32170/atriena/v2/events \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer change-me' \
   -d '{
-    "version":"atriena.v1",
+    "version":"atriena.v2",
     "atriwisp":{"name":"server-watchdog"},
     "source":"minecraft-main",
     "id":"cpu-alert-001",
     "mode":"direct",
     "title":"服务器 CPU 异常",
     "content":"minecraft-main CPU 使用率超过阈值。",
-    "targets":{"platforms":["cli"],"superadmins":true}
+    "targets":[{"platform":"cli"}]
   }'
 ```
 
@@ -99,7 +100,7 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
 
 ```json
 {
-  "version": "atriena.v1",
+  "version": "atriena.v2",
   "atriwisp": {
     "name": "server-watchdog",
     "tags": ["server", "prod"]
@@ -126,10 +127,10 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
       "endpoint": "http://127.0.0.1:32171/tools/server_status"
     }
   ],
-  "targets": {
-    "platforms": ["cli"],
-    "superadmins": true
-  },
+  "targets": [
+    {"platform": "cli"},
+    {"platform": "telegram", "type": "private", "id": "123456789"}
+  ],
   "meta": {
     "severity": "warning",
     "host": "mc-main-01"
@@ -139,7 +140,7 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
 
 ## Segments (Multimodal Message Segments)
 
-Atriena v1 supports sending images and files via the `segments` field. `content` is retained as a plain text fallback, fully compatible with the old Atriwisp.
+Atriena v2 supports sending images and files via the `segments` field. `content` is reserved as a plain text fallback and is fully compatible with the old Atriwisp.
 
 Behavior remains unchanged when `segments` is empty; when not empty, segments are rendered preferentially, and content serves as additional text.
 
@@ -166,7 +167,7 @@ Behavior remains unchanged when `segments` is empty; when not empty, segments ar
 
 ```json
 {
-  "version": "atriena.v1",
+  "version": "atriena.v2",
   "atriwisp": {"name": "monitor"},
   "source": "prod-server",
   "id": "cpu-chart-002",
@@ -178,7 +179,7 @@ Behavior remains unchanged when `segments` is empty; when not empty, segments ar
     {"kind": "image", "url": "https://monitor.example.com/chart.png", "name": "cpu_chart.png"},
     {"kind": "file",  "url": "https://logs.example.com/dump.txt", "name": "cpu_dump.txt"}
   ],
-  "targets": {"platforms": ["cli"], "superadmins": true}
+  "targets": [{"platform": "cli"}]
 }
 ```
 
@@ -204,7 +205,7 @@ Common fields:
 
 | Field | Required | Description |
 | --- | ---: | --- |
-| `version` | Yes | Protocol version, currently `atriena.v1`. |
+| `version` | Yes | Protocol version, currently `atriena.v2`. |
 | `atriwisp.name` | Yes | Atriwisp name, which is also one of the source identities; only English letters, numbers, `_`, and `-` are allowed; dots are not allowed. |
 
 | `atriwisp.tags` | No | Atriwisp tag, used for logs and statistics. |
@@ -218,7 +219,7 @@ Common fields:
 | `model_slot` | No | Atrinis LLM model slot, only supporting `atriwisp1`, `atriwisp2`, and `atriwisp3`; if left blank or the corresponding slot is not configured, it will fall back to `work`. |
 | `tool_list_names` | No | The ATRI-X internal tool name or Skill name preloaded for background tasks; Ordinary tools inject the schema, while Skills inject task descriptions and automatically inject the corresponding runner; Must be within the Atrinis `allowed_tools` adjudication range; `discover_tool` will be ignored. |
 | `tools` | No | External tools declared by Atriwisp with events; allowed by default, rejected when hitting the `disabled_external_tools` of that Atriwisp. |
-| `targets` | No | The delivery target expected by Atriwisp; the final decision is still made by Atrinis. |
+| `targets` | Yes | Atriwisp expects a delivery target array: `{"platform":"telegram"}` indicates sending to the platform superadmin, `type=private/group` with `id` indicates sending to a specified private chat/group chat, and `{"platform":"all"}` indicates all enabled platform superadmins. The final decision is still made by Atrinis. |
 | `meta` | No | Original supplementary data, used only for recording and prompt attachment. |
 
 
@@ -276,18 +277,27 @@ token_env = ["ATRIX_CLI_WINDOWS_TOKEN"]
 
 Atriwisp can declare the expected target in `targets`, but the final target is decided by Atrinis.
 
-Currently, it is recommended to only use:
+`targets` must be an array:
 
 ```json
 {
-  "targets": {
-    "platforms": ["cli"],
-    "superadmins": true
-  }
+  "targets": [
+    {"platform": "telegram"},
+    {"platform": "telegram", "type": "private", "id": "123456789"},
+    {"platform": "qqonebot", "type": "group", "id": "987654321"},
+    {"platform": "all"}
+  ]
 }
 ```
 
-`platforms` can contain `"all"`, indicating that the request is delivered to all platforms allowed by the Atrinis policy. Atrinis will still calculate the final target based on global configuration, Atriwisp configuration, and platform availability.
+Semantics:
+
+- Only write `platform`: deliver to the superadmin of that platform.
+- `type=private`: deliver to a specified platform private chat.
+- `type=group`: deliver to a specified platform group chat.
+- `platform=all`: deliver to the superadmins of all enabled platforms; `type` or `id` cannot be written at the same time.
+
+Atrinis allows delivery by default; It is only prohibited when `[delivery_disabled].targets` or a single Atriwisp `disabled_targets` is hit. Setting `{ platform = "telegram" }` in the disable configuration means disabling all deliveries for this platform.
 
 Security Conventions:
 

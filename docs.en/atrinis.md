@@ -133,7 +133,7 @@ It is responsible for turning "what happened outside" into a unified event that 
 Initial endpoint:
 
 ```text
-POST /atriena/v1/events
+POST /atriena/v2/events
 GET  /healthz
 ```
 
