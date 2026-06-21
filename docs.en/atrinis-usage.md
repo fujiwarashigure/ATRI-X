@@ -207,7 +207,6 @@ Common fields:
 | --- | ---: | --- |
 | `version` | Yes | Protocol version, currently `atriena.v2`. |
 | `atriwisp.name` | Yes | Atriwisp name, which is also one of the source identities; only English letters, numbers, `_`, and `-` are allowed; dots are not allowed. |
-
 | `atriwisp.tags` | No | Atriwisp tag, used for logs and statistics. |
 | `source` | Yes | Specific event source, such as service name, script name, or RSS name. |
 | `id` | Yes | Unique event ID within the source. |
