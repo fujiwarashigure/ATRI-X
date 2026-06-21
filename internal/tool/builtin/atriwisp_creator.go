@@ -20,16 +20,14 @@ const AtriwispCreatorName = "atriwisp_creator"
 type AtriwispCreatorTool struct{}
 
 type atriwispCreatorConfigSnapshot struct {
-	AppConfigPath    string
-	AtrinisConfigPath  string
-	Enabled          bool
-	Addr             string
-	TokenNames       []string
-	TokenEnvNames    []string
-	AllowedTools     []string
-	DefaultPlatforms []string
-	AllowSuperadmins bool
-	Warnings         []string
+	AppConfigPath   string
+	AtrinisConfigPath string
+	Enabled         bool
+	Addr            string
+	TokenNames      []string
+	TokenEnvNames   []string
+	AllowedTools    []string
+	Warnings        []string
 }
 
 func NewAtriwispCreatorTool() AtriwispCreatorTool {
@@ -101,18 +99,15 @@ func loadAtriwispCreatorConfig() atriwispCreatorConfigSnapshot {
 	sort.Strings(tokenEnvNames)
 
 	snapshot := atriwispCreatorConfigSnapshot{
-		AppConfigPath:    cfg.ConfigPath,
-		AtrinisConfigPath:  cfg.AtrinisConfigPath,
-		Enabled:          cfg.Atrinis.Enabled,
-		Addr:             strings.TrimSpace(cfg.Atrinis.HTTP.Addr),
-		TokenNames:       tokenNames,
-		TokenEnvNames:    tokenEnvNames,
-		AllowedTools:     append([]string(nil), cfg.Atrinis.AllowedTools...),
-		DefaultPlatforms: append([]string(nil), cfg.Atrinis.Delivery.DefaultPlatforms...),
-		AllowSuperadmins: cfg.Atrinis.Delivery.AllowSuperadmins,
+		AppConfigPath:   cfg.ConfigPath,
+		AtrinisConfigPath: cfg.AtrinisConfigPath,
+		Enabled:         cfg.Atrinis.Enabled,
+		Addr:            strings.TrimSpace(cfg.Atrinis.HTTP.Addr),
+		TokenNames:      tokenNames,
+		TokenEnvNames:   tokenEnvNames,
+		AllowedTools:    append([]string(nil), cfg.Atrinis.AllowedTools...),
 	}
 	sort.Strings(snapshot.AllowedTools)
-	sort.Strings(snapshot.DefaultPlatforms)
 
 	if !snapshot.Enabled {
 		snapshot.Warnings = append(snapshot.Warnings, "当前 Atrinis 未启用。测试 Atriwisp 前，请提示用户设置 atrinis.toml 的 enabled=true。")
@@ -122,9 +117,6 @@ func loadAtriwispCreatorConfig() atriwispCreatorConfigSnapshot {
 	}
 	if len(snapshot.TokenEnvNames) == 0 {
 		snapshot.Warnings = append(snapshot.Warnings, "当前未配置 Atrinis token_env。请提示用户配置 token_env，并在系统环境变量或配置目录 .env 中保存 token。")
-	}
-	if len(snapshot.DefaultPlatforms) == 0 {
-		snapshot.Warnings = append(snapshot.Warnings, "当前未配置 Atrinis delivery.default_platforms。请提示用户确认要投递的平台，或让用户配置 atrinis.toml 的 [delivery].default_platforms。")
 	}
 	return snapshot
 }
@@ -160,7 +152,7 @@ func buildAtriwispCreatorGuide(cfg atriwispCreatorConfigSnapshot) string {
 -> $files:list
 -> $test_commands:list
 -> $security_notes:list
-// brief: Atrinis 是 ATRI-X 内部事件监听枢纽；Atriwisp 是外部监听器；Atriena v1 是 Atriwisp 向 Atrinis 投递事件的 JSON over HTTP 协议。
+// brief: Atrinis 是 ATRI-X 内部事件监听枢纽；Atriwisp 是外部监听器；Atriena v2 是 Atriwisp 向 Atrinis 投递事件的 JSON over HTTP 协议。
 // tool_scope: 这个工具只提供创建指引；读文件用 read_file，写文件用 edit_file，测试命令用 shell。
 // roles: Atrinis 负责鉴权、协议校验、去重、记录、目标裁决，并按 record/direct/llm 分发。
 // roles: Atriwisp 负责观察服务器、RSS、Webhook、日志、脚本、游戏或设备状态，并上报 Atriena 事件。
@@ -171,7 +163,7 @@ func buildAtriwispCreatorGuide(cfg atriwispCreatorConfigSnapshot) string {
 `)
 	if cfg.Addr != "" {
 		b.WriteString("// POST ")
-		b.WriteString(endpointURL(cfg.Addr, "/atriena/v1/events"))
+		b.WriteString(endpointURL(cfg.Addr, "/atriena/v2/events"))
 		b.WriteByte('\n')
 		b.WriteString("// GET  ")
 		b.WriteString(endpointURL(cfg.Addr, "/healthz"))
@@ -182,12 +174,13 @@ func buildAtriwispCreatorGuide(cfg atriwispCreatorConfigSnapshot) string {
 	b.WriteString(`// auth: Authorization: Bearer $TOKEN
 // auth: X-Atrinis-Token: $TOKEN
 // token_setup: token_env 只声明变量名，token 值请设置到系统环境变量或配置目录 .env。
-// required_fields: version="atriena.v1", atriwisp.name, source, id, mode, content
+// required_fields: version="atriena.v2", atriwisp.name, source, id, mode, content
 // modes: record 只记录；direct 直接通知；llm 进入后台 LLM Session。
-// optional_fields: atriwisp.tags, created_at, title, format, model_slot, tool_list_names, tools, targets, meta
+// optional_fields: atriwisp.tags, created_at, title, format, model_slot, tool_list_names, tools, meta
+// targets: 必填数组；{"platform":"cli"} 表示投递到 cli 超级管理员；{"platform":"telegram","type":"private","id":"123"} 表示指定私聊；{"platform":"all"} 表示所有已启用平台超级管理员。
 // model_slot: atriwisp1 | atriwisp2 | atriwisp3；未配置时由 Atrinis fallback。
-// minimal_direct_payload: {"version":"atriena.v1","atriwisp":{"name":"example-atriwisp","tags":["example"]},"source":"example-source","id":"stable-event-id","mode":"direct","title":"事件标题","content":"可直接通知给管理员的文本。","targets":{"platforms":["cli"],"superadmins":true}}
-// minimal_llm_payload: {"version":"atriena.v1","atriwisp":{"name":"example-atriwisp","tags":["example"]},"source":"example-source","id":"stable-event-id","mode":"llm","title":"需要分析的事件","format":"atriyph","content":"#task review_event - 判断事件是否需要通知\n<- $event:object!\n-> $report:str\n** 基于事件内容、meta 和工具结果判断\n~ 编造日志、指标或结论\n> 如果需要通知，给出原因和建议；否则说明无需打扰。","tool_list_names":[],"targets":{"platforms":["cli"],"superadmins":true},"meta":{}}
+// minimal_direct_payload: {"version":"atriena.v2","atriwisp":{"name":"example-atriwisp","tags":["example"]},"source":"example-source","id":"stable-event-id","mode":"direct","title":"事件标题","content":"可直接通知给管理员的文本。","targets":[{"platform":"cli"}]}
+// minimal_llm_payload: {"version":"atriena.v2","atriwisp":{"name":"example-atriwisp","tags":["example"]},"source":"example-source","id":"stable-event-id","mode":"llm","title":"需要分析的事件","format":"atriyph","content":"#task review_event - 判断事件是否需要通知\n<- $event:object!\n-> $report:str\n** 基于事件内容、meta 和工具结果判断\n~ 编造日志、指标或结论\n> 如果需要通知，给出原因和建议；否则说明无需打扰。","tool_list_names":[],"targets":[{"platform":"cli"}],"meta":{}}
 `)
 	writeGuideCommentBlock(&b, "atriyph_rule_card", atriyph.RuleCard())
 	b.WriteString(`** 如果 current_atrinis 有 warning，先提醒用户处理。
@@ -195,7 +188,7 @@ func buildAtriwispCreatorGuide(cfg atriwispCreatorConfigSnapshot) string {
 ** Atriwisp 只上报事件，由 Atrinis/ATRI-X 决定记录、通知、分析或调用工具。
 ** 真实文件修改使用 edit_file；本地检查、curl 或脚本测试使用 shell。
 ** token 值由用户设置到系统环境变量或配置目录 .env；Atriwisp 代码只读取环境变量。
-** 投递平台优先参考 current_atrinis.default_platforms；为空或用户目标不明确时，先询问用户要推送到哪些平台。
+** targets 必须由事件明确声明；用户目标不明确时，先询问用户要推送到哪些平台或会话。
 ** tool_list_names 请求 ATRI-X 内部工具或 Skill，最终可用性由 atrinis.toml allowed_tools、ToolRun 和 Security Policy 裁决。
 ** tools 是 Atriwisp 随事件声明的外部工具，适合查询 Atriwisp 所在环境的状态、日志或详情。
 ** Atriwisp 外部工具 endpoint 默认绑定 127.0.0.1，除非用户明确需要远程访问。
@@ -215,7 +208,7 @@ func writeAtriwispCreatorConfig(b *strings.Builder, cfg atriwispCreatorConfigSna
 	writeGuideField(b, "atrinis_config", cfg.AtrinisConfigPath)
 	writeGuideField(b, "enabled", fmt.Sprintf("%t", cfg.Enabled))
 	if cfg.Addr != "" {
-		writeGuideField(b, "endpoint", endpointURL(cfg.Addr, "/atriena/v1/events"))
+		writeGuideField(b, "endpoint", endpointURL(cfg.Addr, "/atriena/v2/events"))
 		writeGuideField(b, "healthz", endpointURL(cfg.Addr, "/healthz"))
 	} else {
 		writeGuideField(b, "endpoint", "unknown")
@@ -223,8 +216,6 @@ func writeAtriwispCreatorConfig(b *strings.Builder, cfg atriwispCreatorConfigSna
 	writeGuideList(b, "token_names", cfg.TokenNames)
 	writeGuideList(b, "token_env", cfg.TokenEnvNames)
 	writeGuideList(b, "allowed_tools", cfg.AllowedTools)
-	writeGuideList(b, "default_platforms", cfg.DefaultPlatforms)
-	writeGuideField(b, "allow_superadmins", fmt.Sprintf("%t", cfg.AllowSuperadmins))
 	for _, warning := range cfg.Warnings {
 		writeGuideField(b, "warning", warning)
 	}

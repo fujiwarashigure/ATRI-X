@@ -234,6 +234,7 @@ Keep responses concise, accurate, and friendly. Follow the user's language unles
 const defaultAtrinisTOML = `# Atrinis listening hub config. Loaded from app.toml [config_files].atrinis.
 
 enabled = false
+# Default ATRI-X internal tools that Atriwisp events may preload.
 allowed_tools = ["web_search", "web_extract"]
 
 [http]
@@ -243,26 +244,31 @@ queue_size = 128
 workers = 2
 
 [tokens.home]
+# Read token values from OS environment variables or the config directory .env file.
 token_env = ["ATRINIS_HOME_TOKEN", "ATRINIS_HOME_TOKEN_ALT"]
 
-[delivery]
-default_platforms = ["cli"]
-allow_superadmins = true
+# Delivery is allowed by default. Targets listed here are explicitly disabled.
+# In disabled config, platform-only disables all delivery to that platform.
+[delivery_disabled]
+targets = [
+  # { platform = "telegram" },
+  # { platform = "telegram", type = "private", id = "123456789" },
+  # { platform = "qqonebot", type = "group", id = "987654321" },
+]
 
 [segment]
 max_file_bytes = 104857600  # 100MB, max per image/file segment
 download_timeout_secs = 60
 
 # Atriwisp is enabled by default. Configure a named Atriwisp only when you need
-# token restrictions, tool overrides, delivery overrides, or explicit disable.
+# token restrictions, tool overrides, delivery disables, or explicit disable.
 # [atriwisps.server-watchdog]
 # allowed_tokens = ["home"]
 # allowed_tools = ["shell", "web_search"]
 # disabled_external_tools = ["danger_tool"]
-#
-# [atriwisps.server-watchdog.delivery]
-# default_platforms = ["cli"]
-# allow_superadmins = true
+# disabled_targets = [
+#   { platform = "qqonebot", type = "group", id = "987654321" },
+# ]
 #
 # [atriwisps.spike-checker]
 # enabled = false

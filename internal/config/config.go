@@ -174,13 +174,13 @@ type FileDeliveryConfig struct {
 type PlatformConfig map[string]map[string]any
 
 type AtrinisConfig struct {
-	Enabled      bool                         `toml:"enabled"`
-	AllowedTools []string                     `toml:"allowed_tools"`
-	HTTP         AtrinisHTTPConfig              `toml:"http"`
-	Tokens       map[string]AtrinisTokenConfig  `toml:"tokens"`
-	Delivery     AtrinisDeliveryConfig          `toml:"delivery"`
-	Segment      AtrinisSegmentConfig           `toml:"segment"`
-	Atriwisps      map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
+	Enabled          bool                         `toml:"enabled"`
+	AllowedTools     []string                     `toml:"allowed_tools"`
+	HTTP             AtrinisHTTPConfig              `toml:"http"`
+	Tokens           map[string]AtrinisTokenConfig  `toml:"tokens"`
+	DeliveryDisabled AtrinisDeliveryDisabledConfig  `toml:"delivery_disabled"`
+	Segment          AtrinisSegmentConfig           `toml:"segment"`
+	Atriwisps          map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
 }
 
 type AtrinisSegmentConfig struct {
@@ -199,9 +199,14 @@ type AtrinisTokenConfig struct {
 	TokenEnv []string `toml:"token_env"`
 }
 
-type AtrinisDeliveryConfig struct {
-	DefaultPlatforms []string `toml:"default_platforms"`
-	AllowSuperadmins bool     `toml:"allow_superadmins"`
+type AtrinisDeliveryDisabledConfig struct {
+	Targets []AtrinisTargetConfig `toml:"targets"`
+}
+
+type AtrinisTargetConfig struct {
+	Platform string `toml:"platform"`
+	Type     string `toml:"type"`
+	ID       string `toml:"id"`
 }
 
 type AtrinisAtriwispConfig struct {
@@ -209,7 +214,7 @@ type AtrinisAtriwispConfig struct {
 	AllowedTokens         []string            `toml:"allowed_tokens"`
 	AllowedTools          []string            `toml:"allowed_tools"`
 	DisabledExternalTools []string            `toml:"disabled_external_tools"`
-	Delivery              AtrinisDeliveryConfig `toml:"delivery"`
+	DisabledTargets       []AtrinisTargetConfig `toml:"disabled_targets"`
 }
 
 type CronTaskConfig struct {

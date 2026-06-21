@@ -131,7 +131,7 @@ Atriena 是 Atriwisp 向 Atrinis 投递事件的 JSON over HTTP 协议。
 首期 endpoint：
 
 ```text
-POST /atriena/v1/events
+POST /atriena/v2/events
 GET  /healthz
 ```
 

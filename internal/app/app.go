@@ -331,11 +331,12 @@ func Run(ctx context.Context, opts Options) error {
 			return err
 		}
 		atrinisService, err := atrinis.NewService(atrinis.Options{
-			Config:      cfg.Atrinis,
-			SandboxRoot: cfg.Sandbox.Root,
-			Tokens:      atrinisTokens,
-			Store:       store,
-			Logger:      logs.Atrinis(),
+			Config:           cfg.Atrinis,
+			SandboxRoot:      cfg.Sandbox.Root,
+			Tokens:           atrinisTokens,
+			Store:            store,
+			Logger:           logs.Atrinis(),
+			EnabledPlatforms: runtimeNames(platforms.Runtimes),
 			Audit: func(event string, attrs ...any) {
 				logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
 			},
@@ -559,6 +560,20 @@ func resolveAtrinisTokens(cfg *config.Config) (map[string]string, error) {
 		}
 	}
 	return out, nil
+}
+
+func runtimeNames(runtimes []platformRuntime) []string {
+	out := []string{}
+	for _, runtime := range runtimes {
+		if runtime == nil {
+			continue
+		}
+		name := strings.TrimSpace(runtime.Name())
+		if name != "" && name != "atrinis" {
+			out = append(out, name)
+		}
+	}
+	return out
 }
 
 func enabledCronPlatforms(cfg *config.Config) []elcron.PlatformTarget {
