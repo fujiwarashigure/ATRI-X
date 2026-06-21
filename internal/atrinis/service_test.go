@@ -10,6 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
+	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
 	"github.com/fujiwarashigure/ATRI-X/internal/toolrun"
 )
@@ -338,12 +339,52 @@ func TestHandleRejectsAtriwispNameWithDot(t *testing.T) {
 	}
 }
 
+func TestRunLLMEventMapsReportNoticeToBackgroundMessage(t *testing.T) {
+	runner := &fakeBackgroundRunner{text: `{"completed":true,"need_report":true,"report":"处理完成"}`}
+	var service *Service
+	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
+		if target.Platform != "qq-onebot" || target.PrivateUserID != "1001" {
+			t.Fatalf("target = %#v", target)
+		}
+		return delivery.Receipt{PlatformMessageIDs: []string{"notice-1"}}, nil
+	})
+	defer cleanup()
+	bgSession := &storage.Session{ID: "bg-session", OwnerID: "atrinis:home", Platform: "qq-onebot", PlatformScopeID: "atrinis:watcher:source:event-1", Mode: storage.SessionModeWork, Status: storage.SessionStatusActive, Title: "atrinis"}
+	if err := service.store.Sessions().Create(context.Background(), bgSession); err != nil {
+		t.Fatalf("create background session: %v", err)
+	}
+	if err := service.store.Messages().Append(context.Background(), &storage.Message{ID: "bg-message", SessionID: bgSession.ID, Role: storage.RoleAssistant, Content: "处理完成"}); err != nil {
+		t.Fatalf("append background message: %v", err)
+	}
+	var queued QueuedLLMEvent
+	service.SetLLMEnqueuer(func(ctx context.Context, event QueuedLLMEvent) error {
+		queued = event
+		return nil
+	})
+
+	req := testRequest(ModeLLM)
+	req.Targets = []Target{{Platform: "qq-onebot", Type: "private", ID: "1001"}}
+	if _, err := service.Handle(context.Background(), "secret", req); err != nil {
+		t.Fatalf("Handle llm: %v", err)
+	}
+	if err := service.RunLLMEvent(context.Background(), queued.Event, queued.EventID); err != nil {
+		t.Fatalf("RunLLMEvent: %v", err)
+	}
+	msg, err := service.store.Messages().FindByPlatformMessage(context.Background(), "qq-onebot", "private:1001", "notice-1")
+	if err != nil {
+		t.Fatalf("FindByPlatformMessage: %v", err)
+	}
+	if msg.ID != "bg-message" || msg.SessionID != "bg-session" {
+		t.Fatalf("mapped message = %#v", msg)
+	}
+}
+
 func TestRunLLMEventCompletesAndReports(t *testing.T) {
 	runner := &fakeBackgroundRunner{text: `{"completed":true,"need_report":true,"report":"处理完成"}`}
 	sent := []string{}
-	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) error {
+	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
 		sent = append(sent, target.Platform+":"+out.Text)
-		return nil
+		return delivery.Receipt{}, nil
 	})
 	defer cleanup()
 	var queued QueuedLLMEvent
@@ -378,9 +419,9 @@ func TestRunLLMEventCompletesAndReports(t *testing.T) {
 func TestRunLLMEventReportsSegmentsByRelativePath(t *testing.T) {
 	runner := &fakeBackgroundRunner{text: `{"completed":true,"need_report":true,"report":"见图","report_segments":[{"type":"image","url":"chart.png"}]}`}
 	sent := []delivery.Kind{}
-	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) error {
+	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
 		sent = append(sent, out.Kind)
-		return nil
+		return delivery.Receipt{}, nil
 	})
 	defer cleanup()
 	if err := os.MkdirAll(filepath.Join(service.sandboxRoot, "atrinis", "watcher"), 0755); err != nil {
@@ -409,7 +450,9 @@ func TestRunLLMEventReportsSegmentsByRelativePath(t *testing.T) {
 
 func TestRunLLMEventRejectsAbsoluteReportSegmentPath(t *testing.T) {
 	runner := &fakeBackgroundRunner{text: `{"completed":true,"need_report":true,"report":"见图","report_segments":[{"type":"image","url":"/tmp/chart.png"}]}`}
-	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) error { return nil })
+	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
+		return delivery.Receipt{}, nil
+	})
 	defer cleanup()
 	var queued QueuedLLMEvent
 	service.SetLLMEnqueuer(func(ctx context.Context, event QueuedLLMEvent) error {
@@ -429,9 +472,9 @@ func TestRunLLMEventRejectsAbsoluteReportSegmentPath(t *testing.T) {
 func TestRunLLMEventReportsFailedResultWhenRequested(t *testing.T) {
 	runner := &fakeBackgroundRunner{text: `{"completed":false,"need_report":true,"report":"创建失败：工具权限不足"}`}
 	sent := []string{}
-	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) error {
+	service, cleanup := newTestServiceWithRunner(t, runner, func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
 		sent = append(sent, target.Platform+":"+out.Text)
-		return nil
+		return delivery.Receipt{}, nil
 	})
 	defer cleanup()
 	var queued QueuedLLMEvent
@@ -534,9 +577,9 @@ func TestResolveTargetsDisabledAtriwispPrivateChat(t *testing.T) {
 
 func TestHandleDirectSendsToPrivateAndGroupTargets(t *testing.T) {
 	sent := []string{}
-	service, cleanup := newTestService(t, func(ctx context.Context, target delivery.Target, out delivery.Output) error {
+	service, cleanup := newTestService(t, func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
 		sent = append(sent, target.Platform+":"+target.PrivateUserID+":"+target.GroupID+":"+out.Text)
-		return nil
+		return delivery.Receipt{}, nil
 	})
 	defer cleanup()
 
@@ -559,9 +602,9 @@ func TestHandleDirectSendsToPrivateAndGroupTargets(t *testing.T) {
 
 func TestHandleDirectSendsToResolvedSuperadminTargets(t *testing.T) {
 	sent := []string{}
-	service, cleanup := newTestService(t, func(ctx context.Context, target delivery.Target, out delivery.Output) error {
+	service, cleanup := newTestService(t, func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
 		sent = append(sent, target.Platform+":"+out.Text)
-		return nil
+		return delivery.Receipt{}, nil
 	})
 	defer cleanup()
 
@@ -593,7 +636,9 @@ func newTestServiceWithRunner(t *testing.T, runner background.Runner, send Sende
 		t.Fatalf("sqlite.New: %v", err)
 	}
 	if send == nil {
-		send = func(ctx context.Context, target delivery.Target, out delivery.Output) error { return nil }
+		send = func(ctx context.Context, target delivery.Target, out delivery.Output) (delivery.Receipt, error) {
+			return delivery.Receipt{}, nil
+		}
 	}
 	service, err := NewService(Options{
 		Config: config.AtrinisConfig{
@@ -651,7 +696,7 @@ type fakeBackgroundRunner struct {
 
 func (r *fakeBackgroundRunner) RunBackground(ctx context.Context, req background.RunRequest) (background.RunResult, error) {
 	r.requests = append(r.requests, req)
-	return background.RunResult{SessionID: "bg-session", Text: r.text}, nil
+	return background.RunResult{SessionID: "bg-session", MessageID: "bg-message", Text: r.text}, nil
 }
 
 func testRequest(mode string) Request {
