@@ -90,6 +90,13 @@ atri-x service run  # Linux/headless 服务模式：不启动 CLI，启动已启
 
 `atri-x cli` 是独立本地进程，会使用同一套配置和 SQLite 数据，但不会接管 service 进程中的当前请求、确认状态或内存里的当前 Session。需要继续历史会话时，可用 `/list` 和 `/resume`。
 
+CLI TUI 常用按键：
+
+- `PgUp` / `PgDn` / `Home` / `End`：滚动聊天输出。
+- `Ctrl+K` / `Ctrl+J`：小幅滚动聊天输出；`Ctrl+U` / `Ctrl+D` 滚动通知区。
+- `Alt+h` / `Alt+l`：进入聊天区 / 通知区 copy mode。
+- copy mode 中可用 `h/j/k/l` 与 `w/e/b` 移动，`v` / `V` 选择，`y` 复制，`/` 搜索，`i` 或 `Esc` 返回输入。
+
 构建二进制：
 
 ```bash
