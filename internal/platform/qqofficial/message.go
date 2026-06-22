@@ -9,6 +9,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform/refcontext"
+	"github.com/fujiwarashigure/ATRI-X/internal/security"
 )
 
 const (
@@ -32,9 +33,10 @@ func (a *Adapter) handleC2CMessage(ctx context.Context, handler platform.Platfor
 	if text == "" && len(segments) == 0 {
 		return
 	}
+	actorID := security.ActorID(a.Name(), openID)
 	messageCtx := platform.MessageContext{
 		Platform:              a.Name(),
-		ActorID:               openID,
+		ActorID:               actorID,
 		PlatformUserID:        openID,
 		DisplayName:           openID,
 		ScopeID:               "c2c:" + openID,
@@ -54,7 +56,7 @@ func (a *Adapter) handleC2CMessage(ctx context.Context, handler platform.Platfor
 			Store:           a.store,
 			Platform:        a.Name(),
 			ScopeID:         messageCtx.ScopeID,
-			ActorID:         a.Name() + ":" + openID,
+			ActorID:         actorID,
 			IsSuperadmin:    isConfiguredSuperadmin(a.cfg.Superadmins, openID),
 			ReplyID:         replyID,
 			Text:            text,

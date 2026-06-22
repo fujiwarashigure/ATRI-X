@@ -19,6 +19,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform/refcontext"
+	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
@@ -415,7 +416,7 @@ func (a *Adapter) handleEvent(ctx context.Context, handler platform.PlatformHand
 			Store:           a.store,
 			Platform:        a.Name(),
 			ScopeID:         messageCtx.ScopeID,
-			ActorID:         a.Name() + ":" + strconv.FormatInt(event.UserID, 10),
+			ActorID:         security.ActorID(a.Name(), strconv.FormatInt(event.UserID, 10)),
 			IsSuperadmin:    isConfiguredSuperadmin(a.cfg.Superadmins, strconv.FormatInt(event.UserID, 10)),
 			ReplyID:         normalized.ReplyID,
 			Text:            text,
