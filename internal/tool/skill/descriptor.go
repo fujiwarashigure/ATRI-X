@@ -48,15 +48,19 @@ func (d Descriptor) Call(context.Context, tool.CallRequest) (*tool.Result, error
 }
 
 func (d Descriptor) Detail() string {
-	detail := d.Record.Detail
-	if d.Record.Format == atriyph.Format {
-		detail = atriyph.RuleCard() + "\n\n" + detail
-	}
-	if d.Record.Kind == KindAgent {
-		detail = detail + agentSkillPythonConstraint()
-	}
+	return tool.RenderDetailBlocks([]tool.DetailBlock{d.DetailBlock()})
+}
 
-	return detail
+func (d Descriptor) DetailBlock() tool.DetailBlock {
+	content := d.Record.Detail
+	if d.Record.Kind == KindAgent {
+		content = content + agentSkillPythonConstraint()
+	}
+	block := tool.DetailBlock{Content: content, Format: d.Record.Format}
+	if d.Record.Format == atriyph.Format {
+		block.RuleCard = atriyph.RuleCard()
+	}
+	return block
 }
 
 func (d Descriptor) ActivateTools() []string {
