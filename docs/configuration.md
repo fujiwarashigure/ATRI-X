@@ -30,7 +30,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
 
 
 开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
@@ -58,6 +58,18 @@ path = "SOUL.md"
 ```
 
 这些路径都会解析到主配置文件所在目录下；默认情况下就是平台配置目录。
+
+## 常驻记忆配置
+
+常驻记忆数据默认保存在配置目录的 `memories.toml`，文件由程序首次运行时生成。主配置中可以设置 core/normal 两段常驻记忆的长度上限：
+
+```toml
+[resident_memory]
+core_max_units = 200
+normal_max_units = 300
+```
+
+长度单位 `units` 可以近似理解为“中文按字数、英文按单词”：中日韩字符按单字计数，英文/数字连续片段按一个词计数。core 用于需要高风险确认的核心记忆，normal 用于可整理的普通记忆；注入 Prompt 时两段会合并成一段自然文本。
 
 ## Provider 配置
 

@@ -24,6 +24,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/llm/openai"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/maintenance"
+	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	platformbuiltin "github.com/fujiwarashigure/ATRI-X/internal/platform/builtin"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
@@ -268,7 +269,7 @@ func Run(ctx context.Context, opts Options) error {
 	if err := cronManager.RegisterHandler(elcron.UserHandlerName, cronService.Handler); err != nil {
 		return err
 	}
-	toolRuntime, err := builtin.NewRuntime(builtin.RuntimeOptions{ConfigDir: filepath.Dir(cfg.ConfigPath), CronService: cronService, ChatHistory: chatHistory, SandboxRoot: cfg.Sandbox.Root, FileDelivery: cfg.FileDelivery})
+	toolRuntime, err := builtin.NewRuntime(builtin.RuntimeOptions{ConfigDir: filepath.Dir(cfg.ConfigPath), CronService: cronService, ChatHistory: chatHistory, SandboxRoot: cfg.Sandbox.Root, FileDelivery: cfg.FileDelivery, ResidentMemoryMaxUnits: resident.Limits{Core: cfg.ResidentMemory.CoreMaxUnits, Normal: cfg.ResidentMemory.NormalMaxUnits}})
 	if err != nil {
 		return err
 	}
