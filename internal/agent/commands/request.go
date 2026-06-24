@@ -10,6 +10,7 @@ import (
 
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
+	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/turn"
 )
 
@@ -57,6 +58,7 @@ func (c stopCommand) Info() command.Info {
 		Name:        "stop",
 		Usage:       "/stop [request_id|number]",
 		Description: "Stop a request or all requests in current session. Use /requests to see numbers like 1 or 1.1.",
+		MinRole:     security.RoleUser,
 	}
 }
 
