@@ -13,7 +13,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/launcher"
 )
 
-const version = "dev"
+var version = "dev"
 
 func main() {
 	startedAt := time.Now()
