@@ -8,10 +8,9 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 | 文件或目录 | 职责 |
 | --- | --- |
-| `config/providers.toml` | LLM Provider、模型列表、默认请求参数和模型 metadata。 |
-| `config/state.toml` | 运行态状态，例如默认 Session 模式、chat/work/compact/naming 模型选择。 |
-| `config/tool_tags.md` | 给工具添加 tag 和prompt的配置文件。 |
 | `config/atrinis.toml` | Atrinis 监听枢纽配置，保存 HTTP、token、delivery、allowed_tools 和 Atriwisp 策略。 |
+| `config/state.toml` | 运行态状态，例如默认 Session 模式、chat/work/compact/naming 模型选择。 |
+| `config/tool_tags.toml` | 给工具添加 tag 和 prompt 的配置文件。 |
 | `config/SOUL.md` | Agent 的 System Prompt 来源文件。 |
 | `config/.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
 | `config/plugins/` | Hook 和插件配置目录。 |
@@ -76,27 +75,37 @@ normal_max_units = 300
 Provider 写在 `providers.toml`：
 
 ```toml
-[global_default]
-stream = true
-temperature = 1.0
-max_tokens = 4096
-
 [providers.deepseek]
 base_url = "https://api.deepseek.com"
 api_key_env = "DEEPSEEK_API_KEY"
+proxy = ""                          # 可选，HTTP/SOCKS5 代理地址
+extra_payload = { provider_field = "xxx" }  # 可选，Provider 级 extra payload
 
 [providers.openai]
 base_url = "https://api.openai.com/v1"
 api_key_env = "OPENAI_API_KEY"
-models = ["gpt-4o-mini"]
+models = ["gpt-4o-mini"]             # 手动补充模型列表（API 获取不到时使用）
+
+# 可选：为特定模型配置 context_window 或 extra_payload
+# [providers.openai.model_configs."gpt-4o-mini"]
+# context_window = 128000
+# extra_payload = { }
+
+[model_metadata]
+default_context_window = 256000
 ```
 
 说明：
 
 - `base_url` 使用 Provider 的 OpenAI-compatible API 地址。
 - `api_key_env` 指向环境变量名，推荐用这种方式保存密钥。
-- `models` 可手动补充模型列表；也可以通过 Provider 的模型列表接口获取。
-- `[global_default]` 提供默认请求参数。
+- `proxy` 可选，支持 `http://` 和 `socks5://` 代理地址。
+- `models` 是手动补充的模型名列表，当 Provider 的模型列表接口获取不到某些模型时使用。
+- `[providers.<name>.model_configs."<model>"]` 为特定模型配置 `context_window` 和 `extra_payload`，两者都是可选的。
+- `extra_payload` 会合并到 LLM 请求 JSON 中，模型级覆盖 Provider 级。
+- `[model_metadata]` 的 `default_context_window` 是全局回退值，没有在 `model_configs` 里配 `context_window` 时使用。
+
+
 
 ## API Key 与 `.env`
 
@@ -283,15 +292,17 @@ compact_trigger_ratio = 0.8
 - 也可以通过 `/compact` 手动压缩当前 Session。
 - 压缩只影响发给 LLM 的上下文视图，不删除原始历史。
 
-模型窗口可以在 `providers.toml` 中补充：
+模型窗口在 `providers.toml` 的 `model_configs` 中配置：
 
 ```toml
+[providers.deepseek.model_configs."deepseek-chat"]
+context_window = 64000
+
 [model_metadata]
 default_context_window = 256000
-
-[model_metadata.context_windows]
-# "deepseek-chat" = 64000
 ```
+
+- `[model_metadata].default_context_window` 是全局回退值，模型块里没配 `context_window` 时使用。
 
 ## 命令前缀
 
