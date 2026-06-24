@@ -35,7 +35,7 @@ func (FinalizeAtrixSkillTool) Info() tool.Info {
 	return tool.NewBuilder(FinalizeAtrixSkillName).
 		Description("完成 ATRI-X Skill 修改：校验 SKILL.atriyph；如有 main.go，则 gofmt、校验 package main、go build；成功后 reload。错误会返回给 LLM 继续修。").
 		Source(tool.SourceBuiltin).
-		Risk(tool.RiskHigh).
+		Risk(tool.RiskMedium).
 		BuildInfo()
 }
 
