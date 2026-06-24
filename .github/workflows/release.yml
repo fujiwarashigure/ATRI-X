@@ -59,17 +59,18 @@ jobs:
 
       - name: Archive
         run: |
+          mkdir -p assets
           archive="atri-x-${GITHUB_REF_NAME}-${{ matrix.goos }}-${{ matrix.goarch }}"
           if [ "${{ matrix.goos }}" = "windows" ]; then
-            zip "${archive}.zip" "atri-x${{ matrix.ext }}"
+            zip "assets/${archive}.zip" "atri-x${{ matrix.ext }}"
           else
-            tar czf "${archive}.tar.gz" atri-x
+            tar czf "assets/${archive}.tar.gz" atri-x
           fi
 
       - uses: actions/upload-artifact@v4
         with:
           name: atri-x-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: atri-x-${GITHUB_REF_NAME}-*
+          path: assets
 
   release:
     name: Publish release
