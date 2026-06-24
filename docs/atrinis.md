@@ -184,6 +184,8 @@ Atrinis 收到事件后，会按 `mode` 决定处理方式。
 
 工作模式下，超级管理员可以让 ATRI-X 使用内置工具 `atriwisp_creator` 辅助创建 Atriwisp。该工具会返回创建指南、Atriena 事件模板、Atrinis 配置片段、监听器脚手架、curl 测试命令和安全检查清单；真正写文件或运行命令仍由文件工具和 shell 工具处理。
 
+如需参考现成的 Atriwisp 示例、协议文档和模板，可查看 [Atriwisp Showcase](https://github.com/Elfreese/elwisp-showcase)。
+
 ## 当前限制与后续方向
 
 当前 Atrinis 已支持 record、direct、llm 模式、Atriwisp 随事件声明外部工具以及多模态消息段（text/image/file）。超级管理员在平台里引用回复 Atrinis LLM 报告通知时，会自动 resume 到对应后台 Session 继续对话；普通用户引用时只会作为普通引用文本处理。

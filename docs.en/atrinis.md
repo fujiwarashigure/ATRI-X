@@ -186,6 +186,8 @@ Simply put: Cron is responsible for "when to do it", Atrinis is responsible for 
 
 In work mode, the superadmin can let ATRI-X use the built-in tool `atriwisp_creator` to assist in creating Atriwisp. This tool returns creation guides, Atriena event templates, Atrinis configuration snippets, listener scaffolds, curl test commands, and security checklists; The actual writing of files or execution of commands is still handled by the file tool and shell tool.
 
+For ready-made Atriwisp examples, protocol documentation, and templates, please refer to [Atriwisp Showcase](https://github.com/Elfreese/elwisp-showcase).
+
 ## Current Limitations and Future Directions
 
 Currently, Atrinis supports record, direct, and llm modes, Atriwisp declaring external tools with events, and multimodal message segments (text/image/file). When a superadmin quotes and replies to an Atrinis LLM report notification within the platform, it will automatically resume to the corresponding background Session to continue the conversation; When a regular user quotes it, it will only be processed as ordinary quoted text.
