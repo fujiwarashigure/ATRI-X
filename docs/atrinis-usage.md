@@ -77,11 +77,11 @@ ATRINIS_HOME_TOKEN=change-me
 启动 ATRI-X 后，可以用 curl 测试一个 `direct` 事件：
 
 ```bash
-curl -sS http://127.0.0.1:32170/atriena/v2/events \
+curl -sS http://127.0.0.1:32170/atriena/v3/events \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer change-me' \
   -d '{
-    "version":"atriena.v2",
+    "version":"atriena.v3",
     "atriwisp":{"name":"server-watchdog"},
     "source":"minecraft-main",
     "id":"cpu-alert-001",
@@ -98,7 +98,7 @@ curl -sS http://127.0.0.1:32170/atriena/v2/events \
 
 ```json
 {
-  "version": "atriena.v2",
+  "version": "atriena.v3",
   "atriwisp": {
     "name": "server-watchdog",
     "tags": ["server", "prod"]
@@ -136,9 +136,32 @@ curl -sS http://127.0.0.1:32170/atriena/v2/events \
 }
 ```
 
+### direct calls-only 示例
+
+```json
+{
+  "version": "atriena.v3",
+  "atriwisp": {"name": "hook-recall"},
+  "source": "rules-hook",
+  "id": "recall-qqonebot-1024",
+  "mode": "direct",
+  "targets": [{"platform": "qqonebot", "type": "group", "id": "987654321"}],
+  "calls": [
+    {
+      "kind": "capability",
+      "name": "message.recall",
+      "platform": "qqonebot",
+      "target": {"platform": "qqonebot", "type": "group", "id": "987654321"},
+      "params": {"message_id": 1024}
+    }
+  ]
+}
+```
+
+
 ## Segments（多模态消息段）
 
-Atriena v2 支持通过 `segments` 字段发送图片和文件。`content` 保留为纯文本 fallback，与旧 Atriwisp 完全兼容。
+Atriena v3 支持通过 `segments` 字段发送图片和文件。`content` 保留为纯文本 fallback；direct/record 请求中 `content`、`segments`、`calls` 至少提供一个，LLM 模式仍必须提供 `content`。
 
 `segments` 为空时行为不变，非空时优先 segments 渲染，content 作为附加文本。
 
@@ -165,7 +188,7 @@ Atriena v2 支持通过 `segments` 字段发送图片和文件。`content` 保�
 
 ```json
 {
-  "version": "atriena.v2",
+  "version": "atriena.v3",
   "atriwisp": {"name": "monitor"},
   "source": "prod-server",
   "id": "cpu-chart-002",
@@ -203,7 +226,7 @@ Atriena v2 支持通过 `segments` 字段发送图片和文件。`content` 保�
 
 | 字段 | 必填 | 说明 |
 | --- | ---: | --- |
-| `version` | 是 | 协议版本，当前为 `atriena.v2`。 |
+| `version` | 是 | 协议版本，当前为 `atriena.v3`。 |
 | `atriwisp.name` | 是 | Atriwisp 名称，也是来源身份之一；仅允许英文字母、数字、`_`、`-`，不允许点号。 |
 | `atriwisp.tags` | 否 | Atriwisp 标签，用于日志和统计。 |
 | `source` | 是 | 具体事件源，例如服务名、脚本名、RSS 名。 |
@@ -212,12 +235,12 @@ Atriena v2 支持通过 `segments` 字段发送图片和文件。`content` 保�
 | `mode` | 是 | `record`、`direct` 或 `llm`。 |
 | `title` | 否 | 事件标题，用于通知和后台 Session 标题。 |
 | `format` | 否 | `text` 或 `atriyph`，默认 `text`。 |
-| `content` | 是 | 事件主体。LLM 模式推荐使用 Atriyph Task Notation（任务表示法）`#task`。 |
+| `content` | 否 | 事件主体。LLM 模式必填，推荐使用 Atriyph Task Notation（任务表示法）`#task`；direct/record 模式可为空，但 `content`、`segments`、`calls` 至少提供一个。 |
 | `model_slot` | 否 | Atrinis LLM 模型槽位，仅支持 `atriwisp1`、`atriwisp2`、`atriwisp3`；未填写或对应槽位未配置时回退到 `work`。 |
 | `tool_list_names` | 否 | 后台任务预加载的 ATRI-X 内部工具名或 Skill 名；普通工具注入 schema，Skill 注入任务说明并自动注入对应 runner；必须在 Atrinis `allowed_tools` 裁决范围内，`discover_tool` 会被忽略。 |
 | `tools` | 否 | Atriwisp 随事件声明的外部工具；默认允许，命中该 Atriwisp 的 `disabled_external_tools` 时拒绝。 |
 | `targets` | 是 | Atriwisp 期望投递目标数组，`{"platform":"telegram"}` 表示发给平台超级管理员，`type=private/group` 且带 `id` 时发指定私聊/群聊，`{"platform":"all"}` 表示所有已启用平台超级管理员。最终仍由 Atrinis 裁决。 |
-| `calls` | 否 | Atriena v3 动作调用数组。`kind="raw"` 透传平台原始 API，`kind="capability"` 使用统一能力名；首批 capability 包含 `message.recall`、`member.mute`、`chat.leave`。 |
+| `calls` | 否 | Atriena v3 动作调用数组。`kind="raw"` 透传平台原始 API，`kind="capability"` 使用统一能力名；首批 capability 包含 `message.recall`、`member.mute`、`chat.leave`。direct 请求只有 `calls` 且没有 `content`/`segments` 时只执行 API，不发送消息。 |
 | `meta` | 否 | 原始补充数据，只做记录和 prompt 附加。 |
 
 

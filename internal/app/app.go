@@ -340,6 +340,7 @@ func Run(ctx context.Context, opts Options) error {
 			Store:            store,
 			Logger:           logs.Atrinis(),
 			EnabledPlatforms: runtimeNames(platforms.Runtimes),
+			PlatformCallers:  platformCallerResolver{runtimes: platforms.Runtimes},
 			Audit: func(event string, attrs ...any) {
 				logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
 			},
@@ -377,6 +378,25 @@ func Run(ctx context.Context, opts Options) error {
 }
 
 type platformRuntime = platform.Runtime
+
+type platformCallerResolver struct {
+	runtimes []platformRuntime
+}
+
+func (r platformCallerResolver) PlatformCaller(name string) (atriena.PlatformAPICaller, bool) {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return nil, false
+	}
+	for _, runtime := range r.runtimes {
+		if runtime == nil || runtime.Name() != name {
+			continue
+		}
+		caller, ok := runtime.(atriena.PlatformAPICaller)
+		return caller, ok
+	}
+	return nil, false
+}
 
 type atrinisRuntimeAdapter struct {
 	runtime *atrinis.Runtime

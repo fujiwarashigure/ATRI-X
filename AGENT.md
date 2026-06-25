@@ -17,7 +17,7 @@
 
 - `devdocs/` 是开发资料，只给维护者/Agent 看，不走自动翻译。
 - `devdocs/tasks.md`：实现任务，按里程碑拆分任务、状态和后续事项。
-- `devdocs/atrinis-atriwisp.md`：Atrinis/Atriwisp 监听枢纽架构、Atriena 协议草案和分阶段实现规划。
+- `devdocs/atrinis-atriwisp.md`：Atrinis/Atriwisp 监听枢纽架构、Atriena 协议和分阶段实现规划。
 
 ## Go 文件速查
 
@@ -120,9 +120,7 @@
 - `internal/atrinis/segments.go`：Atrinis segment 下载、URL/data URI 校验和 LLM segment 转换。
 - `internal/atrinis/store.go`：Atrinis 重复事件、完成状态和事件日志属性 helper。
 - `internal/atrinis/background.go`：Atrinis 后台 actor、sandbox subdir 和平台辅助 helper。
-- `internal/atrinis/http.go`：Atrinis HTTP runtime；提供 `POST /atriena/v2/events` 和 `GET /healthz`，支持 body 限制、token 提取、JSON 响应和 LLM 事件队列 worker。
-
-
+- `internal/atrinis/http.go`：Atrinis HTTP runtime；提供 `POST /atriena/v3/events` 和 `GET /healthz`，支持 body 限制、token 提取、JSON 响应和 LLM 事件队列 worker。
 - `internal/logging/logging.go`：日志地基；创建运行日志、审计日志和 Atrinis 日志的 `slog.Logger`，`Manager` 统一持有按日期懒轮转的 `atri-x-YYYY-MM-DD.log`、`audit-YYYY-MM-DD.log`、`atrinis-YYYY-MM-DD.log` writer，暴露日志目录和可配置旧日志清理入口。
 - `internal/logging/reader.go`：结构化文本日志读取器；解析 `slog.TextHandler` 输出，支持 `/log`、`/audit` 的时间、等级、字段、msg、latest message 文本和条数过滤，并放宽单行读取上限以支持较大的 Debug 请求体。
 

@@ -78,13 +78,13 @@ background runner 的输入应同时携带：
 
 当前实现中已新增 `internal/background` 作为公共后台执行类型与 JSON 结果解析层；Agent 提供通用 `RunBackground`，cron 通过薄适配继续保持原行为，Atrinis HTTP runtime 通过队列 worker 调用同一后台 runner。
 
-## Atriena v2 协议草案
+## Atriena v3 协议
 
-首期协议使用 JSON 外壳，主体内容支持 Atriyph 或自然语言文本。
+协议使用 JSON 外壳；`content` 支持 Atriyph 或自然语言文本，`segments` 支持多模态 direct 投递，`calls` 支持调用平台 API。direct/record 请求中 `content`、`segments`、`calls` 至少提供一个；llm 模式仍必须提供 `content`。
 
 ```json
 {
-  "version": "atriena.v2",
+  "version": "atriena.v3",
   "atriwisp": {
     "name": "server-watchdog",
     "tags": ["server", "prod"]
@@ -124,11 +124,34 @@ background runner 的输入应同时携带：
 }
 ```
 
+`calls` 只在 direct 模式执行。calls-only 请求可以不写 `content`/`segments`，Atrinis 只调用平台 API，不额外发送消息：
+
+```json
+{
+  "version": "atriena.v3",
+  "atriwisp": {"name": "hook-recall"},
+  "source": "rules-hook",
+  "id": "recall-qqonebot-1024",
+  "mode": "direct",
+  "targets": [{"platform": "qqonebot", "type": "group", "id": "987654321"}],
+  "calls": [
+    {
+      "kind": "capability",
+      "name": "message.recall",
+      "platform": "qqonebot",
+      "target": {"platform": "qqonebot", "type": "group", "id": "987654321"},
+      "params": {"message_id": 1024}
+    }
+  ]
+}
+```
+
 字段说明：
+
 
 | 字段 | 必填 | 说明 |
 |---|---:|---|
-| `version` | 是 | 协议版本，首期固定 `atriena.v2`。 |
+| `version` | 是 | 协议版本，当前固定 `atriena.v3`。 |
 | `atriwisp.name` | 是 | Atriwisp 唯一名称，是主要来源身份。 |
 | `atriwisp.tags` | 否 | 分类标签，用于日志、统计和目标策略。 |
 | `source` | 是 | 具体事件源，例如服务名、RSS 名、脚本名。 |
@@ -137,12 +160,13 @@ background runner 的输入应同时携带：
 | `mode` | 是 | `record`、`direct` 或 `llm`。 |
 | `title` | 否 | 事件标题，用于通知和 Session 标题。 |
 | `format` | 否 | `atriyph` 或 `text`，默认 `text`。 |
-| `content` | 是 | 事件主体。LLM 模式推荐使用 Atriyph `#task`。 |
+| `content` | 否 | 事件主体。LLM 模式必填，推荐使用 Atriyph `#task`；direct/record 模式可为空，但 `content`、`segments`、`calls` 至少提供一个。 |
 | `model_slot` | 否 | 模型槽位，例如 `atriwisp1`、`atriwisp2`、`atriwisp3`。 |
 | `tool_list_names` | 否 | 请求预加载的工具名或 Skill 名。普通工具注入 schema，Skill 注入后台任务 prompt 并自动注入对应 runner；实际可用性仍由 Atrinis/ToolRun/Security 裁决；`discover_tool` 会被静默忽略，后台任务不注入发现入口。 |
 
 | `tools` | 否 | Atriwisp 额外声明的工具信息，包含名称、描述、Schema、调用端点或执行方式、风险与超时等。 |
 | `targets` | 是 | Atriwisp 期望投递目标数组。只写 `platform` 表示投递到该平台超级管理员；`type=private/group` 且带 `id` 表示指定私聊/群聊；`platform=all` 表示所有已启用平台超级管理员。最终投递目标由 Atrinis 配置裁决。 |
+| `calls` | 否 | Atriena v3 动作调用数组。`kind=raw` 透传平台原始 API，`kind=capability` 使用统一能力名；direct 请求只有 `calls` 且没有 `content`/`segments` 时只执行 API，不发送消息。 |
 | `meta` | 否 | 原始补充数据，只做记录与 prompt 附加，不让核心理解事件类型。 |
 
 HTTP 响应只表示接收状态，不等待 LLM 完成：
@@ -489,7 +513,7 @@ atrinis.llm_completed
 atrinis.llm_failed
 ```
 
-## 配置草案
+## 配置
 
 ```toml
 enabled = true
@@ -541,7 +565,7 @@ enabled = false
 首期 endpoint：
 
 ```text
-POST /atriena/v2/events
+POST /atriena/v3/events
 GET  /healthz
 ```
 
@@ -571,7 +595,7 @@ GET  /healthz
 ### Phase 1：Ingress 与 direct/record
 
 - 增加 Atrinis config。
-- 增加 Atriena v2 类型与校验。
+- 增加 Atriena v3 类型与校验。
 - 增加 HTTP server。
 - 增加 token 鉴权。
 - 增加 Atrinis 事件表与 repository。
