@@ -28,7 +28,7 @@ ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是
 
 ### 二、强大可扩展
 
-**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。Hook 可以修改消息、追加输出意图、调用低风险工具或注入常驻记忆。内置规则 Hook、表情 Hook 和常驻记忆 Hook，支持后续扩展独立插件。规则 Hook 的 exec action 基于 stdio 通信，支持用任意语言或脚本编写插件；配合 [Atriwisp](docs/atrinis.md) 可实现条件触发 LLM、外部事件接入等强大功能。
+**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。Hook 可以修改消息、追加输出意图、调用脚本等。规则 Hook 的 exec action 基于 stdio 通信，支持用任意语言或脚本编写插件；配合 [Atriwisp](docs/atrinis.md) 可实现条件触发 LLM、外部事件接入等强大功能。
 
 **普通 Cron 与 LLM Cron**： ATRI-X 内置 Cron Runtime 和 LLM 可编排 Cron 服务。普通 Cron 按计划直接发送固定内容；LLM Cron 用任务描述驱动模型执行，适合需要分析、归纳或使用工具的定时任务。
 
