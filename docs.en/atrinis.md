@@ -126,9 +126,10 @@ Atriwisp is only responsible for "seeing and reporting." It does not directly co
 
 ### Atriena: event protocol
 
-Atriena is the JSON over HTTP protocol used by Atriwisp to deliver events to Atrinis.
+Atriena is the JSON over HTTP protocol for Atriwisp to deliver events to Atrinis. Hook exec within ATRI-X can also submit Atriena requests via the same Atriena Bus; These requests do not go through an HTTP token, but instead carry a `hook` origin, and are executed by Atrinis in a unified manner for direct, LLM, and calls.
 
-It is responsible for turning "what happened outside" into a unified event that Atrinis can understand: who the source is, what the event ID is, what the content is, how it should be handled, and where it should be delivered.
+It is responsible for transforming "what happened outside" or "what the internal Hook wants to do" into a unified event that Atrinis can understand: who the source is, what the event ID is, what the content is, how it should be handled, and where it should be delivered.
+
 
 Initial endpoint:
 
@@ -190,12 +191,16 @@ For ready-made Atriwisp examples, protocol documentation, and templates, please 
 
 ## Current Limitations and Future Directions
 
-Currently, Atrinis supports record, direct, and llm modes, Atriwisp declaring external tools with events, and multimodal message segments (text/image/file). When a superadmin quotes and replies to an Atrinis LLM report notification within the platform, it will automatically resume to the corresponding background Session to continue the conversation; When a regular user quotes it, it will only be processed as ordinary quoted text.
+Currently, Atrinis supports record, direct, and llm modes, Atriwisp declaring external tools with events, multimodal message segments (text/image/file), Atriena v3 calls (raw platform APIs and the first batch of capabilities), and Hook exec delivery via the internal Atriena Bus. When a superadmin quotes and replies to an Atrinis LLM report notification within the platform, it will automatically resume to the corresponding background Session to continue the conversation; When a regular user quotes it, it will only be processed as ordinary quoted text.
+
 
 The following capabilities are still under development or planning:
 
 - Multi-turn communication between Atrinis and Atriwisp.
+- More unified capabilities: `member.kick`, `message.pin`, `member.unmute`, bot profile/avatar/name/commands, etc.
+- QQ Official raw API caller。
 - Non-HTTP transports such as stdio, pipe, etc.
+
 
 ## Next Step: Configuration and Usage
 
