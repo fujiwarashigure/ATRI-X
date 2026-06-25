@@ -4,19 +4,19 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 ## 配置文件职责
 
-源码中的 `config/` 目录只保留可独立维护的示例/辅助配置文件；主配置 `app.toml` 首次运行时由程序内置 assets 生成到平台配置目录。
+所有配置文件均由程序内置 assets 首次运行时自动生成到平台配置目录，已有文件不会被覆盖；源码中不再保留 `config/` 目录。
 
 | 文件或目录 | 职责 |
 | --- | --- |
-| `config/atrinis.toml` | Atrinis 监听枢纽配置，保存 HTTP、token、delivery、allowed_tools 和 Atriwisp 策略。 |
-| `config/state.toml` | 运行态状态，例如默认 Session 模式、chat/work/compact/naming 模型选择。 |
-| `config/tool_tags.toml` | 给工具添加 tag 和 prompt 的配置文件。 |
-| `config/SOUL.md` | Agent 的 System Prompt 来源文件。 |
-| `config/.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
-| `config/plugins/` | Hook 和插件配置目录。 |
-| `config/skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。 |
-| `config/memories.toml` | 常驻记忆文件，默认位于配置目录下。 |
-| `config/long_memory/` | 长期记忆 Markdown 源数据目录，默认位于配置目录下。 |
+| `atrinis.toml` | Atrinis 监听枢纽配置，保存 HTTP、token、delivery、allowed_tools 和 Atriwisp 策略。 |
+| `state.toml` | 运行态状态，例如默认 Session 模式、chat/work/compact/naming 模型选择。 |
+| `tool_tags.toml` | 给工具添加 tag 和 prompt 的配置文件。 |
+| `SOUL.md` | Agent 的 System Prompt 来源文件。 |
+| `.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
+| `plugins/` | Hook 和插件配置目录。 |
+| `skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。 |
+| `memories.toml` | 常驻记忆文件，默认位于配置目录下。 |
+| `long_memory/` | 长期记忆 Markdown 源数据目录，默认位于配置目录下。 |
 
 ## 主配置查找顺序
 
@@ -386,13 +386,13 @@ MUST:
 
 ## Atrinis 监听枢纽
 
-Atrinis 默认关闭。启用后，ATRI-X 会启动本地 HTTP ingress，接收 Atriwisp 按 Atriena 协议投递的事件。Atrinis 配置建议拆到独立 `config/atrinis.toml`，`app.toml` 只保留入口路径。
+Atrinis 默认关闭。启用后，ATRI-X 会启动本地 HTTP ingress，接收 Atriwisp 按 Atriena 协议投递的事件。Atrinis 配置建议拆到独立 `atrinis.toml`，`app.toml` 只保留入口路径。
 
 ```toml
 [config_files]
 atrinis = "atrinis.toml"
 
-# config/atrinis.toml
+# atrinis.toml
 enabled = true
 allowed_tools = ["shell", "web_search"]
 
