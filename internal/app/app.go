@@ -19,6 +19,7 @@ import (
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/atrinis"
+	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	hookbuiltin "github.com/fujiwarashigure/ATRI-X/internal/hook/builtin"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm/openai"
@@ -282,6 +283,7 @@ func Run(ctx context.Context, opts Options) error {
 	}
 	profiler.Mark("skill reload")
 	securityPolicy := security.NewPolicy(cfg.Security.UserMaxToolRisk, cfg.Security.SuperadminConfirmRisk, cfg.Security.Superadmins)
+	atrienaBus := atriena.NewBus()
 	hooks := hook.NewManager()
 	hooks.SetLogger(logger)
 	if err := hookbuiltin.RegisterAll(hooks, hookbuiltin.Options{
@@ -294,6 +296,7 @@ func Run(ctx context.Context, opts Options) error {
 			logs.Audit().Log(context.Background(), slog.LevelInfo, "audit event", append([]any{"event", event}, attrs...)...)
 		},
 		Notify: notifyHookIssue,
+		Atriena: atrienaBus,
 	}); err != nil {
 		logger.Error("hook registration failed", "error", err)
 		notifyHookIssue(context.Background(), fmt.Sprintf("Hook 注册失败：%v", err))
@@ -352,6 +355,7 @@ func Run(ctx context.Context, opts Options) error {
 		if err != nil {
 			return err
 		}
+		atrienaBus.SetDispatcher(atrinisService)
 		platforms.Runtimes = append(platforms.Runtimes, atrinisRuntimeAdapter{runtime: atrinis.NewRuntime(cfg.Atrinis.HTTP, atrinisService)})
 		profiler.Mark("atrinis init")
 	}

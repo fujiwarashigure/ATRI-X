@@ -10,6 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
+	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
 	"github.com/fujiwarashigure/ATRI-X/internal/toolrun"
@@ -42,7 +43,7 @@ func TestEventAttrsIncludeTags(t *testing.T) {
 	defer cleanup()
 
 	req := testRequest(ModeRecord)
-	event, err := service.prepareEvent("home", req)
+	event, err := service.prepareEvent(atriena.Origin{Kind: atriena.OriginInternal, Name: "home"}, req)
 	if err != nil {
 		t.Fatalf("prepareEvent: %v", err)
 	}

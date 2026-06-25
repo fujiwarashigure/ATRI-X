@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
+	"github.com/fujiwarashigure/ATRI-X/internal/security"
 )
 
 // PlatformAdapter is the interface for message platform adapters (CLI, QQ, etc.).
@@ -55,6 +56,7 @@ type MessageContext struct {
 	ActorID               string
 	PlatformUserID        string
 	DisplayName           string
+	GroupRole             security.GroupRole
 	ScopeID               string
 	Sender                delivery.ContextSender
 	BufferAssistantOutput bool

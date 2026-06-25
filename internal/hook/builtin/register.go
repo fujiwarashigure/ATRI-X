@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
-	"github.com/fujiwarashigure/ATRI-X/internal/hook/plugins/emoticon"
 	residentmemory "github.com/fujiwarashigure/ATRI-X/internal/hook/plugins/resident_memory"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook/rules"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
@@ -23,6 +23,7 @@ type Options struct {
 	Logger              *slog.Logger
 	Audit               func(event string, attrs ...any)
 	Notify              func(context.Context, string)
+	Atriena              atriena.Dispatcher
 }
 
 func RegisterAll(registrar hook.Registrar, opts Options) error {
@@ -39,18 +40,12 @@ func RegisterAll(registrar hook.Registrar, opts Options) error {
 		Logger:    opts.Logger,
 		Audit:     opts.Audit,
 		Notify:    opts.Notify,
+		Atriena:    opts.Atriena,
 	})
 	if err == nil {
 		registerModule(registrar, opts, "rules", rulesModule)
 	} else {
 		reportPluginError(opts, "rules", err)
-	}
-
-	emoticonModule, err := emoticon.NewModule(emoticon.Options{ConfigDir: opts.ConfigDir, Logger: opts.Logger})
-	if err == nil {
-		registerModule(registrar, opts, "emoticon", emoticonModule)
-	} else {
-		reportPluginError(opts, "emoticon", err)
 	}
 	return nil
 }

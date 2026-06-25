@@ -7,12 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Atriena v3 动作通道：Atrinis 支持 `calls`，首批支持 raw 平台 API 以及 `message.recall`、`member.mute`、`chat.leave` capability；Hook rules 可通过 `exec` action 执行脚本，并用 `stdout=atriena` 经内部 Atriena Bus 触发 Atrinis direct/LLM/calls。
+- Hook rules 新增角色分区与控制字段：`roles`、`actor_roles`、`group_roles`、`control.consume`、`control.stop_propagation`；平台消息 Hook 输出现在会发送，`consume=true` 可阻止后续命令/LLM 处理。
+- Hook rules `send` action 新增 `segments` 列表，支持多类型多段输出（text/image/file/emoticon，含 url/path/base64），格式与 Atriena segment 统一。
+- Hook rules `exec` action 新增 `outputs` stdout 模式，脚本 stdout 解析为 JSON 并提取 `outputs` 数组和可选 `text`；设 `field` 时 `text` 覆写对应字段，不设时不修改原文。
+- 平台入站上下文新增统一群身份 `owner/admin/member/unknown`，QQ OneBot 和 Telegram 会映射群主/管理员/普通成员。
+
 ### Changed
+
 - Provider 配置重构：删除未使用的 `[global_default]`，删除 `[model_metadata.context_windows]` 全局模型窗口表；模型级 `context_window` 和 `extra_payload` 统一收到 `[providers.<name>.model_configs."<model>"]` 下，按 `provider/model` 查找，避免跨 provider 同名模型冲突。
 - Provider 新增 `proxy` 字段，支持 HTTP/SOCKS5 代理。
+- 表情 Hook 从内嵌插件改为规则 Hook 示例，不再内置 emoticon 插件和 `emoticon.toml` 资产。
 
 ### Fixed
 - 修复 OpenAI-compatible 流式响应中途断开但缺失 `[DONE]` 时被当作正常结束的问题；现在会明确通知 LLM 响应中断。
+- 修复 Hook exec stdin JSON 使用 Go 默认大写字段名导致外部脚本无法用小写 key 读取 event 字段的问题；Hook event 及相关 payload 结构体统一加 JSON tag。
 
 ### Changed
 - LLM 建连/HTTP 可重试失败时通过 Notice 显示当前重试次数。
@@ -29,7 +39,7 @@ ATRI-X 的首个预发布版本。轻量 Agent/Chatbot 框架，目标是个人�
 - **Chat/Work 双模式**：chat 模式关闭工具，适合日常聊天与低成本对话；work 模式启用工具发现与调用，两模式可独立配置模型。
 - **工具发现机制**：默认只暴露 `discover_tool` 与工具名，按需注入完整 schema，减少无效上下文开销。
 - **Session 服务**：持久化会话，支持恢复、归档、置顶、Fork、删除、分页与平台隔离；长对话自动上下文压缩。
-- **Hook Layer**：在 Agent 输入、LLM 请求/响应、平台发送等关键点插入扩展逻辑；内置规则 Hook、表情 Hook 与常驻记忆 Hook。
+- **Hook Layer**：在 Agent 输入、LLM 请求/响应、平台发送等关键点插入扩展逻辑；内置规则 Hook 与常驻记忆 Hook。
 - **标准 Cron 与 LLM Cron**：标准 Cron 按计划直发固定内容；LLM Cron 用 Atriyph 任务描述驱动模型执行，支持一次性与周期任务、missed 补跑与广播。
 - **Atriyph Task Notation**：结构化任务描述语言，用于 LLM Cron 与原生 Skill，减少自然语言歧义。
 - **原生与外置 Skill**：`create_atrix_skill` 元工具支持 LLM 创建原生 ATRI-X Skill（纯 Atriyph 或附带 Go 源码并编译）；兼容 agentskills.io 风格外置 AgentSkill（附带 Python 脚本）。

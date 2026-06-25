@@ -8,8 +8,9 @@
 2. [配置说明](configuration.md)：了解配置文件、路径规则、Provider、运行数据和插件目录。
 3. [命令速查](commands.md)：查看常用 slash 命令和会话管理方式。
 4. [核心概念](concepts.md)：理解 Chat / Work 模式、工具发现、Session、Hook、Cron、Skill 和安全策略。
-5. [Atrinis 监听枢纽](atrinis.md)：了解 Atrinis、Atriwisp、Atriena 和外部事件接入。
-6. [Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp，并用 Atriena 投递事件。
+5. [Hook](hooks.md)：规则 Hook 配置、action 类型、segments 多段输出、exec 脚本和表情提取示例。
+6. [Atrinis 监听枢纽](atrinis.md)：了解 Atrinis、Atriwisp、Atriena 和外部事件接入。
+7. [Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp，并用 Atriena 投递事件。
 
 ## 文档维护约定
 

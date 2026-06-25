@@ -1,92 +1,32 @@
 package atrinis
 
-import (
-	"time"
-
-	"github.com/fujiwarashigure/ATRI-X/internal/toolrun"
-)
+import "github.com/fujiwarashigure/ATRI-X/internal/atriena"
 
 const (
-	ModeRecord = "record"
-	ModeDirect = "direct"
-	ModeLLM    = "llm"
+	ModeRecord = atriena.ModeRecord
+	ModeDirect = atriena.ModeDirect
+	ModeLLM    = atriena.ModeLLM
 
-	StatusAccepted    = "accepted"
-	StatusQueued      = "queued"
-	StatusRunning     = "running"
-	StatusCompleted   = "completed"
-	StatusFailed      = "failed"
-	StatusDuplicate   = "duplicate"
-	StatusUnsupported = "unsupported"
+	StatusAccepted    = atriena.StatusAccepted
+	StatusQueued      = atriena.StatusQueued
+	StatusRunning     = atriena.StatusRunning
+	StatusCompleted   = atriena.StatusCompleted
+	StatusFailed      = atriena.StatusFailed
+	StatusDuplicate   = atriena.StatusDuplicate
+	StatusUnsupported = atriena.StatusUnsupported
 )
 
-type Request struct {
-	Version       string                          `json:"version"`
-	Atriwisp        Atriwisp                          `json:"atriwisp"`
-	Source        string                          `json:"source"`
-	ID            string                          `json:"id"`
-	CreatedAt     string                          `json:"created_at"`
-	Mode          string                          `json:"mode"`
-	Title         string                          `json:"title"`
-	Format        string                          `json:"format"`
-	Content       string                          `json:"content"`
-	ModelSlot     string                          `json:"model_slot"`
-	ToolListNames []string                        `json:"tool_list_names"`
-	Tools         []toolrun.AtriwispToolDeclaration `json:"tools"`
-	Segments      []Segment                       `json:"segments,omitempty"`
-	Targets       []Target                        `json:"targets"`
-	Meta          map[string]any                  `json:"meta"`
-}
-
-type Atriwisp struct {
-	Name string   `json:"name"`
-	Tags []string `json:"tags"`
-}
-
-// SegmentKind is the type of an Atriena message segment.
-type SegmentKind string
+type Request = atriena.Request
+type Atriwisp = atriena.Atriwisp
+type SegmentKind = atriena.SegmentKind
+type Segment = atriena.Segment
+type Target = atriena.Target
+type Response = atriena.Response
+type Call = atriena.Call
+type Event = atriena.Event
 
 const (
-	SegmentKindText  SegmentKind = "text"
-	SegmentKindImage SegmentKind = "image"
-	SegmentKindFile  SegmentKind = "file"
+	SegmentKindText  = atriena.SegmentKindText
+	SegmentKindImage = atriena.SegmentKindImage
+	SegmentKindFile  = atriena.SegmentKindFile
 )
-
-// Segment is a typed content segment in an Atriena event.
-type Segment struct {
-	Kind     SegmentKind `json:"kind"`
-	Text     string      `json:"text,omitempty"`
-	URL      string      `json:"url,omitempty"`
-	Name     string      `json:"name,omitempty"`
-	MIMEType string      `json:"mime_type,omitempty"`
-}
-
-type Target struct {
-	Platform string `json:"platform" toml:"platform"`
-	Type     string `json:"type,omitempty" toml:"type"`
-	ID       string `json:"id,omitempty" toml:"id"`
-}
-
-type Response struct {
-	Accepted  bool   `json:"accepted"`
-	Duplicate bool   `json:"duplicate"`
-	EventKey  string `json:"event_key"`
-	Mode      string `json:"mode"`
-	Status    string `json:"status"`
-	Error     string `json:"error,omitempty"`
-}
-
-type Event struct {
-	Request          Request
-	TokenName        string
-	EventKey         string
-	ContentHash      string
-	ToolDeclarations string
-	ToolHash         string
-	TagsJSON         string
-	RequestedTargets string
-	ResolvedTargets  string
-	SegmentPaths     map[string]string
-	CreatedAt        time.Time
-	ReceivedAt       time.Time
-}
