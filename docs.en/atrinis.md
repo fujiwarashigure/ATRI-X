@@ -134,7 +134,7 @@ It is responsible for transforming "what happened outside" or "what the internal
 Initial endpoint:
 
 ```text
-POST /atriena/v2/events
+POST /atriena/v3/events
 GET  /healthz
 ```
 

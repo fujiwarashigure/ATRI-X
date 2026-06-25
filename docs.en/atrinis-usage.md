@@ -79,11 +79,11 @@ If you want ATRI-X to help you generate an Atriwisp listener, you can submit a r
 After starting ATRI-X, you can use curl to test a `direct` event:
 
 ```bash
-curl -sS http://127.0.0.1:32170/atriena/v2/events \
+curl -sS http://127.0.0.1:32170/atriena/v3/events \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer change-me' \
   -d '{
-    "version":"atriena.v2",
+    "version":"atriena.v3",
     "atriwisp":{"name":"server-watchdog"},
     "source":"minecraft-main",
     "id":"cpu-alert-001",
@@ -100,7 +100,7 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
 
 ```json
 {
-  "version": "atriena.v2",
+  "version": "atriena.v3",
   "atriwisp": {
     "name": "server-watchdog",
     "tags": ["server", "prod"]
@@ -138,9 +138,32 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
 }
 ```
 
+### direct calls-only example
+
+```json
+{
+  "version": "atriena.v3",
+  "atriwisp": {"name": "hook-recall"},
+  "source": "rules-hook",
+  "id": "recall-qqonebot-1024",
+  "mode": "direct",
+  "targets": [{"platform": "qqonebot", "type": "group", "id": "987654321"}],
+  "calls": [
+    {
+      "kind": "capability",
+      "name": "message.recall",
+      "platform": "qqonebot",
+      "target": {"platform": "qqonebot", "type": "group", "id": "987654321"},
+      "params": {"message_id": 1024}
+    }
+  ]
+}
+```
+
+
 ## Segments (Multimodal Message Segments)
 
-Atriena v2 supports sending images and files via the `segments` field. `content` is reserved as a plain text fallback and is fully compatible with the old Atriwisp.
+Atriena v3 supports sending images and files via the `segments` field. `content` is reserved as a plain text fallback; In direct/record requests, at least one of `content`, `segments`, or `calls` must be provided; LLM mode still requires `content`.
 
 Behavior remains unchanged when `segments` is empty; when not empty, segments are rendered preferentially, and content serves as additional text.
 
@@ -167,7 +190,7 @@ Behavior remains unchanged when `segments` is empty; when not empty, segments ar
 
 ```json
 {
-  "version": "atriena.v2",
+  "version": "atriena.v3",
   "atriwisp": {"name": "monitor"},
   "source": "prod-server",
   "id": "cpu-chart-002",
@@ -205,7 +228,7 @@ Common fields:
 
 | Field | Required | Description |
 | --- | ---: | --- |
-| `version` | Yes | Protocol version, currently `atriena.v2`. |
+| `version` | Yes | Protocol version, currently `atriena.v3`. |
 | `atriwisp.name` | Yes | Atriwisp name, which is also one of the source identities; only English letters, numbers, `_`, and `-` are allowed; dots are not allowed. |
 | `atriwisp.tags` | No | Atriwisp tag, used for logs and statistics. |
 | `source` | Yes | Specific event source, such as service name, script name, or RSS name. |
@@ -214,12 +237,12 @@ Common fields:
 | `mode` | Yes | `record`, `direct`, or `llm`. |
 | `title` | No | Event title, used for notifications and background Session titles. |
 | `format` | No | `text` or `atriyph`, default `text`. |
-| `content` | Yes | Event body. For LLM mode, using Atriyph Task Notation `#task` is recommended. |
+| `content` | No | Event body. Required for LLM mode; it is recommended to use Atriyph Task Notation `#task`; Can be empty in direct/record mode, but at least one of `content`, `segments`, or `calls` must be provided. |
 | `model_slot` | No | Atrinis LLM model slot, only supporting `atriwisp1`, `atriwisp2`, and `atriwisp3`; if left blank or the corresponding slot is not configured, it will fall back to `work`. |
 | `tool_list_names` | No | The ATRI-X internal tool name or Skill name preloaded for background tasks; Ordinary tools inject the schema, while Skills inject task descriptions and automatically inject the corresponding runner; Must be within the Atrinis `allowed_tools` adjudication range; `discover_tool` will be ignored. |
 | `tools` | No | External tools declared by Atriwisp with events; allowed by default, rejected when hitting the `disabled_external_tools` of that Atriwisp. |
 | `targets` | Yes | Atriwisp expects a delivery target array: `{"platform":"telegram"}` indicates sending to the platform superadmin, `type=private/group` with `id` indicates sending to a specified private chat/group chat, and `{"platform":"all"}` indicates all enabled platform superadmins. The final decision is still made by Atrinis. |
-| `calls` | No | Atriena v3 action call array. `kind="raw"` passes through the platform's original API, while `kind="capability"` uses a unified capability name; The first batch of capabilities includes `message.recall`, `member.mute`, and `chat.leave`. |
+| `calls` | No | Atriena v3 action call array. `kind="raw"` passes through the platform's original API, while `kind="capability"` uses a unified capability name; The first batch of capabilities includes `message.recall`, `member.mute`, and `chat.leave`. When a direct request only has `calls` and lacks `content`/`segments`, it only executes the API and does not send a message. |
 | `meta` | No | Original supplementary data, used only for recording and prompt attachment. |
 
 
