@@ -192,14 +192,6 @@ Atrinis 收到事件后，会按 `mode` 决定处理方式。
 当前 Atrinis 已支持 record、direct、llm 模式、Atriwisp 随事件声明外部工具、多模态消息段（text/image/file）、Atriena v3 calls（raw 平台 API 与首批 capability）以及 Hook exec 经内部 Atriena Bus 投递。超级管理员在平台里引用回复 Atrinis LLM 报告通知时，会自动 resume 到对应后台 Session 继续对话；普通用户引用时只会作为普通引用文本处理。
 
 
-以下能力仍在开发或规划中：
-
-- Atrinis 与 Atriwisp 多轮通信。
-- 更多统一 capability：`member.kick`、`message.pin`、`member.unmute`、bot profile/avatar/name/commands 等。
-- QQ Official raw API caller。
-- stdio、pipe 等非 HTTP transport。
-
-
 ## 下一步：配置与使用
 
 - [Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp 策略、发送 Atriena 请求，并了解请求字段和投递边界。
