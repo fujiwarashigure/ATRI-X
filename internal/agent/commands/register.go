@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
+	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
@@ -90,6 +91,11 @@ type ToolService interface {
 	Reload(ctx context.Context) error
 }
 
+type HookService interface {
+	HookList() []hook.Info
+	HookReload() error
+}
+
 type LogService interface {
 	QueryLogs(ctx context.Context, query logging.LogQuery) ([]logging.LogEntry, error)
 }
@@ -105,6 +111,7 @@ type Deps struct {
 	Compact              CompactService
 	ContextStatus        ContextStatusService
 	Tools                ToolService
+	Hooks                HookService
 	SetLastSessions      func([]storage.SessionSummary)
 	LastSessions         func() []string
 	SessionListPageSize  func() int
@@ -140,6 +147,7 @@ func DefaultModules() []Module {
 		RequestModule{},
 		LogModule{},
 		ToolModule{},
+		HookModule{},
 	}
 }
 

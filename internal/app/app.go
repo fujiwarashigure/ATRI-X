@@ -283,10 +283,11 @@ func Run(ctx context.Context, opts Options) error {
 	}
 	profiler.Mark("skill reload")
 	securityPolicy := security.NewPolicy(cfg.Security.UserMaxToolRisk, cfg.Security.SuperadminConfirmRisk, cfg.Security.Superadmins)
+	var atrinisService *atrinis.Service
 	atrienaBus := atriena.NewBus()
 	hooks := hook.NewManager()
 	hooks.SetLogger(logger)
-	if err := hookbuiltin.RegisterAll(hooks, hookbuiltin.Options{
+	hookOpts := hookbuiltin.Options{
 		ConfigDir:           config.PluginConfigDir(cfg.ConfigPath),
 		Tools:               toolRegistry,
 		Policy:              securityPolicy,
@@ -297,7 +298,8 @@ func Run(ctx context.Context, opts Options) error {
 		},
 		Notify: notifyHookIssue,
 		Atriena: atrienaBus,
-	}); err != nil {
+	}
+	if err := hookbuiltin.RegisterAll(hooks, hookOpts); err != nil {
 		logger.Error("hook registration failed", "error", err)
 		notifyHookIssue(context.Background(), fmt.Sprintf("Hook 注册失败：%v", err))
 	}
@@ -308,6 +310,13 @@ func Run(ctx context.Context, opts Options) error {
 	profiler.Mark("hook register")
 	agt = agent.NewWithRequestConfig(platforms.Primary, adapter, workModel.Provider, cfg.ModeModels, cfg.Providers, cfg.StateConfigPath, store, cfg.Commands.Prefixes, session.Config{NamingConfig: session.NamingConfig{TriggerStep: cfg.Session.Naming.TriggerStep}, DefaultMode: cfg.Session.DefaultMode}, cfg.NamingModel, namingAdapter, namingModel, namingLogger{logger: logger}, cfg.Soul.Path, cfg.LLMRequest)
 	agt.SetHookManager(hooks)
+	agt.SetHookReloader(func() error {
+		hooks.Reset()
+		if err := hookbuiltin.RegisterAll(hooks, hookOpts); err != nil {
+			return err
+		}
+		return registerCronPlatformHook(hooks, cronService)
+	})
 	agt.SetOutputManager(delivery.NewManager(nil, logger))
 	agt.SetSessionListPageSize(cfg.View.SessionListPageSize)
 	agt.SetCleanupRetentionDays(cfg.Maintenance.SessionCleanup.RetentionDays)
@@ -333,7 +342,7 @@ func Run(ctx context.Context, opts Options) error {
 		if err != nil {
 			return err
 		}
-		atrinisService, err := atrinis.NewService(atrinis.Options{
+		atrinisService, err = atrinis.NewService(atrinis.Options{
 			Config:           cfg.Atrinis,
 			SandboxRoot:      cfg.Sandbox.Root,
 			Tokens:           atrinisTokens,
@@ -378,25 +387,6 @@ func Run(ctx context.Context, opts Options) error {
 }
 
 type platformRuntime = platform.Runtime
-
-type platformCallerResolver struct {
-	runtimes []platformRuntime
-}
-
-func (r platformCallerResolver) PlatformCaller(name string) (atriena.PlatformAPICaller, bool) {
-	name = strings.TrimSpace(name)
-	if name == "" {
-		return nil, false
-	}
-	for _, runtime := range r.runtimes {
-		if runtime == nil || runtime.Name() != name {
-			continue
-		}
-		caller, ok := runtime.(atriena.PlatformAPICaller)
-		return caller, ok
-	}
-	return nil, false
-}
 
 type atrinisRuntimeAdapter struct {
 	runtime *atrinis.Runtime
@@ -452,9 +442,10 @@ func registerCronPlatformHook(hooks hook.Registrar, service *elcron.Service) err
 		return nil
 	}
 	return hooks.Register(hook.Registration{
-		Point: hook.PointPlatformConnected,
-		Name:  "builtin.cron.missed_once",
-		Match: hook.Always(),
+		Point:  hook.PointPlatformConnected,
+		Name:   "builtin.cron.missed_once",
+		Match:  hook.Always(),
+		Detail: "平台连接时补投递 missed once cron",
 		Handler: hook.HandlerFunc(func(ctx context.Context, event hook.Event) (hook.Event, error) {
 			service.NotifyPlatformConnected(ctx, event.Platform.Name)
 			return event, nil

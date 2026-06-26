@@ -162,6 +162,28 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 
 内置工具 `atriwisp_creator` 可帮助超级管理员生成 Atriwisp 配置、Atriena 事件模板、监听器脚手架和测试命令；它本身无参数、无副作用，实际写文件或运行命令仍会继续使用文件工具和 shell 工具并走对应风险确认。
 
+## Hook
+
+| 命令 | 作用 |
+| --- | --- |
+| `/hooks` | 列出所有已注册 Hook。 |
+| `/hooks <name>` | 查看某个 Hook 的详细配置。 |
+| `/hooks reload` | 清空并重新注册所有 Hook（规则 Hook、常驻记忆、内置 Hook）。 |
+
+示例：
+
+```text
+/hooks
+/hooks rules.greet
+/hooks reload
+```
+
+说明：
+
+- Hook 包括规则 Hook（`plugins/hooks.toml`）、常驻记忆 Hook 和内置 Cron Hook。
+- `reload` 会重新读取 `hooks.toml` 并重建所有 Hook 注册，修改配置后无需重启即可生效。
+- `/hooks` 为超级管理员命令。
+
 ## 日志和审计
 
 | 命令 | 作用 |

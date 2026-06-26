@@ -54,7 +54,7 @@ func TestAtriwispCreatorToolCallReturnsGuide(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if result == nil || !strings.Contains(result.Content, "#task create_atriwisp") || !strings.Contains(result.Content, "Atriena v2") || !strings.Contains(result.Content, "atriyph_rule_card") {
+	if result == nil || !strings.Contains(result.Content, "#task create_atriwisp") || !strings.Contains(result.Content, "Atriena v3") || !strings.Contains(result.Content, "atriyph_rule_card") {
 		t.Fatalf("unexpected guide content: %#v", result)
 	}
 	if _, err := atriyph.ParseTask(result.Content, "create_atriwisp"); err != nil {
@@ -114,7 +114,7 @@ token_env = ["ATRINIS_HOME_TOKEN"]
 		t.Fatal(err)
 	}
 	for _, want := range []string{
-		"endpoint: http://127.0.0.1:45678/atriena/v2/events",
+		"endpoint: http://127.0.0.1:45678/atriena/v3/events",
 		"token_env: [ATRINIS_HOME_TOKEN]",
 		"allowed_tools: [web_extract, web_search]",
 	} {
