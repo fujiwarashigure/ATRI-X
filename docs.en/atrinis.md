@@ -189,11 +189,6 @@ In work mode, the superadmin can let ATRI-X use the built-in tool `atriwisp_crea
 
 For ready-made Atriwisp examples, protocol documentation, and templates, please refer to [Atriwisp Showcase](https://github.com/Elfreese/elwisp-showcase).
 
-## Current Limitations and Future Directions
-
-Currently, Atrinis supports record, direct, and llm modes, Atriwisp declaring external tools with events, multimodal message segments (text/image/file), Atriena v3 calls (raw platform APIs and the first batch of capabilities), and Hook exec delivery via the internal Atriena Bus. When a superadmin quotes and replies to an Atrinis LLM report notification within the platform, it will automatically resume to the corresponding background Session to continue the conversation; When a regular user quotes it, it will only be processed as ordinary quoted text.
-
-
 ## Next Step: Configuration and Usage
 
 - [Atrinis Configuration and Usage](atrinis-usage.md): Enable Atrinis, configure Atriwisp policies, send Atriena requests, and understand request fields and delivery boundaries.
