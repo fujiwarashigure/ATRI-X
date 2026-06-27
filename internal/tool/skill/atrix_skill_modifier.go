@@ -64,6 +64,7 @@ func (ReadAtrixSkillTool) Name() string { return ReadAtrixSkillName }
 func (ReadAtrixSkillTool) Info() tool.Info {
 	return tool.NewBuilder(ReadAtrixSkillName).
 		Description("按行读取 ATRI-X 原生 ATRI-X Skill 的 SKILL.atriyph 或 main.go，返回 1-based 行号，供修改前定位使用。").
+		DependsOn("modify_atrix_skill").
 		Source(tool.SourceBuiltin).
 		Risk(tool.RiskMedium).
 		BuildInfo()
@@ -128,7 +129,7 @@ func (ModifyAtrixSkillTool) Name() string { return ModifyAtrixSkillName }
 func (ModifyAtrixSkillTool) Info() tool.Info {
 	return tool.NewBuilder(ModifyAtrixSkillName).
 		Description("修改 ATRI-X 原生 ATRI-X Skill 的 SKILL.atriyph 或 main.go；技能定义会校验 Atriyph 并 reload，源码只写入文件，完成后用 finalize_atrix_skill 格式化和编译。").
-		DependsOn(FinalizeAtrixSkillName).
+		DependsOn(FinalizeAtrixSkillName, "read_atrix_skill").
 		Source(tool.SourceBuiltin).
 		Risk(tool.RiskHigh).
 		BuildInfo()
