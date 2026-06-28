@@ -147,6 +147,70 @@ func TestModifyAtrixSkillDeletesLines(t *testing.T) {
 	}
 }
 
+func TestModifyAtrixSkillPreflightRejectsInvalidPatchWithoutWriting(t *testing.T) {
+	root := t.TempDir()
+	original := "#skill guarded_preflight - Guarded.\n** risk low\n<- $text:str!\n-> $result:str\n"
+	writeTestSkill(t, root, "guarded_preflight", original)
+	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+	err := modifier.PreflightConfirmation(context.Background(), tool.CallRequest{Arguments: []byte(`{"name":"guarded_preflight","patches":[{"start_line":9,"end_line":9,"new_lines":["// x"]}]}`)})
+	if err == nil {
+		t.Fatal("expected preflight error")
+	}
+	if got := readTestSkill(t, root, "guarded_preflight"); got != original {
+		t.Fatalf("file changed: %q", got)
+	}
+}
+
+func TestModifyAtrixSkillPreflightRejectsInvalidAtriyphWithoutWriting(t *testing.T) {
+	root := t.TempDir()
+	original := "#skill guarded_atriyph - Guarded.\n** risk low\n<- $text:str!\n-> $result:str\n"
+	writeTestSkill(t, root, "guarded_atriyph", original)
+	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+	args, _ := json.Marshal(map[string]string{"name": "guarded_atriyph", "content": "not a skill\n"})
+	err := modifier.PreflightConfirmation(context.Background(), tool.CallRequest{Arguments: args})
+	if err == nil {
+		t.Fatal("expected invalid Atriyph preflight error")
+	}
+	if got := readTestSkill(t, root, "guarded_atriyph"); got != original {
+		t.Fatalf("file changed: %q", got)
+	}
+}
+
+func TestModifyAtrixSkillRiskDetailIncludesDiff(t *testing.T) {
+	root := t.TempDir()
+	writeTestSkill(t, root, "detailer", "#skill detailer - Old.\n** risk low\n<- $text:str!\n-> $result:str\n")
+	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+	args, _ := json.Marshal(map[string]any{
+		"name": "detailer",
+		"patches": []map[string]any{{
+			"start_line": 1,
+			"end_line":   1,
+			"new_lines":  []string{"#skill detailer - New."},
+		}},
+	})
+	detail, err := modifier.RiskDetail(context.Background(), tool.CallRequest{Arguments: args})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{"技能：detailer", "目标：skill_atriyph", "模式：确认后写入；确认前已自动预检", "预检 diff:\n", "-#skill detailer - Old.", "+#skill detailer - New."} {
+		if !strings.Contains(detail, want) {
+			t.Fatalf("detail missing %q:\n%s", want, detail)
+		}
+	}
+}
+
+func TestModifyAtrixSkillPreflightRejectsNoop(t *testing.T) {
+	root := t.TempDir()
+	original := "#skill noop - Noop.\n** risk low\n<- $text:str!\n-> $result:str\n"
+	writeTestSkill(t, root, "noop", original)
+	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+	args, _ := json.Marshal(map[string]string{"name": "noop", "content": original})
+	err := modifier.PreflightConfirmation(context.Background(), tool.CallRequest{Arguments: args})
+	if err == nil || !strings.Contains(err.Error(), "edit produced no changes") {
+		t.Fatalf("expected no-op preflight error, got %v", err)
+	}
+}
+
 func TestModifyAtrixSkillRejectsInvalidPatchesWithoutWriting(t *testing.T) {
 	root := t.TempDir()
 	original := "#skill guarded - Guarded.\n** risk low\n<- $text:str!\n-> $result:str\n"

@@ -51,6 +51,15 @@ type modifyLinePatch struct {
 	NewLines  []string `json:"new_lines"`
 }
 
+type modifyAtrixSkillPreview struct {
+	Name   string
+	Target string
+	Path   string
+	File   fileops.File
+	Next   string
+	Diff   string
+}
+
 func NewReadAtrixSkillTool(manager *Manager) ReadAtrixSkillTool {
 	return ReadAtrixSkillTool{Manager: manager}
 }
@@ -160,66 +169,111 @@ func (ModifyAtrixSkillTool) Schema() llm.ToolSchema {
 	}}
 }
 
+func (t ModifyAtrixSkillTool) PreflightConfirmation(ctx context.Context, req tool.CallRequest) error {
+	_, err := t.preview(ctx, req)
+	return err
+}
+
+func (t ModifyAtrixSkillTool) RiskDetail(ctx context.Context, req tool.CallRequest) (string, error) {
+	preview, err := t.preview(ctx, req)
+	if err != nil {
+		return "", err
+	}
+	var b strings.Builder
+	fmt.Fprintf(&b, "技能：%s\n", preview.Name)
+	fmt.Fprintf(&b, "目标：%s\n", preview.Target)
+	fmt.Fprintf(&b, "文件：%s\n", preview.Path)
+	b.WriteString("模式：确认后写入；确认前已自动预检\n")
+	b.WriteString("预检 diff:\n")
+	b.WriteString(preview.Diff)
+	if !strings.HasSuffix(preview.Diff, "\n") {
+		b.WriteString("\n")
+	}
+	return strings.TrimRight(b.String(), "\n"), nil
+}
+
 func (t ModifyAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*tool.Result, error) {
+	preview, err := t.preview(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	switch preview.Target {
+	case atrixSkillTargetAtriyph:
+		return t.modifyAtriyph(ctx, preview)
+	case atrixSkillTargetCodeSource:
+		return t.modifyCodeSource(preview)
+	default:
+		return nil, fmt.Errorf("unsupported target %q", preview.Target)
+	}
+}
+
+func (t ModifyAtrixSkillTool) preview(ctx context.Context, req tool.CallRequest) (modifyAtrixSkillPreview, error) {
+	if err := ctx.Err(); err != nil {
+		return modifyAtrixSkillPreview{}, err
+	}
 	var args modifyAtrixSkillArgs
 	if len(req.Arguments) > 0 {
 		if err := json.Unmarshal(req.Arguments, &args); err != nil {
-			return nil, fmt.Errorf("parse modify_atrix_skill arguments: %w", err)
+			return modifyAtrixSkillPreview{}, fmt.Errorf("parse modify_atrix_skill arguments: %w", err)
 		}
 	}
 	name := strings.TrimSpace(args.Name)
 	path, target, err := atrixSkillTargetPath(t.Manager, name, strings.TrimSpace(args.Target))
 	if err != nil {
-		return nil, err
+		return modifyAtrixSkillPreview{}, err
 	}
 	hasContent := args.Content != ""
 	hasPatches := len(args.Patches) > 0
 	if hasContent == hasPatches {
-		return nil, fmt.Errorf("provide exactly one of content or patches")
+		return modifyAtrixSkillPreview{}, fmt.Errorf("provide exactly one of content or patches")
 	}
 	file, err := fileops.ReadFile(path, "")
 	if err != nil {
-		return nil, err
+		return modifyAtrixSkillPreview{}, err
 	}
 	next := args.Content
 	if hasPatches {
 		next, err = applyLinePatches(fileops.SplitLines(file.Text), args.Patches)
 		if err != nil {
-			return nil, err
+			return modifyAtrixSkillPreview{}, err
 		}
 	}
-	switch target {
-	case atrixSkillTargetAtriyph:
-		return t.modifyAtriyph(ctx, name, path, file, next)
-	case atrixSkillTargetCodeSource:
-		return t.modifyCodeSource(name, path, file, next)
-	default:
-		return nil, fmt.Errorf("unsupported target %q", target)
+	next = normalizeSkillContent(next)
+	oldText := fileops.NormalizeEditText(file.Text)
+	newText := fileops.NormalizeEditText(next)
+	if oldText == newText {
+		return modifyAtrixSkillPreview{}, fmt.Errorf("edit produced no changes")
 	}
+	if target == atrixSkillTargetAtriyph {
+		if _, err := atriyph.ParseSkill(next, name); err != nil {
+			return modifyAtrixSkillPreview{}, err
+		}
+	}
+	return modifyAtrixSkillPreview{
+		Name:   name,
+		Target: target,
+		Path:   path,
+		File:   file,
+		Next:   next,
+		Diff:   fileops.UnifiedDiff(path, fileops.SplitLines(oldText), fileops.SplitLines(newText), 3),
+	}, nil
 }
 
-func (t ModifyAtrixSkillTool) modifyAtriyph(ctx context.Context, name, path string, file fileops.File, next string) (*tool.Result, error) {
-	next = normalizeSkillContent(next)
-	if _, err := atriyph.ParseSkill(next, name); err != nil {
-		return nil, err
-	}
-	diff := fileops.UnifiedDiff(path, fileops.SplitLines(fileops.NormalizeEditText(file.Text)), fileops.SplitLines(fileops.NormalizeEditText(next)), 3)
-	if _, err := fileops.WriteTextFile(path, file, next); err != nil {
+func (t ModifyAtrixSkillTool) modifyAtriyph(ctx context.Context, preview modifyAtrixSkillPreview) (*tool.Result, error) {
+	if _, err := fileops.WriteTextFile(preview.Path, preview.File, preview.Next); err != nil {
 		return nil, err
 	}
 	if err := t.Manager.Reload(ctx); err != nil {
 		return nil, fmt.Errorf("ATRI-X skill modified but reload failed: %w", err)
 	}
-	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s", name, atrixSkillTargetAtriyph, diff)}, nil
+	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s", preview.Name, atrixSkillTargetAtriyph, preview.Diff)}, nil
 }
 
-func (t ModifyAtrixSkillTool) modifyCodeSource(name, path string, file fileops.File, next string) (*tool.Result, error) {
-	next = normalizeSkillContent(next)
-	diff := fileops.UnifiedDiff(path, fileops.SplitLines(fileops.NormalizeEditText(file.Text)), fileops.SplitLines(fileops.NormalizeEditText(next)), 3)
-	if _, err := fileops.WriteTextFile(path, file, next); err != nil {
+func (t ModifyAtrixSkillTool) modifyCodeSource(preview modifyAtrixSkillPreview) (*tool.Result, error) {
+	if _, err := fileops.WriteTextFile(preview.Path, preview.File, preview.Next); err != nil {
 		return nil, err
 	}
-	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s\n\n源码已写入但尚未格式化/编译；完成修改后调用 finalize_atrix_skill。", name, atrixSkillTargetCodeSource, diff)}, nil
+	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s\n\n源码已写入但尚未格式化/编译；完成修改后调用 finalize_atrix_skill。", preview.Name, atrixSkillTargetCodeSource, preview.Diff)}, nil
 }
 
 func atrixSkillTargetPath(manager *Manager, name, target string) (string, string, error) {
