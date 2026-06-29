@@ -7,11 +7,21 @@ import (
 	"strings"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
+	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
 func isAtrinisModelSlot(slot string) bool {
 	switch strings.TrimSpace(slot) {
 	case "atriwisp1", "atriwisp2", "atriwisp3":
+		return true
+	default:
+		return false
+	}
+}
+
+func isAtrinisSessionMode(mode string) bool {
+	switch strings.TrimSpace(mode) {
+	case storage.SessionModeWork, storage.SessionModeChat:
 		return true
 	default:
 		return false

@@ -110,6 +110,7 @@ curl -sS http://127.0.0.1:32170/atriena/v3/events \
   "format": "atriyph",
   "content": "#task investigate_cpu_alert - 检查服务器 CPU 异常并判断是否需要通知",
   "model_slot": "atriwisp2",
+  "session_mode": "work",
   "tool_list_names": ["shell"],
   "tools": [
     {
@@ -237,6 +238,7 @@ Atriena v3 支持通过 `segments` 字段发送图片和文件。`content` 保�
 | `format` | 否 | `text` 或 `atriyph`，默认 `text`。 |
 | `content` | 否 | 事件主体。LLM 模式必填，推荐使用 Atriyph Task Notation（任务表示法）`#task`；direct/record 模式可为空，但 `content`、`segments`、`calls` 至少提供一个。 |
 | `model_slot` | 否 | Atrinis LLM 模型槽位，仅支持 `atriwisp1`、`atriwisp2`、`atriwisp3`；未填写或对应槽位未配置时回退到 `work`。 |
+| `session_mode` | 否 | LLM 后台 Session 模式：`work` 或 `chat`，默认 `work`；`chat` 不注入工具 schema，适合不需要工具的低成本后台处理。 |
 | `tool_list_names` | 否 | 后台任务预加载的 ATRI-X 内部工具名或 Skill 名；普通工具注入 schema，Skill 注入任务说明并自动注入对应 runner；必须在 Atrinis `allowed_tools` 裁决范围内，`discover_tool` 会被忽略。 |
 | `tools` | 否 | Atriwisp 随事件声明的外部工具；默认允许，命中该 Atriwisp 的 `disabled_external_tools` 时拒绝。 |
 | `targets` | 是 | Atriwisp 期望投递目标数组，`{"platform":"telegram"}` 表示发给平台超级管理员，`type=private/group` 且带 `id` 时发指定私聊/群聊，`{"platform":"all"}` 表示所有已启用平台超级管理员。最终仍由 Atrinis 裁决。 |
@@ -293,8 +295,7 @@ Atrinis 默认允许投递；命中 `[delivery_disabled].targets` 或单 Atriwis
 
 - token 名只用于日志和审计，不等同于 Atriwisp 身份。
 - token 原文不写日志。
-- `model_slot` 只能选择 `atriwisp1`、`atriwisp2`、`atriwisp3`，不能指定任意内部模式名。
+- `model_slot` 只能选择 `atriwisp1`、`atriwisp2`、`atriwisp3`，不能指定任意内部模式名；`session_mode` 只允许 `work` 或 `chat`，不影响模型槽位。
 - Atriwisp 不能绕过 Tool Runtime 和 Security Policy 调用 ATRI-X 内部工具；`tool_list_names` 中的工具名或 Skill 名都会经过 Atrinis `allowed_tools` 裁决。
-
 - Atriwisp 声明的外部 `tools` 默认允许，并通过 ToolRun 以 `atriwisp_<atriwisp>_<tool>` 形式注入为模型可调用函数名；单个 Atriwisp 可用 `disabled_external_tools` 禁用指定工具。
 - 外部工具调用由 Atrinis 对声明的 endpoint 发起 HTTP JSON POST；外部工具自身负责实际风险边界，Atrinis 侧按 low 风险处理。

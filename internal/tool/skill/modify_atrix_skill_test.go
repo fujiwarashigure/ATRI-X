@@ -45,9 +45,13 @@ func TestModifyAtrixSkillWritesFullContent(t *testing.T) {
 	writeTestSkill(t, root, "writer", "#skill writer - Old.\n** risk low\n<- $text:str!\n-> $result:str\n")
 	registry := tool.NewRegistry()
 	modifier := NewModifyAtrixSkillTool(NewManager(root, registry))
-	args, _ := json.Marshal(map[string]string{
-		"name":    "writer",
-		"content": "#skill writer - New.\n** risk medium\n<- $input:str!\n-> $result:str\n",
+	args, _ := json.Marshal(map[string]any{
+		"name": "writer",
+		"edits": []map[string]any{{
+			"operation":   "replace_match",
+			"old_content": "#skill writer - Old.\n** risk low\n<- $text:str!\n-> $result:str\n",
+			"content":     "#skill writer - New.\n** risk medium\n<- $input:str!\n-> $result:str\n",
+		}},
 	})
 
 	if _, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: args}); err != nil {
@@ -63,16 +67,16 @@ func TestModifyAtrixSkillWritesFullContent(t *testing.T) {
 	}
 }
 
-func TestModifyAtrixSkillPatchesLines(t *testing.T) {
+func TestModifyAtrixSkillEditsLines(t *testing.T) {
 	root := t.TempDir()
 	original := "#skill patcher - Old.\n** risk low\n<- $text:str!\n-> $result:str\n"
 	writeTestSkill(t, root, "patcher", original)
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
 	args, _ := json.Marshal(map[string]any{
 		"name": "patcher",
-		"patches": []map[string]any{
-			{"start_line": 1, "end_line": 1, "new_lines": []string{"#skill patcher - New."}},
-			{"start_line": 3, "end_line": 3, "new_lines": []string{"<- $input:str!"}},
+		"edits": []map[string]any{
+			{"operation": "replace", "start_line": 1, "end_line": 1, "content": "#skill patcher - New."},
+			{"operation": "replace", "start_line": 3, "end_line": 3, "content": "<- $input:str!"},
 		},
 	})
 
@@ -85,16 +89,19 @@ func TestModifyAtrixSkillPatchesLines(t *testing.T) {
 	}
 }
 
-func TestModifyAtrixSkillPatchesCodeSourceWithoutBuild(t *testing.T) {
+func TestModifyAtrixSkillEditsCodeSourceWithoutBuild(t *testing.T) {
 	root := t.TempDir()
 	writeTestGoSkill(t, root, "patcher_code", "package main\n\nfunc main() {}\n")
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
 	args, _ := json.Marshal(map[string]any{
 		"name":   "patcher_code",
 		"target": "code_source",
-		"patches": []map[string]any{
-			{"start_line": 3, "end_line": 3, "new_lines": []string{"func main(){ missing() }"}},
-		},
+		"edits": []map[string]any{{
+			"operation":  "replace",
+			"start_line": 3,
+			"end_line":   3,
+			"content":    "func main(){ missing() }",
+		}},
 	})
 
 	result, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: args})
@@ -114,10 +121,14 @@ func TestModifyAtrixSkillWritesInvalidCodeSourceWithoutBuild(t *testing.T) {
 	root := t.TempDir()
 	writeTestGoSkill(t, root, "broken", "package main\n\nfunc main() {}\n")
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
-	args, _ := json.Marshal(map[string]string{
-		"name":    "broken",
-		"target":  "code_source",
-		"content": "package main\n\nfunc main() { missing() }\n",
+	args, _ := json.Marshal(map[string]any{
+		"name":   "broken",
+		"target": "code_source",
+		"edits": []map[string]any{{
+			"operation":   "replace_match",
+			"old_content": "package main\n\nfunc main() {}\n",
+			"content":     "package main\n\nfunc main() { missing() }\n",
+		}},
 	})
 
 	if _, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: args}); err != nil {
@@ -134,9 +145,11 @@ func TestModifyAtrixSkillDeletesLines(t *testing.T) {
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
 	args, _ := json.Marshal(map[string]any{
 		"name": "delete_line",
-		"patches": []map[string]any{
-			{"start_line": 3, "end_line": 3, "new_lines": []string{}},
-		},
+		"edits": []map[string]any{{
+			"operation":  "delete",
+			"start_line": 3,
+			"end_line":   3,
+		}},
 	})
 
 	if _, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: args}); err != nil {
@@ -152,7 +165,7 @@ func TestModifyAtrixSkillPreflightRejectsInvalidPatchWithoutWriting(t *testing.T
 	original := "#skill guarded_preflight - Guarded.\n** risk low\n<- $text:str!\n-> $result:str\n"
 	writeTestSkill(t, root, "guarded_preflight", original)
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
-	err := modifier.PreflightConfirmation(context.Background(), tool.CallRequest{Arguments: []byte(`{"name":"guarded_preflight","patches":[{"start_line":9,"end_line":9,"new_lines":["// x"]}]}`)})
+	err := modifier.PreflightConfirmation(context.Background(), tool.CallRequest{Arguments: []byte(`{"name":"guarded_preflight","edits":[{"operation":"replace","start_line":9,"end_line":9,"content":"// x"}]}`)})
 	if err == nil {
 		t.Fatal("expected preflight error")
 	}
@@ -166,7 +179,14 @@ func TestModifyAtrixSkillPreflightRejectsInvalidAtriyphWithoutWriting(t *testing
 	original := "#skill guarded_atriyph - Guarded.\n** risk low\n<- $text:str!\n-> $result:str\n"
 	writeTestSkill(t, root, "guarded_atriyph", original)
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
-	args, _ := json.Marshal(map[string]string{"name": "guarded_atriyph", "content": "not a skill\n"})
+	args, _ := json.Marshal(map[string]any{
+		"name": "guarded_atriyph",
+		"edits": []map[string]any{{
+			"operation":   "replace_match",
+			"old_content": original,
+			"content":     "not a skill\n",
+		}},
+	})
 	err := modifier.PreflightConfirmation(context.Background(), tool.CallRequest{Arguments: args})
 	if err == nil {
 		t.Fatal("expected invalid Atriyph preflight error")
@@ -182,10 +202,11 @@ func TestModifyAtrixSkillRiskDetailIncludesDiff(t *testing.T) {
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
 	args, _ := json.Marshal(map[string]any{
 		"name": "detailer",
-		"patches": []map[string]any{{
+		"edits": []map[string]any{{
+			"operation":  "replace",
 			"start_line": 1,
 			"end_line":   1,
-			"new_lines":  []string{"#skill detailer - New."},
+			"content":    "#skill detailer - New.",
 		}},
 	})
 	detail, err := modifier.RiskDetail(context.Background(), tool.CallRequest{Arguments: args})
@@ -204,23 +225,29 @@ func TestModifyAtrixSkillPreflightRejectsNoop(t *testing.T) {
 	original := "#skill noop - Noop.\n** risk low\n<- $text:str!\n-> $result:str\n"
 	writeTestSkill(t, root, "noop", original)
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
-	args, _ := json.Marshal(map[string]string{"name": "noop", "content": original})
+	args, _ := json.Marshal(map[string]any{
+		"name": "noop",
+		"edits": []map[string]any{{
+			"operation":   "replace_match",
+			"old_content": original,
+			"content":     original,
+		}},
+	})
 	err := modifier.PreflightConfirmation(context.Background(), tool.CallRequest{Arguments: args})
 	if err == nil || !strings.Contains(err.Error(), "edit produced no changes") {
 		t.Fatalf("expected no-op preflight error, got %v", err)
 	}
 }
 
-func TestModifyAtrixSkillRejectsInvalidPatchesWithoutWriting(t *testing.T) {
+func TestModifyAtrixSkillRejectsInvalidEditsWithoutWriting(t *testing.T) {
 	root := t.TempDir()
 	original := "#skill guarded - Guarded.\n** risk low\n<- $text:str!\n-> $result:str\n"
 	writeTestSkill(t, root, "guarded", original)
 	modifier := NewModifyAtrixSkillTool(NewManager(root, tool.NewRegistry()))
 	cases := []string{
-		`{"name":"guarded","patches":[{"start_line":9,"end_line":9,"new_lines":["// x"]}]}`,
-		`{"name":"guarded","patches":[{"start_line":2,"end_line":3,"new_lines":["** risk low"]},{"start_line":3,"end_line":3,"new_lines":["<- $x:str!"]}]}`,
-		`{"name":"guarded","patches":[{"start_line":1,"end_line":1,"new_lines":["missing header"]}]}`,
-		`{"name":"guarded","content":"#skill guarded","patches":[{"start_line":1,"end_line":1,"new_lines":["#skill guarded"]}]}`,
+		`{"name":"guarded","edits":[{"operation":"replace","start_line":9,"end_line":9,"content":"// x"}]}`,
+		`{"name":"guarded","edits":[{"operation":"replace","start_line":1,"end_line":1,"content":"missing header"}]}`,
+		`{"name":"guarded","edits":[{"operation":"replace_match","old_content":"not found","content":"#skill guarded"}]}`,
 		`{"name":"guarded"}`,
 	}
 	for _, raw := range cases {
@@ -235,7 +262,7 @@ func TestModifyAtrixSkillRejectsInvalidPatchesWithoutWriting(t *testing.T) {
 
 func TestModifyAtrixSkillRejectsMissingSkill(t *testing.T) {
 	modifier := NewModifyAtrixSkillTool(NewManager(t.TempDir(), tool.NewRegistry()))
-	_, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: []byte(`{"name":"missing","content":"#skill missing"}`)})
+	_, err := modifier.Call(context.Background(), tool.CallRequest{Arguments: []byte(`{"name":"missing","edits":[{"operation":"append","content":"#skill missing"}]}`)})
 	if err == nil {
 		t.Fatal("expected missing skill error")
 	}

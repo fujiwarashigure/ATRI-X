@@ -22,6 +22,7 @@ func (s *Service) prepareEvent(origin atriena.Origin, req Request) (Event, error
 	req.Mode = strings.TrimSpace(req.Mode)
 	req.Format = strings.TrimSpace(req.Format)
 	req.ModelSlot = strings.TrimSpace(req.ModelSlot)
+	req.SessionMode = strings.TrimSpace(req.SessionMode)
 	req.Content = strings.TrimSpace(req.Content)
 	if req.Version != atriena.VersionV2 && req.Version != atriena.VersionV3 {
 		return Event{}, fmt.Errorf("unsupported Atriena version %q", req.Version)
@@ -55,6 +56,9 @@ func (s *Service) prepareEvent(origin atriena.Origin, req Request) (Event, error
 	}
 	if req.ModelSlot != "" && !isAtrinisModelSlot(req.ModelSlot) {
 		return Event{}, fmt.Errorf("unsupported model_slot %q", req.ModelSlot)
+	}
+	if req.SessionMode != "" && !isAtrinisSessionMode(req.SessionMode) {
+		return Event{}, fmt.Errorf("unsupported session_mode %q", req.SessionMode)
 	}
 	createdAt := time.Now()
 	if strings.TrimSpace(req.CreatedAt) != "" {
