@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
+	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 )
 
 func appendAtriyphWarnings(content string, diagnostics []atriyph.Diagnostic) string {
@@ -11,5 +12,5 @@ func appendAtriyphWarnings(content string, diagnostics []atriyph.Diagnostic) str
 	if len(warnings) == 0 {
 		return content
 	}
-	return strings.TrimRight(content, "\n") + "\n\nWarnings:\n" + atriyph.FormatDiagnostics(warnings)
+	return tool.AppendWarnings(content, []string{strings.TrimSpace(atriyph.FormatDiagnostics(warnings))})
 }
