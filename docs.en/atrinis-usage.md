@@ -112,6 +112,7 @@ If the same `atriwisp.name + source + id` is sent again, Atrinis will return dup
   "format": "atriyph",
   "content": "#task investigate_cpu_alert - 检查服务器 CPU 异常并判断是否需要通知",
   "model_slot": "atriwisp2",
+  "session_mode": "work",
   "tool_list_names": ["shell"],
   "tools": [
     {
@@ -239,6 +240,7 @@ Common fields:
 | `format` | No | `text` or `atriyph`, default `text`. |
 | `content` | No | Event body. Required for LLM mode; it is recommended to use Atriyph Task Notation `#task`; Can be empty in direct/record mode, but at least one of `content`, `segments`, or `calls` must be provided. |
 | `model_slot` | No | Atrinis LLM model slot, only supporting `atriwisp1`, `atriwisp2`, and `atriwisp3`; if left blank or the corresponding slot is not configured, it will fall back to `work`. |
+| `session_mode` | No | LLM background Session mode: `work` or `chat`, default `work`; `chat` does not inject tool schema, suitable for low-cost background processing that does not require tools. |
 | `tool_list_names` | No | The ATRI-X internal tool name or Skill name preloaded for background tasks; Ordinary tools inject the schema, while Skills inject task descriptions and automatically inject the corresponding runner; Must be within the Atrinis `allowed_tools` adjudication range; `discover_tool` will be ignored. |
 | `tools` | No | External tools declared by Atriwisp with events; allowed by default, rejected when hitting the `disabled_external_tools` of that Atriwisp. |
 | `targets` | Yes | Atriwisp expects a delivery target array: `{"platform":"telegram"}` indicates sending to the platform superadmin, `type=private/group` with `id` indicates sending to a specified private chat/group chat, and `{"platform":"all"}` indicates all enabled platform superadmins. The final decision is still made by Atrinis. |
@@ -295,8 +297,7 @@ Security Conventions:
 
 - The token name is used only for logs and audit logs, and is not equivalent to the Atriwisp identity.
 - The original token text is not written to logs.
-- `model_slot` can only choose `atriwisp1`, `atriwisp2`, or `atriwisp3`, and cannot specify an arbitrary internal mode name.
+- `model_slot` can only choose `atriwisp1`, `atriwisp2`, or `atriwisp3`, and cannot specify an arbitrary internal mode name; `session_mode` only allows `work` or `chat`, and does not affect model slots.
 - Atriwisp cannot bypass Tool Runtime and Security Policy to call ATRI-X internal tools; Tool names or Skill names in `tool_list_names` will all undergo Atrinis `allowed_tools` adjudication.
-
 - External `tools` declared by Atriwisp are allowed by default and are injected as model-callable function names in the form of `atriwisp_<atriwisp>_<tool>` via ToolRun; A single Atriwisp can use `disabled_external_tools` to disable specific tools.
 - External tool calls are initiated by Atrinis as HTTP JSON POST requests to the declared endpoint; the external tool itself is responsible for the actual risk boundary, and Atrinis handles it as low-risk.
