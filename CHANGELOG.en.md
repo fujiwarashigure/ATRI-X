@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - qq heartbeat ack and qqofficial gateway resumed are no longer logged
 - read_atrix_skill now depends on modify_atrix_skill to facilitate possible modifications
 - Atriyph syntax is no longer validated during ATRI-X startup to avoid slowing down the startup speed.
+- Colons at the end of Atriyph `**`/`~` text are now returned as warnings to `create_atrix_skill`/`finalize_atrix_skill`, and no longer block creation or finalization.
+- `modify_atrix_skill` no longer automatically reloads after modifying `SKILL.atriyph`; `finalize_atrix_skill` must be called after modification to take effect.
+- Tool results now support unified `Warnings` output, used to prompt the LLM to prioritize more appropriate tools in the future.
+- `read_file`/`shell` will suggest using `read_atrix_skill` when reading ATRI-X Skill files; Direct modification of ATRI-X Skill files by `edit_file` or shell will be rejected before confirmation or execution; `modify_atrix_skill` should be used instead.
+- Source files for resident memory and long-term memory are now included in general FileGuard protection; reading will suggest using memory tools, and direct writing via general file tools or shell will be rejected.
 
 ### Fixed
 
