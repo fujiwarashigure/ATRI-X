@@ -155,7 +155,8 @@ Current built-in capabilities include:
 - Skill creation, reading, modification, and execution.
 - `atriwisp_creator`: Returns protocol specifications, configuration snippets, scaffolding, and test checklists for creating Atriwisp for the superadmin.
 
-Tool results can be fed back to the LLM, or return platform-independent output intents, which are sent uniformly by the Agent.
+Tool results can be fed back to the LLM or return a platform-agnostic output intent, which is sent uniformly by the Agent. The `Warnings` in tool results will be fed back to the LLM to suggest prioritizing more appropriate tools in the future, such as using `read_file` instead of shell `cat`. ATRI-X Skill, resident memory, and long-term memory source files are protected by FileGuard: reading will prompt the use of corresponding dedicated tools, and direct writing via general file tools or shell will be rejected.
+
 
 ## Security Policy
 
@@ -220,7 +221,8 @@ Skill types:
 - Go Skill: placed in `skills/go/<skill>/`, using `SKILL.atriyph` to describe the task; When a binary exists, it can be executed via `go_skill_run` and receive a JSON payload from stdin.
 
 
-The goal of Atriyph is to express inputs, outputs, steps, conditions, and constraints using a shorter and more stable structure, reducing the ambiguity of natural language task descriptions. For the complete syntax, see [Atriyph Task Notation](atriyph.md).
+The goal of Atriyph is to express inputs, outputs, steps, conditions, and constraints using a shorter and more stable structure, reducing the ambiguity of natural language task descriptions. Reading or modifying the `SKILL.atriyph` / `main.go` of Go Skill should use `read_atrix_skill` / `modify_atrix_skill`; Direct modification of these files via general file tools or shell will be rejected. For the complete syntax, see [Atriyph Task Notation](atriyph.md).
+
 
 ## Platform Adapter
 
