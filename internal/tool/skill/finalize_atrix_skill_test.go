@@ -30,6 +30,20 @@ func TestFinalizeAtrixSkillTextOnlyReloads(t *testing.T) {
 	}
 }
 
+func TestFinalizeAtrixSkillReturnsAtriyphWarnings(t *testing.T) {
+	root := t.TempDir()
+	writeTestSkill(t, root, "warn_finalize", "#skill warn_finalize - Text.\n** 清单：\n")
+	finalizer := NewFinalizeAtrixSkillTool(NewManager(root, tool.NewRegistry()))
+
+	result, err := finalizer.Call(context.Background(), tool.CallRequest{Arguments: []byte(`{"name":"warn_finalize"}`)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(result.Content, "Atriyph: ok") || !strings.Contains(result.Content, "Atriyph warnings:") || !strings.Contains(result.Content, "line 2:") {
+		t.Fatalf("result = %q", result.Content)
+	}
+}
+
 func TestFinalizeAtrixSkillFormatsBuildsAndReloads(t *testing.T) {
 	root := t.TempDir()
 	writeTestGoSkill(t, root, "finalize", "package main\nfunc main(){println(\"ok\")}\n")

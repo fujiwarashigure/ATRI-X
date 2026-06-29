@@ -80,6 +80,25 @@ func TestParseGoModVersion(t *testing.T) {
 	}
 }
 
+func TestCreateAtrixSkillReturnsAtriyphWarnings(t *testing.T) {
+	root := t.TempDir()
+	registry := tool.NewRegistry()
+	creator := NewCreateAtrixSkillTool(NewManager(root, registry))
+	args, _ := json.Marshal(map[string]string{
+		"name":        "warn_skill",
+		"description": "Warn workflow.",
+		"risk":        "low",
+		"atriyph":       "#skill warn_skill - Warn workflow.\n** 清单：\n",
+	})
+	result, err := creator.Call(context.Background(), tool.CallRequest{Arguments: args})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(result.Content, "created Atriyph skill warn_skill") || !strings.Contains(result.Content, "Warnings:") || !strings.Contains(result.Content, "line 2:") {
+		t.Fatalf("content = %q", result.Content)
+	}
+}
+
 func TestCreateAtrixSkillCanCreateTextOnlySkill(t *testing.T) {
 
 	root := t.TempDir()

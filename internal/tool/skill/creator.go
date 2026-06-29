@@ -93,7 +93,8 @@ func (t CreateAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 			return nil, err
 		}
 	}
-	if _, err := atriyph.ParseSkill(args.Atriyph, name); err != nil {
+	_, diagnostics, err := atriyph.ValidateSkill(args.Atriyph, name)
+	if err != nil {
 		return nil, err
 	}
 	args.Atriyph = withAtriyphMetadata(args.Atriyph, args.Description, args.Risk)
@@ -142,7 +143,7 @@ func (t CreateAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 	if err := t.Manager.Reload(ctx); err != nil {
 		return nil, fmt.Errorf("Atriyph skill written but reload failed: %w", err)
 	}
-	return &tool.Result{Content: fmt.Sprintf("created Atriyph skill %s", name)}, nil
+	return &tool.Result{Content: appendAtriyphWarnings(fmt.Sprintf("created Atriyph skill %s", name), diagnostics)}, nil
 }
 
 func detectGoModVersion(ctx context.Context) (string, error) {

@@ -189,7 +189,7 @@ func (t ModifyAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 	}
 	switch preview.Target {
 	case atrixSkillTargetAtriyph:
-		return t.modifyAtriyph(ctx, preview)
+		return t.modifyAtriyph(preview)
 	case atrixSkillTargetCodeSource:
 		return t.modifyCodeSource(preview)
 	default:
@@ -224,21 +224,18 @@ func (t ModifyAtrixSkillTool) preview(ctx context.Context, req tool.CallRequest)
 		return modifyAtrixSkillPreview{}, err
 	}
 	if target == atrixSkillTargetAtriyph {
-		if _, err := atriyph.ParseSkill(next, name); err != nil {
+		if _, _, err := atriyph.ValidateSkill(next, name); err != nil {
 			return modifyAtrixSkillPreview{}, err
 		}
 	}
 	return modifyAtrixSkillPreview{Name: name, Target: target, Path: path, Result: result, Next: next, Diff: result.Diff}, nil
 }
 
-func (t ModifyAtrixSkillTool) modifyAtriyph(ctx context.Context, preview modifyAtrixSkillPreview) (*tool.Result, error) {
+func (t ModifyAtrixSkillTool) modifyAtriyph(preview modifyAtrixSkillPreview) (*tool.Result, error) {
 	if err := fileops.AtomicWriteFile(preview.Path, preview.Result.NewBytes, existingFileMode(preview.Path)); err != nil {
 		return nil, err
 	}
-	if err := t.Manager.Reload(ctx); err != nil {
-		return nil, fmt.Errorf("ATRI-X skill modified but reload failed: %w", err)
-	}
-	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s", preview.Name, atrixSkillTargetAtriyph, preview.Diff)}, nil
+	return &tool.Result{Content: fmt.Sprintf("modified ATRI-X skill %s target %s\ndiff:\n%s\n\nSKILL.atriyph 已写入但尚未 reload；完成修改后调用 finalize_atrix_skill。", preview.Name, atrixSkillTargetAtriyph, preview.Diff)}, nil
 }
 
 func (t ModifyAtrixSkillTool) modifyCodeSource(preview modifyAtrixSkillPreview) (*tool.Result, error) {

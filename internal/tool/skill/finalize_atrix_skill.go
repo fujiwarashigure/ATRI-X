@@ -69,11 +69,17 @@ func (t FinalizeAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) 
 	}
 	var b strings.Builder
 	fmt.Fprintf(&b, "finalize ATRI-X skill %s\n\n", name)
-	if _, err := atriyph.ParseSkill(string(atriyphData), name); err != nil {
+	_, diagnostics, err := atriyph.ValidateSkill(string(atriyphData), name)
+	if err != nil {
 		fmt.Fprintf(&b, "Atriyph: failed\n%s\n", err)
 		return &tool.Result{Content: b.String()}, nil
 	}
 	b.WriteString("Atriyph: ok\n")
+	if warnings := atriyph.WarningDiagnostics(diagnostics); len(warnings) > 0 {
+		b.WriteString("Atriyph warnings:\n")
+		b.WriteString(atriyph.FormatDiagnostics(warnings))
+		b.WriteByte('\n')
+	}
 
 	sourcePath := filepath.Join(root, "main.go")
 	if _, err := os.Stat(sourcePath); os.IsNotExist(err) {
