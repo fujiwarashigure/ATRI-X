@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update `Atriyph` version to v3
 - qq heartbeat ack and qqofficial gateway resumed are no longer logged
 - read_atrix_skill now depends on modify_atrix_skill to facilitate possible modifications
+- Atriyph syntax is no longer validated during ATRI-X startup to avoid slowing down the startup speed.
 
 ### Fixed
 
