@@ -296,4 +296,4 @@ LLM Cron tasks can use the `#task` header to write task entries, and the syntax 
 
 ## Syntax Evolution
 
-Atriyph is currently v0.3, and the syntax may be expanded in future versions. When writing `SKILL.atriyph` or task entries, it is recommended to keep the structure concise and avoid relying on experimental notations not listed in this document.
+Atriyph is currently v0.3, and the syntax may be expanded in future versions. When writing `SKILL.atriyph` or task entries, it is recommended to keep the structure concise.
