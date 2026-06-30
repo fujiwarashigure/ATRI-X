@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tool results now support unified `Warnings` output, used to prompt the LLM to prioritize more appropriate tools in the future.
 - `read_file`/`shell` will suggest using `read_atrix_skill` when reading ATRI-X Skill files; Direct modification of ATRI-X Skill files by `edit_file` or shell will be rejected before confirmation or execution; `modify_atrix_skill` should be used instead.
 - Source files for resident memory and long-term memory are now included in general FileGuard protection; reading will suggest using memory tools, and direct writing via general file tools or shell will be rejected.
+- Hook logs are no longer duplicated
 
 ### Fixed
 
