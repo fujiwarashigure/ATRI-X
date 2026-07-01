@@ -241,6 +241,39 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 /atriwisp --source minecraft-main --mode llm --since 2h
 ```
 
+## Token 消耗统计
+
+| 命令 | 作用 |
+| --- | --- |
+| `/usage [options]` | 汇总审计日志中的 token 消耗数据。 |
+
+选项：
+
+| 选项 | 作用 |
+| --- | --- |
+| `-d, --days <n>` | 查看最近 n 天，默认 1。 |
+| `-m, --model <name>` | 按模型名过滤。 |
+| `-s, --session <id>` | 按 Session ID 过滤。 |
+| `--by <key>` | 按维度汇总：`model`（默认）、`day`、`session`。 |
+| `--since <time>` | 只看某时间之后，例如 `2h`、`30m`、`2026-06-03`。 |
+| `--until <time>` | 只看某时间之前。 |
+
+示例：
+
+```text
+/usage
+/usage -d 7
+/usage -m gpt-4o
+/usage -s sess-xxx
+/usage --by day -d 30
+/usage --since 2h
+```
+
+说明：
+
+- `/usage` 从审计日志的 `llm_usage` 事件聚合 token 用量，按模型/天/会话分组统计 prompt、completion、total、cache 和耗时。
+- 仅超级管理员可用。
+
 ## 高风险工具确认
 
 当工具调用触发高风险确认时，Agent 会提示可用确认命令，例如：
