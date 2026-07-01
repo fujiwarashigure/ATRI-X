@@ -11,6 +11,7 @@
 5. [Hook](hooks.md)：规则 Hook 配置、action 类型、segments 多段输出、exec 脚本和表情提取示例。
 6. [Atrinis 监听枢纽](atrinis.md)：了解 Atrinis、Atriwisp、Atriena 和外部事件接入。
 7. [Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp，并用 Atriena 投递事件。
+8. [前端 API](frontend-api.md)：WebSocket 协议、消息类型和补全接口，用于编写自定义前端。
 
 ## 文档维护约定
 
