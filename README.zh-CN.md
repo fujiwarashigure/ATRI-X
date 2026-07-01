@@ -101,6 +101,7 @@ Shell 补全可通过 `atri-x completion <shell>` 生成，支持 `bash`、`zsh`
 - [核心概念](docs/concepts.md)
 - [Atrinis 监听枢纽](docs/atrinis.md)
 - [Atrinis 配置与使用](docs/atrinis-usage.md)
+- [前端 API](docs/frontend-api.md)
 
 开发计划和任务拆分： [devdocs](devdocs/)。
 
