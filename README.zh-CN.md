@@ -51,8 +51,7 @@ Atrinis 是 ATRI-X 的监听枢纽，Atriwisp 是分布在各地的外部监听�
 
 **多平台与富输出抽象**： ATRI-X 抽象了平台层与输出层，目前支持 CLI、QQ OneBot、QQ Official 和 Telegram，并预留扩展其他平台的空间。
 
-**CLI 客户端/服务端分离**： 支持任何电脑使用 ATRI-X 作为客户端连接 ATRI-X 服务端。
-**前端完全可定制**： ATRI-X 前后端分离，想写什么好看的界面都行。以下截图展示不同的前端形态，除 TUI 外均为概念性 HTML mockup，不代表最终 UI。
+**CLI 客户端/服务端分离**： 支持任何电脑使用 ATRI-X 作为客户端连接 ATRI-X 服务端。 **前端自由定制**，可以随便制作自己喜欢的前端界面。以下截图展示不同的前端形态，除 TUI 外均为概念性 HTML mockup，不代表最终 UI。
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Elfreese/elbot-showcase/main/frontend/assets/frontend_1.png" width="260" />
