@@ -53,8 +53,7 @@ For detailed information, see [Atrinis Listening Hub](docs.en/atrinis.md).
 
 **Multi-platform and Rich Output Abstraction**: ATRI-X abstracts the platform and output layers, currently supporting CLI, QQ OneBot, QQ Official, and Telegram, while reserving space for extending to other platforms.
 
-**CLI Client/Server Separation**: Supports using ATRI-X as a client on any computer to connect to the ATRI-X server.
-**Fully Customizable Frontend**: ATRI-X separates the frontend and backend, allowing you to build any beautiful interface you like. The following screenshots demonstrate different frontend forms; except for the TUI, all are conceptual HTML mockups and do not represent the final UI.
+**CLI Client/Server Separation**: Supports using ATRI-X as a client on any computer to connect to the ATRI-X server.  **Free Frontend Customization**, allowing you to create any frontend interface you prefer. The following screenshots demonstrate different frontend forms; except for the TUI, all are conceptual HTML mockups and do not represent the final UI.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Elfreese/elbot-showcase/main/frontend/assets/frontend_1.png" width="260" />
@@ -104,6 +103,7 @@ For detailed instructions, see:
 - [Core Concepts](docs.en/concepts.md)
 - [Atrinis Listening Hub](docs.en/atrinis.md)
 - [Atrinis Configuration and Usage](docs.en/atrinis-usage.md)
+- [Frontend API](docs.en/frontend-api.md)
 
 Development plan and task decomposition: [devdocs](devdocs/).
 
