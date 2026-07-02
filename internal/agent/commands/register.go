@@ -6,6 +6,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
+	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
@@ -118,6 +119,7 @@ type Deps struct {
 	CleanupRetentionDays func() int
 	Audit                func(event string, attrs ...any)
 	Logs                 LogService
+	RuntimeStatus        func(sessionID string) runtimestatus.Snapshot
 }
 
 func RegisterFactories(registrar Registrar, deps Deps, factories ...HandlerFactory) error {
