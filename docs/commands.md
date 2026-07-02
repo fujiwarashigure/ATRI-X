@@ -160,7 +160,10 @@ Fork 会保留原会话，并从指定 assistant 消息位置创建新的上下�
 
 LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。聊天中也可以用 `@tool:<name-or-tag>` 预载工具，或用 `@skill:<name>` 把 Skill 文档加入本轮消息并预载对应运行 wrapper。
 
+`workspace` 工具用于设置当前 Session 的共享工作目录。设置后，所有需要路径的工具都会基于该目录解析相对路径；不传参数时返回当前 workspace，`reset=true` 时重置为默认工作目录。cron/Atrinis 后台任务不使用 workspace，仍限制在各自 sandbox 内。
+
 ## Hook
+
 
 | 命令 | 作用 |
 | --- | --- |
