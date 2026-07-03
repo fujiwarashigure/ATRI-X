@@ -206,8 +206,8 @@
 - `internal/tool/skill/catalog.go`：skill catalog；记录 AgentSkill/Go skill 的名称、详情格式、风险、根目录、Go binary 路径和 AgentSkill 工具化配置状态。
 
 - `internal/tool/skill/creator.go`：`create_atrix_skill` 内置元工具；用结构化参数 `name/description/risk/atriyph/go_source` 创建 ATRI-X 原生 skill，写入 `SKILL.atriyph`，可选写入 `main.go` 并编译，创建前用 Atriyph parser/linter 校验，成功后自动 reload；不再要求 LLM 拼 `SKILL.md` front matter，未提供源码时创建纯 Atriyph 文本 skill。
-- `internal/tool/skill/agent_manifest.go`：AgentSkill `ATRIX_SKILL.toml` 解析与严格校验；配置把 AgentSkill 命令行参数映射为普通工具 schema。
-- `internal/tool/skill/command_tool.go`：工具化 AgentSkill runtime；按 manifest 把 LLM arguments 翻译成 argv，在 Skill 根目录执行命令并把 stdout 转成工具结果。
+- `internal/tool/skill/agent_manifest.go`：AgentSkill `ATRIX_SKILL.toml` 解析与严格校验；配置把 AgentSkill 命令行参数映射为普通工具 schema，并支持 `tags` 为工具分类。
+- `internal/tool/skill/command_tool.go`：工具化 AgentSkill runtime；按 manifest 把 LLM arguments 翻译成 argv，在 Skill 根目录执行命令，把 stdout 转成工具结果，并把 manifest tags 暴露给工具 tag 系统。
 - `internal/tool/skill/agent_skill_tool.go`：隐藏元工具 `agent_skill`；读取/写入 AgentSkill 的 `ATRIX_SKILL.toml`，写入前校验，成功后 reload。
 - `internal/tool/skill/modify_atrix_skill.go`：`read_atrix_skill`/`modify_atrix_skill` 。
 - `internal/tool/skill/finalize_atrix_skill.go`：`finalize_atrix_skill` 内置元工具；完成原生 ATRI-X Skill 修改，校验 `SKILL.atriyph`，对 `main.go` 执行 gofmt、`package main` 校验、`go build` 和 reload，并把格式化/编译错误作为结果返回给 LLM。
