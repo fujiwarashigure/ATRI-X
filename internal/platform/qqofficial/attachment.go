@@ -3,6 +3,7 @@ package qqofficial
 import (
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"mime"
@@ -11,11 +12,10 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 )
-
-const maxInboundAttachmentBytes = 50 << 20
 
 type savedAttachment struct {
 	URL      string
@@ -27,7 +27,10 @@ type savedAttachment struct {
 type inboundAttachments struct {
 	Segments []platform.MessageSegment
 	Saved    []savedAttachment
+	TooLarge []messageAttachment
 }
+
+var errAttachmentTooLarge = errors.New("attachment too large")
 
 func (a *Adapter) prepareInboundAttachments(ctx context.Context, attachments []messageAttachment) inboundAttachments {
 	if len(attachments) == 0 {
@@ -42,7 +45,11 @@ func (a *Adapter) prepareInboundAttachments(ctx context.Context, attachments []m
 		if isImageAttachment(attachment) {
 			segment, err := a.downloadInboundImageSegment(ctx, i+1, attachment)
 			if err != nil {
-				a.logWarn(ctx, "download qqofficial image failed", "url", urlValue, "error", err)
+				if errors.Is(err, errAttachmentTooLarge) {
+					out.TooLarge = append(out.TooLarge, attachment)
+				} else {
+					a.logWarn(ctx, "download qqofficial image failed", "url", urlValue, "error", err)
+				}
 				continue
 			}
 			out.Segments = append(out.Segments, segment)
@@ -50,7 +57,11 @@ func (a *Adapter) prepareInboundAttachments(ctx context.Context, attachments []m
 		}
 		saved, err := a.downloadInboundAttachment(ctx, i+1, attachment)
 		if err != nil {
-			a.logWarn(ctx, "download qqofficial attachment failed", "url", urlValue, "error", err)
+			if errors.Is(err, errAttachmentTooLarge) {
+				out.TooLarge = append(out.TooLarge, attachment)
+			} else {
+				a.logWarn(ctx, "download qqofficial attachment failed", "url", urlValue, "error", err)
+			}
 			continue
 		}
 		out.Saved = append(out.Saved, saved)
@@ -111,6 +122,11 @@ func (a *Adapter) downloadInboundAttachment(ctx context.Context, index int, atta
 }
 
 func (a *Adapter) downloadInboundAttachmentData(ctx context.Context, urlValue string) ([]byte, http.Header, error) {
+	if a.cfg.DownloadTimeoutSecs > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, time.Duration(a.cfg.DownloadTimeoutSecs)*time.Second)
+		defer cancel()
+	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, strings.TrimSpace(urlValue), nil)
 	if err != nil {
 		return nil, nil, err
@@ -123,13 +139,14 @@ func (a *Adapter) downloadInboundAttachmentData(ctx context.Context, urlValue st
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return nil, nil, fmt.Errorf("download attachment http %d", resp.StatusCode)
 	}
-	limited := io.LimitReader(resp.Body, maxInboundAttachmentBytes+1)
+	maxBytes := a.cfg.MaxReceiveFileBytes
+	limited := io.LimitReader(resp.Body, maxBytes+1)
 	data, err := io.ReadAll(limited)
 	if err != nil {
 		return nil, nil, fmt.Errorf("read attachment: %w", err)
 	}
-	if len(data) > maxInboundAttachmentBytes {
-		return nil, nil, fmt.Errorf("attachment exceeds %d bytes", maxInboundAttachmentBytes)
+	if int64(len(data)) > maxBytes {
+		return nil, nil, fmt.Errorf("%w: exceeds %d bytes", errAttachmentTooLarge, maxBytes)
 	}
 	return data, resp.Header.Clone(), nil
 }
