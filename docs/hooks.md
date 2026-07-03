@@ -180,7 +180,7 @@ segment 格式与 [Atriena 协议](atrinis-usage.md#segments多模态消息段)�
 | `kind` | `text` / `image` / `file` / `emoticon`，默认 `text` |
 | `text` | 文本内容（text 类型必填，其他类型可选作为附加文本） |
 | `url` | HTTP/HTTPS URL（image/file） |
-| `path` | 本地文件路径（image/file/emoticon） |
+| `path` | 本地文件路径（image/file/emoticon）；普通路径按平台默认方式处理，`base64://`、`file://`、`http://`、`https://` 前缀表示调用方已指定媒体源，会按平台能力直接处理 |
 | `base64` | base64 编码数据（image/file） |
 | `name` | 文件名或表情名 |
 | `mime_type` | MIME 类型提示 |
