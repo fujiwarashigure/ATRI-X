@@ -49,80 +49,39 @@ ATRI-X 不会在每轮 work 对话中默认注入所有工具的完整 schema。
 
 ## 内联预载
 
-用户可以在普通输入中提前指定本轮要用的工具或 Skill。
+内联预载用于在普通输入中提示 ATRI-X：本轮任务可能需要某类工具或某个 Skill。
 
-- `@tool:<name-or-tag>`：提前注入工具或工具 tag 的 schema。
-- `@skill:<name>`：把指定 Skill 文档内容加入本轮用户消息；若 AgentSkill 带有合法 `ATRIX_SKILL.toml`，会注入该 Skill 的 top-level 工具 schema，否则仅作为说明文档使用。
+它的作用是减少 LLM 先发现工具再调用工具的步骤，让明确的任务更快进入工作状态。预载成功后，相关工具或 Skill 会进入当前 Session 的工具上下文。
 
-示例：
-
-```text
-@tool:web 帮我查一下今天的新闻摘要
-@tool:files 读取这个配置并解释
-按这个技能处理文件 @skill:docx
-```
-
-有效指令会被剥离；工具 schema 和 Skill wrapper 会持久化到当前 Session 的工具缓存。无效值会保留为普通文本并提示。多个 Atriyph Skill 同时注入时，Atriyph 规则说明只会加入一次。
+具体语法和示例见 [命令速查：工具与 Skill](commands.md#工具与-skill)。
 
 ## Session
 
-Session 是 ATRI-X 的持久化会话单位。它保存：
+Session 是 ATRI-X 的持久化会话单位，用来保存一次连续对话的上下文、模式、消息历史、压缩摘要和工具调用记录。
 
+不同平台、不同聊天作用域通常会使用各自的 Session，避免上下文互相污染。CLI 属于本地高权限入口，可以跨平台查看和管理 Session。
 
-- 会话标题和模式。
-- 用户消息与 assistant 回复。
-- 上下文压缩 checkpoint。
-- 工具调用记录。
-- 平台隔离信息。
-
-常用操作：
-
-- `/new` 创建新 Session。
-- `/sessions` 查看历史 Session。
-- `/resume` 恢复 Session。
-- `/archive` 归档 Session。
-- `/pin` 置顶 Session。
-- `/delete` 删除 Session。
-
-CLI 是本地高权限入口，可以跨平台查看 Session；其他平台默认只看到当前平台和作用域下的 Session。
+Session 的创建、恢复、归档、置顶和删除等操作见 [命令速查：Session](commands.md#session)。
 
 ## Fork
 
-Fork 用于从历史 assistant 消息处创建新的对话分支。
+Fork 用于从历史对话中的某个 assistant 回复处分出新的对话分支。
 
-流程：
-
-1. 用 `/messages` 找到可 fork 的 assistant message ID。
-2. 用 `/fork <message_id>` 创建分支 Session。
-3. 新 Session 使用 fork 截止点之前的上下文继续对话。
-
-Fork 不会删除或修改原 Session。
+新分支会继承 fork 点之前的上下文，但不会修改原 Session。它适合在同一个问题上尝试另一种思路、重做方案，或保留原对话同时继续探索。
 
 ## 上下文压缩
 
-长对话会逐渐接近模型上下文窗口。ATRI-X 支持上下文压缩：
+长对话会逐渐接近模型上下文窗口。上下文压缩会把较早的对话整理成摘要，并和最近的新消息一起组成后续发给 LLM 的上下文视图。
 
-- 自动压缩：由 `[context] compact_enabled` 和 `compact_trigger_ratio` 控制。
-- 手动压缩：使用 `/compact`。
-
-压缩后的上下文视图通常由“最新摘要 + 摘要之后的新消息”组成。
-
-重要约定：压缩不删除原始消息，只改变后续发给 LLM 的上下文视图。
+压缩不会删除原始消息，只会改变后续请求中使用的上下文内容。它可以自动触发，也可以由用户手动触发。
 
 ## Prompt 与 Soul
 
-ATRI-X 从 `SOUL.md` 加载 Agent 的基础 System Prompt。
+Soul 是 Agent 的基础 System Prompt，用来定义人格、行为边界和长期稳定的表达风格。
 
-Prompt Builder 会把以下内容组合成最终请求：
+实际发送给 LLM 的 Prompt 不只包含 Soul，还会按当前会话动态组合平台信息、用户身份、记忆、工具提示、压缩摘要和会话历史。
 
-- Soul Prompt。
-- 当前平台和 Actor 信息。
-- 常驻记忆。
-- 工具名称提示。
-- 压缩摘要。
-- 会话历史。
-
-工具发现、常驻记忆和时间等动态信息不会硬编码进 `SOUL.md`。
+因此，Soul 只适合放稳定规则；工具发现、时间、平台上下文和临时状态等动态信息不应硬编码进去。
 
 ## 记忆
 
@@ -130,30 +89,26 @@ ATRI-X 将记忆分成两类：
 
 | 类型 | 用法 |
 | --- | --- |
-| 常驻记忆 | 短小、稳定、每轮都可能有用的信息，会被注入 Prompt。 |
-| 长期记忆 | 更长、更复杂的信息，以 Markdown 为源数据，通过工具按需搜索。 |
+| 常驻记忆 | 短小、稳定、经常有用的信息，会在对话中自动注入。 |
+| 长期记忆 | 更长、更复杂的信息，按需通过工具搜索和使用。 |
 
-常驻记忆内部保存为 core 和 normal 两段：core 用于核心信息，修改需要高风险确认；normal 用于普通信息，可追加、覆盖或清空。注入 Prompt 时不会暴露分段标题，而是合并成一段自然文本。
-
-长期记忆使用 Markdown 文件作为人类可读源数据，SQLite FTS 作为可重建搜索索引。
+常驻记忆适合保存偏身份、偏偏好、偏长期稳定的信息。长期记忆适合保存篇幅更大、需要检索的资料。
 
 ## Tool Runtime
 
 Tool Runtime 管理工具的注册、发现、权限、风险评估和执行。
 
-当前内置能力包括：
+工具可以来自内置能力、Skill、外部扩展或监听事件。ATRI-X 不会默认把所有工具细节都塞进上下文，而是通过工具发现和预载机制按需暴露。
 
-- Web 搜索与网页提取。
-- Workspace：设置当前 Session 的共享工作目录。
-- 文件读写。
+常见工具能力包括：
+
+- 搜索与网页提取。
+- 文件读写与文件发送。
 - Shell 命令。
 - 聊天历史查询。
-- 常驻记忆和长期记忆。
+- 记忆管理。
 - Cron 管理。
-- 文件发送。
-- Skill 创建、读取、修改和运行。
-- `atriwisp_creator`：为超级管理员返回创建 Atriwisp 的协议说明、配置片段、脚手架和测试清单。
-
+- Skill 创建、修改和运行。
 
 ## 安全策略
 
@@ -170,23 +125,19 @@ CLI 默认本地用户 `local` 是超级管理员。
 
 ## Hook
 
-Hook Layer 用于在关键流程前后扩展行为，例如修改消息、追加输出意图、调用低风险工具或注入常驻记忆。规则 Hook 支持条件匹配、多段输出、exec 脚本和角色分区。
+Hook Layer 用于在 Agent 的关键流程前后插入扩展逻辑，例如修改输入、补充上下文、追加输出意图或触发外部动作。
 
-重要约定：Hook 不替代 Security Layer，安全判定仍以 Security Layer 为准。完整配置和示例见 [Hook](hooks.md)。
+Hook 是扩展机制，不是权限机制。工具调用、危险操作和角色限制仍由 Security Layer 判断。
 
+完整配置和示例见 [Hook：规则 Hook 配置](hooks.md#规则-hook-配置)。
 
 ## Output Layer
 
-Output Layer 定义平台无关的输出意图，例如：
+Output Layer 定义平台无关的输出意图。
 
-- 文本。
-- 图片。
-- 文件。
-- at。
-- reply。
-- 表情。
+Agent、Hook 和 Tool 不直接依赖具体平台发送消息，而是返回统一的输出意图，再由 Output Manager 交给对应平台适配器发送。
 
-Agent、Hook 和 Tool 不应该直接依赖具体平台发送消息，而是返回 output intent，由 Output Manager 统一发送。
+这样可以让同一段 Agent 逻辑复用于 CLI、聊天平台和未来的新平台。
 
 ## Cron
 
@@ -198,7 +149,6 @@ ATRI-X 包含两层 Cron 能力：
 | LLM Cron | 按任务描述驱动模型执行，并可使用工具。 |
 
 后台 Cron 有独立 Session 和 sandbox 约束。
-超级管理员在平台里引用回复 LLM Cron 的通知消息时，会自动 resume 到对应后台 Session 继续对话。
 
 ## Atrinis / Atriwisp / Atriena
 
@@ -210,53 +160,24 @@ Atrinis 不作为聊天平台，也不替代 Cron。Cron 处理“按时间触�
 
 ## Skill 与 Atriyph
 
-ATRI-X 支持 Skill 扩展，并引入 Atriyph Task Notation（任务表示法）描述可复用任务。
+Skill 是 ATRI-X 的可复用任务扩展。它可以是一段给 Agent 阅读的任务说明，也可以被包装成结构化工具供 LLM 调用。
 
-Skill 类型：
+ATRI-X 支持两类主要 Skill：
 
-- AgentSkill：放在 `skills/agent/<skill>/`，遵从或兼容 agentskills.io 风格 `SKILL.md`，也可用 `SKILL.atriyph` 覆写 Agent 可读说明。默认是说明型 Skill，LLM 可按文档使用 shell、文件等通用工具处理附带脚本。
-- 工具化 AgentSkill：AgentSkill 根目录存在合法 `ATRIX_SKILL.toml` 时，会注册为普通 top-level 工具。LLM 调用结构化参数，ATRI-X 按配置把参数翻译为命令行 argv 并在 Skill 目录执行命令，不通过 shell。
-`ATRIX_SKILL.toml` 只在 `skills/agent/<skill>/` 根目录读取。最小示例：
+- AgentSkill：以文档形式描述任务，让 LLM 按说明使用通用工具完成工作。
+- 工具化 Skill：把 Skill 注册成普通工具，让 LLM 通过结构化参数调用。
 
-```toml
-risk = "medium"
-tags = ["doc"]
-command = ["python", "foo.py"]
-timeout_seconds = 30
-expose_root = false
+Atriyph Task Notation 是 ATRI-X 用来描述可复用任务的结构化表示法。它用更稳定的格式表达输入、输出、步骤、条件和约束，减少自然语言任务描述的歧义。
 
-parameters = '''
-{
-  "type": "object",
-  "required": ["input"],
-  "properties": {
-    "input": {"type": "string", "description": "输入文本"}
-  }
-}
-'''
-
-[args]
-input = "--input"
-```
-
-上例中，LLM 调用 Skill 工具传入 `input` 后，ATRI-X 会执行 `python foo.py --input <value>`，工作目录固定为该 Skill 根目录。`risk`、`command`、`parameters` 和 `[args]` 必填；`tags` 可选，相当于为该工具分类，可用于 `@tool:<tag>` 预载；`expose_root=true` 时，发现 Skill 时才会向 LLM 暴露 Skill 根路径。
-
-Atriyph 的目标是用更短、更稳定的结构表达输入、输出、步骤、条件和约束，减少自然语言任务描述的歧义。完整语法见 [Atriyph 任务表示法](atriyph.md)。
+工具化 AgentSkill 配置示例见 [配置说明：AgentSkill 工具化配置](configuration.md#agentskill-工具化配置)。Atriyph 与 Skill 的关系见 [Atriyph 任务表示法：与 Skill 的关系](atriyph.md#与-skill-的关系)，完整语法见 [语法速查](atriyph.md#语法速查)。
 
 ## 平台适配
 
-Platform Adapter 负责接入具体平台。当前主要包括：
+Platform Adapter 负责接入具体平台。
 
-- CLI。
-- QQ OneBot。
-- QQ 官方机器人。
+它的职责是把平台消息转换为 Agent Core 能理解的统一输入，并把 Output Layer 的输出意图转换回平台消息。
 
-平台适配层负责：
-
-- 接收入站消息。
-- 解析文本、图片、文件、at、reply 等平台特性。
-- 转换为 Agent Core 的统一输入。
-- 发送 Output Layer 的统一输出意图。
+因此，Agent Core 不需要关心消息来自 CLI、群聊、私聊还是其他平台。
 
 ## 日志与审计
 
