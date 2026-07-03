@@ -52,7 +52,7 @@ ATRI-X 不会在每轮 work 对话中默认注入所有工具的完整 schema。
 用户可以在普通输入中提前指定本轮要用的工具或 Skill。
 
 - `@tool:<name-or-tag>`：提前注入工具或工具 tag 的 schema。
-- `@skill:<name>`：把指定 Skill 文档内容加入本轮用户消息，并注入该 Skill 需要的运行 wrapper。Skill 本体不是 top-level tool schema。
+- `@skill:<name>`：把指定 Skill 文档内容加入本轮用户消息；若 AgentSkill 带有合法 `ATRIX_SKILL.toml`，会注入该 Skill 的 top-level 工具 schema，否则仅作为说明文档使用。
 
 示例：
 
@@ -148,14 +148,11 @@ Tool Runtime 管理工具的注册、发现、权限、风险评估和执行。
 - 文件读写。
 - Shell 命令。
 - 聊天历史查询。
-
 - 常驻记忆和长期记忆。
 - Cron 管理。
 - 文件发送。
 - Skill 创建、读取、修改和运行。
 - `atriwisp_creator`：为超级管理员返回创建 Atriwisp 的协议说明、配置片段、脚手架和测试清单。
-
-工具结果可以回灌给 LLM，也可以返回平台无关的输出意图，由 Agent 统一发送。工具结果中的 `Warnings` 会回灌给 LLM，用于提示后续优先使用更合适的工具，例如用 `read_file` 代替 shell `cat`。前台 work Session 可用 `workspace` 设置共享工作目录，所有需要路径的工具会基于该目录解析相对路径；cron/Atrinis 后台任务仍使用各自 sandbox。ATRI-X Skill、常驻记忆和长期记忆源文件由 FileGuard 保护：读取会提示使用对应专用工具，通用文件工具或 shell 直接写入会被拒绝。
 
 
 ## 安全策略
@@ -200,12 +197,12 @@ ATRI-X 包含两层 Cron 能力：
 | Direct Cron | 按计划直接发送固定内容。 |
 | LLM Cron | 按任务描述驱动模型执行，并可使用工具。 |
 
-后台 Cron 有独立 Session 和 sandbox 约束。LLM Cron 可以通过 `session_mode` 选择后台 Session 模式：默认 `work`，传 `chat` 时不注入工具 schema，适合不需要工具的低成本任务。LLM Cron 可以通过 `tool_list_names` 预注入工具名或 Skill 名：普通工具会注入 schema，Skill 会把说明注入后台任务 prompt，并自动注入对应 runner。后台任务中的所有路径参数都应使用当前任务工作目录内的相对路径；LLM Cron 的最终 JSON 可通过 `report_segments` 附带当前任务工作目录内的图片或文件相对路径。超级管理员在平台里引用回复 LLM Cron 的通知消息时，会自动 resume 到对应后台 Session 继续对话；普通用户引用时只会作为普通引用文本处理。
+后台 Cron 有独立 Session 和 sandbox 约束。
+超级管理员在平台里引用回复 LLM Cron 的通知消息时，会自动 resume 到对应后台 Session 继续对话。
 
 ## Atrinis / Atriwisp / Atriena
 
 Atrinis 是 ATRI-X 的监听枢纽，用于接收外部事件。Atriwisp 是外部子监听器，负责观察服务器、Webhook、RSS、日志或脚本输出等外部世界。Atriena 是 Atriwisp 向 Atrinis 投递事件的协议，也是 Hook exec 等内部触发源复用的动作协议。
-
 
 它们的分工是：Atriwisp 观测一切，Atrinis 管理一切，ATRI-X 掌控最终执行与投递。
 
@@ -217,12 +214,33 @@ ATRI-X 支持 Skill 扩展，并引入 Atriyph Task Notation（任务表示法�
 
 Skill 类型：
 
-- AgentSkill：放在 `skills/agent/<skill>/`，遵从或兼容 agentskills.io 风格 `SKILL.md`，也可用 `SKILL.atriyph` 覆写 Agent 可读说明；当前可通过 `python_skill_run` 执行附带 Python 脚本。
-- Go Skill：放在 `skills/go/<skill>/`，使用 `SKILL.atriyph` 描述任务；存在二进制时可通过 `go_skill_run` 执行，并从 stdin 接收 JSON payload。
+- AgentSkill：放在 `skills/agent/<skill>/`，遵从或兼容 agentskills.io 风格 `SKILL.md`，也可用 `SKILL.atriyph` 覆写 Agent 可读说明。默认是说明型 Skill，LLM 可按文档使用 shell、文件等通用工具处理附带脚本。
+- 工具化 AgentSkill：AgentSkill 根目录存在合法 `ATRIX_SKILL.toml` 时，会注册为普通 top-level 工具。LLM 调用结构化参数，ATRI-X 按配置把参数翻译为命令行 argv 并在 Skill 目录执行命令，不通过 shell。
+`ATRIX_SKILL.toml` 只在 `skills/agent/<skill>/` 根目录读取。最小示例：
 
+```toml
+risk = "medium"
+command = ["python", "foo.py"]
+timeout_seconds = 30
+expose_root = false
 
-Atriyph 的目标是用更短、更稳定的结构表达输入、输出、步骤、条件和约束，减少自然语言任务描述的歧义。读取或修改 Go Skill 的 `SKILL.atriyph` / `main.go` 应使用 `read_atrix_skill` / `modify_atrix_skill`；通用文件工具或 shell 直接修改这些文件会被拒绝。完整语法见 [Atriyph 任务表示法](atriyph.md)。
+parameters = '''
+{
+  "type": "object",
+  "required": ["input"],
+  "properties": {
+    "input": {"type": "string", "description": "输入文本"}
+  }
+}
+'''
 
+[args]
+input = "--input"
+```
+
+上例中，LLM 调用 Skill 工具传入 `input` 后，ATRI-X 会执行 `python foo.py --input <value>`，工作目录固定为该 Skill 根目录。`risk`、`command`、`parameters` 和 `[args]` 必填；`expose_root=true` 时，发现 Skill 时才会向 LLM 暴露 Skill 根路径。
+
+Atriyph 的目标是用更短、更稳定的结构表达输入、输出、步骤、条件和约束，减少自然语言任务描述的歧义。完整语法见 [Atriyph 任务表示法](atriyph.md)。
 
 ## 平台适配
 

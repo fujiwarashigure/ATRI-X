@@ -14,7 +14,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 | `SOUL.md` | Agent 的 System Prompt 来源文件。 |
 | `.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
 | `plugins/` | Hook 和插件配置目录。 |
-| `skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。 |
+| `skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。AgentSkill 可在根目录放置 `ATRIX_SKILL.toml` 注册为普通工具。 |
 | `memories.toml` | 常驻记忆文件，默认位于配置目录下。 |
 | `long_memory/` | 长期记忆 Markdown 源数据目录，默认位于配置目录下。 |
 
@@ -29,7 +29,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
 
 
 开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
@@ -174,6 +174,41 @@ token_env = ["ATRIX_CLI_WINDOWS_TOKEN"]
 - `clients.<name>` 是客户端 profile；`id` 可省略，默认等于 `<name>`；`url` 可省略，默认使用 `default_url`。
 - `atri-x cli -c <name>` 使用指定客户端 profile；未指定时使用 `default_client`。
 - CLI token 与 Provider API Key 一样，优先读系统环境变量，再读配置目录 `.env`。
+
+## AgentSkill 工具化配置
+
+AgentSkill 默认只作为说明文档使用。若要把 `skills/agent/<skill>/` 注册成普通工具，在该 Skill 根目录添加 `ATRIX_SKILL.toml`：
+
+```toml
+risk = "medium"
+command = ["python", "foo.py"]
+timeout_seconds = 30
+expose_root = false
+
+parameters = '''
+{
+  "type": "object",
+  "required": ["input"],
+  "properties": {
+    "input": {"type": "string", "description": "输入文本"}
+  }
+}
+'''
+
+[args]
+input = "--input"
+```
+
+字段说明：
+
+- `risk`：必填，允许 `safe`、`low`、`medium`、`high`、`critical`。
+- `command`：必填，命令数组，不使用 shell 字符串。
+- `parameters`：必填，JSON object schema，决定 LLM 看到的工具参数。
+- `[args]`：必填，扁平参数映射；`input = "--input"` 会把工具参数 `input` 翻译成 `--input <value>`。
+- `timeout_seconds`：可选，命令超时时间。
+- `expose_root`：可选，默认 `false`；为 `true` 时，发现该 Skill 时会暴露 Skill 根路径。
+
+ATRI-X 只读取 Skill 根目录下的 `ATRIX_SKILL.toml`，不递归扫描。执行时工作目录固定为该 Skill 根目录，stdout 会作为工具结果；若 stdout 是 `{"content":"..."}` JSON，会取 `content` 字段。
 
 ## Go Skill 编译器路径
 
