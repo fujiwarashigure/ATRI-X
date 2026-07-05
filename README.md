@@ -28,10 +28,10 @@ ATRI-X does not inject the full schema of all tools by default in every round of
 
 **Layering of resident memory and long-term memory**: Resident memory only saves short, stable information that truly needs to be injected into every round, and internally distinguishes between 'core' (requiring confirmation for modification) and 'normal' (organizable); Longer and more complex memories are queried by the LLM on demand via `long_memory`. Long-term memory uses Markdown source data and SQLite FTS, balancing transparency and retrieval efficiency.
 
-| Mode   | Tool               | Applicable Scenarios                                 | Token consumption for the first request |
-| ------ | ------------------ | ---------------------------------------- | --------------------- |
-| `chat` | No injection             | Small talk, companionship, lightweight Q&A, low-cost conversation         | <500 (cache hit 95%+)   |
-| `work` | Enable tool discovery and invocation | Complex tasks such as search, files, commands, Cron, Skills, etc. | <1000 (cache hit 90%+)  |
+| Mode   | Tool               | Applicable Scenarios                                 | Token consumption for the first request      |
+| ------ | ------------------ | ---------------------------------------- | -------------------------- |
+| `chat` | No injection             | Small talk, companionship, lightweight Q&A, low-cost conversation         | <500 (subsequent cache hit 95%+)  |
+| `work` | Enable tool discovery and invocation | Complex tasks such as search, files, commands, Cron, Skills, etc. | <1000 (subsequent cache hit 90%+) |
 
 ### II. Powerful and Extensible
 
@@ -84,8 +84,8 @@ Common startup methods:
 ```bash
 atri-x              # Automatic mode: Prioritize attempting the default remote CLI client; fall back to full foreground startup when local is unreachable
 atri-x run          # Full foreground: Local CLI + Enabled platforms + Cron
-atri-x cli [-c 名称] # Remote CLI client: Connect to a resident ATRI-X server
-atri-x -c 名称      # Connect to the server directly using a specified CLI client profile
+atri-x cli [-c name]# Remote CLI client: Connect to a resident ATRI-X server
+atri-x -c name      # Connect to the server directly using a specified CLI client profile
 atri-x service run  # Linux/headless service mode: Do not start local CLI; remote CLI server, platforms, and Cron can be enabled
 ```
 
