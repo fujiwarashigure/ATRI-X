@@ -29,7 +29,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/go/write_atrix_hook/SKILL.atriyph` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
 
 
 开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
@@ -185,7 +185,7 @@ token_env = ["ATRIX_CLI_WINDOWS_TOKEN"]
 
 ## AgentSkill 工具化配置
 
-AgentSkill 默认只作为说明文档使用。若要把 `skills/agent/<skill>/` 注册成普通工具，在该 Skill 根目录添加 `ATRIX_SKILL.toml`：
+AgentSkill 默认只作为说明文档使用；若按文档执行脚本，风险由实际调用的 `shell` 等工具承担。若要把 `skills/agent/<skill>/` 注册成普通工具，在该 Skill 根目录添加 `ATRIX_SKILL.toml`，工具风险以其中的 `risk` 为准。默认生成的 `agent_skill_creator` Skill 可用于查看说明并辅助创建该文件：
 
 ```toml
 risk = "medium"
