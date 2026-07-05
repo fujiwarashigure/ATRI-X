@@ -11,34 +11,25 @@ ATRI-X 是一个使用 Go 编写的轻量级 Agent/Chatbot 框架，目标是在
 
 **极致轻量的 Go 实现**：
 
-| 指标 | 数值 |
-| --- | --- |
-| 本地启动耗时 | <10ms（N5105，SATA 固态） |
-| 常驻内存 | ~30MB |
+| 指标           | 数值                            |
+| -------------- | ------------------------------- |
+| 本地启动耗时   | <10ms（N5105，SATA 固态上测试） |
+| 常驻内存       | ~30MB                           |
+| 二进制文件大小 | <30MB                           |
 
 **极致节省 Token 的工具发现**： 研究表明，许多普通用户仍主要将 LLM 类产品用作更高级的搜索引擎、写作助手和倾听对象，频繁工具调用并不是所有对话的常态。
-参考：Chatterji et al., *How People Use ChatGPT*, NBER, 2025；Yan et al., *ShareChat: A Dataset of Chatbot Conversations in the Wild*, arXiv:2512.17843, 2025。
+参考：Chatterji et al., _How People Use ChatGPT_, NBER, 2025；Yan et al., _ShareChat: A Dataset of Chatbot Conversations in the Wild_, arXiv:2512.17843, 2025。
 
 ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是仅暴露 `discover_tool` 和当前可用工具名称。模型需要使用工具时，先按需发现工具详情，再由 Agent 注入对应 schema。极大程度减少无效上下文开销。
 
-**Chat / Work 双模式**：
-
-| 模式 | 工具 | 适用场景 |
-| --- | --- | --- |
-| `chat` | 不注入 | 闲聊、陪伴、轻量问答、低成本对话 |
-| `work` | 启用工具发现与调用 | 搜索、文件、命令、Cron、Skill 等复杂任务 |
-
-两种模式可独立配置模型，让低成本模型承担闲聊，让强模型专注处理复杂任务。
+**Chat / Work 双模式**：两种模式可独立配置模型，让低成本模型承担闲聊，让强模型专注处理复杂任务。
 
 **常驻记忆与长期记忆分层**： 常驻记忆只保存短小、稳定、真正需要每轮注入的信息，并在内部区分需确认修改的 core 与可整理的 normal；更长、更复杂的记忆由 LLM 按需通过 `long_memory` 查询。长期记忆使用 Markdown 源数据和 SQLite FTS，兼顾透明性和检索效率。
 
-个人日常使用，一次请求 token 消耗：
-
-| 场景 | Token 消耗 |
-| --- | --- |
-| work 模式 | <1000 |
-| chat 模式 | <500 |
-| 缓存命中 | >90% |
+| 模式   | 工具               | 适用场景                                 | 第一次请求 Token 消耗 |
+| ------ | ------------------ | ---------------------------------------- | --------------------- |
+| `chat` | 不注入             | 闲聊、陪伴、轻量问答、低成本对话         | <500 (缓存命中95%+)   |
+| `work` | 启用工具发现与调用 | 搜索、文件、命令、Cron、Skill 等复杂任务 | <1000 (缓存命中90%+)  |
 
 ### 二、强大可扩展
 
@@ -51,7 +42,6 @@ ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是
 **可由 LLM 创建的 ATRI-X Skill**： ATRI-X 内置 `create_atrix_skill` 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。创建时自动校验 Atriyph 语法，可选附带 Go 源码并编译；创建后的纯 Atriyph 文本或 Go 源码由统一的 `read_atrix_skill` / `modify_atrix_skill` 维护，源码改完后通过 `finalize_atrix_skill` 统一格式化、编译并返回检查结果。
 
 **兼容外置 AgentSkill**： 除了原生 Go Skill，ATRI-X 也兼容遵从 agentskills.io 风格的外置 AgentSkill。自动扫描 `skills/agent/<skill>/SKILL.md` 或 `SKILL.atriyph`，读取名称、描述、适用场景和风险等级；当前可通过隐藏包装工具执行附带 Python 脚本。
-
 
 ### 三、Atrinis 事件感知系统
 
@@ -87,7 +77,6 @@ Atrinis 是 ATRI-X 的监听枢纽，Atriwisp 是分布在各地的外部监听�
 
 ## 使用方法
 
-
 常用启动方式：
 
 ```bash
@@ -122,4 +111,3 @@ Shell 补全可通过 `atri-x completion <shell>` 生成，支持 `bash`、`zsh`
 ## 开发状态
 
 ATRI-X 仍在快速开发中，接口、配置和内部实现可能继续调整。当前更适合作为个人 Agent/机器人框架探索使用。
-
