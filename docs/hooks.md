@@ -493,7 +493,7 @@ if __name__ == "__main__":
 
 ### write_atrix_hook Skill 示例
 
-可以把下面内容保存为 `skills/go/write_atrix_hook/SKILL.atriyph`，用于让 LLM 按需求生成规则 Hook 配置和可选 exec 脚本。
+下面内容在ATRI-X第一次运行时自动生成在 `skills/go/write_atrix_hook/SKILL.atriyph`，用于让 LLM 按需求生成规则 Hook 配置和可选 exec 脚本。
 
 ```text
 #skill write_atrix_hook - 根据需求编写 ATRI-X 规则 Hook
