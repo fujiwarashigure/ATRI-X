@@ -117,7 +117,8 @@ platform.name / scope_id / user_id / conversation_id / message_id / reply_to_mes
 actor.id / user_id / role / group_role / display_name
 session.id / mode / status
 request.id / kind / phase
-message.text / content_text / role
+message.text / content_text / raw_text / role
+message.reply.message_id / sender_id / text / content_text
 llm.text / raw_text / latest_user_text / latest_user_content_text / provider / model
 tool.name / arguments / result / risk
 ```
@@ -313,8 +314,13 @@ init frame 字段：
 | `request.phase` | Request/Turn 阶段 |
 | `message.id` | 当前消息 ID；未设置时为空 |
 | `message.role` | 消息角色，例如 `user`、`assistant` |
-| `message.segments` | 当前消息片段数组；脚本读取用户文本应优先从这里聚合 `type=text` 的片段 |
+| `message.raw_text` | 平台原始当前消息文本，不包含引用 fallback 展开内容 |
+| `message.segments` | 当前消息片段数组；脚本读取用户文本应优先从这里聚合 `type=text` 的片段。`platform.message.received` 中这里表示当前入站消息，不包含被引用消息文本 |
 | `message.messages` | 相关 LLM 消息数组；仅部分 Hook 点填充 |
+| `message.reply.message_id` | 当前消息引用/回复的目标平台消息 ID |
+| `message.reply.sender_id` | 被引用消息发送者 ID；平台未提供时为空 |
+| `message.reply.text` | 被引用消息的纯文本内容；没有文本时为空 |
+| `message.reply.content_text` | 被引用消息的可读内容文本，可能包含图片/文件占位 |
 | `llm.provider` | LLM provider 名 |
 | `llm.model` | LLM model 名 |
 | `llm.messages` | 本次 LLM 消息数组 |
@@ -347,7 +353,7 @@ init frame 字段：
 | `user_id` | `at` 输出的目标用户 ID |
 | `message_id` | `reply` 输出的目标平台消息 ID |
 
-注意：`message.text`、`message.content_text`、`llm.latest_user_text` 等是规则匹配和模板变量里的派生字段，不是 init JSON 里的同名字段。exec 脚本需要从 `event.message.segments` 或 `event.llm.messages[].segments` 读取原始片段。
+注意：`message.text`、`message.content_text`、`llm.latest_user_text` 等是规则匹配和模板变量里的派生字段，不是 init JSON 里的同名字段。exec 脚本需要从 `event.message.segments`、`event.message.raw_text`、`event.message.reply` 或 `event.llm.messages[].segments` 读取原始数据。
 
 `match.regex[]` 字段：
 
@@ -451,7 +457,8 @@ actions = [
 {{platform.name}}          {{platform.scope_id}}      {{platform.user_id}}
 {{platform.message_id}}    {{platform.reply_to_message_id}}
 {{actor.id}}               {{actor.user_id}}          {{actor.role}}
-{{message.text}}           {{message.content_text}}
+{{message.text}}           {{message.content_text}}   {{message.raw_text}}
+{{message.reply.message_id}} {{message.reply.text}}    {{message.reply.content_text}}
 {{llm.text}}               {{llm.raw_text}}           {{llm.latest_user_text}}
 {{tool.arguments}}         {{tool.result}}
 {{actions.<name>.result}}  {{actions.<name>.error}}
@@ -503,9 +510,9 @@ ATRI-X 会向脚本 stdin 写入 response frame：
 
 ## 撤回引用消息示例
 
-以下示例用于超级管理员回复某条平台消息并发送“撤回这条”时，通过 Atriena v3 `calls` 调用平台 API 撤回被引用的消息。
+以下示例用于超级管理员回复某条平台消息并发送“撤回”时，通过 Atriena v3 `calls` 调用平台 API 撤回被引用的消息。
 
-前提：平台适配器需要支持原始 API 调用，且本次消息必须带引用/回复关系。Hook 里可通过 `platform.reply_to_message_id` 读取被引用消息的平台消息 ID，通过 `platform.message_id` 读取当前触发 Hook 的消息 ID。
+前提：平台适配器需要支持原始 API 调用，且本次消息必须带引用/回复关系。Hook 里可通过 `message.reply.message_id` 或 `platform.reply_to_message_id` 读取被引用消息的平台消息 ID，通过 `platform.message_id` 读取当前触发 Hook 的消息 ID。`platform.message.received` 中的 `message.text` 只表示当前用户发送的文本；被引用内容在 `message.reply.*` 中，不会污染 `message.text`。
 
 Telegram 使用 Bot API `deleteMessage`，机器人必须有删除目标消息的权限，且目标消息不能超过平台允许的删除时限。
 
@@ -515,10 +522,11 @@ Telegram 使用 Bot API `deleteMessage`，机器人必须有删除目标消息�
 [[rules]]
 name = "recall_quoted_message"
 on = "platform.message.received"
+require_wakeup = false
 roles = ["superadmin"]
 match = [
-  { field = "message.text", op = "fullmatch", value = "撤回这条" },
-  { field = "platform.reply_to_message_id", op = "exists" },
+  { field = "message.text", op = "fullmatch", value = "撤回" },
+  { field = "message.reply.message_id", op = "exists" },
 ]
 
 consume = true
@@ -721,7 +729,7 @@ step rule_shape {
 }
 
 step fields {
-  ** 匹配字段白名单：platform.name,scope_id,user_id,conversation_id,message_id,reply_to_message_id,actor.id,actor.user_id,actor.role,actor.group_role,actor.display_name,session.id,session.mode,session.status,request.id,request.kind,request.phase,message.text,message.content_text,message.role,llm.text,llm.raw_text,llm.latest_user_text,llm.latest_user_content_text,llm.provider,llm.model,tool.name,tool.arguments,tool.result,tool.risk
+  ** 匹配字段白名单：platform.name,scope_id,user_id,conversation_id,message_id,reply_to_message_id,actor.id,actor.user_id,actor.role,actor.group_role,actor.display_name,session.id,session.mode,session.status,request.id,request.kind,request.phase,message.text,message.content_text,message.raw_text,message.role,message.reply.message_id,message.reply.sender_id,message.reply.text,message.reply.content_text,llm.text,llm.raw_text,llm.latest_user_text,llm.latest_user_content_text,llm.provider,llm.model,tool.name,tool.arguments,tool.result,tool.risk
   ** 可编辑 field 映射：on=platform.message.received/agent.input.prepared 时 field="message.text"；on=llm.turn.prepared/llm.request.prepared 时 field="llm.latest_user_text"；on=llm.response.received 时 field="llm.text"；on=tool.call.prepared 时 field="tool.arguments"；on=tool.call.completed 时 field="tool.result"；on=agent.output.prepared/agent.turn.output.prepared/platform.message.sent 时 field="message.text"；llm.raw_text 只可匹配不可作为 field
 }
 
@@ -742,7 +750,7 @@ step actions {
   ** outputs 必须是 segment 数组
 }
 
-step templates: ** 模板变量白名单：{{platform.name}},{{platform.scope_id}},{{platform.user_id}},{{platform.message_id}},{{platform.reply_to_message_id}},{{actor.id}},{{actor.user_id}},{{actor.role}},{{message.text}},{{message.content_text}},{{llm.text}},{{llm.raw_text}},{{llm.latest_user_text}},{{tool.arguments}},{{tool.result}},{{actions.<name>.result}},{{actions.<name>.error}},{{match.regex.0.group.1}},{{match.regex.0.<name>}}
+step templates: ** 模板变量白名单：{{platform.name}},{{platform.scope_id}},{{platform.user_id}},{{platform.message_id}},{{platform.reply_to_message_id}},{{actor.id}},{{actor.user_id}},{{actor.role}},{{message.text}},{{message.content_text}},{{message.raw_text}},{{message.reply.message_id}},{{message.reply.sender_id}},{{message.reply.text}},{{message.reply.content_text}},{{llm.text}},{{llm.raw_text}},{{llm.latest_user_text}},{{tool.arguments}},{{tool.result}},{{actions.<name>.result}},{{actions.<name>.error}},{{match.regex.0.group.1}},{{match.regex.0.<name>}}
 
 step exec_protocol {
   ** exec 字段：command,cwd,timeout_seconds,field
@@ -773,7 +781,7 @@ step exec_init {
   ** init 顶层字段：type,version,event,match,runtime
   ** init.event 常用字段：platform,actor,session,request,message,llm,tool,outputs,error
   ** init.event.message 字段：id,role,segments,messages
-  ** init.event.message 没有 message.text/message.content_text
+  ** init.event.message 没有 message.text/message.content_text；读取当前原始文本用 raw_text，读取引用用 reply
   ** 读用户文本时拼接 init.event.message.segments 中 type=text 的片段
   ** init.event.llm 字段：provider,model,messages,tools,usage,raw_text,text,tool_calls,elapsed_ms
   ** init.event.tool 字段：id,name,arguments,risk,result,error
