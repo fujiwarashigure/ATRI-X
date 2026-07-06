@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 	"errors"
 	"os"
 	"path/filepath"
@@ -8,6 +9,12 @@ import (
 	"runtime"
 	"testing"
 )
+
+func TestDefaultWriteAtrixHookSkillAtriyphParses(t *testing.T) {
+	if _, err := atriyph.ParseSkill(defaultWriteAtrixHookSkillAtriyph, "write_atrix_hook"); err != nil {
+		t.Fatalf("default write_atrix_hook skill should parse: %v", err)
+	}
+}
 
 func TestResolvePathUsesExplicitPath(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "app.toml")
