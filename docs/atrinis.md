@@ -124,9 +124,9 @@ Atriwisp 只负责“看见并上报”。它不直接控制 ATRI-X，不直接�
 
 ### Atriena（艾露维娜）：事件协议
 
-Atriena 是 Atriwisp 向 Atrinis 投递事件的 JSON over HTTP 协议。ATRI-X 内部的 Hook exec 也可以通过同一 Atriena Bus 提交 Atriena 请求；这类请求不经过 HTTP token，而是带 `hook` origin，由 Atrinis 统一执行 direct、LLM 和 calls。
+Atriena 是 Atriwisp 向 Atrinis 投递事件的 JSON over HTTP 协议。
 
-它负责把“外面发生了什么”或“内部 Hook 想做什么”变成 Atrinis 能理解的统一事件：来源是谁、事件 ID 是什么、内容是什么、希望怎么处理、希望投递到哪里。
+它负责把“外面发生了什么”变成 Atrinis 能理解的统一事件：来源是谁、事件 ID 是什么、内容是什么、希望怎么处理、希望投递到哪里。
 
 
 首期 endpoint：

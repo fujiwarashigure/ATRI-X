@@ -25,7 +25,16 @@ ATRI-X 随程序注册两类内置 Hook：
 
 ## 规则 Hook 配置
 
-规则 Hook 配置固定在配置目录的 `plugins/hooks.toml`。插件专属配置放在 `plugins/<plugin-name>.toml`。
+规则 Hook 主配置固定在配置目录的 `plugins/hooks.toml`。插件规则通过主配置里的 `[[plugins]]` 引用，默认读取 `plugins/<plugin-name>/hook.toml`。
+
+```toml
+[[plugins]]
+name = "demo"
+enabled = true
+# path = "demo/hook.toml" # 可选；必须是相对 plugins/ 的路径
+```
+
+插件配置文件可以包含 `[plugin]` 元信息和自己的 `[[rules]]`。插件规则里的本地相对路径和相对 `cwd` 都基于该插件配置所在目录解析。
 
 ### 规则结构
 
@@ -202,13 +211,15 @@ segment 格式与 [Atriena 协议](atrinis-usage.md#segments多模态消息段)�
 
 | 字段 | 说明 |
 | --- | --- |
-| `kind` | `text` / `image` / `file` / `emoticon`，默认 `text` |
-| `text` | 文本内容（text 类型必填，其他类型可选作为附加文本） |
+| `kind` | `text` / `image` / `file` / `emoticon` / `at` / `reply`，默认 `text` |
+| `text` | 文本内容（text 类型必填，其他类型可选作为附加文本；at 类型未设置 `user_id` 时作为用户 ID） |
 | `url` | HTTP/HTTPS URL（image/file） |
-| `path` | 本地文件路径（image/file/emoticon）；普通路径按平台默认方式处理，`base64://`、`file://`、`http://`、`https://` 前缀表示调用方已指定媒体源，会按平台能力直接处理 |
+| `path` | 本地文件路径（image/file/emoticon）；reply 类型未设置 `message_id` 时作为被回复消息 ID；普通路径按平台默认方式处理，`base64://`、`file://`、`http://`、`https://` 前缀表示调用方已指定媒体源，会按平台能力直接处理 |
 | `base64` | base64 编码数据（image/file） |
 | `name` | 文件名或表情名 |
 | `mime_type` | MIME 类型提示 |
+| `user_id` | at 目标用户 ID |
+| `message_id` | reply 目标消息 ID |
 
 `target` 和 `timing` 从 action 继承到所有 segment。
 
@@ -227,44 +238,184 @@ actions = [
 
 #### exec
 
-执行本地脚本。脚本默认以 `plugins/` 为工作目录，`cwd` 可覆盖（绝对路径直接使用，相对路径仍基于 `plugins/`）。
+执行本地脚本。主配置里的脚本默认以 `plugins/` 为工作目录；插件配置里的脚本默认以插件配置所在目录为工作目录，且相对 `cwd` 不能逃出插件目录。
 
 `command` 会按空白拆分为可执行程序和参数后直接执行，不会隐式套 `sh -c`。例如 `uv run script.py` 会直接执行 `uv`，`bash ./script.sh` 会直接执行 `bash`；需要管道、重定向、`&&` 等 shell 语法时，请显式写 `bash -lc "..."`、`sh -c "..."` 或平台对应解释器。
 
-默认 stdin 是包含完整 event 和 match 上下文的 JSON。也可以用 `stdin` 字段自定义 stdin 内容（支持模板渲染）。
-
-`stdout` 模式：
-
-| 模式 | 说明 |
-| --- | --- |
-| `capture` | 默认值，把 stdout 保存到 `{{actions.<name>.result}}`，供后续 action 使用 |
-| `send` | 把 stdout 作为文本输出发送 |
-| `outputs` | 把 stdout 解析为 JSON，提取 `outputs` 数组和可选 `text` |
-| `atriena` | 把 stdout 解析为 Atriena JSON 请求，经内部 Atriena Bus 交给 Atrinis |
-| `ignore` | 忽略 stdout |
+exec 使用 `hook.v1` 行协议：ATRI-X 启动脚本后，会先向 stdin 写一行 init JSON；脚本向 stdout 每行写一个 JSON frame，最后必须写 `done` 或 `error` frame。stderr 会进入日志，不作为协议数据。
 
 ```toml
 actions = [
-  { type = "exec", command = "uv run script.py", stdout = "capture", timeout_seconds = 30 },
+  { name = "script", type = "exec", command = "uv run script.py", timeout_seconds = 30 },
 ]
 ```
 
-### exec outputs 模式
+### exec hook.v1 协议
 
-`stdout = "outputs"` 时，脚本 stdout 必须是 JSON：
+init frame 由 ATRI-X 写入脚本 stdin：
 
 ```json
 {
-  "outputs": [
-    {"kind": "emoticon", "name": "微笑", "path": "emoticons/微笑/01.png"},
-    {"kind": "text", "text": "已处理"}
-  ],
-  "text": "清理后的文本"
+  "type": "init",
+  "version": "hook.v1",
+  "event": {},
+  "match": {},
+  "runtime": {
+    "plugin_name": "demo",
+    "plugin_dir": ".../plugins/demo",
+    "config_path": ".../plugins/demo/hook.toml",
+    "rule_name": "demo_rule",
+    "cwd": ".../plugins/demo"
+  }
 }
 ```
 
-- `outputs`：每项格式与 send segments 一致，转换为输出意图发送到平台。
-- `text`：可选。当 action 设了 `field` 时，`text` 会整体覆写该字段（走可编辑字段校验）；不设 `field` 或 `text` 为空时不修改原文。
+init frame 字段：
+
+| 字段 | 说明 |
+| --- | --- |
+| `type` | 固定为 `init` |
+| `version` | 固定为 `hook.v1` |
+| `event` | 当前 Hook 事件上下文；字段按 Hook 点填充，不相关字段为空、零值或省略 |
+| `match` | 当前规则匹配上下文；正则命中时包含 `regex` 数组 |
+| `runtime` | 本次 exec 运行上下文 |
+
+`event` 字段：
+
+| 字段 | 说明 |
+| --- | --- |
+| `id` | Hook 事件 ID |
+| `point` | Hook 点，例如 `platform.message.received`、`llm.response.received` |
+| `time` | 事件时间，RFC3339 格式 |
+| `metadata` | 预留/扩展元数据对象 |
+| `control.consume` | 是否阻止后续 slash 命令和 LLM 处理 |
+| `control.stop_propagation` | 是否阻止同 Hook 点后续规则执行 |
+| `platform.name` | 平台名，例如 `qqonebot`、`telegram`、`cli` |
+| `platform.scope_id` | 平台会话范围 ID；由平台适配器生成，通常带范围前缀，例如 `group:<id>`、`private:<id>` |
+| `platform.user_id` | 当前平台发送者用户 ID |
+| `platform.conversation_id` | 平台会话 ID；平台未提供时为空 |
+| `platform.message_id` | 当前入站平台消息 ID |
+| `platform.reply_to_message_id` | 当前消息引用/回复的目标平台消息 ID |
+| `actor.id` | ATRI-X 内部 Actor ID，通常由平台名和用户 ID 组合得到 |
+| `actor.user_id` | Actor 对应的平台用户 ID |
+| `actor.role` | ATRI-X 内部角色：`superadmin` 或 `user` |
+| `actor.group_role` | 群身份：`owner`、`admin`、`member`、`unknown` |
+| `actor.display_name` | 显示名 |
+| `session.id` | 当前 Session ID |
+| `session.mode` | 当前 Session 模式 |
+| `session.title` | 当前 Session 标题 |
+| `session.status` | 当前 Session 状态 |
+| `request.id` | 当前 Request ID |
+| `request.kind` | Request 类型 |
+| `request.session_id` | Request 关联的 Session ID |
+| `request.phase` | Request/Turn 阶段 |
+| `message.id` | 当前消息 ID；未设置时为空 |
+| `message.role` | 消息角色，例如 `user`、`assistant` |
+| `message.segments` | 当前消息片段数组；脚本读取用户文本应优先从这里聚合 `type=text` 的片段 |
+| `message.messages` | 相关 LLM 消息数组；仅部分 Hook 点填充 |
+| `llm.provider` | LLM provider 名 |
+| `llm.model` | LLM model 名 |
+| `llm.messages` | 本次 LLM 消息数组 |
+| `llm.tools` | 本次请求可用工具 schema 数组 |
+| `llm.usage` | LLM usage 统计；未提供时为空 |
+| `llm.raw_text` | LLM 原始响应文本；可匹配，不可编辑 |
+| `llm.text` | 当前可见/可编辑的 LLM 文本 |
+| `llm.tool_calls` | LLM 返回的工具调用数组 |
+| `llm.elapsed_ms` | LLM 调用耗时毫秒数 |
+| `tool.id` | 工具调用 ID |
+| `tool.name` | 工具名 |
+| `tool.arguments` | 工具参数 JSON 字符串 |
+| `tool.risk` | 工具风险等级 |
+| `tool.result` | 工具结果文本 |
+| `tool.error` | 工具错误；通常仅用于错误上下文 |
+| `outputs` | 当前事件已累计的输出意图数组 |
+| `error` | 当前错误上下文；仅错误 Hook 相关 |
+
+`message.segments`、`llm.messages[].segments` 和 stdout `output`/`segments` 使用的常见片段字段：
+
+| 字段 | 说明 |
+| --- | --- |
+| `type` / `kind` | 片段类型；入站消息常见为 `text`、`image`、`file`，输出还支持 `emoticon`、`at`、`reply` |
+| `text` | 文本内容或附加文本 |
+| `url` | HTTP/HTTPS 资源 URL |
+| `path` | 本地资源路径；输出时相对 `plugins/` 或插件目录解析 |
+| `base64` | base64 编码数据；仅输出片段使用 |
+| `name` | 文件名或表情名 |
+| `mime_type` | MIME 类型提示 |
+| `user_id` | `at` 输出的目标用户 ID |
+| `message_id` | `reply` 输出的目标平台消息 ID |
+
+注意：`message.text`、`message.content_text`、`llm.latest_user_text` 等是规则匹配和模板变量里的派生字段，不是 init JSON 里的同名字段。exec 脚本需要从 `event.message.segments` 或 `event.llm.messages[].segments` 读取原始片段。
+
+`match.regex[]` 字段：
+
+| 字段 | 说明 |
+| --- | --- |
+| `field` | 正则匹配的字段名 |
+| `value` | 正则表达式 |
+| `text` | 被匹配的文本 |
+| `groups` | 捕获组数组；`groups[0]` 为完整匹配 |
+| `named` | 命名捕获组对象 |
+| `start` / `end` | 命中范围 |
+
+`runtime` 字段：
+
+| 字段 | 说明 |
+| --- | --- |
+| `plugin_name` | 插件名；主 `plugins/hooks.toml` 中的规则为空 |
+| `plugin_dir` | 插件目录；主规则为空 |
+| `config_path` | 当前规则配置文件路径 |
+| `rule_name` | 当前规则最终名称 |
+| `cwd` | exec 进程工作目录 |
+
+脚本可写的 stdout frame：
+
+| type | 说明 |
+| --- | --- |
+| `output` | 排入本次 Hook 的输出意图，`output` 字段使用 send segment 格式 |
+| `request` | 调用 ATRI-X 能力；带 `id` 时 ATRI-X 会向 stdin 写 `response` frame |
+| `done` | 正常结束；可带 `matched=false` 表示本规则不生效并回滚此前 action 效果 |
+| `error` | 失败结束，`error` 或 `message` 字段作为错误文本 |
+
+`done` 可选字段：
+
+| 字段 | 说明 |
+| --- | --- |
+| `matched` | 默认 `true`；为 `false` 时整条规则视为未命中，后续 action 不再执行 |
+| `result` | 保存到 `{{actions.<name>.result}}` |
+| `error` | 保存到 `{{actions.<name>.error}}` |
+| `message.text` | 覆写 action 的 `field`；未设置 `field` 时覆写 `message.text` |
+| `consume` | 设置本事件的 consume 控制位 |
+| `stop_propagation` | 设置本事件的 stop_propagation 控制位 |
+
+支持的 request method：
+
+| method | params | 说明 |
+| --- | --- | --- |
+| `platform.call` | `platform`、`api`、`params` | 调用当前平台原始 API；不能跨平台调用 |
+| `output.send` | `output` | 立即发送一个输出并返回 receipt；需要 app 层 sender 可用 |
+| `message.get_reply` | 无 | 返回当前消息引用/回复的目标消息 ID |
+| `message.get` | 预留 | 当前返回 `available=false` |
+| `hook.log` | 任意 JSON | 写入 Hook 插件日志 |
+
+最小 Python 示例：
+
+```python
+#!/usr/bin/env python3
+import json
+import sys
+
+init = json.loads(sys.stdin.readline())
+event = init["event"]
+segments = event.get("message", {}).get("segments", [])
+text = "".join(seg.get("text", "") for seg in segments if seg.get("type") == "text")
+
+print(json.dumps({
+    "type": "output",
+    "output": {"kind": "text", "text": "收到：" + text},
+}, ensure_ascii=False), flush=True)
+print(json.dumps({"type": "done", "result": "ok"}, ensure_ascii=False), flush=True)
+```
 
 ```toml
 [[rules]]
@@ -274,13 +425,13 @@ if = "llm.text"
 op = "regex"
 value = "\\[\\[[^\\[\\]]+\\]\\]"
 actions = [
-  { type = "exec", command = "uv run emoticon_extract.py", stdout = "outputs", field = "llm.text", timing = "after_assistant" },
+  { name = "extract", type = "exec", command = "uv run emoticon_extract.py", field = "llm.text", timing = "after_assistant" },
 ]
 ```
 
 ### 模板变量
 
-文本字段和 exec command/stdin 支持 `{{...}}` 模板渲染：
+文本字段和 exec command 支持 `{{...}}` 模板渲染：
 
 ```
 {{platform.name}}          {{platform.scope_id}}      {{platform.user_id}}
@@ -322,27 +473,19 @@ stop_propagation = true      # 阻止同一 Hook 点后续规则继续执行
 
 `consume = true` 通常用于 `platform.message.received` Hook：发送输出后阻止后续命令和 LLM 处理，让 Hook 完全接管消息。
 
-## Hook exec 投递 Atriena
+## Hook exec 平台调用
 
-规则 Hook 的 `exec` action 可以设置 `stdout = "atriena"`。脚本 stdout 必须是完整 Atriena JSON 请求，ATRI-X 会通过内部 Atriena Bus 交给 Atrinis，而不是重新走 HTTP token 鉴权。
+规则 Hook 的 `exec` action 可以通过 `request` frame 调用当前平台原始 API。平台调用会进入审计日志，并且只能调用当前事件所属平台，不能从一个平台 Hook 跨到另一个平台。
 
-```toml
-[[rules]]
-name = "server-script"
-on = "platform.message.received"
-roles = ["superadmin"]
-always = true
-
-[[rules.actions]]
-type = "exec"
-name = "notify"
-command = "uv run scripts/build_atriena.py"
-stdout = "atriena"
+```json
+{"type":"request","id":"call-1","method":"platform.call","params":{"api":"delete_msg","params":{"message_id":"123"}}}
 ```
 
-脚本可以输出 `mode = "direct"` 的通知，也可以输出 `mode = "llm"` 的后台任务；后续处理仍由 Atrinis 的目标裁决、日志、去重和后台 runner 负责。
+ATRI-X 会向脚本 stdin 写入 response frame：
 
-Atriena 基于 JSON，内容必须使用 UTF-8 编码。完整 Atriena 请求字段见 [Atrinis 配置与使用](atrinis-usage.md#atriena-请求示例)。
+```json
+{"type":"response","id":"call-1","ok":true,"result":{}}
+```
 
 ## 撤回引用消息示例
 
@@ -370,19 +513,17 @@ consume = true
 type = "exec"
 name = "recall"
 command = "uv run recall_quoted_message.py"
-stdout = "atriena"
 timeout_seconds = 10
 ```
 
 ### recall_quoted_message.py
 
-脚本从 stdin 读取 Hook event JSON，按当前平台生成 Atriena v3 direct calls-only 请求。Atrinis 只执行 `calls`，请求没有 `content` 或 `segments` 时不会额外发送确认消息。
+脚本从 stdin 读取 init frame，向 stdout 写 `platform.call` request frame，再读取 response frame，最后写 done frame。
 
 ```python
 #!/usr/bin/env python3
 import json
 import sys
-import time
 
 
 def numeric_scope_id(scope_id):
@@ -392,8 +533,8 @@ def numeric_scope_id(scope_id):
 
 
 def main():
-    data = json.load(sys.stdin)
-    event = data.get("event", {})
+    init = json.loads(sys.stdin.readline())
+    event = init.get("event", {})
     platform = event.get("platform", {})
     platform_name = platform.get("name", "")
     scope_id = platform.get("scope_id", "")
@@ -402,50 +543,43 @@ def main():
     if not reply_id:
         raise SystemExit("missing platform.reply_to_message_id")
 
-    target = {"platform": platform_name}
     scope_target_id = numeric_scope_id(scope_id)
-    if scope_id.startswith("group:") or scope_id.startswith("supergroup:"):
-        target.update({"type": "group", "id": scope_target_id})
-    elif scope_id.startswith("private:"):
-        target.update({"type": "private", "id": scope_target_id})
-
-    call = {
-        "kind": "capability",
-        "name": "message.recall",
-        "platform": platform_name,
-        "target": target,
-        "params": {"message_id": reply_id},
-    }
-
-    # Telegram deleteMessage 还需要 chat_id；message.recall 会从 target.id 映射。
-    if platform_name == "telegram":
-        call["params"]["chat_id"] = scope_target_id
+    if platform_name == "qqonebot":
+        api = "delete_msg"
+        params = {"message_id": reply_id}
+    elif platform_name == "telegram":
+        api = "deleteMessage"
+        params = {"chat_id": scope_target_id, "message_id": int(reply_id)}
+    else:
+        raise SystemExit(f"unsupported platform: {platform_name}")
 
     req = {
-        "version": "atriena.v3",
-        "atriwisp": {"name": "hook_recall"},
-        "source": "rules-hook",
-        "id": f"recall-{platform_name}-{reply_id}-{int(time.time() * 1000)}",
-        "mode": "direct",
-        "targets": [target],
-        "calls": [call],
+        "type": "request",
+        "id": "recall",
+        "method": "platform.call",
+        "params": {
+            "platform": platform_name,
+            "api": api,
+            "params": params,
+        },
     }
-    json.dump(req, sys.stdout, ensure_ascii=False)
+    print(json.dumps(req, ensure_ascii=False), flush=True)
+    resp = json.loads(sys.stdin.readline())
+    if not resp.get("ok"):
+        print(json.dumps({
+            "type": "error",
+            "error": resp.get("error", "platform.call failed"),
+        }, ensure_ascii=False), flush=True)
+        return
+
+    done = {"type": "done", "result": "recalled", "consume": True}
+    if platform_name == "telegram":
+        done["message"] = {"text": "已撤回引用消息"}
+    print(json.dumps(done, ensure_ascii=False), flush=True)
 
 
 if __name__ == "__main__":
     main()
-```
-
-OneBot 也可以不用 capability，直接 raw 调用：
-
-```json
-{
-  "kind": "raw",
-  "platform": "qqonebot",
-  "api": "delete_msg",
-  "params": {"message_id": "{{platform.reply_to_message_id}}"}
-}
 ```
 
 ## 表情提取示例
@@ -463,13 +597,13 @@ if = "llm.text"
 op = "regex"
 value = "\\[\\[[^\\[\\]]+\\]\\]"
 actions = [
-  { type = "exec", command = "uv run emoticon_extract.py", stdout = "outputs", field = "llm.text", timing = "after_assistant" },
+  { name = "extract", type = "exec", command = "uv run emoticon_extract.py", field = "llm.text", timing = "after_assistant" },
 ]
 ```
 
 ### emoticon_extract.py
 
-脚本从 stdin 读取 event JSON，提取 `[[token]]`，检查 `emoticons/<token>/` 目录是否有图片，有则生成 emoticon output 并从文本中移除 token，无则保留原样。
+脚本从 stdin 读取 init frame，提取 `[[token]]`，检查 `emoticons/<token>/` 目录是否有图片，有则输出 emoticon frame 并从文本中移除 token，无则保留原样。
 
 ```python
 #!/usr/bin/env python3
@@ -484,8 +618,8 @@ EMOTICON_DIR = "emoticons"
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 
 def main():
-    data = json.load(sys.stdin)
-    text = data.get("event", {}).get("llm", {}).get("text", "")
+    init = json.loads(sys.stdin.readline())
+    text = init.get("event", {}).get("llm", {}).get("text", "")
     outputs = []
 
     def replace(match):
@@ -502,8 +636,16 @@ def main():
         return ""
 
     cleaned = TOKEN_RE.sub(replace, text).strip()
-    result = {"outputs": outputs, "text": cleaned}
-    json.dump(result, sys.stdout, ensure_ascii=False)
+    for output in outputs:
+        print(json.dumps({
+            "type": "output",
+            "output": output,
+        }, ensure_ascii=False), flush=True)
+    print(json.dumps({
+        "type": "done",
+        "message": {"text": cleaned},
+        "result": str(len(outputs)),
+    }, ensure_ascii=False), flush=True)
 
 if __name__ == "__main__":
     main()
@@ -526,13 +668,19 @@ if __name__ == "__main__":
 <- $script_name:str?
 -> $script_content:str
 ?if(windows){
-$hook_config:str=%AppData/Roaming/ATRI-X/hooks.toml
+$hook_config:str=%AppData%/ATRI-X/plugins/hooks.toml
 }
 ?else {
 $hook_config:str=~/.config/atri-x/plugins/hooks.toml
 }
 ** $requirement 是用户想实现的 Hook 行为，直接修改$hook_config；$script_name 是可选脚本文件名，仅在需要 exec 时使用
 ** $script_content 仅在需要 exec 时输出完整脚本，否则说明不需要
+** 主 hooks.toml 只允许顶层 [[plugins]] 和 [[rules]]；严格模式，不允许未知字段、旧字段 stdout/stdin，且同一条 rule 里不要混用 actions=[...] 和 [[rules.actions]]
+** 主 hooks.toml 的 [[plugins]] 字段：name 必填；enabled 可选默认 true；path 可选且必须相对 plugins/，未设置时默认读取 plugins/<name>/hook.toml
+** 插件 hook.toml 只允许顶层 [plugin] 和 [[rules]]；[plugin] 只允许 description；插件 hook.toml 不能再写 [[plugins]] 指向其他 toml，不支持套娃加载
+** 主 hooks.toml 和插件 hook.toml 的 [[rules]] 字段相同：name、on、priority、enabled、require_wakeup、if/op/value、always、match、roles、actor_roles、group_roles、action、actions、field、text、pattern、replace、kind、path、timing、tool、arguments、command、cwd、timeout_seconds、all、target、consume、stop_propagation
+** rule 的 target 字段：target.platform、target.scope_id、target.private_user_id、target.group_id、target.superadmins；未指定 target 时输出到当前上下文
+** rule 的 actions 可用两种写法二选一：内联 actions=[{type=...}]，或多段 [[rules.actions]]；单 action 也可用 action="send" 加 text/kind 等平铺字段
 ** Hook 点：platform.connected=平台连接完成；platform.message.received=平台消息刚收到（适合关键词拦截、预处理和 consume）
 ** Hook 点：agent.input.prepared=Agent 输入准备后（改写用户输入文本）；llm.turn.prepared=LLM turn 准备阶段（改写本轮 latest user 文本）；llm.request.prepared=LLM 请求发出前（改写 latest user 文本）
 ** Hook 点：llm.response.received=LLM 响应收到后（改写 assistant 文本或提取标记）；tool.call.prepared=工具调用执行前（改写 tool.arguments）；tool.call.completed=工具调用完成后（改写 tool.result）
@@ -547,26 +695,38 @@ $hook_config:str=~/.config/atri-x/plugins/hooks.toml
 ** 匹配写法：always=true 无条件匹配（不能与 if/op/value 或 match 混用）；单条件用 if/op/value；多条件 AND 用 match 数组（每项含 field/op/value）
 ** 匹配操作：exists=非空、contains=包含 value、fullmatch=完全等于、startswith=以 value 开头、endswith=以 value 结尾、regex=正则匹配（捕获组可用模板引用）
 ** 可编辑字段按 Hook 点：platform.message.received 和 agent.input.prepared→message.text；llm.turn.prepared 和 llm.request.prepared→llm.latest_user_text；llm.response.received→llm.text；tool.call.prepared→tool.arguments；tool.call.completed→tool.result；agent.output.prepared、agent.turn.output.prepared、platform.message.sent→assistant message.text；llm.raw_text 只能匹配不能编辑
-** Action 类型：prepend=开头追加、append=末尾追加、replace=替换（可用 pattern/replace/all）、delete=删除（等同 replace 空串）、send=生成输出意图由 Output Manager 发送、tool=调用已注册工具（结果存 actions.<name>.result）、exec=执行本地脚本（默认 cwd 是 plugins/）
+** Action 类型：prepend=开头追加、append=末尾追加、replace=替换（可用 pattern/replace/all）、delete=删除（等同 replace 空串）、send=生成输出意图由 Output Manager 发送、tool=调用已注册工具（结果存 actions.<name>.result）、exec=执行本地脚本（使用 hook.v1 行协议）
 ** send 字段：kind（text/image/file/emoticon/at，默认 text）、text（文本内容）、timing（immediate/after_assistant，默认 immediate）、target（输出目标，未指定时用当前上下文）
-** segment 字段：kind（text/image/file/emoticon）、text（内容或附加文本）、url（HTTP/HTTPS）、path（相对 plugins/ 的本地路径）、base64（编码数据）、name（文件名或表情名）、mime_type（MIME 提示）
-** exec 字段：command（命令）、cwd（可覆盖工作目录，相对路径仍基于 plugins/）、stdin（自定义标准输入，支持模板；未设置时为 event+match 的 JSON）、timeout_seconds（超时）、field（仅 stdout=outputs 且需用 text 覆写字段时使用）
-** exec stdout 模式：capture=默认（存 actions.<name>.result）、send=作为文本输出发送、outputs=解析 JSON 读取 outputs 数组和可选 text、atriena=解析为 Atriena JSON 请求交内部 Atrinis、ignore=忽略
-** outputs JSON：outputs 数组每项格式同 send segments；text 可选，action 设 field 时用 text 覆写该字段
-** atriena JSON：必须是完整 Atriena 请求，UTF-8 编码，经内部 Atriena Bus 投递
+** segment 字段：kind（text/image/file/emoticon/at/reply）、text（内容或附加文本）、url（HTTP/HTTPS）、path（相对 plugins/ 或插件目录的本地路径）、base64（编码数据）、name（文件名或表情名）、mime_type（MIME 提示）、user_id（at）、message_id（reply）
+** exec 字段：command（命令）、cwd（可覆盖工作目录；插件规则的相对 cwd 不能逃出插件目录）、timeout_seconds（超时）、field（done.message.text 覆写的字段）
+** exec 协议：ATRI-X 向 stdin 写 init frame；脚本向 stdout 逐行写 JSON frame，支持 output、request、done、error；最后必须写 done 或 error
+** exec init 顶层字段：type=init、version=hook.v1、event=当前 Hook 事件上下文、match=规则匹配上下文、runtime=本次 exec 运行上下文；字段按 Hook 点填充，不相关字段为空/零值/省略
+** exec event 字段：id、point、time、metadata、control.consume、control.stop_propagation、platform、actor、session、request、message、llm、tool、outputs、error
+** exec event.platform：name=平台名；scope_id=平台会话范围ID（由平台适配器生成，通常如 group:<id>、private:<id>）；user_id=发送者用户ID；conversation_id=平台会话ID；message_id=当前入站平台消息ID；reply_to_message_id=当前消息引用/回复目标平台消息ID
+** exec event.actor：id=ATRI-X内部Actor ID；user_id=平台用户ID；role=superadmin/user；group_role=owner/admin/member/unknown；display_name=显示名
+** exec event.session/request：session.id/mode/title/status；request.id/kind/session_id/phase
+** exec event.message：id、role、segments、messages；脚本读取用户文本优先从 message.segments 中拼接 type=text 的片段，不要假设 init JSON 有 message.text/message.content_text 字段
+** exec event.llm：provider、model、messages、tools、usage、raw_text、text、tool_calls、elapsed_ms；raw_text 是原始响应文本，text 是当前可见/可编辑文本
+** exec event.tool：id、name、arguments、risk、result、error
+** exec segment 字段：入站 message.segments/llm.messages[].segments 常见 type/text/url/mime_type/name；stdout output/segments 使用 kind/text/url/path/base64/name/mime_type/user_id/message_id，其中 path 相对 plugins/ 或插件目录解析
+** exec match.regex 字段：field、value、text、groups（groups[0] 为完整匹配）、named、start、end
+** exec runtime 字段：plugin_name、plugin_dir、config_path、rule_name、cwd
+** exec request：platform.call 调当前平台 API（params含 platform/api/params，不能跨平台），output.send 立即发送输出（params.output 使用 segment 字段），message.get_reply 读取引用消息，message.get 预留，hook.log 写日志；带 id 时会收到 response frame：type=response、id、ok、result 或 error
+** exec done：result 存 actions.<name>.result，error 存 actions.<name>.error，message.text 按 action.field 覆写字段，matched=false 会回滚本规则并跳过后续 action，consume/stop_propagation 可设置控制位
 ** 角色字段：roles 同时匹配内部角色和群身份；actor_roles 只匹配 superadmin/user；group_roles 只匹配 owner/admin/member
+** 唤起字段：require_wakeup 默认 true；在 platform.message.received 上设为 false 可监听未 at、未命中唤起词、未回复机器人的普通群消息，但不会自动让 LLM 处理该消息
 ** 控制字段：consume=true 阻止后续 slash 命令和 LLM 处理；stop_propagation=true 阻止同 Hook 点后续规则执行，二者都与 on/name/match/actions 等字段平级
 ** 模板变量：platform.name/scope_id/user_id/message_id/reply_to_message_id、actor.id/user_id/role、message.text/content_text、llm.text/raw_text/latest_user_text、tool.arguments/result、actions.<name>.result/error；regex 捕获组用 match.regex.0.group.1 或命名组 match.regex.0.<name>
 ** 先判断需求适合的 Hook 点，只使用本 Skill 列出的 Hook 点；选择 always、单条件 if/op/value 或 match 多条件，不混用互斥写法
 ** 只编辑当前 Hook 点允许修改的字段；需要发送消息时优先用 send action 产出 output 意图，不直接调用平台发送
-** 需要多模态输出时使用 segments，字段格式必须使用本 Skill 列出的 segment 字段；需要本地脚本时使用 exec action 并明确 stdout 模式
-** exec 脚本默认以 plugins/ 为工作目录，脚本和资源路径用相对 plugins/ 的路径；工具调用必须遵守 Security Policy，只调用当前 Actor 可用且不需要交互确认的工具
+** 需要多模态输出时使用 segments，字段格式必须使用本 Skill 列出的 segment 字段；需要本地脚本时使用 exec action，并让脚本实现 hook.v1 行协议
+** exec 脚本默认以 plugins/ 或插件目录为工作目录，脚本和资源路径用相对路径；工具调用必须遵守 Security Policy，只调用当前 Actor 可用且不需要交互确认的工具
 ** 输出必须包含可直接复制的 TOML；如果需要脚本，也输出完整脚本内容
 ~ 使用本 Skill 未列出的 Hook 点
 ~ 修改不可编辑字段
 ~ 让 Hook 或脚本直接绕过 Output Manager 发送平台消息
-~ 让 exec stdout 输出非 JSON 却声明 outputs 或 atriena 模式
-~ 编造不存在的 action 类型、segment 字段、stdout 模式或模板变量
+~ 让 exec 脚本输出非 JSON 行、忘记输出 done/error、或把日志写到 stdout
+~ 编造不存在的 action 类型、segment 字段、request method 或模板变量
 ?if(需求需要拦截输入并阻止后续 LLM 处理) {
   ** 在 platform.message.received Hook 上使用 consume = true
 }
@@ -575,19 +735,12 @@ $hook_config:str=~/.config/atri-x/plugins/hooks.toml
 }
 ?if(需求包含脚本处理、外部程序或复杂文本解析) {
   ** 使用 exec action
-  ** 如果脚本要同时发送 outputs 并改写文本，stdout 使用 outputs，并在 action 上设置 field
-  ** 脚本从 stdin 读取 event JSON，向 stdout 写规定格式结果
+  ** 如果脚本要同时发送输出并改写文本，stdout 写 output frame，最后 done.message.text，并在 action 上设置 field
+  ** 脚本先从 stdin 读取 init frame，向 stdout 写 hook.v1 JSON frame；需要平台 API 时用 request frame
 }
 ?else {
   ** 优先用 replace、append、prepend、delete、send 或 tool action 完成
 }
-> 选择的 Hook 点、匹配条件和 action 原因。
-> plugins/hooks.toml 中可复制的 [[rules]] 配置。
-?if(用到exec){
-> 脚本文件路径和完整脚本内容
-}
-> 把脚本和资源放在 plugins/ 下，并按需测试。
+
 > 完成后通知用户用/hooks reload重载
 ```
-
-
