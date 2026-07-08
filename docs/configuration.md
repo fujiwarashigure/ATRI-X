@@ -14,7 +14,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 | `SOUL.md` | Agent 的 System Prompt 来源文件。 |
 | `.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
 | `plugins/` | Hook 和插件配置目录。 |
-| `skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。AgentSkill 可在根目录放置 `ATRIX_SKILL.toml` 注册为普通工具。 |
+| `skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。AgentSkill 可在根目录放置 `ATRIX_SKILL.toml` 配置可见性或注册为普通工具。 |
 | `memories.toml` | 常驻记忆文件，默认位于配置目录下。 |
 | `long_memory/` | 长期记忆 Markdown 源数据目录，默认位于配置目录下。 |
 
@@ -29,7 +29,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/agent/write_atrix_hook/SKILL.md` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/agent/agent_skill_creator/ATRIX_SKILL.toml`、`skills/agent/write_atrix_hook/SKILL.md`、`skills/agent/write_atrix_hook/ATRIX_SKILL.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
 
 
 开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
@@ -194,10 +194,16 @@ token_env = ["ATRIX_CLI_WINDOWS_TOKEN"]
 
 ## AgentSkill 工具化配置
 
-AgentSkill 默认只作为说明文档使用；若按文档执行脚本，风险由实际调用的 `shell` 等工具承担。若要把 `skills/agent/<skill>/` 注册成普通工具，在该 Skill 根目录添加 `ATRIX_SKILL.toml`，工具风险以其中的 `risk` 为准。默认生成的 `agent_skill_creator` Skill 可用于查看说明并辅助创建该文件：
+AgentSkill 默认只作为说明文档使用；若按文档执行脚本，风险由实际调用的 `shell` 等工具承担。若要限制文档型 Skill 的可见性，或把 `skills/agent/<skill>/` 注册成普通工具，在该 Skill 根目录添加 `ATRIX_SKILL.toml`。未写 `command`/`parameters`/`[args]` 时只作为可见性配置，不会注册成普通工具；写了任一工具化字段后必须补齐完整工具化配置。默认生成的 `agent_skill_creator` Skill 可用于查看说明并辅助创建该文件：
+
+```toml
+risk = "high"
+superadmin_only = true
+```
 
 ```toml
 risk = "medium"
+superadmin_only = false
 tags = ["doc"]
 command = ["python", "foo.py"]
 timeout_seconds = 30
@@ -219,11 +225,12 @@ input = "--input"
 
 字段说明：
 
-- `risk`：必填，允许 `safe`、`low`、`medium`、`high`、`critical`。
+- `risk`：可选，允许 `safe`、`low`、`medium`、`high`、`critical`；注册成普通工具时必填。文档型 Skill 未写时按 `safe` 处理。
+- `superadmin_only`：可选，`true` 表示只有 ATRI-X 超级管理员能发现、预载或调用该 Skill。
 - `tags`：可选，相当于为该工具分类，可用于 `@tool:<tag>` 预载。
-- `command`：必填，命令数组，不使用 shell 字符串。
-- `parameters`：必填，JSON object schema，决定 LLM 看到的工具参数。
-- `[args]`：必填，扁平参数映射；`input = "--input"` 会把工具参数 `input` 翻译成 `--input <value>`。
+- `command`：工具化时必填，命令数组，不使用 shell 字符串。
+- `parameters`：工具化时必填，JSON object schema，决定 LLM 看到的工具参数。
+- `[args]`：工具化时必填，扁平参数映射；`input = "--input"` 会把工具参数 `input` 翻译成 `--input <value>`。
 - `timeout_seconds`：可选，命令超时时间。
 - `expose_root`：可选，默认 `false`；为 `true` 时，发现该 Skill 时会暴露 Skill 根路径。
 
