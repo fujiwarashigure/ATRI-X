@@ -10,14 +10,16 @@ import (
 	"strings"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
-	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
+	"github.com/fujiwarashigure/ATRI-X/internal/tool/runtimeinfo"
 )
 
 const AtriwispCreatorName = "atriwisp_creator"
 
-type AtriwispCreatorTool struct{}
+type AtriwispCreatorTool struct {
+	info runtimeinfo.Info
+}
 
 type atriwispCreatorConfigSnapshot struct {
 	AppConfigPath   string
@@ -30,8 +32,8 @@ type atriwispCreatorConfigSnapshot struct {
 	Warnings        []string
 }
 
-func NewAtriwispCreatorTool() AtriwispCreatorTool {
-	return AtriwispCreatorTool{}
+func NewAtriwispCreatorTool(infos ...runtimeinfo.Info) AtriwispCreatorTool {
+	return AtriwispCreatorTool{info: runtimeinfo.First(infos...)}
 }
 
 func (AtriwispCreatorTool) Name() string {
@@ -54,16 +56,16 @@ func (AtriwispCreatorTool) Schema() llm.ToolSchema {
 		BuildSchema()
 }
 
-func (AtriwispCreatorTool) Call(ctx context.Context, req tool.CallRequest) (*tool.Result, error) {
+func (t AtriwispCreatorTool) Call(ctx context.Context, req tool.CallRequest) (*tool.Result, error) {
 	_ = req
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	return &tool.Result{Content: buildAtriwispCreatorGuide(loadAtriwispCreatorConfig())}, nil
+	return &tool.Result{Content: buildAtriwispCreatorGuide(loadAtriwispCreatorConfig(t.info))}, nil
 }
 
-func loadAtriwispCreatorConfig() atriwispCreatorConfigSnapshot {
-	appConfigPath, ok := findAtriwispCreatorAppConfigPath()
+func loadAtriwispCreatorConfig(info runtimeinfo.Info) atriwispCreatorConfigSnapshot {
+	appConfigPath, ok := findAtriwispCreatorAppConfigPath(info)
 	if !ok {
 		return atriwispCreatorConfigSnapshot{Warnings: []string{
 			"未找到 ATRI-X app.toml，无法确认 Atrinis endpoint 和 token 配置。请提示用户先配置 Atrinis，或让用户要求 Agent 修改 app.toml / atrinis.toml / .env。",
@@ -121,7 +123,11 @@ func loadAtriwispCreatorConfig() atriwispCreatorConfigSnapshot {
 	return snapshot
 }
 
-func findAtriwispCreatorAppConfigPath() (string, bool) {
+func findAtriwispCreatorAppConfigPath(info runtimeinfo.Info) (string, bool) {
+	info = info.Normalize()
+	if strings.TrimSpace(info.ConfigPath) != "" {
+		return filepath.Clean(info.ConfigPath), true
+	}
 	if envPath := strings.TrimSpace(os.Getenv(config.EnvConfigFile)); envPath != "" {
 		return filepath.Clean(envPath), true
 	}
@@ -185,7 +191,7 @@ func buildAtriwispCreatorGuide(cfg atriwispCreatorConfigSnapshot) string {
 // minimal_direct_calls_payload: {"version":"atriena.v3","atriwisp":{"name":"example-atriwisp"},"source":"example-source","id":"stable-event-id","mode":"direct","targets":[{"platform":"qqonebot","type":"group","id":"987654321"}],"calls":[{"kind":"capability","name":"message.recall","platform":"qqonebot","target":{"platform":"qqonebot","type":"group","id":"987654321"},"params":{"message_id":1024}}]}
 // minimal_llm_payload: {"version":"atriena.v3","atriwisp":{"name":"example-atriwisp","tags":["example"]},"source":"example-source","id":"stable-event-id","mode":"llm","title":"需要分析的事件","format":"atriyph","content":"#task review_event - 判断事件是否需要通知\n<- $event:object!\n-> $report:str\n** 基于事件内容、meta 和工具结果判断\n~ 编造日志、指标或结论\n> 如果需要通知，给出原因和建议；否则说明无需打扰。","tool_list_names":[],"targets":[{"platform":"cli"}],"meta":{}}
 `)
-	writeGuideCommentBlock(&b, "atriyph_rule_card", atriyph.RuleCard())
+	writeGuideCommentBlock(&b, "atriyph_rule_card", runtimeinfo.AtriyphRuleCard())
 	b.WriteString(`** 如果 current_atrinis 有 warning，先提醒用户处理。
 ** event id 在同一 source 内稳定且唯一。
 ** Atriwisp 只上报事件，由 Atrinis/ATRI-X 决定记录、通知、分析或调用工具。
