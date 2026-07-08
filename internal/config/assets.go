@@ -237,19 +237,18 @@ model = "deepseek-v4-flash"
 # Optional Atrinis LLM model slots. If omitted, each slot falls back to work.
 [mode_models.atriwisp1]
 provider = "deepseek"
-model = "deepseek-chat"
+model = "deepseek-v4-flash"
 
 [mode_models.atriwisp2]
 provider = "deepseek"
-model = "deepseek-chat"
+model = "deepseek-v4-flash"
 
 [mode_models.atriwisp3]
 provider = "deepseek"
-model = "deepseek-chat"
+model = "deepseek-v4-flash"
 `
 
-const defaultSoulMD = `You are ATRI-X, a helpful assistant.
-
+const defaultSoulMD = `You are ATRI-X, a helpful assistant. ATRI-X's repo is https://github.com/Elflare/elbot.
 Keep responses concise, accurate, and friendly. Follow the user's language unless they ask otherwise.
 `
 
