@@ -29,7 +29,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/agent/write_atrix_hook/SKILL.md` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
 
 
 开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
@@ -113,6 +113,15 @@ default_context_window = 256000
 - `extra_payload` 会合并到 LLM 请求 JSON 中，模型级覆盖 Provider 级。
 - `[model_metadata]` 的 `default_context_window` 是全局回退值，没有在 `model_configs` 里配 `context_window` 时使用。
 
+## 内置 Web 工具配置
+
+`web_extract` 的 `proxy` 参数用于控制网页提取请求的代理：
+如果希望所有默认 `web_extract` 调用都走固定代理，可以在配置目录 `.env` 或系统环境中设置：
+
+```env
+WEB_EXTRACT_PROXY=http://127.0.0.1:7890
+```
+
 ## LLM 请求与整轮超时
 
 `app.toml` 的 `[llm_request]` 控制 OpenAI-compatible 流式请求、整轮处理和重试：
@@ -185,7 +194,7 @@ token_env = ["ATRIX_CLI_WINDOWS_TOKEN"]
 
 ## AgentSkill 工具化配置
 
-AgentSkill 默认只作为说明文档使用。若要把 `skills/agent/<skill>/` 注册成普通工具，在该 Skill 根目录添加 `ATRIX_SKILL.toml`：
+AgentSkill 默认只作为说明文档使用；若按文档执行脚本，风险由实际调用的 `shell` 等工具承担。若要把 `skills/agent/<skill>/` 注册成普通工具，在该 Skill 根目录添加 `ATRIX_SKILL.toml`，工具风险以其中的 `risk` 为准。默认生成的 `agent_skill_creator` Skill 可用于查看说明并辅助创建该文件：
 
 ```toml
 risk = "medium"
@@ -461,7 +470,7 @@ MUST:
 
 字段说明：
 
-- `[tags.<tag-name>]`：定义一个可在聊天里使用的 tag，例如 `[tags.agent]` 对应 `@tool:agent`。
+- `[tags.<tag-name>]`：定义一个可在聊天里使用的 tag，例如 `[tags.agent]` 对应 `@tool:agent` 或简写 `@t:agent`。
 - `tools`：这个 tag 会预载的工具名列表。工具名必须是已注册且当前用户有权限访问的工具。
 - `prompt`：这个 tag 成功激活后追加到 system prompt 的工具使用策略。内容会直接给模型看，不会自动添加 tag 名标题。
 
@@ -469,6 +478,7 @@ MUST:
 
 ```text
 @tool:agent 帮我检查这个项目的问题
+@t:agent 帮我检查这个项目的问题
 ```
 
 这会把 `agent` 下配置的工具预载到当前 Session。如果 `prompt` 非空，也会从本轮开始追加到 system prompt。
@@ -476,8 +486,8 @@ MUST:
 注意事项：
 
 - 配置 tag 会追加到内置 tag，不覆盖内置 tag。
-- 只有 `@tool:<tag>` 成功命中至少一个工具后，当前 Session 才会激活该 tag 的 prompt。
-- 直接 `@tool:<tool-name>` 只预载指定工具，不激活 tag prompt。
+- 只有 `@tool:<tag>` 或 `@t:<tag>` 成功命中至少一个工具后，当前 Session 才会激活该 tag 的 prompt。
+- 直接 `@tool:<tool-name>` 或 `@t:<tool-name>` 只预载指定工具，不激活 tag prompt。
 - 激活的 tag 会写入 Session metadata，`/resume` 后仍生效。
 - prompt 文本从 `tool_tags.toml` 动态读取；文件变更后影响后续请求，行为类似 `SOUL.md`。
 - 重复预载已经存在的工具时不会重复添加，平台会提示 `已存在工具：<name>`。
@@ -586,7 +596,7 @@ stream_edit_interval_milliseconds = 250
 
 Hook 和插件不要直接发平台消息，应返回输出意图，由 Agent 统一交给 Output Manager 发送。
 
-规则 Hook 的完整配置说明（action 类型、segments 多段输出、exec stdout 模式、角色分区、控制字段）见 [Hook](hooks.md)。
+规则 Hook 的完整配置说明（action 类型、segments 多段输出、exec hook.v1 协议、角色分区、控制字段）见 [Hook](hooks.md)。
 
 ## 建议的维护方式
 

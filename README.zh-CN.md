@@ -9,26 +9,31 @@ ATRI-X 是一个使用 Go 编写的轻量级 Agent/Chatbot 框架，目标是在
 
 ### 一、轻量高效
 
-**极致轻量的 Go 实现**： ATRI-X 当前本地启动耗时 <10ms（N5105，sata固态），常驻内存约 30MB。
+**极致轻量的 Go 实现**：
+
+| 指标           | 数值                            |
+| -------------- | ------------------------------- |
+| 本地启动耗时   | <10ms（N5105，SATA 固态上测试） |
+| 常驻内存       | ~30MB                           |
+| 二进制文件大小 | <30MB                           |
 
 **极致节省 Token 的工具发现**： 研究表明，许多普通用户仍主要将 LLM 类产品用作更高级的搜索引擎、写作助手和倾听对象，频繁工具调用并不是所有对话的常态。
-参考：Chatterji et al., *How People Use ChatGPT*, NBER, 2025；Yan et al., *ShareChat: A Dataset of Chatbot Conversations in the Wild*, arXiv:2512.17843, 2025。
+参考：Chatterji et al., _How People Use ChatGPT_, NBER, 2025；Yan et al., _ShareChat: A Dataset of Chatbot Conversations in the Wild_, arXiv:2512.17843, 2025。
 
 ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是仅暴露 `discover_tool` 和当前可用工具名称。模型需要使用工具时，先按需发现工具详情，再由 Agent 注入对应 schema。极大程度减少无效上下文开销。
 
-**Chat / Work 双模式**： ATRI-X 区分 chat 模式与 work 模式。chat 模式完全移除工具，更适合日常闲聊、陪伴、轻量问答和低成本对话；work 模式则启用工具发现与工具调用能力，用于复杂工作。两种模式可以独立配置模型，让低成本模型承担闲聊，让强模型专注处理复杂任务。
+**Chat / Work 双模式**：两种模式可独立配置模型，让低成本模型承担闲聊，让强模型专注处理复杂任务。
 
 **常驻记忆与长期记忆分层**： 常驻记忆只保存短小、稳定、真正需要每轮注入的信息，并在内部区分需确认修改的 core 与可整理的 normal；更长、更复杂的记忆由 LLM 按需通过 `long_memory` 查询。长期记忆使用 Markdown 源数据和 SQLite FTS，兼顾透明性和检索效率。
 
-个人日常使用，一次请求 token 消耗：
-
-- work 模式：<1000
-- chat 模式：<500
-- 缓存命中：>90%
+| 模式   | 工具               | 适用场景                                 | 第一次请求 Token 消耗      |
+| ------ | ------------------ | ---------------------------------------- | -------------------------- |
+| `chat` | 不注入             | 闲聊、陪伴、轻量问答、低成本对话         | <500 （后续缓存命中95%+）  |
+| `work` | 启用工具发现与调用 | 搜索、文件、命令、Cron、Skill 等复杂任务 | <1000 （后续缓存命中90%+） |
 
 ### 二、强大可扩展
 
-**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。Hook 可以修改消息、追加输出意图、调用脚本等。规则 Hook 的 exec action 基于 stdio 通信，支持用任意语言或脚本编写插件；配合 [Atriwisp](docs/atrinis.md) 可实现条件触发 LLM、外部事件接入等强大功能。
+**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。Hook 可以修改消息、追加输出意图、调用脚本等。规则 Hook 的 exec action 基于 stdio 通信，支持用任意语言或脚本编写插件。
 
 **普通 Cron 与 LLM Cron**： ATRI-X 内置 Cron Runtime 和 LLM 可编排 Cron 服务。普通 Cron 按计划直接发送固定内容；LLM Cron 用任务描述驱动模型执行，适合需要分析、归纳或使用工具的定时任务。
 
@@ -37,7 +42,6 @@ ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是
 **可由 LLM 创建的 ATRI-X Skill**： ATRI-X 内置 `create_atrix_skill` 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。创建时自动校验 Atriyph 语法，可选附带 Go 源码并编译；创建后的纯 Atriyph 文本或 Go 源码由统一的 `read_atrix_skill` / `modify_atrix_skill` 维护，源码改完后通过 `finalize_atrix_skill` 统一格式化、编译并返回检查结果。
 
 **兼容外置 AgentSkill**： 除了原生 Go Skill，ATRI-X 也兼容遵从 agentskills.io 风格的外置 AgentSkill。自动扫描 `skills/agent/<skill>/SKILL.md` 或 `SKILL.atriyph`，读取名称、描述、适用场景和风险等级；当前可通过隐藏包装工具执行附带 Python 脚本。
-
 
 ### 三、Atrinis 事件感知系统
 
@@ -73,14 +77,13 @@ Atrinis 是 ATRI-X 的监听枢纽，Atriwisp 是分布在各地的外部监听�
 
 ## 使用方法
 
-
 常用启动方式：
 
 ```bash
 atri-x              # 自动模式：优先尝试默认远程 CLI client；本地不可达时回退完整前台启动
 atri-x run          # 完整前台：本地 CLI + 已启用平台 + Cron
-atri-x cli [-c 名称] # 远程 CLI 客户端：连接常驻 ATRI-X 服务端
-atri-x -c 名称      # 直接用指定 CLI client profile 连接服务端
+atri-x cli [-c name]# 远程 CLI 客户端：连接常驻 ATRI-X 服务端
+atri-x -c name      # 直接用指定 CLI client profile 连接服务端
 atri-x service run  # Linux/headless 服务模式：不启动本地 CLI，可启用远程 CLI server、平台和 Cron
 ```
 
@@ -108,4 +111,3 @@ Shell 补全可通过 `atri-x completion <shell>` 生成，支持 `bash`、`zsh`
 ## 开发状态
 
 ATRI-X 仍在快速开发中，接口、配置和内部实现可能继续调整。当前更适合作为个人 Agent/机器人框架探索使用。
-
