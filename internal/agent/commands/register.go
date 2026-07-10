@@ -5,6 +5,7 @@ import (
 
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
+	hookruntime "github.com/fujiwarashigure/ATRI-X/internal/hook/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
@@ -95,6 +96,10 @@ type ToolService interface {
 type HookService interface {
 	HookList() []hook.Info
 	HookReload() (hook.ReloadReport, error)
+	StatefulHooks() []hookruntime.Info
+	StartStatefulHook(id string) error
+	StopStatefulHook(ctx context.Context, id string) error
+	RestartStatefulHook(ctx context.Context, id string) error
 }
 
 type LogService interface {
