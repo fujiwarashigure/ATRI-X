@@ -9,6 +9,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	residentmemory "github.com/fujiwarashigure/ATRI-X/internal/hook/plugins/resident_memory"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook/rules"
+	hookruntime "github.com/fujiwarashigure/ATRI-X/internal/hook/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -25,6 +26,7 @@ type Options struct {
 	Notify              func(context.Context, string)
 	Send                func(context.Context, delivery.Target, delivery.Output) (delivery.Receipt, error)
 	PlatformCallers     rules.PlatformCallerResolver
+	Runtime             *hookruntime.Manager
 }
 
 func RegisterAll(registrar hook.Registrar, opts Options) error {
@@ -43,6 +45,7 @@ func RegisterAll(registrar hook.Registrar, opts Options) error {
 		Notify:          opts.Notify,
 		Send:            opts.Send,
 		PlatformCallers: opts.PlatformCallers,
+		Runtime:         opts.Runtime,
 	})
 	if err == nil {
 		registerModule(registrar, opts, "rules", rulesModule)
