@@ -11,7 +11,7 @@ Hook 在 ATRI-X 的关键边界运行：它可以匹配或修改事件、追加�
 | 每次事件独立交给外部程序，处理完即退出 | 规则 Hook 的 `exec` action |
 | 进程常驻、维护状态、等待后续输入、主动调用 Host 工具 | 持久 Hook |
 
-完整的规则 Hook 与持久 Hook 示例见 [Hook Showcase](https://github.com/Elfreese/elbot-showcase/blob/main/hooks/README.md)。
+Hook 示例见 [Hook Showcase](https://github.com/Elfreese/elbot-showcase/blob/main/hooks/README.md)。
 
 ## 配置位置
 
