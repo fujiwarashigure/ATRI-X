@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
+	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 )
 
@@ -50,9 +51,11 @@ type Config struct {
 	Restart                RestartConfig `toml:"restart"`
 	Tools                  ToolsConfig   `toml:"tools"`
 
-	ID          string `toml:"-"`
-	Description string `toml:"-"`
-	Dir         string `toml:"-"`
+	ID          string           `toml:"-"`
+	Description string           `toml:"-"`
+	Dir         string           `toml:"-"`
+	ConfigPath  string           `toml:"-"`
+	Block       hook.BlockPolicy `toml:"-"`
 }
 
 func (c Config) Validate() error {
