@@ -29,7 +29,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/agent/agent_skill_creator/ATRIX_SKILL.toml`、`skills/agent/write_atrix_hook/SKILL.md`、`skills/agent/write_atrix_hook/ATRIX_SKILL.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。Skill 扫描在启动后延迟执行，首次使用 `discover_tool` 时会兜底等待或触发扫描。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/agent/agent_skill_creator/ATRIX_SKILL.toml`、`skills/agent/write_atrix_hook/SKILL.md`、`skills/agent/write_atrix_hook/ATRIX_SKILL.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
 
 
 开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
