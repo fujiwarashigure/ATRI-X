@@ -251,6 +251,8 @@ outputs = [
 | `user_id` | `kind = "at"` 的平台原始用户 ID；为空时回退 `text`。 |
 | `message_id` | `kind = "reply"` 的平台消息 ID；为空时回退 `path`。 |
 
+`outputs` 是一条消息片段组，要发送单片段消息，只需让 `outputs` 只包含一个元素；要发送多条消息，则使用多个 `send` action 或多次 `output.send` 请求。一个 `outputs` 内若显式指定 target，所有片段的 target 必须一致。
+
 一次性 exec 的大媒体应写到插件目录或 `_shared/`，然后返回 `path` 或 `url`；不要把大数据塞进 JSON Pipe。单个 stdout 协议帧最大 16 MiB。
 
 ### target 与 timing
@@ -388,7 +390,7 @@ Hook 成功响应：
 
 ## 持久 Hook
 
-持久 Hook 仍是 Hook，不存在独立插件系统或 `/plugins` 命令。它由插件自己的 `hook.toml` 声明，并在 ATRI-X 启动或 `/hooks reload` 后自动启动。
+持久和临时 worker 都由插件自己的 `hook.toml` 声明。`mode = "persistent"` 的 worker 在 ATRI-X 启动或 `/hooks reload` 后自动启动；`mode = "transient"` 只在 trigger rule 命中时启动。省略 `[plugin.runtime]` 或省略 `mode` 等价于 `mode = "once"`：普通规则 Hook 或一次性 `exec`，没有常驻 worker。
 
 ```toml
 [plugin]
@@ -399,7 +401,7 @@ blocked_group = ["qqonebot:123456"]
 blocked_id = ["qqonebot:10001"]
 
 [plugin.runtime]
-stateful = true
+mode = "persistent"
 command = "uv run weather_hook.py"
 cwd = "."
 startup_timeout_seconds = 10
@@ -443,11 +445,11 @@ stop_propagation = true
 
 阻断三项任一命中即不调用该插件规则或 `event.handle`；其他插件不受影响。匹配精确、不支持通配符；`blocked_group` 同时识别 `group` 和 `supergroup` scope。
 
-`[plugin.runtime]` 以下字段必填：
+`[plugin.runtime]` 在 `mode = "persistent"` 或 `mode = "transient"` 时需要以下字段；`mode` 只能是 `once`、`persistent` 或 `transient`，省略时为 `once`。`once` 不创建 worker，也不要求其余 runtime 字段。
 
 | 字段 | 说明 |
 | --- | --- |
-| `stateful` | 必须为 `true`。 |
+| `mode` | `once`（默认）、`persistent` 或 `transient`。`persistent` 启动后常驻；`transient` 只在规则命中后启动，并在会话结束后退出。 |
 | `command` | 启动命令，不经过 shell，当前按空白简单拆分，**不解析引号**；参数含空格时请通过脚本包装或避免该路径。 |
 | `cwd` | 相对插件目录，不能为绝对路径或逃出插件目录。通常为 `.`。 |
 | `startup_timeout_seconds` | 等待 `system.init` 成功 response 的最长秒数，必须大于 `0`。 |
@@ -455,7 +457,7 @@ stop_propagation = true
 | `event_timeout_seconds` | 单次 `event.handle` 的最长秒数，也限制此次工具上下文，必须大于 `0`。 |
 | `max_wait_seconds` | waiting 会话可声明的最长剩余时间，必须大于 `0`。 |
 
-`[plugin.runtime.restart]` 以下字段必填：
+`[plugin.runtime.restart]` 只适用于 `mode = "persistent"`：
 
 | 字段 | 说明 |
 | --- | --- |
@@ -514,7 +516,7 @@ worker 状态为 `starting`、`ready`、`running`、`degraded`、`stopping`、`s
 
 #### 读取用户输入
 
-持久 Hook 不应假定 `event.message.segments` 已去掉唤醒前缀：它保留平台归一化后的原始 segments；`event.message.intent_text` 才是 Host 去除唤醒前缀后计算出的用户意图文本。处理文本指令时，应优先读取 `intent_text`，为空再拼接 text segments：
+持久或临时 worker 不应假定 `event.message.segments` 已去掉唤醒前缀：它保留平台归一化后的原始 segments；`event.message.intent_text` 才是 Host 去除唤醒前缀后计算出的用户意图文本。处理文本指令时，应优先读取 `intent_text`，为空再拼接 text segments：
 
 ```python
 def message_text(event):
@@ -569,24 +571,24 @@ def message_text(event):
 
 同一 `platform + scope_id + actor.id` 在同一个 worker 内串行，不同路由可并行。waiting 租约也以该三元组为 key：
 
-- 正常串行分发中，首个返回 `waiting` 的持久 Hook 持有该路由，后续持久 trigger rule 不会再分发该路由。实现每条路由只存一份租约；若并发事件使多个 Hook 同时竞争，最后写入者覆盖此前租约。因此多个持久 Hook 可能匹配同一路由时，应使用 `priority`、更严格条件或 `stop_propagation` 明确归属。
-- waiting 存在时，普通 `platform.message.received` 规则仍会先运行；持久 trigger rule 不会再次触发。
+- 正常串行分发中，首个返回 `waiting` 的 worker 持有该路由，后续 worker trigger rule 不会再分发该路由。实现每条路由只存一份租约；若并发事件使多个 worker 同时竞争，最后写入者覆盖此前租约。因此多个 worker Hook 可能匹配同一路由时，应使用 `priority`、更严格条件或 `stop_propagation` 明确归属。
+- waiting 存在时，普通 `platform.message.received` 规则仍会先运行；worker trigger rule 不会再次触发。
 - Host 先将后续消息以 `continuation = true` 路由给持有租约的 Hook；插件返回 `pass_through = true` 时，再从后续规则继续传播，最后可进入命令或主 LLM。
 - continuation 放行后不会用同一条消息重新触发刚结束 waiting 的插件。
-- continuation 返回 `completed` 或省略 `status` 后，Host 立即释放租约；再次返回 `waiting` 则以新 ID、过期时间续期。
+- continuation 返回 `completed` 或省略 `status` 后，Host 立即释放租约；对于 transient worker，同时关闭该进程。再次返回 `waiting` 则以新 ID、过期时间续期。
 - 阻断策略命中、worker 退出、停止或重载会清理该插件租约。
 
-用户发送精确的 `/cancel` 时，Host 取消该路由当前执行或 waiting 会话，并向插件写入无 response 的通知帧：
+用户发送精确的 `/cancel` 时，Host 取消该路由当前执行或 waiting 会话，并关闭 transient worker；persistent worker 只接收取消通知并保留进程和内存。
 
 ```json
 {"type":"event","method":"event.cancel","params":{"conversation_id":"weather-42"}}
 ```
 
-`conversation_id` 仅在存在时提供。`/cancel` 不停止进程和插件内存；使用 `/hooks stop <id>` 才停止 worker。
+`conversation_id` 仅在存在时提供。`/hooks stop <id>` 只接受 persistent worker。
 
 ### 工具与共享状态
 
-持久 Hook 自行维护 LLM loop、业务状态和工具使用决策。Host 对 `tool.call` 只校验 allowlist、前后台能力、context 归属、次数、超时、取消和发送 target；**不执行 ATRI-X 的风险分级、权限策略或交互确认**。插件必须自行承担工具授权和风险控制。
+worker Hook 自行维护 LLM loop、业务状态和工具使用决策。Host 对 `tool.call` 只校验 allowlist、前后台能力、context 归属、次数、超时、取消和发送 target；**不执行 ATRI-X 的风险分级、权限策略或交互确认**。插件必须自行承担工具授权和风险控制。
 
 前台调用：
 
@@ -606,7 +608,7 @@ def message_text(event):
 
 `content` 是工具文本结果，`segments` 为 `{type,text,url,mime_type,name}` 数组，`warnings` 为字符串数组，`receipts` 是工具 outputs 经 Output Manager 发送后的平台消息 ID。失败统一使用外层 `ok=false,error`。Hook 工具调用不会写入 Agent Session。
 
-除 `_shared/` 文件目录外，所有持久 Hook 还共享一个进程内 JSON KV：
+除 `_shared/` 文件目录外，所有 worker 共享一个进程内 JSON KV：
 
 | method | `params` | 成功 `result` |
 | --- | --- | --- |
@@ -620,7 +622,7 @@ def message_text(event):
 
 ### 插件自身重载
 
-持久 Hook 修改自身 `hook.toml` 后可请求重载自己：
+worker 修改自身 `hook.toml` 后可请求重载自己：
 
 ```json
 {"type":"request","id":"plugin:reload-1","method":"hooks.reload","params":{}}
@@ -642,7 +644,7 @@ Host 会先完整读取并校验候选配置。失败时返回 `ok=false`，旧�
 
 ```text
 /hooks
-/hooks <rule-name-or-stateful-id>
+/hooks <rule-name-or-persistent-id>
 /hooks start <id>
 /hooks stop <id>
 /hooks restart <id>
