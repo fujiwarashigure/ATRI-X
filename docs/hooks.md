@@ -584,8 +584,6 @@ def message_text(event):
 {"type":"event","method":"event.cancel","params":{"conversation_id":"weather-42"}}
 ```
 
-`conversation_id` 仅在存在时提供。`/hooks stop <id>` 只接受 persistent worker。
-
 ### 工具与共享状态
 
 worker Hook 自行维护 LLM loop、业务状态和工具使用决策。Host 对 `tool.call` 只校验 allowlist、前后台能力、context 归属、次数、超时、取消和发送 target；**不执行 ATRI-X 的风险分级、权限策略或交互确认**。插件必须自行承担工具授权和风险控制。
@@ -637,21 +635,6 @@ Host 会先完整读取并校验候选配置。失败时返回 `ok=false`，旧�
 ```
 
 实际替换等当前 `event.handle` 结束后发生：仅替换调用插件的规则和 worker，清理该插件 waiting 路由与工具上下文，不重启其他插件。调用者身份由进程确定，不能重载别的插件；`starting`、`stopping`、`stopped` 时不能请求重载。根 `plugins/hooks.toml` 的插件引用、`enabled`、`path` 以及插件增删仍需管理员执行全局 `/hooks reload`。
-
-## 管理命令
-
-`/hooks` 是超级管理员管理入口：
-
-```text
-/hooks
-/hooks <rule-name-or-persistent-id>
-/hooks start <id>
-/hooks stop <id>
-/hooks restart <id>
-/hooks reload
-```
-
-`/hooks` 列出规则和持久 Hook；`/hooks <名称>` 查看规则详情或持久 worker 状态。`start`、`stop`、`restart` 只接受持久 Hook ID。全局 `reload` 重读规则与持久运行配置，并停止、替换或启动相应 worker；配置不做动态 schema patch，受影响 worker 会重启。
 
 ## Event 与模板字段
 
