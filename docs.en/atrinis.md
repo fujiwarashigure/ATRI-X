@@ -126,9 +126,9 @@ Atriwisp is only responsible for "seeing and reporting." It does not directly co
 
 ### Atriena: event protocol
 
-Atriena is the JSON over HTTP protocol for Atriwisp to deliver events to Atrinis. Hook exec within ATRI-X can also submit Atriena requests via the same Atriena Bus; These requests do not go through an HTTP token, but instead carry a `hook` origin, and are executed by Atrinis in a unified manner for direct, LLM, and calls.
+Atriena is the JSON over HTTP protocol used by Atriwisp to deliver events to Atrinis.
 
-It is responsible for transforming "what happened outside" or "what the internal Hook wants to do" into a unified event that Atrinis can understand: who the source is, what the event ID is, what the content is, how it should be handled, and where it should be delivered.
+It is responsible for turning "what happened outside" into a unified event that Atrinis can understand: who the source is, what the event ID is, what the content is, how it should be handled, and where it should be delivered.
 
 
 Initial endpoint:
