@@ -247,13 +247,6 @@ Common fields:
 | `calls` | No | Atriena v3 action call array. `kind="raw"` passes through the platform's original API, while `kind="capability"` uses a unified capability name; The first batch of capabilities includes `message.recall`, `member.mute`, and `chat.leave`. When a direct request only has `calls` and lacks `content`/`segments`, it only executes the API and does not send a message. |
 | `meta` | No | Original supplementary data, used only for recording and prompt attachment. |
 
-
-
-## Hook exec delivering to Atriena
-
-The `exec` action of a rule Hook can be set to `stdout = "atriena"`, where the script's stdout serves as an Atriena JSON request passed to Atrinis via the internal Atriena Bus, bypassing HTTP token authentication. For complete configuration details, see [Hook](hooks.md#hook-exec-投递-atriena).
-
-
 The HTTP response only indicates that Atrinis has received or rejected the request, and does not wait for the LLM to complete.
 
 
