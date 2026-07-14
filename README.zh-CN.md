@@ -33,7 +33,7 @@ ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是
 
 ### 二、强大可扩展
 
-**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。Hook 可以修改消息、追加输出意图、调用脚本等。规则 Hook 的 exec action 基于 stdio 通信，支持用任意语言或脚本编写插件。
+**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。Hook 可以修改消息、追加输出意图、调用脚本等。Hook 支持用**任意语言**编写插件。
 
 **普通 Cron 与 LLM Cron**： ATRI-X 内置 Cron Runtime 和 LLM 可编排 Cron 服务。普通 Cron 按计划直接发送固定内容；LLM Cron 用任务描述驱动模型执行，适合需要分析、归纳或使用工具的定时任务。
 
@@ -41,7 +41,7 @@ ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是
 
 **可由 LLM 创建的 ATRI-X Skill**： ATRI-X 内置 `create_atrix_skill` 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。创建时自动校验 Atriyph 语法，可选附带 Go 源码并编译；创建后的纯 Atriyph 文本或 Go 源码由统一的 `read_atrix_skill` / `modify_atrix_skill` 维护，源码改完后通过 `finalize_atrix_skill` 统一格式化、编译并返回检查结果。
 
-**兼容外置 AgentSkill**： 除了原生 Go Skill，ATRI-X 也兼容遵从 agentskills.io 风格的外置 AgentSkill。自动扫描 `skills/agent/<skill>/SKILL.md` 或 `SKILL.atriyph`，读取名称、描述、适用场景和风险等级；当前可通过隐藏包装工具执行附带 Python 脚本。
+**兼容外置 AgentSkill**： ATRI-X 兼容遵从 agentskills.io 风格的外置 AgentSkill。可通过配置将任意 AgentSKill 脚本作为工具使用。
 
 ### 三、Atrinis 事件感知系统
 
