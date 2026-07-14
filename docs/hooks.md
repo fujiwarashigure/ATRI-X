@@ -1,15 +1,17 @@
 # Hook
 
-Hook 在 ATRI-X 的关键边界运行：它可以匹配或修改事件、追加输出意图，或把事件交给外部进程。Hook 不直接调用平台发送接口；输出由 ATRI-X 的 Output Manager 统一落到平台。
+Hook 在 ATRI-X 的关键边界匹配或修改事件、追加输出，或把事件交给外部程序。输出统一由 Output Manager 发送。
 
+## 名词与选型
 
-## 先选类型
+| 名称 | 配置与生命周期 | 适用场景 |
+| --- | --- | --- |
+| **规则 Hook** | TOML `[[rules]]`；匹配后执行 actions。 | 改文本、发送内容等简单逻辑。 |
+| **一次性 exec Hook** | 规则中的 `type = "exec"`；每次命中启动一个外部程序，处理当前事件后退出。 | 独立脚本或无需保存进程状态的逻辑。 |
+| **Transient Worker** | `[plugin.runtime] mode = "transient"`；命中 trigger rule 后启动，waiting 会话结束后退出。 | 短期有状态、多轮交互。 |
+| **Persistent Worker** | `[plugin.runtime] mode = "persistent"`；随 ATRI-X 启动并常驻。 | 长期状态、后台任务、频繁事件。 |
 
-| 需求 | 选择 |
-| --- | --- |
-| 匹配事件后改文本、追加输出或调用已注册工具 | 规则 Hook |
-| 每次事件独立交给外部程序，处理完即退出 | 规则 Hook 的 `exec` action |
-| 进程常驻、维护状态、等待后续输入、主动调用 Host 工具 | 持久 Hook |
+Transient Worker 与 Persistent Worker 统称 **Worker Hook**；一次性 exec Hook 与 Worker Hook 统称 **进程 Hook**。`mode = "once"` 不创建 Worker，仍按规则 Hook 运行；只有规则配置了 `type = "exec"` 才会启动一次性 exec Hook。所有产生 outputs 的入口使用同一套 segment。
 
 Hook 示例见 [Hook Showcase](https://github.com/Elfreese/elbot-showcase/blob/main/hooks/README.md)。
 
@@ -27,7 +29,7 @@ name = "weather"
 
 | 字段 | 必填 | 说明 |
 | --- | --- | --- |
-| `name` | 是 | 插件标识和默认目录名；持久 Hook 同时把它作为 worker ID。持久 Hook ID 只能使用小写字母、数字、`-`、`_`；规则插件也建议遵守此格式。 |
+| `name` | 是 | 插件标识和默认目录名；Worker Hook 同时把它作为 worker ID。Worker ID 只能使用小写字母、数字、`-`、`_`；规则插件也建议遵守此格式。 |
 | `enabled` | 否 | 是否加载，默认 `true`。修改根配置后需要管理员执行全局 `/hooks reload`。 |
 | `path` | 否 | 相对 `plugins/` 的配置路径，默认 `<name>/hook.toml`；不能是绝对路径或逃出 `plugins/`。 |
 
@@ -193,11 +195,13 @@ text = "{{actions.search.result}}"
 - `replace` / `delete` 只处理 text segment；图片和文件保留。
 - exec response 的 `message.text` 覆写会重建为纯 text segment，原图片和文件 segment 会丢失。
 
-## 输出与路径
+## 统一输出
 
-规则 `send`、所有 Hook 使用同一套输出 segment。`target` 和 `timing` 属于整组 outputs，不属于单个 segment。
+规则 `send`、`output.send`、一次性 exec Hook 和 Worker Hook 的 response 使用同一套 outputs segment。`target` 和 `timing` 属于整组 outputs，不属于单个 segment。
 
-### 规则 TOML 的单个 `send`
+### TOML 写法
+
+单 segment 可直接写在 `send` action：
 
 ```toml
 type = "send"
@@ -208,10 +212,7 @@ timing = "immediate"
 target.group_id = "123456"
 ```
 
-单输出快速写法支持与 outputs segment 相同的字段，内部等价于单元素 `outputs`。快速字段与 `outputs` 不能同时出现；需要为 exec/tool action 命名时使用 `action_name`。
-
-### TOML `outputs` 与一次性 exec 的 `outputs`
-
+该写法等价于单元素 `outputs`，两者不能同时出现。多 segment 写法：
 
 ```toml
 [[rules.actions]]
@@ -225,6 +226,18 @@ outputs = [
 ]
 ```
 
+### JSON 写法
+
+进程 Hook response 和 `output.send` 使用相同结构：
+
+```json
+{
+  "outputs": [{"kind":"reply","message_id":"456","text":"引用回复"}],
+  "target": {"platform":"qqonebot","scope_id":"group:123"},
+  "timing": "immediate"
+}
+```
+
 | 字段 | 说明 |
 | --- | --- |
 | `kind` | `text`、`image`、`file`、`emoticon`、`at`、`reply`；默认 `text`。 |
@@ -235,11 +248,9 @@ outputs = [
 | `message_id` | `kind = "reply"` 的非空平台消息 ID。 |
 | `emoticon_id` | `kind = "emoticon"` 的非空平台原生表情或贴纸 ID；原生表情不接受媒体来源。 |
 
-`outputs` 是一条消息片段组。要发送单片段消息，只需让 `outputs` 只包含一个元素；要发送多条消息，则使用多个 `send` action 或多次 `output.send` 请求。
+`outputs` 是一条消息的片段组。发送多条消息需要多个 `send` action 或多次 `output.send`。
 
-大媒体应写到插件目录或 `_shared/`，然后返回 `path` 或 `url`；不要把大数据塞进 JSON Pipe。单个 stdout 协议帧最大 16 MiB。
-
-### target 与 timing
+### target、timing 与路径
 
 规则 TOML 使用 snake_case target：
 
@@ -251,17 +262,126 @@ target.group_id = "123456"
 target.superadmins = true
 ```
 
-通常省略 target 以沿用当前事件。JSON 和 TOML target 都使用上面的 snake_case 字段。`timing` 为 `immediate`（默认）或 `after_assistant`；其实际生效范围见 Hook 点表。
+JSON 与 TOML target 都使用上述 snake_case 字段；省略时沿用当前事件。`timing` 为 `immediate`（默认）或 `after_assistant`，实际生效范围见 Hook 点表。
 
-## hook.v2
+媒体相对路径按声明规则的插件目录解析；根 `plugins/hooks.toml` 的规则相对 `plugins/`。大媒体应写入插件目录或 `_shared/` 后返回 `path` 或 `url`。单个 `hook.v2` JSON Lines 帧最大 16 MiB，不要内联大数据。
 
-### 共同协议原则
+## 进程 Hook 编程接口
 
-所有 Hook 都使用 `hook.v2` JSON Lines：stdin 和 stdout 的每行都是一个 JSON 帧；stdout 只能写协议帧，日志写 stderr。Host 发起的 request ID 必须以 `host:` 开头，Hook 发起的 request ID 必须以 `plugin:` 开头，response 必须复用对应 request ID。
+进程 Hook 使用 `hook.v2` JSON Lines。stdin 和 stdout 每行一个 JSON 帧；stdout 只能写协议，日志写 stderr。Host request ID 使用 `host:*`，Hook request ID 使用 `plugin:*`，response 必须复用 request ID。
 
-两种模式都先处理 `system.init`，成功后再处理 `event.handle`，也都允许 Hook 向 Host 发 request；可用 method 则随运行模式不同。一次性 exec 只处理一个 `event.handle` 后退出；持久 Hook 会持续处理多个事件，并额外接收 `system.shutdown`、可能收到 `event.cancel`。
+Host 先发送 `system.init`，成功后发送 `event.handle`。一次性 exec Hook 处理一次事件后退出；Worker Hook 可处理多次事件，并接收 `system.shutdown` 和可能的 `event.cancel`。
 
-`exec` 每次匹配启动一个子进程：Host 发送 `system.init`，收到成功 response 后发送 `event.handle`，读取其 response 后等待进程退出。
+### 完整交互示例
+
+以下是一次性 exec Hook 的完整往返；代码块中每行都是一个 JSON Lines 帧。Host 写入 Hook stdin：
+
+```jsonl
+{"type":"request","id":"host:init","method":"system.init","params":{"version":"hook.v2","runtime":{"plugin_name":"demo","plugin_dir":"C:/atri-x/plugins/demo","config_path":"C:/atri-x/plugins/demo/hook.toml","rule_name":"weather","cwd":"C:/atri-x/plugins/demo"}}}
+```
+
+Hook 从 stdout 返回成功 response：
+
+```jsonl
+{"type":"response","id":"host:init","ok":true,"result":{}}
+```
+
+随后 Host 发送当前事件：
+
+```jsonl
+{"type":"request","id":"host:event","method":"event.handle","params":{"event":{"id":"evt-123","point":"platform.message.received","time":"2026-07-14T12:00:00+08:00","metadata":{"match":{}},"control":{"consume":false,"stop_propagation":false},"platform":{"name":"qqonebot","scope_id":"group:123456","user_id":"10001","conversation_id":"group:123456","message_id":"789","reply_to_message_id":""},"actor":{"id":"qqonebot:10001","role":"user","group_role":"member","user_id":"10001","nickname":"Alice","group_card":"","display_name":"Alice"},"session":{"id":"session-123","mode":"group","title":"","status":""},"request":{"id":"","kind":"","session_id":"","phase":""},"message":{"id":"789","role":"user","platform_text":"天气 上海","intent_text":"天气 上海","segments":[{"type":"text","text":"天气 上海"}]},"llm":{"provider":"","model":""},"tool":{"id":"","name":""}},"match":{},"runtime":{"plugin_name":"demo","plugin_dir":"C:/atri-x/plugins/demo","config_path":"C:/atri-x/plugins/demo/hook.toml","rule_name":"weather","cwd":"C:/atri-x/plugins/demo"}}}
+```
+
+Hook 返回处理结果：
+
+```jsonl
+{"type":"response","id":"host:event","ok":true,"result":{"status":"completed","matched":true,"result":"weather accepted","message":{"text":"查询上海天气"},"outputs":[{"kind":"text","text":"正在查询……"}],"target":{"platform":"qqonebot","scope_id":"group:123456"},"timing":"immediate","pass_through":false}}
+```
+
+处理失败时省略 `result`，返回 `{"type":"response","id":"host:event","ok":false,"error":"error message"}`。response 的 `id` 必须与 request 相同。
+
+### system.init.params
+
+| 字段 | 使用者 | 说明 |
+| --- | --- | --- |
+| `version` | 全部 | 固定为 `hook.v2`。 |
+| `runtime.plugin_name` | 一次性 | 插件名；根规则可能为空。 |
+| `runtime.plugin_dir` | 一次性 | 插件目录。 |
+| `runtime.config_path` | 一次性 | 声明规则的配置文件。 |
+| `runtime.rule_name` | 一次性 | 当前规则名；规则无名称时使用 action 名。 |
+| `runtime.cwd` | 一次性 | 当前进程工作目录。 |
+| `hook.id` / `hook.description` | Worker | Worker ID 和简介。 |
+| `hook.plugin_dir` / `hook.cwd` / `hook.shared_dir` | Worker | 插件目录、工作目录和共享目录。 |
+| `tools` | Worker | `[plugin.runtime.tools].allow` 中工具的 schema；未配置时为空。 |
+
+### event.handle.params
+
+| 字段 | 使用者 | 说明 |
+| --- | --- | --- |
+| `event` | 全部 | 当前事件，字段见文末 Event 章节。 |
+| `match` | 全部 | trigger rule 的 regex 捕获；无捕获时为空对象。 |
+| `runtime` | 一次性 | 与 `system.init.params.runtime` 相同。 |
+| `continuation` | Worker | `true` 表示 waiting 路由捕获的后续消息。 |
+| `tool_context` | Worker | 当前前台 `tool.call` 令牌。 |
+
+### event.handle result
+
+| 字段 | 使用者 | 说明 |
+| --- | --- | --- |
+| `status` | 全部 | 省略或 `completed` 表示结束；Worker 还可返回 `waiting`。 |
+| `outputs` / `target` / `timing` | 全部 | 统一输出格式，见“统一输出”。 |
+| `pass_through` | 全部 | `false` 表示接管，`true` 表示放行；覆盖规则默认的 `consume` 和 `stop_propagation`。 |
+| `matched` | 一次性 | `false` 表示本规则未命中：回滚本规则修改和 outputs，并跳过剩余 actions。 |
+| `result` / `error` | 一次性 | 写入 `{{actions.<name>.result/error}}` 的文本。 |
+| `message.text` | 一次性 | 覆写 action 的 `field`；未配置 field 时默认 `message.text`。空字符串表示清空，省略表示不改。 |
+| `consume` / `stop_propagation` | 一次性 | 为 `true` 时设置对应控制字段。 |
+| `conversation_id` | Worker | `waiting` 时必填的非空不透明 ID。 |
+| `expires_at` | Worker | `waiting` 时必填的 RFC 3339 时间，不得超过 `max_wait_seconds`。 |
+
+### Host 方法
+
+插件发起 request 时，`id` 必须以 `plugin:` 开头；它不是 method 的一部分。例如，Hook 从 stdout 请求 `platform.call`：
+
+```jsonl
+{"type":"request","id":"plugin:get-message-1","method":"platform.call","params":{"platform":"qqonebot","api":"get_msg","params":{"message_id":"789"}}}
+```
+
+Host 从 stdin 返回相同 `id`；`result` 的具体结构由平台 API 决定：
+
+```jsonl
+{"type":"response","id":"plugin:get-message-1","ok":true,"result":{"message_id":789,"raw_message":"天气 上海"}}
+```
+
+| method | 可用方 | `params` 与 `result` |
+| --- | --- | --- |
+| `shared.*` | 全部 | 读写全局共享状态，见下表。 |
+| `platform.call` | 一次性 | params 为 `platform`（可选，默认当前平台）、必填 `api`、可选对象 `params`；result 为平台返回值。 |
+| `output.send` | 一次性 | params 使用统一输出结构；result 含 `sent` 数量和 `receipts`。 |
+| `message.get_reply` | 一次性 | 无参数；result 含 `message_id` 和 `available`。 |
+| `message.get` | 一次性 | 保留接口；当前总是返回 `{"available":false}`。 |
+| `hook.log` | 一次性 | params 作为日志内容；result 为 `{"ok":true}`。 |
+| `tool.call` | Worker | 调用 allowlist 中的 ATRI-X 工具，字段见“工具调用”。 |
+| `hooks.reload` | Worker | params 为空对象；重载当前插件，结果见“插件自身重载”。 |
+
+### 共享状态
+
+一次性 exec Hook 与所有 Worker Hook 共享一个进程内 JSON KV：
+
+| method | `params` | 成功 `result` |
+| --- | --- | --- |
+| `shared.get` | `{"key":"weather/cache"}` | `{"found":true,"value":<任意 JSON>}`；不存在时 `found=false`。 |
+| `shared.set` | `{"key":"weather/cache","value":<任意 JSON>,"ttl_seconds":600}` | `{"ok":true}` |
+| `shared.delete` | `{"key":"weather/cache"}` | `{"deleted":true/false}` |
+| `shared.list` | `{"prefix":"weather/"}` | `{"keys":["weather/cache",...]}`；按字典序排列，空 prefix 列出全部。 |
+| `shared.compare_and_swap` | `{"key":"weather/cache","expected":<旧 JSON>,"value":<新 JSON>,"ttl_seconds":600}` | `{"swapped":true/false}` |
+
+`ttl_seconds` 是空闲超时：省略时默认 600 秒；正数会在成功 `get`、`set` 或 CAS 时重新计时；`0` 不按时间过期；负数非法。`list` 和失败的 CAS 不刷新时间，过期 key 视为不存在。
+
+key 去除首尾空白后必须非空，最长 256 字节。建议使用 `users/<platform>/<id>`、`cache/<name>` 等前缀避免冲突，但前缀不是权限边界。value 必须是合法 JSON，压缩后单值最大 1 MiB；共享区最多 10,000 条，key 与 value 合计最大 32 MiB。
+
+达到上限时先删除过期项，再按最近使用时间淘汰最冷数据；`ttl_seconds = 0` 也可能被淘汰。CAS 按压缩后的 JSON 原子比较；省略 `expected` 表示仅当 key 不存在时写入，显式 `expected: null` 只匹配 JSON `null`。共享状态跨 Hook 重启和 `/hooks reload` 保留，ATRI-X 重启后清空；需要持久化时写入插件目录或 `_shared/`。
+
+### 一次性 exec Hook
 
 ```toml
 [[rules]]
@@ -277,105 +397,15 @@ field = "llm.text"
 timeout_seconds = 30
 ```
 
-### command、cwd 与 timeout
+`command` 不经过 shell，支持单引号、双引号及引号内的反斜杠转义；shell 语法应显式调用 `bash -lc`、`sh -c` 或平台解释器。`timeout_seconds` 为 `0` 或省略时不额外超时，不能为负数。
 
-`exec.command` 不隐式经过 shell。它支持单引号、双引号及引号/反斜杠的有限转义；shell 语法应显式调用 `bash -lc`、`sh -c` 或平台解释器。
+插件内规则的 `cwd` 默认插件目录，只能使用插件内相对路径；根 `plugins/hooks.toml` 的规则默认在 `plugins/` 执行，可使用相对或绝对 cwd。
 
-- `timeout_seconds` 为 `0` 或省略时不额外设置 exec 超时；不能为负数。
-- 插件内规则的 `cwd` 默认插件目录；显式 cwd 必须是插件目录内的相对路径。
-- 根 `plugins/hooks.toml` 的规则默认在 `plugins/` 目录执行；其 cwd 可为相对路径或绝对路径。
-- `exec` 返回的相对媒体 `path` 始终相对声明规则的插件目录；根规则则相对 `plugins/`。
+一次性 exec Hook 的 `platform.call` 中，`platform` 可省略并默认当前平台；显式填写时必须等于当前平台。adapter 返回 JSON 时 Host 原样放入 response `result`，否则作为字符串。
 
-### Host 请求与 Hook response
+## Worker Hook
 
-每个 stdin/stdout 帧是一行 JSON。Host ID 使用 `host:*`，Hook 主动 request ID 使用 `plugin:*`；response 必须复用原 request ID。stdout 只能写协议帧，日志写 stderr。
-
-Host 首先发送：
-
-```json
-{"type":"request","id":"host:init","method":"system.init","params":{"version":"hook.v2","runtime":{"plugin_name":"demo","plugin_dir":"C:/atri-x/plugins/demo","config_path":"C:/atri-x/plugins/demo/hook.toml","rule_name":"demo_rule","cwd":"C:/atri-x/plugins/demo"}}}
-```
-
-Hook 成功响应：
-
-```json
-{"type":"response","id":"host:init","ok":true,"result":{}}
-```
-
-随后 Host 发送：
-
-```json
-{"type":"request","id":"host:event","method":"event.handle","params":{"event":{"point":"platform.message.received","platform":{"name":"qqonebot","scope_id":"group:123","message_id":"456","reply_to_message_id":"789"},"actor":{"id":"qqonebot:10001"},"message":{"role":"user","segments":[{"type":"text","text":"撤回"}]}},"match":{},"runtime":{"plugin_name":"demo","plugin_dir":"C:/atri-x/plugins/demo","config_path":"C:/atri-x/plugins/demo/hook.toml","rule_name":"demo_rule","cwd":"C:/atri-x/plugins/demo"}}}
-```
-
-`event.handle` 成功 response：
-
-```json
-{
-  "type": "response",
-  "id": "host:event",
-  "ok": true,
-  "result": {
-    "status": "completed",
-    "matched": true,
-    "result": "optional template result",
-    "message": {"text": "optional replacement text"},
-    "outputs": [{"kind": "text", "text": "hello"}],
-    "consume": false,
-    "stop_propagation": false
-  }
-}
-```
-
-失败时只返回外层错误：
-
-```json
-{"type":"response","id":"host:event","ok":false,"error":"missing platform.reply_to_message_id"}
-```
-
-`status` 只能省略或为 `completed`。配置了 action `field` 时，存在的 `message.text` 覆写该字段；空字符串合法，省略 `message` 或 `message.text` 才表示不改。
-
-`matched = false` 表示外部脚本判定规则未命中：该规则本次已产生的文本修改和 outputs 会回滚，剩余 actions 不执行，也不视为错误。
-
-### exec Hook 主动请求 Host
-
-一次性 exec 可向 Host 发 `plugin:*` request：
-
-| method | 作用 |
-| --- | --- |
-| `platform.call` | 调用当前事件平台的原生 API。 |
-| `output.send` | 立即经 Output Manager 发送 outputs。 |
-| `message.get_reply` | 读取当前被引用的平台消息 ID。 |
-| `message.get` | 保留接口；当前总是返回 `available: false`。 |
-| `hook.log` | 写入 Host 日志。 |
-| `shared.*` | 读写全局共享 KV；方法和参数见下文“工具与共享状态”。 |
-
-`platform.call` 示例：
-
-```json
-{
-  "type": "request",
-  "id": "plugin:recall-1",
-  "method": "platform.call",
-  "params": {
-    "platform": "qqonebot",
-    "api": "delete_msg",
-    "params": {"message_id": "789"}
-  }
-}
-```
-
-`platform` 可省略，默认当前事件的 `platform.name`；若填写，只能等于当前平台。Host 成功后以相同 ID 回写：
-
-```json
-{"type":"response","id":"plugin:recall-1","ok":true,"result":{}}
-```
-
-平台 adapter 返回 JSON 时，Host 原样作为 JSON 值放入 `result`；否则作为字符串。Hook 应先依据外层 `ok` 判断通用成功。
-
-## 持久 Hook
-
-持久和临时 worker 都由插件自己的 `hook.toml` 声明。`mode = "persistent"` 的 worker 在 ATRI-X 启动或 `/hooks reload` 后自动启动；`mode = "transient"` 只在 trigger rule 命中时启动。省略 `[plugin.runtime]` 或省略 `mode` 等价于 `mode = "once"`。
+Worker Hook 由插件自己的 `hook.toml` 声明。Persistent Worker 在 ATRI-X 启动或 `/hooks reload` 后启动；Transient Worker 在 trigger rule 命中时启动。省略 `[plugin.runtime]` 或 `mode` 等价于 `mode = "once"`，不创建 Worker。
 
 ```toml
 [plugin]
@@ -411,7 +441,7 @@ wakeup = "any"
 if = "message.intent_text"
 op = "contains"
 value = "天气"
-# 持久 Hook 的 rules 不设置 action/actions；控制字段作为 event.handle 的默认值。
+# Worker Hook 的 rules 不设置 action/actions；控制字段作为 event.handle 的默认值。
 consume = true
 stop_propagation = true
 ```
@@ -435,7 +465,7 @@ stop_propagation = true
 | 字段 | 说明 |
 | --- | --- |
 | `mode` | `once`（默认）、`persistent` 或 `transient`。`persistent` 启动后常驻；`transient` 只在规则命中后启动，并在会话结束后退出。 |
-| `command` | 启动命令，不经过 shell，当前按空白简单拆分，**不解析引号**；参数含空格时请通过脚本包装或避免该路径。 |
+| `command` | 启动命令，不经过 shell；支持单引号、双引号及引号内的反斜杠转义。 |
 | `cwd` | 相对插件目录，不能为绝对路径或逃出插件目录。通常为 `.`。 |
 | `startup_timeout_seconds` | 等待 `system.init` 成功 response 的最长秒数，必须大于 `0`。 |
 | `shutdown_timeout_seconds` | 等待 `system.shutdown` 和退出的最长秒数，必须大于 `0`。 |
@@ -457,93 +487,13 @@ stop_propagation = true
 | `allow` | 前台 `tool.call` 可使用的工具名；Host 在 `system.init.params.tools` 下发对应 schema。 |
 | `background_allow` | 后台可使用的工具名，必须同时出现在 `allow`。 |
 
-持久 trigger rule 复用规则 Hook 的匹配、角色、priority、`wakeup`、`consume` 和 `stop_propagation` 语义。`action` 或 `actions` 会使配置校验失败。两个控制字段是插件未返回 `pass_through` 时的默认行为。
+Worker trigger rule 复用规则 Hook 的匹配、角色、priority、`wakeup`、`consume` 和 `stop_propagation`；配置 `action` 或 `actions` 会校验失败。`pass_through` 省略时使用规则中的两个控制字段。
 
-需要由插件动态决定是否拦截时，在 stdout 的 `event.handle` response 中返回 `pass_through`：`false` 表示当前插件接管消息，`true` 表示继续交给后续插件、命令或主 LLM。该字段会
-         同时覆盖规则配置中的 `consume` 和 `stop_propagation`；省略时仍按配置处理。
-
-worker 状态为 `starting`、`ready`、`running`、`degraded`、`stopping`、`stopped` 或 `failed`。停止时 Host 先请求 `system.shutdown`，超过关闭超时才强制结束进程。
-
-### 协议与输出
-
-持久进程收到的 `system.init.params`：
-
-```json
-{
-  "version": "hook.v2",
-  "hook": {
-    "id": "weather",
-    "description": "有状态天气助手",
-    "plugin_dir": "C:/atri-x/plugins/weather",
-    "cwd": "C:/atri-x/plugins/weather",
-    "shared_dir": "C:/atri-x/plugins/_shared"
-  },
-  "tools": [
-    {
-      "type": "function",
-      "function": {
-        "name": "web_search",
-        "description": "...",
-        "parameters": {"type": "object"}
-      }
-    }
-  ]
-}
-```
-
-`event.handle.params`：
-
-| 字段 | 说明 |
-| --- | --- |
-| `event` | 当前 Hook 事件。 |
-| `match` | trigger rule 的 regex 捕获；无捕获时为空对象。 |
-| `continuation` | `true` 表示 waiting 路由捕获的后续消息。 |
-| `tool_context` | 本次前台工具调用令牌，必须原样用于前台 `tool.call`。 |
-
-#### 读取用户输入
-
-持久或临时 worker 不应假定 `event.message.segments` 已去掉唤醒前缀：它保留平台归一化后的原始 segments；`event.message.intent_text` 才是 Host 去除唤醒前缀后计算出的用户意图文本。处理文本指令时，应优先读取 `intent_text`，为空再拼接 text segments：
-
-```python
-def message_text(event):
-    message = event.get("message") or {}
-    intent = str(message.get("intent_text") or "").strip()
-    if intent:
-        return intent
-    return "".join(
-        str(segment.get("text") or "")
-        for segment in message.get("segments") or []
-        if segment.get("type") == "text"
-    ).strip()
-```
-
-对于由 `platform.message.received` trigger rule 以 `message.intent_text` 匹配后启动的首次调用，插件通常无需再次校验同一唤醒前缀或指令文本；Host 已完成这层路由。waiting continuation 也只会捕获同一 platform、scope 和 actor 的消息。业务参数校验、外部服务授权和插件自身权限判断仍由插件负责。
-
-`event.handle` 成功 response 的 `result`：
-
-| 字段 | 说明 |
-| --- | --- |
-| `status` | 省略或 `completed` 表示结束；`waiting` 表示继续捕获后续消息。 |
-| `conversation_id` | `waiting` 时必填的非空不透明 ID。 |
-| `expires_at` | `waiting` 时必填的 RFC 3339 时间，必须晚于当前时间且不超过 `max_wait_seconds`。 |
-| `outputs` | 交给 Output Manager 的输出数组。 |
-| `target` | 可选的整组发送目标，使用统一 snake_case 字段；省略时沿用当前事件。 |
-| `timing` | 可选的整组发送时机：`immediate` 或 `after_assistant`。 |
-| `pass_through` | 可选动态控制；`false` 表示接管消息，`true` 表示完整放行，省略时使用 trigger rule 的 `consume`、`stop_propagation`。 |
-
-例如，查询插件缺少参数时返回 `waiting` 和“请输入查询内容”；收到 continuation 后，命中时返回结果及 `"pass_through": false`，未命中时静默返回 `{"status":"completed","pass_through":true}`。
-
-临时和持久 Hook 使用与规则、一次性 exec 相同的 outputs segment：
-
-```json
-{
-  "outputs": [{"kind": "reply", "message_id": "456", "text": "引用回复"}],
-  "target": {"platform":"qqonebot","scope_id":"group:123"},
-  "timing": "immediate"
-}
-```
+Worker 状态为 `starting`、`ready`、`running`、`degraded`、`stopping`、`stopped` 或 `failed`。停止时 Host 先请求 `system.shutdown`，超过关闭超时才强制结束进程。
 
 ### waiting、并发与取消
+
+需要继续收集输入时返回 `status = "waiting"`、`conversation_id` 和 `expires_at`；`expires_at` 必须晚于当前时间，且剩余时间不超过 `max_wait_seconds`。完成时返回 `completed` 或省略 status。
 
 同一 `platform + scope_id + actor.id` 在同一个 worker 内串行，不同路由可并行。waiting 租约也以该三元组为 key：
 
@@ -554,15 +504,15 @@ def message_text(event):
 - continuation 返回 `completed` 或省略 `status` 后，Host 立即释放租约；对于 transient worker，同时关闭该进程。再次返回 `waiting` 则以新 ID、过期时间续期。
 - 阻断策略命中、worker 退出、停止或重载会清理该插件租约。
 
-用户发送精确的 `/cancel` 时，Host 取消该路由当前执行或 waiting 会话，并关闭 transient worker；persistent worker 只接收取消通知并保留进程和内存。
+用户发送精确的 `/cancel` 时，Host 取消该路由当前执行或 waiting 会话，并关闭 Transient Worker；Persistent Worker 只接收取消通知并保留进程和内存。
 
 ```json
 {"type":"event","method":"event.cancel","params":{"conversation_id":"weather-42"}}
 ```
 
-### 工具与共享状态
+### 工具调用
 
-worker Hook 自行维护 LLM loop、业务状态和工具使用决策。Host 对 `tool.call` 只校验 allowlist、前后台能力、context 归属、次数、超时、取消和发送 target；**不执行 ATRI-X 的风险分级、权限策略或交互确认**。插件必须自行承担工具授权和风险控制。
+Worker Hook 自行维护 LLM loop、业务状态和工具使用决策。Host 对 `tool.call` 只校验 allowlist、前后台能力、context 归属、次数、超时、取消和发送 target；**不执行 ATRI-X 的风险分级、权限策略或交互确认**。插件必须自行承担工具授权和风险控制。
 
 前台调用：
 
@@ -580,23 +530,7 @@ worker Hook 自行维护 LLM loop、业务状态和工具使用决策。Host 对
 {"content":"...","segments":[],"warnings":[],"receipts":[{"PlatformMessageIDs":["123"]}]}
 ```
 
-`content` 是工具文本结果，`segments` 为 `{type,text,url,mime_type,name}` 数组，`warnings` 为字符串数组，`receipts` 是工具 outputs 经 Output Manager 发送后的平台消息 ID。失败统一使用外层 `ok=false,error`。Hook 工具调用不会写入 Agent Session。
-
-除 `_shared/` 文件目录外，一次性 exec 与所有 worker 共享一个进程内 JSON KV：
-
-| method | `params` | 成功 `result` |
-| --- | --- | --- |
-| `shared.get` | `{"key":"weather/cache"}` | `{"found":true,"value":<任意 JSON>}`；不存在时 `found=false`。 |
-| `shared.set` | `{"key":"weather/cache","value":<任意 JSON>,"ttl_seconds":600}` | `{"ok":true}` |
-| `shared.delete` | `{"key":"weather/cache"}` | `{"deleted":true/false}` |
-| `shared.list` | `{"prefix":"weather/"}` | `{"keys":["weather/cache",...]}`，按字典序；空 prefix 列出全部。 |
-| `shared.compare_and_swap` | `{"key":"weather/cache","expected":<旧 JSON>,"value":<新 JSON>,"ttl_seconds":600}` | `{"swapped":true/false}` |
-
-`ttl_seconds` 是空闲超时：省略时默认 600 秒，设为正数时每次成功 `get`、`set` 或 `compare_and_swap` 都会重新计时，显式设为 `0` 时不按时间过期；负数非法。`list` 和失败的 `compare_and_swap` 不会刷新访问时间。过期 key 在读取、列举、删除或 CAS 时均视为不存在。
-
-key 去除首尾空白后必须非空，最长 256 字节，不强制使用特定格式。建议按 `users/<platform>/<id>`、`cache/<name>` 等前缀组织全局数据以减少命名冲突；前缀只是命名约定，不是权限边界，所有hook共享数据。value 必须是合法 JSON，压缩后单值最大 1 MiB；共享区最多 10,000 条，key 与 value 合计最大 32 MiB。
-
-达到条目或容量上限时，Host 会先删除过期项，再按最近使用时间淘汰全局最冷的数据；`ttl_seconds = 0` 的条目也可能被容量淘汰。`compare_and_swap` 是原子操作，按压缩后的 JSON 内容比较；省略 `expected` 表示仅当 key 不存在时写入，显式 `expected: null` 表示当前值必须是 JSON `null`。共享内存跨 Hook 重启和 `/hooks reload` 保留，在 ATRI-X 重启后清空；需要持久化时由 Hook 写入自己的目录或 `_shared/`。
+`content` 是工具文本结果，`segments` 为 `{type,text,url,mime_type,name}` 数组，`warnings` 为字符串数组，`receipts` 是工具 outputs 经 Output Manager 发送后的平台消息 ID。失败使用外层 `ok=false,error`。Hook 工具调用不会写入 Agent Session。
 
 ### 插件自身重载
 
@@ -640,6 +574,25 @@ Host 会先完整读取并校验候选配置。失败时返回 `ok=false`，旧�
 | `segments` | `{type,text,url,mime_type,name}` 数组，type 为 `text` / `image` / `file`。 |
 | `reply` | 被引用消息：`message_id`、`sender_id`、`text`、`display_text`、`segments`。 |
 | `messages` | LLM 消息数组；非 LLM 上下文通常为空。 |
+
+### 读取用户输入
+
+`segments` 保留平台归一化后的原始内容；处理文本指令时优先读取已去除唤醒前缀的 `intent_text`，为空再拼接 text segments：
+
+```python
+def message_text(event):
+    message = event.get("message") or {}
+    intent = str(message.get("intent_text") or "").strip()
+    if intent:
+        return intent
+    return "".join(
+        str(item.get("text") or "")
+        for item in message.get("segments") or []
+        if item.get("type") == "text"
+    ).strip()
+```
+
+trigger rule 已匹配的首次调用通常无需重复校验同一指令；waiting continuation 只捕获同一 platform、scope 和 actor。业务参数、授权和插件权限仍由插件校验。
 
 `llm` 包含 `provider`、`model`、`messages`、`tools`、`usage`、`source_text`、`text`、`tool_calls`、`elapsed_ms`。其中嵌套 `messages`、`tool_calls`、`usage` 沿用 Go 导出的 JSON 名：`Role/Segments/Name/ToolCallID/ToolCalls`、`ID/Name/Arguments`、`PromptTokens/CompletionTokens/TotalTokens/CacheHitTokens`。
 
