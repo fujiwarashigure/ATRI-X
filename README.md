@@ -35,7 +35,7 @@ ATRI-X does not inject the full schema of all tools by default in every round of
 
 ### II. Powerful and Extensible
 
-**Extensible Hook system**: ATRI-X has a built-in Hook Layer, allowing extension logic to be inserted at key event points such as Agent input, LLM request, LLM response, platform sending, and platform connection. Hooks can modify messages, append output intents, call scripts, and more. The exec action of Rule Hooks is based on stdio communication, supporting the development of plugins using any language or script.
+**Extensible Hook system**: ATRI-X has a built-in Hook Layer, allowing extension logic to be inserted at key event points such as Agent input, LLM request, LLM response, platform sending, and platform connection. Hooks can modify messages, append output intents, call scripts, and more. Hook supports writing plugins in **any language**.
 
 **Standard Cron and LLM Cron**: ATRI-X features a built-in Cron Runtime and an LLM-orchestratable Cron service. Standard Cron sends fixed content directly according to a schedule; LLM Cron drives model execution using task descriptions, making it suitable for scheduled tasks that require analysis, summarization, or the use of tools.
 
@@ -43,7 +43,7 @@ ATRI-X does not inject the full schema of all tools by default in every round of
 
 **ATRI-X Skills creatable by LLM**: ATRI-X has a built-in `create_atrix_skill` meta-tool, allowing the LLM to crystallize reusable experience into ATRI-X Skills. Automatically validate Atriyph syntax upon creation, with optional Go source code attachment and compilation; The pure Atriyph text or Go source code created is maintained by a unified `read_atrix_skill` / `modify_atrix_skill`; after the source code is modified, it is uniformly formatted and compiled via `finalize_atrix_skill`, and the check results are returned.
 
-**Compatible with external AgentSkills**: In addition to native Go Skills, ATRI-X is also compatible with external AgentSkills that follow the agentskills.io style. Automatically scan `skills/agent/<skill>/SKILL.md` or `SKILL.atriyph` to read the name, description, applicable scenarios, and risk level; Currently, bundled Python scripts can be executed via hidden wrapper tools.
+**Compatible with external AgentSkill**: ATRI-X is compatible with external AgentSkills that follow the agentskills.io style. Any AgentSkill script can be used as a tool through configuration.
 
 ### III. Atrinis Event Perception System
 
