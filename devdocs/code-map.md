@@ -330,7 +330,8 @@ rg -n "Migration|Repository|Upsert|List|Archive|Fork|ToolCall|CronJob|AtrinisEve
 先看：
 
 - `internal/atriena/`：公共协议层。
-- `internal/atrinis/`：Atrinis HTTP、鉴权、准备、投递和后台任务。
+- `internal/atrinis/`：Atrinis HTTP、鉴权、准备、投递和后台任务；`outbox.go` 负责 LLM 报告持久化投递、重试与恢复。
+- `internal/storage/sqlite/atrinis_event_repository.go`：Atrinis event 与 report outbox 的事务、claim、receipt 和完成状态持久化。
 - `internal/background/`：cron/Atrinis 共用后台 LLM 类型与结果 helper。
 - `internal/tool/builtin/atriwisp_creator.go`：Atriwisp 创建指南工具。
 - `docs/atrinis.md`

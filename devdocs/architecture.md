@@ -292,11 +292,14 @@ Atrinis 是监听枢纽，Atriena 是公共协议层，Atriwisp 是外部事件/
 5. direct 发送 content/segments 或执行 raw/capability calls。
 6. llm 后台任务按 session_mode 运行，并投递结果报告。
 
+LLM 报告使用 SQLite outbox：result 与逐目标、逐 output 的投递项原子落库，投递期间状态为 `result_ready/delivering`，所有 receipt 持久化后才进入 `completed`。Runtime 定时重试未完成项，并在启动时恢复被中断的投递；语义为至少一次。
+
 约定：
 
 - 公共协议类型放在 `internal/atriena`，Atrinis 复用别名。
 - segment 下载和 URL/data URI 校验集中处理。
 - 背景 LLM 要使用后台 actor、sandbox subdir 和对应 session_mode。
+- 报告发送不能先写 `completed`；外部平台未提供幂等能力时允许恢复产生重复消息，但不能静默丢失待投递项。
 
 <!-- locator:cron -->
 ## Cron 与后台任务

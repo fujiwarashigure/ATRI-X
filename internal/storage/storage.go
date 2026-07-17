@@ -123,6 +123,27 @@ type AtrinisEvent struct {
 	UpdatedAt        time.Time
 }
 
+type AtrinisReportDelivery struct {
+	ID        string
+	EventID   string
+	Ordinal   int
+	Target    string
+	Output    string
+	MessageID string
+	Status    string
+	Receipt   string
+	Error     string
+	Attempts  int
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+const (
+	AtrinisReportDeliveryPending   = "pending"
+	AtrinisReportDeliveryFailed    = "failed"
+	AtrinisReportDeliveryDelivered = "delivered"
+)
+
 type ChatMessage struct {
 	Seq                      int64
 	ID                       string
@@ -205,6 +226,21 @@ type UpdateAtrinisEventRequest struct {
 	SessionID       string
 	Result          string
 	Error           string
+}
+
+type CreateAtrinisReportDeliveryRequest struct {
+	Target    string
+	Output    string
+	MessageID string
+}
+
+type PrepareAtrinisReportRequest struct {
+	EventID           string
+	ResolvedTargets   string
+	SessionID         string
+	Result            string
+	Deliveries        []CreateAtrinisReportDeliveryRequest
+	ResultReadyStatus string
 }
 
 type ToolUsageSummary struct {
@@ -304,8 +340,19 @@ type CronJobRepository interface {
 
 type AtrinisEventRepository interface {
 	Create(ctx context.Context, req CreateAtrinisEventRequest) (*AtrinisEvent, error)
+	Get(ctx context.Context, id string) (*AtrinisEvent, error)
 	GetByKey(ctx context.Context, atriwispName, source, sourceID string) (*AtrinisEvent, error)
 	Update(ctx context.Context, req UpdateAtrinisEventRequest) error
+	PrepareReport(ctx context.Context, req PrepareAtrinisReportRequest) error
+	ResetDeliveringReports(ctx context.Context, deliveringStatus, resultReadyStatus string) error
+	ListResultReadyReportIDs(ctx context.Context, resultReadyStatus string) ([]string, error)
+	ClaimReport(ctx context.Context, eventID, resultReadyStatus, deliveringStatus string) (bool, error)
+	ReleaseReport(ctx context.Context, eventID, deliveringStatus, resultReadyStatus, deliveryError string) error
+	ListReportDeliveries(ctx context.Context, eventID string) ([]AtrinisReportDelivery, error)
+	StartReportDelivery(ctx context.Context, id string) error
+	MarkReportDeliveryFailed(ctx context.Context, eventID, deliveryID, resultReadyStatus, deliveryError string) error
+	MarkReportDeliveryDelivered(ctx context.Context, deliveryID, receipt string) error
+	CompleteReport(ctx context.Context, eventID, deliveringStatus, completedStatus string) error
 }
 
 type ChatHistoryRepository interface {

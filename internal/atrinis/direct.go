@@ -3,15 +3,11 @@ package atrinis
 import (
 	"context"
 	"fmt"
-	"path/filepath"
 	"strings"
 
-	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
-	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
-	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 )
 
 func (s *Service) runDirect(ctx context.Context, event Event, eventID string) error {
@@ -64,24 +60,6 @@ func (s *Service) executeCalls(ctx context.Context, targets []Target, calls []Ca
 		}
 	}
 	return nil
-}
-
-func (s *Service) sendReport(ctx context.Context, event Event, report string, reportSegments []llm.MessageSegment, sessionID, messageID string) error {
-	if s.send == nil {
-		return fmt.Errorf("atrinis sender is not configured")
-	}
-	resolved, err := decodeResolvedTargets(event.ResolvedTargets)
-	if err != nil {
-		return err
-	}
-	if len(resolved) == 0 {
-		return nil
-	}
-	outputs, err := background.BuildReportOutputs(report, reportSegments, tool.SandboxContext{Dir: filepath.Join(s.sandboxRoot, filepath.FromSlash(atrinisSandboxSubdir(event.Request.Atriwisp.Name))), Background: true, BackgroundKind: tool.BackgroundKindAtrinis})
-	if err != nil {
-		return err
-	}
-	return s.sendOutputsToTargetsMapped(ctx, event.EventKey, resolved, outputs, sessionID, messageID)
 }
 
 func (s *Service) sendOutputsToTargets(ctx context.Context, targets []Target, outputs []delivery.Output) error {

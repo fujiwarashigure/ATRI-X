@@ -10,6 +10,8 @@ const (
 	StatusAccepted    = atriena.StatusAccepted
 	StatusQueued      = atriena.StatusQueued
 	StatusRunning     = atriena.StatusRunning
+	StatusResultReady = atriena.StatusResultReady
+	StatusDelivering  = atriena.StatusDelivering
 	StatusCompleted   = atriena.StatusCompleted
 	StatusFailed      = atriena.StatusFailed
 	StatusDuplicate   = atriena.StatusDuplicate

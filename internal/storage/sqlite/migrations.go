@@ -230,6 +230,31 @@ ALTER TABLE atrinis_events ADD COLUMN tool_declarations TEXT NULL;
 ALTER TABLE atrinis_events ADD COLUMN tool_hash TEXT NULL;
 `,
 	},
+	{
+		version: 9,
+		name:    "create_atrinis_report_deliveries",
+		sql: `
+CREATE TABLE atrinis_report_deliveries (
+    id TEXT PRIMARY KEY,
+    event_id TEXT NOT NULL,
+    ordinal INTEGER NOT NULL,
+    target TEXT NOT NULL,
+    output TEXT NOT NULL,
+    message_id TEXT NULL,
+    status TEXT NOT NULL,
+    receipt TEXT NULL,
+    error TEXT NULL,
+    attempts INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY(event_id) REFERENCES atrinis_events(id) ON DELETE CASCADE,
+    UNIQUE(event_id, ordinal)
+);
+
+CREATE INDEX idx_atrinis_report_deliveries_event_status_ordinal
+ON atrinis_report_deliveries(event_id, status, ordinal);
+`,
+	},
 }
 
 func runMigrations(ctx context.Context, db *sql.DB) error {
