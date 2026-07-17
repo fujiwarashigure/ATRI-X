@@ -82,6 +82,20 @@ func TestResolvePathGeneratesPlatformDefaultsWhenNoConfigExists(t *testing.T) {
 	if !strings.Contains(string(envExampleData), "JINA_API_KEY=") {
 		t.Fatalf("generated .env.example is missing JINA_API_KEY: %q", string(envExampleData))
 	}
+	atrinisData, err := os.ReadFile(filepath.Join(filepath.Dir(want), "atrinis.toml"))
+	if err != nil {
+		t.Fatalf("read generated atrinis.toml: %v", err)
+	}
+	for _, setting := range []string{
+		"read_header_timeout_seconds = 5",
+		"read_timeout_seconds = 30",
+		"write_timeout_seconds = 300",
+		"idle_timeout_seconds = 60",
+	} {
+		if !strings.Contains(string(atrinisData), setting) {
+			t.Fatalf("generated atrinis.toml is missing %q", setting)
+		}
+	}
 	creatorTomlPath := filepath.Join(filepath.Dir(want), "skills", "agent", "agent_skill_creator", "ATRIX_SKILL.toml")
 	creatorTomlData, err := os.ReadFile(creatorTomlPath)
 	if err != nil {
@@ -124,6 +138,9 @@ func TestResolvePathGeneratesPlatformDefaultsWhenNoConfigExists(t *testing.T) {
 	}
 	if cfg.Atrinis.Enabled {
 		t.Fatal("generated Atrinis config should be disabled")
+	}
+	if cfg.Atrinis.HTTP.ReadHeaderTimeoutSeconds != 5 || cfg.Atrinis.HTTP.ReadTimeoutSeconds != 30 || cfg.Atrinis.HTTP.WriteTimeoutSeconds != 300 || cfg.Atrinis.HTTP.IdleTimeoutSeconds != 60 {
+		t.Fatalf("generated Atrinis HTTP timeouts = %#v", cfg.Atrinis.HTTP)
 	}
 }
 

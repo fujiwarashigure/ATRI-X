@@ -22,6 +22,10 @@ addr = "127.0.0.1:32170" # 建议先绑定本地地址，需要暴露时再用�
 max_body_bytes = 1048576 # 单个 Atriena 请求 body 上限。
 queue_size = 128 # llm 模式后台队列长度。
 workers = 2 # llm 模式后台 worker 数。
+read_header_timeout_seconds = 5 # 请求头读取期限。
+read_timeout_seconds = 30 # 整个请求（含 body）读取期限。
+write_timeout_seconds = 300 # handler 执行及响应写出期限；direct 模式可能包含外部 I/O，因此默认较宽松。
+idle_timeout_seconds = 60 # keep-alive 空闲连接期限。
 
 [tokens.home]
 token_env = ["ATRINIS_HOME_TOKEN"] # 从系统环境变量或配置目录 .env 读取。
@@ -65,6 +69,8 @@ ATRINIS_HOME_TOKEN=change-me
 - 顶层 `allowed_tools` 是 ATRI-X 内部工具默认白名单，单个 Atriwisp 的 `allowed_tools` 存在时覆盖它。
 - 外部工具默认允许；单个 Atriwisp 可以用 `disabled_external_tools` 禁用指定外部工具。
 - Atrinis 默认允许投递；只有 `[delivery_disabled].targets` 或单 Atriwisp `disabled_targets` 显式列出的目标会被禁止。
+- HTTP 超时配置小于等于 0 时使用上述安全默认值，不能用 0 关闭超时。
+- 非 loopback 地址应放在反向代理后，由代理负责 TLS、连接上限和请求速率限制；应用层超时不能代替这些边界。
 
 如果想让 ATRI-X 帮你生成 Atriwisp 监听器，可以在 work 模式下向超级管理员会话提出需求，例如：
 
@@ -258,6 +264,7 @@ HTTP 响应只表示 Atrinis 已接收或拒绝请求，不等待 LLM 完成。
 }
 ```
 
+每个 HTTP 请求体必须且只能包含一个 JSON 值，尾随空白允许，尾随第二个 JSON 值或非法内容会返回 `400`。未知字段会被忽略，不参与协议语义、规范化、事件 `content_hash` 或审计；需要正式语义的字段应加入对应 Atriena 协议版本。
 
 
 ## 投递目标与安全边界

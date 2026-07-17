@@ -207,10 +207,14 @@ type AtrinisSegmentConfig struct {
 }
 
 type AtrinisHTTPConfig struct {
-	Addr         string `toml:"addr"`
-	MaxBodyBytes int64  `toml:"max_body_bytes"`
-	QueueSize    int    `toml:"queue_size"`
-	Workers      int    `toml:"workers"`
+	Addr                     string `toml:"addr"`
+	MaxBodyBytes             int64  `toml:"max_body_bytes"`
+	QueueSize                int    `toml:"queue_size"`
+	Workers                  int    `toml:"workers"`
+	ReadHeaderTimeoutSeconds int    `toml:"read_header_timeout_seconds"`
+	ReadTimeoutSeconds       int    `toml:"read_timeout_seconds"`
+	WriteTimeoutSeconds      int    `toml:"write_timeout_seconds"`
+	IdleTimeoutSeconds       int    `toml:"idle_timeout_seconds"`
 }
 
 type AtrinisTokenConfig struct {
@@ -645,6 +649,18 @@ func (c *Config) applyAtrinisDefaults() {
 	}
 	if c.Atrinis.HTTP.Workers <= 0 {
 		c.Atrinis.HTTP.Workers = 2
+	}
+	if c.Atrinis.HTTP.ReadHeaderTimeoutSeconds <= 0 {
+		c.Atrinis.HTTP.ReadHeaderTimeoutSeconds = 5
+	}
+	if c.Atrinis.HTTP.ReadTimeoutSeconds <= 0 {
+		c.Atrinis.HTTP.ReadTimeoutSeconds = 30
+	}
+	if c.Atrinis.HTTP.WriteTimeoutSeconds <= 0 {
+		c.Atrinis.HTTP.WriteTimeoutSeconds = 300
+	}
+	if c.Atrinis.HTTP.IdleTimeoutSeconds <= 0 {
+		c.Atrinis.HTTP.IdleTimeoutSeconds = 60
 	}
 	if c.Atrinis.Tokens == nil {
 		c.Atrinis.Tokens = map[string]AtrinisTokenConfig{}
