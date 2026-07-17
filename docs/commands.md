@@ -52,14 +52,15 @@ ATRI-X 的 slash 命令由 Agent Core 统一处理，CLI、QQ、后续平台共�
 
 | 命令 | 作用 |
 | --- | --- |
-| `/chat` | 切换到 chat 模式，或创建新的 chat Session。 |
-| `/work` | 切换到 work 模式，或创建新的 work Session。 |
+| `/chat [消息]` | 切换到 chat 模式，或创建新的 chat Session；提供消息时会切换后立即发送。 |
+| `/work [消息]` | 切换到 work 模式，或创建新的 work Session；提供消息时会切换后立即发送。 |
 
 说明：
 
 - `chat` 模式不注入工具，适合闲聊、陪伴和低成本问答。
 - `work` 模式启用工具发现和工具调用。
 - 已有历史的 work Session 不能直接切到 chat；需要先 `/new`，再 `/chat`。
+- 例如 `/chat 随便聊聊` 会先切换到 chat 模式，再把“随便聊聊”作为同一条用户消息发给模型；若模式切换被拒绝，消息不会发送。
 
 ## Session
 
@@ -68,7 +69,7 @@ ATRI-X 的 slash 命令由 Agent Core 统一处理，CLI、QQ、后续平台共�
 | `/new` | 创建并切换到新 Session。 |
 | `/status` | 查看当前 Session 状态。 |
 | `/sessions [关键词]` | 列出或搜索可见 Session。 |
-| `/resume [编号或session_id]` | 恢复历史 Session。 |
+| `/resume [最近编号或session_id]` | 恢复历史 Session；编号 `1` 表示最近更新的非当前 Session。 |
 | `/archives [页码] [关键词]` | 查看已归档 Session。 |
 | `/archive [编号或session_id] --confirm` | 归档 Session，默认当前 Session。 |
 | `/unarchive [编号或session_id]` | 取消归档 Session，默认当前 Session。 |
@@ -93,7 +94,8 @@ ATRI-X 的 slash 命令由 Agent Core 统一处理，CLI、QQ、后续平台共�
 
 说明：
 
-- `/sessions` 展示的编号可被 `/resume`、`/archive`、`/pin`、`/delete` 等命令复用。
+- `/resume 1` 可以直接恢复最近更新的非当前 Session，无需先执行裸 `/resume`；编号按更新时间排列，不受置顶影响，翻页时编号连续。
+- `/sessions` 展示的编号可被 `/archive`、`/pin`、`/delete` 等 Session 操作命令复用。
 - CLI 作为本地高权限入口，可以跨平台查看 Session；非 CLI 平台默认只查看当前平台和作用域下的 Session。
 - 删除是永久操作，需要显式 `--confirm`。
 
