@@ -24,6 +24,10 @@ addr = "127.0.0.1:32170" # It is recommended to bind to a local address first, a
 max_body_bytes = 1048576 # Request body limit for a single Atriena request.
 queue_size = 128 # Background queue length for LLM mode.
 workers = 2 # Number of background workers in LLM mode.
+read_header_timeout_seconds = 5 # Request header read timeout.
+read_timeout_seconds = 30 # Read timeout for the entire request (including body).
+write_timeout_seconds = 300 # Timeout for handler execution and response writing; direct mode may involve external I/O, so the default is more lenient.
+idle_timeout_seconds = 60 # Keep-alive idle connection timeout.
 
 [tokens.home]
 token_env = ["ATRINIS_HOME_TOKEN"] # Read from system environment variables or the .env file in the configuration directory.
@@ -67,6 +71,8 @@ Configuration description:
 - The top-level `allowed_tools` is the default whitelist for ATRI-X internal tools; it is overridden when `allowed_tools` of an individual Atriwisp exists.
 - External tools are allowed by default; an individual Atriwisp can use `disabled_external_tools` to disable specific external tools.
 - Atrinis allows delivery by default; Only targets explicitly listed in `[delivery_disabled].targets` or a single Atriwisp `disabled_targets` will be prohibited.
+- When HTTP timeout configurations are less than or equal to 0, the aforementioned safe default values are used; timeouts cannot be disabled by using 0.
+- Non-loopback addresses should be placed behind a reverse proxy, with the proxy handling TLS, connection limits, and request rate limiting; application-layer timeouts cannot replace these boundaries.
 
 If you want ATRI-X to help you generate an Atriwisp listener, you can submit a request to the superadmin Session in work mode, for example:
 
@@ -260,8 +266,11 @@ The HTTP response only indicates that Atrinis has received or rejected the reque
 }
 ```
 
+Each HTTP request body must contain exactly one JSON value. Trailing whitespace is allowed, but a trailing second JSON value or illegal content will return `400`. Unknown fields will be ignored and will not participate in protocol semantics, normalization, event `content_hash`, or auditing; Fields requiring formal semantics should be added to the corresponding Atriena protocol version.
+
 
 ## Delivery Target and Security Boundary
+
 Atriwisp can declare the expected target in `targets`, but the final target is decided by Atrinis.
 
 `targets` must be an array:
