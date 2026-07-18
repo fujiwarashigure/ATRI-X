@@ -313,5 +313,7 @@ LLM 报告使用 SQLite outbox：result 与逐目标、逐 output 的投递项�
 - 同一 job 防并发。
 - Runtime 未启动时 Stop 安全返回。
 - 维护类任务集中注册在 maintenance 包。
-- LLM cron 通过 Agent 后台 runner 执行，可预注入工具或 Skill。
+- LLM cron 每次实际调度触发都通过 Agent 后台 runner 创建新 Session；同一轮 JSON 格式重试才复用 Session。
+- 一次性 cron 的执行结果与逐平台投递状态需要持久化；平台重连只补发既有结果，重新启用或重新调度才清空旧状态并开始新一轮。
+- LLM cron 可预注入工具或 Skill。
 - cron/Atrinis 后台 shell 的非 critical 风险可自动确认，critical 直接返回提醒，不等待用户。
