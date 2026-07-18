@@ -250,6 +250,8 @@ Field descriptions:
 
 ATRI-X only reads `ATRIX_SKILL.toml` in the Skill root directory and does not scan recursively. The working directory during execution is fixed to the Skill root directory, and stdout will serve as the tool result; If stdout is `{"content":"..."}` JSON, the `content` field will be used.
 
+When writing configuration via the `agent_skill` meta-tool, ATRI-X will only confirm the write after a complete reload is successful; If the reload fails, the original TOML will be restored; if the file did not exist previously, the newly created file will be deleted.
+
 ## Go Skill Compiler Path
 
 After modifying the `code_source` of the Go Skill, ATRI-X will automatically execute `gofmt`, `go build`, and reload. If ATRI-X is running as a Linux service, the service environment may not have loaded the `PATH` of the interactive shell, causing the `go` available in the terminal to be invisible to ATRI-X.
