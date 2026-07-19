@@ -2,11 +2,14 @@ package agent
 
 import (
 	"context"
+	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/llm/openai"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
+	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -18,6 +21,43 @@ import (
 	"testing"
 	"time"
 )
+
+func mustNewWithOptions(t *testing.T, opts Options) *Agent {
+	t.Helper()
+	if opts.Clients == nil {
+		opts.Clients = map[string]llm.LLM{}
+	}
+	for name, provider := range opts.Providers {
+		if opts.Clients[name] == nil && provider.BaseURL != "" {
+			client, err := openai.NewWithOptions(provider.BaseURL, provider.APIKey, provider.ExtraPayload, nil, openai.RequestOptions{Proxy: provider.Proxy})
+			if err != nil {
+				t.Fatalf("create test provider %s: %v", name, err)
+			}
+			opts.Clients[name] = client
+		}
+	}
+	defaults := config.Default()
+	if opts.SessionListPageSize <= 0 {
+		opts.SessionListPageSize = defaults.View.SessionListPageSize
+	}
+	if opts.CleanupRetentionDays <= 0 {
+		opts.CleanupRetentionDays = 30
+	}
+	if opts.SandboxRoot == "" {
+		opts.SandboxRoot = defaults.Sandbox.Root
+	}
+	if opts.ToolsConfig.MaxRoundsPerTurn <= 0 {
+		opts.ToolsConfig = defaults.Tools
+	}
+	if opts.SecurityPolicy == nil {
+		opts.SecurityPolicy = security.DefaultPolicy()
+	}
+	agent, err := NewWithOptions(opts)
+	if err != nil {
+		t.Fatalf("NewWithOptions: %v", err)
+	}
+	return agent
+}
 
 type fakePlatform struct {
 	out         safeStringBuilder
