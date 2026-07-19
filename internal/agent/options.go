@@ -10,6 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
@@ -30,6 +31,7 @@ type Options struct {
 	NamingSelection       config.ModelSelection
 	NamingNotifier        session.NamingNotifier
 	SoulPath              string
+	ResidentMemoryStore   *resident.Store
 	LLMRequestConfig      config.LLMRequestConfig
 	HookService           agentcommands.HookService
 	HookManager           hook.Manager

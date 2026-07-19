@@ -16,6 +16,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
+	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
@@ -42,6 +43,7 @@ type Agent struct {
 	completion         *completion.Service
 	titleGen           *titleGenerator
 	soul               SoulProvider
+	residentMemory     *resident.Store
 	promptBuilder      PromptBuilder
 	toolRuntime        toolRuntimeState
 	securityPolicy     *security.Policy
@@ -166,6 +168,7 @@ func NewWithOptions(opts Options) (*Agent, error) {
 		turns:                  turns,
 		commands:               command.NewRouter(prefixes),
 		soul:                   promptSoul,
+		residentMemory:         opts.ResidentMemoryStore,
 		securityPolicy:         policy,
 		contextRuntime:         newContextRuntimeState(store, sessions, requests, turns),
 		hooks:                  hookManager,
