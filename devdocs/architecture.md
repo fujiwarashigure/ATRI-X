@@ -314,6 +314,8 @@ LLM 报告使用 SQLite outbox：result 与逐目标、逐 output 的投递项�
 - Runtime 未启动时 Stop 安全返回。
 - 维护类任务集中注册在 maintenance 包。
 - LLM cron 每次实际调度触发都通过 Agent 后台 runner 创建新 Session；同一轮 JSON 格式重试才复用 Session。
-- 一次性 cron 的执行结果与逐平台投递状态需要持久化；平台重连只补发既有结果，重新启用或重新调度才清空旧状态并开始新一轮。
+- 一次性 cron 的任务配置与 Delivery 状态分列持久化；Delivery 以 RunID/报告 Session ID 做条件更新，只写仍启用的当前轮次，不能覆盖配置或重新启用任务。
+- 正常触发和平台连接补发共用逐实际收件目标、逐输出状态；`ReportReady` 表示报告可复用，LLM 的 `TaskCompleted` 只记录任务结论。
+- 补发读取最新任务配置且只由平台连接触发；附件失败在同次补发中降级为路径或 URL 文字，降级文字失败则等待下次连接，不做周期重试。
 - LLM cron 可预注入工具或 Skill。
 - cron/Atrinis 后台 shell 的非 critical 风险可自动确认，critical 直接返回提醒，不等待用户。
