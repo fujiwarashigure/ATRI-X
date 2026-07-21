@@ -95,6 +95,7 @@ ATRI-X 的 slash 命令由 Agent Core 统一处理，CLI、QQ、后续平台共�
 说明：
 
 - `/resume 1` 可以直接恢复最近更新的非当前 Session，无需先执行裸 `/resume`；编号按更新时间排列，不受置顶影响，翻页时编号连续。
+- 当前会话处理中时，不支持执行 `/new`、`/resume`、`/fork`、`/chat`、`/work` 等 Session 切换命令；如有必要，请先使用 `/stop` 结束当前处理。
 - `/sessions` 展示的编号可被 `/archive`、`/pin`、`/delete` 等 Session 操作命令复用。
 - CLI 作为本地高权限入口，可以跨平台查看 Session；非 CLI 平台默认只查看当前平台和作用域下的 Session。
 - 删除是永久操作，需要显式 `--confirm`。
