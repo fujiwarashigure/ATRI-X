@@ -261,6 +261,7 @@ timing = "after_assistant"
 outputs = [
   { kind = "text", text = "检测到关键词" },
   { kind = "image", path = "assets/alert.png", name = "alert.png" },
+  { kind = "record", path = "assets/alert.mp3", name = "alert.mp3" },
   { kind = "at", user_id = "10001" },
   { kind = "reply", message_id = "456", text = "引用回复" },
 ]
@@ -280,10 +281,10 @@ outputs = [
 
 | 字段 | 说明 |
 | --- | --- |
-| `kind` | `text`、`image`、`file`、`emoticon`、`at`、`reply`；默认 `text`。 |
+| `kind` | `text`、`image`、`file`、`record`、`emoticon`、`at`、`reply`；默认 `text`。 |
 | `text` | 文本、媒体 fallback、回复正文或原生表情 fallback。 |
-| `url` / `path` / `base64` | `image`、`file` 必须且只能选择一种来源。`url` 只接受 HTTP(S)，`path` 只接受文件系统路径且相对插件目录解析，`base64` 解码后最大 10 MiB。 |
-| `name` / `mime_type` | 图片或文件的显示名和 MIME 类型；`name` 也可作为原生表情的可读名称。 |
+| `url` / `path` / `base64` | `image`、`file`、`record` 必须且只能选择一种来源。`url` 只接受 HTTP(S)，`path` 只接受文件系统路径且相对插件目录解析，`base64` 解码后最大 10 MiB。 |
+| `name` / `mime_type` | 图片、文件或语音的显示名和 MIME 类型；`name` 也可作为原生表情的可读名称。 |
 | `user_id` | `kind = "at"` 的非空平台用户 ID。 |
 | `message_id` | `kind = "reply"` 的非空平台消息 ID。 |
 | `emoticon_id` | `kind = "emoticon"` 的非空平台原生表情或贴纸 ID；原生表情不接受媒体来源。 |
@@ -429,6 +430,18 @@ Host 从 stdin 返回相同 `id`；`result` 的具体结构由平台 API 决定�
 key 去除首尾空白后必须非空，最长 256 字节。建议使用 `users/<platform>/<id>`、`cache/<name>` 等前缀避免冲突，但前缀不是权限边界。value 必须是合法 JSON，压缩后单值最大 1 MiB；共享区最多 10,000 条，key 与 value 合计最大 32 MiB。
 
 达到上限时先删除过期项，再按最近使用时间淘汰最冷数据；`ttl_seconds = 0` 也可能被淘汰。CAS 按压缩后的 JSON 原子比较；省略 `expected` 表示仅当 key 不存在时写入，显式 `expected: null` 只匹配 JSON `null`。共享状态跨 Hook 重启和 `/hooks reload` 保留，ATRI-X 重启后清空；需要持久化时写入插件目录或 `_shared/`。
+
+### 进程环境
+
+一次性 exec、Persistent Worker 和 Transient Worker 使用同一套环境：先继承 ATRI-X 服务进程环境，再补充配置根目录 `.env` 中尚未存在的变量。服务进程中的同名变量优先，因此 systemd 的 `Environment=` 不会被 `.env` 覆盖。所有进程 Hook 都会获得 `.env` 中的变量，包括其中的密钥；只应运行受信任的 Hook 代码。
+
+`PATH` 是例外：ATRI-X 会把 `.env` 的 PATH 目录追加到服务进程 PATH，去重后同时用于查找 `command[0]` 和作为子进程 PATH。例如 systemd 看不到用户级 `uv` 时可配置：
+
+```dotenv
+PATH=/home/atri-x/.local/bin
+```
+
+ATRI-X 不会加载 `.bashrc`、`.profile`、mise/asdf 等交互式 shell 初始化，也不会展开 PATH 中的 `$PATH` 或 `~`；请填写实际目录。`.env` 在 ATRI-X 启动时读取，修改后需要重启服务，单独执行 `/hooks reload` 不会刷新环境。
 
 ### 一次性 exec Hook
 
