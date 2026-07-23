@@ -20,6 +20,7 @@ import (
 	hookcontrol "github.com/fujiwarashigure/ATRI-X/internal/hook/control"
 	hookruntime "github.com/fujiwarashigure/ATRI-X/internal/hook/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
+	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/builtin"
@@ -34,9 +35,11 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 	logger := foundation.Logger
 	dotEnv, err := config.LoadDotEnv(filepath.Dir(cfg.ConfigPath))
 	if err != nil {
-		return nil, fmt.Errorf("load hook process environment: %w", err)
+		return nil, fmt.Errorf("load process environment: %w", err)
 	}
-	hookProcessEnv := hook.NewProcessEnvironment(os.Environ(), dotEnv)
+	baseProcessEnv := processenv.New(os.Environ())
+	shellProcessEnv := baseProcessEnv.Fill(dotEnv)
+	hookProcessEnv := hook.ProcessEnvironment(baseProcessEnv)
 	var agt *agent.Agent
 	sendNotice := func(ctx context.Context, target delivery.Target, outputs []delivery.Output) (delivery.Receipt, error) {
 		if agt == nil {
@@ -60,6 +63,7 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 		CronService:            cronService,
 		ChatHistory:            foundation.ChatHistory,
 		ResidentMemoryMaxUnits: resident.Limits{Core: cfg.ResidentMemory.CoreMaxUnits, Normal: cfg.ResidentMemory.NormalMaxUnits},
+		ProcessEnv:             shellProcessEnv,
 	})
 	if err != nil {
 		return nil, err

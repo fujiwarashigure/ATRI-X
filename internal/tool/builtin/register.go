@@ -5,6 +5,7 @@ import (
 
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
+	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/runtimeinfo"
@@ -19,6 +20,7 @@ type RegisterOptions struct {
 	ChatHistory         storage.ChatHistoryRepository
 	LongMemoryDir       string
 	FileManager         *FileManager
+	ProcessEnv          processenv.Environment
 }
 
 func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
@@ -93,7 +95,7 @@ func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
 	if err := registry.Register(NewEditFileTool(fileGuard)); err != nil {
 		return err
 	}
-	if err := registry.Register(NewShellTool(fileGuard)); err != nil {
+	if err := registry.Register(NewShellToolWithEnvironment(opts.ProcessEnv, fileGuard)); err != nil {
 		return err
 	}
 	if err := registry.Register(NewAtriwispCreatorTool(info)); err != nil {

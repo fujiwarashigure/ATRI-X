@@ -13,6 +13,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 | `tool_tags.toml` | 给工具添加 tag 和 prompt 的配置文件。 |
 | `SOUL.md` | Agent 的 System Prompt 来源文件。 |
 | `.env` | 可选，本地密钥文件，不建议提交；首次自动生成的是 `.env.example`，不会直接生成 `.env`。 |
+| `plugins/.env` | 自动生成的 Hook 公共环境文件；默认只有注释，可补充公共变量和额外 `PATH`。 |
 | `plugins/` | Hook 和插件配置目录。 |
 | `skills/` | 用户侧 Skill 目录，默认位于配置目录下；当前子目录为 `skills/agent/` 和 `skills/go/`。AgentSkill 可在根目录放置 `ATRIX_SKILL.toml` 配置可见性或注册为普通工具。 |
 | `memories.toml` | 常驻记忆文件，默认位于配置目录下。 |
@@ -29,7 +30,7 @@ ATRI-X 使用一个主配置入口加载应用配置、Provider 配置和运行�
 
 自动生成的默认配置内容来自程序内置 assets，且已有文件不会被覆盖。自动生成只在没有显式 `--config` 和 `ATRIX_CONFIG_FILE` 时触发。若显式指定的配置路径不存在，ATRI-X 会报错而不是偷偷生成，避免掩盖路径拼写错误。
 
-首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/agent/agent_skill_creator/ATRIX_SKILL.toml`、`skills/agent/write_atrix_hook/SKILL.md`、`skills/agent/write_atrix_hook/ATRIX_SKILL.toml` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
+首次自动生成的文件包括：`app.toml`、`providers.toml`、`state.toml`、`SOUL.md`、`memories.toml`、`atrinis.toml`、`skills/agent/agent_skill_creator/SKILL.md`、`skills/agent/agent_skill_creator/ATRIX_SKILL.toml`、`skills/agent/write_atrix_hook/SKILL.md`、`skills/agent/write_atrix_hook/ATRIX_SKILL.toml`、`plugins/.env` 和 `.env.example`；同时会创建 `skills/`、`skills/agent/`、`skills/go/`、`plugins/` 和 `long_memory/` 目录。已有文件不会被覆盖。`atrinis.toml` 默认 `enabled=false`，不会在首次运行时启动 HTTP 监听。
 
 
 开发期直接运行即可使用平台配置目录；首次运行会自动生成默认配置：
@@ -170,7 +171,35 @@ OPENAI_API_KEY=your-api-key
 
 不要把真实 Key 提交到仓库。
 
-进程 Hook 会继承 ATRI-X 进程环境，并获得配置目录 `.env` 中的全部变量；系统环境中的同名变量优先。`.env` 的 PATH 会作为服务进程 PATH 的补充目录，详见 [Hook 进程环境](hooks.md#进程环境)。修改 `.env` 后需要重启 ATRI-X service。
+配置根 `.env` 还会补充到 LLM Shell 的进程环境；ATRI-X 进程中的同名变量优先。Shell 可以读取其中的全部变量，包括 Provider Key，因此只应在信任当前模型及 Shell 权限策略时启用相关工具。修改根 `.env` 后需要重启 ATRI-X。
+
+## 进程环境继承
+
+| 进程入口 | 环境来源与优先级 |
+| --- | --- |
+| LLM Shell | ATRI-X 进程环境为基础，配置根 `.env` 补充尚不存在的变量。 |
+| 根 Hook 规则 | ATRI-X 进程环境为基础，`plugins/.env` 覆盖同名变量。 |
+| 插件 exec 与 Worker | 根 Hook 环境为基础，插件配置文件同目录的 `.env` 再覆盖同名变量；默认路径为 `plugins/<插件 ID>/.env`。 |
+
+`PATH` 不按普通变量覆盖，而是按照上述层级依次追加并去重。系统路径本来就会保留，所以文件中只需填写额外目录，例如：
+
+```dotenv
+PATH=/home/atri-x/.local/bin
+```
+
+不要重复完整系统 PATH，也不要填写 `$PATH`、`%PATH%` 或 `~`，dotenv 不执行变量和路径展开。没有额外目录时可以省略 `PATH`。
+
+需要代理时可在对应环境文件中设置标准变量；Shell 或 Hook 启动的命令会继承它们，是否使用仍取决于具体程序：
+
+```dotenv
+HTTP_PROXY=http://127.0.0.1:7890
+HTTPS_PROXY=http://127.0.0.1:7890
+NO_PROXY=localhost,127.0.0.1,::1
+```
+
+配置根 `.env` 不会注入 Hook。需要所有 Hook 共用的代理、工具路径或变量放在 `plugins/.env`；仅供单个插件使用的密钥放在该插件的 `.env`。一次性 exec、Persistent Worker 和 Transient Worker 遵循相同规则。
+
+根 `.env` 随 ATRI-X 重启生效；`plugins/.env` 和插件 `.env` 在启动及 `/hooks reload` 时重新读取，reload 会按新环境重建 Worker。Hook 环境文件不存在时视为空配置。Hook 代码仍是受信任代码，分级 `.env` 只隔离配置，不是系统级安全沙箱。
 
 ## CLI 远程配置
 

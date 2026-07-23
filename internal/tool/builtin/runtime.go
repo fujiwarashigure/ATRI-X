@@ -7,6 +7,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
+	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/runtimeinfo"
@@ -28,6 +29,7 @@ type RuntimeOptions struct {
 	SandboxRoot            string
 	FileDelivery           config.FileDeliveryConfig
 	ResidentMemoryMaxUnits resident.Limits
+	ProcessEnv             processenv.Environment
 }
 
 func NewRuntime(opts RuntimeOptions) (*Runtime, error) {
@@ -58,6 +60,7 @@ func NewRuntime(opts RuntimeOptions) (*Runtime, error) {
 		ChatHistory:         opts.ChatHistory,
 		LongMemoryDir:       filepath.Join(opts.ConfigDir, "long_memory"),
 		FileManager:         fileManager,
+		ProcessEnv:          opts.ProcessEnv,
 	}); err != nil {
 		return nil, err
 	}
