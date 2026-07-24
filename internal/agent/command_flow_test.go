@@ -9,6 +9,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
+	"errors"
 	"strings"
 	"testing"
 )
@@ -88,8 +89,18 @@ func TestRegularUserCanUseOwnDataSlashCommands(t *testing.T) {
 	if err := a.HandleMessage(ctx, "/new"); err != nil {
 		t.Fatalf("/new: %v", err)
 	}
-	if !strings.Contains(p.out.String(), "created new session") {
+	if !strings.Contains(p.out.String(), "new session ready") {
 		t.Fatalf("/new output = %q", p.out.String())
+	}
+	if _, err := a.sessions.Current(ctx, a.scope(ctx)); !errors.Is(err, storage.ErrNotFound) {
+		t.Fatalf("current after /new = %v, want not found", err)
+	}
+	sessions, err := a.sessions.List(ctx, a.scope(ctx), "", 20)
+	if err != nil {
+		t.Fatalf("list sessions after /new: %v", err)
+	}
+	if len(sessions) != 0 {
+		t.Fatalf("sessions after /new = %#v, want none", sessions)
 	}
 	p.out.Reset()
 
