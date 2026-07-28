@@ -183,6 +183,6 @@ func (a atrinisRuntimeAdapter) SendChat(context.Context, []delivery.Output) (del
 	return delivery.Receipt{}, fmt.Errorf("atrinis cannot send chat output")
 }
 
-func (a atrinisRuntimeAdapter) SendNotice(context.Context, delivery.Target, []delivery.Output) (delivery.Receipt, error) {
+func (a atrinisRuntimeAdapter) SendNotice(context.Context, delivery.Notice) (delivery.Receipt, error) {
 	return delivery.Receipt{}, fmt.Errorf("atrinis cannot send notice output")
 }
