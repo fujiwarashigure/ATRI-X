@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -15,6 +14,7 @@ import (
 
 	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/runtimeinfo"
 )
@@ -89,7 +89,7 @@ func (t CreateAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 			return nil, err
 		}
 		var err error
-		goVersion, err = detectGoModVersion(ctx)
+		goVersion, err = detectGoModVersion(ctx, t.Manager.ProcessEnv)
 		if err != nil {
 			return nil, err
 		}
@@ -131,7 +131,7 @@ func (t CreateAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 		}
 		runCtx, cancel := context.WithTimeout(ctx, timeout)
 		defer cancel()
-		cmd := exec.CommandContext(runCtx, "go", "build", "-o", binary, ".")
+		cmd := t.Manager.ProcessEnv.CommandContext(runCtx, "go", "build", "-o", binary, ".")
 		cmd.Dir = root
 		var stdout bytes.Buffer
 		var stderr bytes.Buffer
@@ -147,12 +147,16 @@ func (t CreateAtrixSkillTool) Call(ctx context.Context, req tool.CallRequest) (*
 	return &tool.Result{Content: appendAtriyphWarnings(fmt.Sprintf("created Atriyph skill %s", name), diagnostics)}, nil
 }
 
-func detectGoModVersion(ctx context.Context) (string, error) {
-	goPath, err := exec.LookPath("go")
+func detectGoModVersion(ctx context.Context, environments ...processenv.Environment) (string, error) {
+	var environment processenv.Environment
+	if len(environments) > 0 {
+		environment = environments[0]
+	}
+	goPath, err := environment.LookPath("go")
 	if err != nil {
 		return "", fmt.Errorf("system go executable not found; install Go and ensure it is in PATH before creating Go skill")
 	}
-	cmd := exec.CommandContext(ctx, goPath, "env", "GOVERSION")
+	cmd := environment.CommandContext(ctx, goPath, "env", "GOVERSION")
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 	cmd.Stdout = &stdout
