@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 )
 
@@ -60,6 +61,42 @@ func main() {
 		t.Fatal(err)
 	}
 	if result.Content != "hello" {
+		t.Fatalf("content = %q", result.Content)
+	}
+}
+
+func TestGoRunnerUsesSharedProcessEnvironment(t *testing.T) {
+	dir := t.TempDir()
+	source := filepath.Join(dir, "main.go")
+	if err := os.WriteFile(source, []byte(`package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	fmt.Printf("{\"content\":\"%s\"}", os.Getenv("ATRIX_GO_SKILL_ENV_TEST"))
+}
+`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	binary := filepath.Join(dir, "helper")
+	if runtime.GOOS == "windows" {
+		binary += ".exe"
+	}
+	cmd := exec.Command("go", "build", "-o", binary, source)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		t.Fatalf("build helper: %v\\n%s", err, output)
+	}
+	catalog := NewCatalog()
+	catalog.Replace([]Record{{Name: "environment", Kind: KindGo, Root: dir, BinaryPath: binary}})
+	runner := NewGoRunner(catalog, processenv.New([]string{"ATRIX_GO_SKILL_ENV_TEST=from-shared"}))
+	result, err := runner.Call(context.Background(), tool.CallRequest{Arguments: []byte(`{"skill_name":"environment","payload":{}}`)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.Content != "from-shared" {
 		t.Fatalf("content = %q", result.Content)
 	}
 }
