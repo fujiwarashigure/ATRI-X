@@ -10,6 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
@@ -26,6 +27,7 @@ type Options struct {
 	Providers             map[string]config.ProviderConfig
 	StatePath             string
 	Store                 storage.Store
+	Media                 *media.Manager
 	CommandPrefixes       []string
 	SessionConfig         session.Config
 	NamingSelection       config.ModelSelection

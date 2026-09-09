@@ -16,6 +16,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
+	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
@@ -35,6 +36,7 @@ type Agent struct {
 	statePath          string
 	stateModTime       time.Time
 	store              storage.Store
+	media              *media.Manager
 	sessions           *session.Service
 	requests           *request.Manager
 	turns              *turn.Manager
@@ -164,6 +166,7 @@ func NewWithOptions(opts Options) (*Agent, error) {
 		statePath:               statePath,
 		stateModTime:            stateModTime,
 		store:                   store,
+		media:                   opts.Media,
 		sessions:                sessions,
 		requests:                requests,
 		turns:                   turns,
