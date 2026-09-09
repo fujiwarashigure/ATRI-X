@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"strings"
+	"time"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
@@ -25,6 +26,12 @@ func (s *Service) completeEvent(ctx context.Context, id, resolvedTargets, status
 }
 
 func (s *Service) completeEventWithSession(ctx context.Context, id, resolvedTargets, status, sessionID, result, eventErr string) error {
+	if status == StatusFailed || status == StatusCompleted {
+		// Persist terminal state and release event references even after cancellation.
+		cleanupCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)
+		defer cancel()
+		ctx = cleanupCtx
+	}
 	return s.store.AtrinisEvents().Update(ctx, storage.UpdateAtrinisEventRequest{ID: id, ResolvedTargets: resolvedTargets, Status: status, SessionID: sessionID, Result: result, Error: eventErr})
 }
 

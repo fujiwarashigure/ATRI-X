@@ -11,6 +11,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
+	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
@@ -28,20 +29,24 @@ type EnqueueLLMFunc func(ctx context.Context, event QueuedLLMEvent) error
 type ModelResolverFunc func(slot string) config.ModelSelection
 
 type Options struct {
-	Config           config.AtrinisConfig
-	SandboxRoot      string
-	Tokens           map[string]string
-	Store            storage.Store
-	Logger           *slog.Logger
-	Audit            AuditFunc
-	Send             SenderFunc
-	Runner           background.Runner
-	ResolveModel     ModelResolverFunc
-	EnabledPlatforms []string
-	PlatformCallers  atriena.PlatformCallerResolver
+	Media              *media.Manager
+	MediaRetentionDays int
+	Config             config.AtrinisConfig
+	SandboxRoot        string
+	Tokens             map[string]string
+	Store              storage.Store
+	Logger             *slog.Logger
+	Audit              AuditFunc
+	Send               SenderFunc
+	Runner             background.Runner
+	ResolveModel       ModelResolverFunc
+	EnabledPlatforms   []string
+	PlatformCallers    atriena.PlatformCallerResolver
 }
 
 type Service struct {
+	media            *media.Manager
+	retentionDays    int
 	cfg              config.AtrinisConfig
 	sandboxRoot      string
 	tokens           map[string]string
@@ -67,6 +72,8 @@ func NewService(opts Options) (*Service, error) {
 		return nil, fmt.Errorf("atrinis enabled but no tokens are configured")
 	}
 	return &Service{
+		media:            opts.Media,
+		retentionDays:    opts.MediaRetentionDays,
 		cfg:              opts.Config,
 		sandboxRoot:      opts.SandboxRoot,
 		tokens:           opts.Tokens,
@@ -135,7 +142,16 @@ func (s *Service) handlePreparedEvent(ctx context.Context, event Event) (Respons
 	if req.Mode == ModeLLM {
 		status = StatusQueued
 	}
+	var mediaIDs []string
+	if req.Mode != ModeRecord {
+		for _, seg := range req.Segments {
+			if media.ValidID(seg.URL) {
+				mediaIDs = append(mediaIDs, seg.URL)
+			}
+		}
+	}
 	record, err := s.store.AtrinisEvents().Create(ctx, storage.CreateAtrinisEventRequest{
+		MediaIDs:         mediaIDs,
 		EventKey:         event.EventKey,
 		TokenName:        event.Origin.Label(),
 		AtriwispName:       req.Atriwisp.Name,

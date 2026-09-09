@@ -12,6 +12,8 @@ import (
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/maintenance"
+	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
@@ -52,6 +54,7 @@ type FoundationRequest struct {
 }
 
 type FoundationComponents struct {
+	Maintenance      *maintenance.Service
 	Config           *config.Config
 	Logs             LogManager
 	Logger           *slog.Logger
@@ -103,6 +106,7 @@ type RuntimeRequest struct {
 }
 
 type RuntimeComponents struct {
+	Media       *media.Manager
 	Agent       *agent.Agent
 	Handler     platform.PlatformHandler
 	CronService *elcron.Service
