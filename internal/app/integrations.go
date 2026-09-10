@@ -31,16 +31,15 @@ func (defaultIntegrationFactory) Attach(ctx context.Context, req IntegrationRequ
 			return PlatformComponents{}, err
 		}
 		atrinisService, err := atrinis.NewService(atrinis.Options{
-			Media:              runtime.Media,
-			MediaRetentionDays: cfg.Maintenance.SandboxCleanup.RetentionDays,
-			Config:             cfg.Atrinis,
-			SandboxRoot:        cfg.Sandbox.Root,
-			Tokens:             atrinisTokens,
-			Store:              foundation.Store,
-			Logger:             foundation.Logs.Atrinis(),
-			EnabledPlatforms:   runtimeNames(platforms.Runtimes),
-			PlatformCallers:    platformCallerResolver{runtimes: platforms.Runtimes},
-			Audit:              auditFunc(foundation.Logs),
+			Media:            runtime.Media,
+			Config:           cfg.Atrinis,
+			SandboxRoot:      cfg.Sandbox.Root,
+			Tokens:           atrinisTokens,
+			Store:            foundation.Store,
+			Logger:           foundation.Logs.Atrinis(),
+			EnabledPlatforms: runtimeNames(platforms.Runtimes),
+			PlatformCallers:  platformCallerResolver{runtimes: platforms.Runtimes},
+			Audit:            auditFunc(foundation.Logs),
 			Send: func(ctx context.Context, target delivery.Target, outputs []delivery.Output) (delivery.Receipt, error) {
 				return runtime.Agent.SendNotice(ctx, delivery.Notice{Target: target, Outputs: outputs})
 			},
