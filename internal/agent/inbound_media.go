@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 )
 
@@ -78,6 +79,8 @@ func unavailablePlatformSegment(segment platform.MessageSegment) platform.Messag
 	label := strings.TrimSpace(segment.Name)
 	if label == "" {
 		label = "未知媒体"
+	} else {
+		label = media.SanitizeName(label)
 	}
 	return platform.MessageSegment{Type: platform.SegmentText, Text: "[媒体不可用；" + label + "]"}
 }
