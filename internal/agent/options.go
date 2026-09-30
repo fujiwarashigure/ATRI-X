@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	agentcommands "github.com/fujiwarashigure/ATRI-X/internal/agent/commands"
+	"github.com/fujiwarashigure/ATRI-X/internal/character"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
@@ -34,6 +35,7 @@ type Options struct {
 	NamingNotifier        session.NamingNotifier
 	SoulPath              string
 	ResidentMemoryStore   *resident.Store
+	CharacterStore        *character.Store
 	LLMRequestConfig      config.LLMRequestConfig
 	HookService           agentcommands.HookService
 	HookManager           hook.Manager
@@ -55,6 +57,13 @@ type Options struct {
 	ToolsConfig           config.ToolsConfig
 	ToolTagsPath          string
 	ToolTags              config.ToolTagsConfig
+	ModelProfiles         map[string]config.ModelSelection
+	ModelAliases          map[string]string
+	ToolProfiles          map[string][]string
+	ToolAliases           map[string]string
+	ImageProfiles         map[string]bool
+	ImageAliases          map[string]string
+	TurnDirectives        config.TurnDirectivesConfig
 }
 
 func validateOptions(opts Options) error {

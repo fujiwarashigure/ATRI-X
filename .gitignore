@@ -17,3 +17,5 @@ data/cron_sandbox/
 data/atrix_sessions.db
 bin/
 
+# Generated offline/image artifacts (use GitHub Releases instead)
+deploy/dist/

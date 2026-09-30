@@ -1,0 +1,55 @@
+# syntax=docker/dockerfile:1.7
+#
+# 预编译二进制版运行镜像（不需要 Go 工具链，也不需要拉 golang:1.26 大镜像）
+# 构建上下文需要包含名为 `atri-x` 的 Linux 静态二进制。
+#
+#   docker build -t atri-x:0.5.0 .
+#   docker run -d --name atri-x -v $PWD/data:/data -p 127.0.0.1:32172:32172 atri-x:0.5.0
+#
+# 国内服务器拉 debian 慢时，可换镜像源：
+#   docker build --build-arg BASE_IMAGE=registry.cn-hangzhou.aliyuncs.com/library/debian:bookworm-slim -t atri-x:0.5.0 .
+
+ARG BASE_IMAGE=debian:bookworm-slim
+FROM ${BASE_IMAGE}
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV TZ=Asia/Shanghai \
+    XDG_CONFIG_HOME=/data/config \
+    XDG_DATA_HOME=/data \
+    XDG_RUNTIME_DIR=/data/run \
+    HOME=/home/atri-x \
+    LANG=C.UTF-8
+
+# 保留常用 CLI 工具，保证 ATRI-X 的 shell 工具可用
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        tzdata \
+        tini \
+        curl \
+        wget \
+        git \
+        jq \
+        unzip \
+ && rm -rf /var/lib/apt/lists/* \
+ && groupadd -g 10001 atri-x \
+ && useradd -u 10001 -g 10001 -d /home/atri-x -m -s /usr/sbin/nologin atri-x \
+ && mkdir -p /data/config /data/run /home/atri-x \
+ && chown -R atri-x:atri-x /data /home/atri-x \
+ && chmod 750 /data/run
+
+COPY atri-x /usr/local/bin/atri-x
+RUN chmod 0755 /usr/local/bin/atri-x
+
+USER atri-x:atri-x
+WORKDIR /home/atri-x
+
+VOLUME ["/data"]
+EXPOSE 32170 32172
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD ["sh", "-c", "test -f /data/run/atri-x/atri-x.pid && kill -0 \"$(cat /data/run/atri-x/atri-x.pid)\""]
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/atri-x"]
+CMD ["service", "run"]

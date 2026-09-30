@@ -54,7 +54,7 @@ func (c modelCommand) Handle(ctx context.Context, req command.Request) (*command
 	if wantsCommandHelp(req.Args) {
 		return formatCommandHelp(req.Prefix, info), nil
 	}
-	args, target, err := parseModelArgs(req.Args)
+	args, target, err := parseModelArgs(req.Prefix, req.Args)
 	if err != nil {
 		return nil, err
 	}
@@ -310,7 +310,7 @@ const (
 	modelTargetNaming  modelTarget = "naming"
 )
 
-func parseModelArgs(args string) (string, modelTarget, error) {
+func parseModelArgs(prefix, args string) (string, modelTarget, error) {
 	fields := strings.Fields(args)
 	out := []string{}
 	target := modelTargetCurrent
@@ -334,7 +334,7 @@ func parseModelArgs(args string) (string, modelTarget, error) {
 		}
 		if nextTarget != "" {
 			if target != modelTargetCurrent {
-				return "", "", fmt.Errorf("usage: /model [--chat|--work|--compact|--naming] <name or number>")
+				return "", "", fmt.Errorf("usage: %smodel [--chat|--work|--atriwisp1|--atriwisp2|--atriwisp3|--compact|--naming] <name or number>", prefix)
 			}
 			target = nextTarget
 			continue

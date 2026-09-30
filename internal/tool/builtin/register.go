@@ -3,7 +3,9 @@ package builtin
 import (
 	"context"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/character"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
+	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
@@ -15,6 +17,10 @@ import (
 type RegisterOptions struct {
 	RuntimeInfo         runtimeinfo.Info
 	ResidentMemoryStore *resident.Store
+	CharacterStore      *character.Store
+	ImageProfiles       map[string]ImageProfile
+	DefaultImageProfile string
+	PromptRewriter      ImagePromptRewriter
 	SkillManager        *skill.Manager
 	CronService         *elcron.Service
 	ChatHistory         storage.ChatHistoryRepository
@@ -93,6 +99,29 @@ func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
 		return err
 	}
 	if err := registry.Register(NewWebExtractTool(opts.ProcessEnv)); err != nil {
+		return err
+	}
+	if opts.CharacterStore != nil && opts.CharacterStore.Enabled() {
+		var center *media.Manager
+		if opts.FileManager != nil {
+			center = opts.FileManager.Media
+		}
+		for _, characterTool := range NewCharacterTools(opts.CharacterStore, center) {
+			if err := registry.Register(characterTool); err != nil {
+				return err
+			}
+		}
+	}
+	if len(opts.ImageProfiles) > 0 {
+		var center *media.Manager
+		if opts.FileManager != nil {
+			center = opts.FileManager.Media
+		}
+		if err := registry.Register(NewImageGenerateTool(opts.ImageProfiles, opts.DefaultImageProfile, opts.CharacterStore, center, opts.ChatHistory, opts.PromptRewriter)); err != nil {
+			return err
+		}
+	}
+	if err := registry.Register(PromptLibrarySearchTool{}); err != nil {
 		return err
 	}
 	fileGuard := NewFileGuard()
