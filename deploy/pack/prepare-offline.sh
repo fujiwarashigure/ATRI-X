@@ -65,6 +65,10 @@ for arch in amd64 arm64; do
     cp "${DEPLOY_DIR}/.env.example" "${out}/.env.example"
     cp "${DEPLOY_DIR}/nginx-atri-x.conf" "${out}/nginx-atri-x.conf"
     cp "${DEPLOY_DIR}/atri-x-compose.service" "${out}/atri-x-compose.service"
+    cp "${DEPLOY_DIR}/atri-x-watchdog.sh" "${out}/atri-x-watchdog.sh"
+    cp "${DEPLOY_DIR}/atri-x-watchdog.service" "${out}/atri-x-watchdog.service"
+    cp "${DEPLOY_DIR}/atri-x-watchdog.timer" "${out}/atri-x-watchdog.timer"
+    cp "${DEPLOY_DIR}/watchdog.env.example" "${out}/watchdog.env.example"
     cp "${DEPLOY_DIR}/backup.sh" "${out}/backup.sh"
     cp "${DEPLOY_DIR}/init-host.sh" "${out}/init.sh"
     cp "${PACK_DIR}/README-OFFLINE.md" "${out}/README.md"
@@ -72,7 +76,7 @@ for arch in amd64 arm64; do
     cp "${PACK_DIR}/README-ALIYUN.md" "${out}/README-ALIYUN.md"
     cp "${PACK_DIR}/README-BAOTA-CONFIG.md" "${out}/README-BAOTA-CONFIG.md"
     mkdir -p "${out}/data"
-    chmod +x "${out}/backup.sh" "${out}/init.sh" "${out}/deploy.sh" 2>/dev/null || true
+    chmod +x "${out}/backup.sh" "${out}/init.sh" "${out}/deploy.sh" "${out}/atri-x-watchdog.sh" 2>/dev/null || true
 done
 
 # 3.5 打包成单文件离线包

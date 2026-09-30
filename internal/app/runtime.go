@@ -21,6 +21,7 @@ import (
 	hookcontrol "github.com/fujiwarashigure/ATRI-X/internal/hook/control"
 	hookruntime "github.com/fujiwarashigure/ATRI-X/internal/hook/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/media"
+	"github.com/fujiwarashigure/ATRI-X/internal/ops/diskguard"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
@@ -77,6 +78,11 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 	mediaCenter.DownloadTimeout = time.Duration(cfg.PlatformFiles.DownloadTimeoutSecs) * time.Second
 	mediaCenter.Media = cfg.Media
 	mediaCenter.Logger = logger
+	mediaCenter.Guard = diskguard.New(filepath.Dir(cfg.Storage.SessionsSQLitePath), diskguard.Config{
+		WarnRatio:     cfg.Storage.DiskWarnRatio,
+		CriticalRatio: cfg.Storage.DiskCriticalRatio,
+		MinFreeBytes:  uint64(maxInt64(cfg.Storage.DiskMinFreeBytes, 0)),
+	})
 	if foundation.Maintenance != nil {
 		foundation.Maintenance.Media = mediaCenter
 	}
@@ -163,9 +169,17 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 		Agent:       agt,
 		Handler:     agt,
 		CronService: cronService,
-		AtrienaBus:   atrienaBus,
-		Lifecycle:   hookRuntimeLifecycle{runtime: hookRuntime},
+		AtrienaBus:     atrienaBus,
+		ImageLimiter:  toolRuntime.ImageLimiter,
+		Lifecycle:     hookRuntimeLifecycle{runtime: hookRuntime},
 	}, nil
+}
+
+func maxInt64(value, fallback int64) int64 {
+	if value > fallback {
+		return value
+	}
+	return fallback
 }
 
 func resolveFileDeliveryCredentials(cfg config.FileDeliveryConfig, configDir string) (aws.CredentialsProvider, error) {
@@ -346,6 +360,7 @@ func buildAgent(
 		ResidentMemoryStore:   toolRuntime.ResidentMemoryStore,
 		CharacterStore:        toolRuntime.CharacterStore,
 		LLMRequestConfig:      cfg.LLMRequest,
+		Ops:                   cfg.Ops,
 		HookService:           hookService,
 		HookManager:           hooks,
 		HookRuntime:           hookRuntime,

@@ -13,8 +13,8 @@ This document is used to get ATRI-X up and running and complete your first CLI c
 ## Get the Code
 
 ```bash
-git clone https://github.com/Elflare/elbot/
-cd atri-x
+git clone https://github.com/fujiwarashigure/ATRI-X.git
+cd ATRI-X
 ```
 
 If you are already in this repository, you can proceed directly to the next step.

@@ -14,7 +14,7 @@
 
 [Unit]
 Description=ATRI-X Agent Service
-Documentation=https://github.com/Elflare/elbot
+Documentation=https://github.com/fujiwarashigure/ATRI-X
 After=network-online.target
 Wants=network-online.target
 

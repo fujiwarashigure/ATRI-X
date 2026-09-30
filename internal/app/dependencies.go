@@ -11,9 +11,11 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
+	"github.com/fujiwarashigure/ATRI-X/internal/health"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/maintenance"
 	"github.com/fujiwarashigure/ATRI-X/internal/media"
+	"github.com/fujiwarashigure/ATRI-X/internal/ops/concurrency"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
@@ -73,6 +75,7 @@ type FoundationFactory interface {
 type ModelRequest struct {
 	Foundation *FoundationComponents
 	Profiler   StartupProfiler
+	Health     *health.State
 }
 
 type ModelClients struct {
@@ -111,6 +114,7 @@ type RuntimeComponents struct {
 	Handler     platform.PlatformHandler
 	CronService *elcron.Service
 	AtrienaBus   *atriena.Bus
+	ImageLimiter *concurrency.Limiter
 	Lifecycle   Lifecycle
 }
 
@@ -124,6 +128,7 @@ type IntegrationRequest struct {
 	Platforms  PlatformComponents
 	Mode       RunMode
 	Profiler   StartupProfiler
+	Health     *health.State
 }
 
 type IntegrationFactory interface {
@@ -135,6 +140,7 @@ type PlatformRunRequest struct {
 	Logger     *slog.Logger
 	Runtimes   []platform.Runtime
 	AfterStart func(context.Context)
+	Heartbeat  func()
 }
 
 type PlatformExecutor interface {

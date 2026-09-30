@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
+	"github.com/fujiwarashigure/ATRI-X/internal/ops/diskguard"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
@@ -56,6 +57,7 @@ type Manager struct {
 	MaxImportBytes  int64
 	DownloadTimeout time.Duration
 	Root            string
+	Guard           *diskguard.Guard
 	FileDelivery    config.FileDeliveryConfig
 	Media           config.MediaConfig
 	Logger          *slog.Logger

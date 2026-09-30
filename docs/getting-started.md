@@ -11,8 +11,8 @@
 ## 获取代码
 
 ```bash
-git clone https://github.com/Elflare/elbot/
-cd atri-x
+git clone https://github.com/fujiwarashigure/ATRI-X.git
+cd ATRI-X
 ```
 
 如果已经在本仓库内，可以直接继续下一步。

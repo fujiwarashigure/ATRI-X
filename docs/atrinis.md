@@ -142,6 +142,8 @@ POST /atriena/v3/events
 GET  /healthz
 ```
 
+> `/healthz` 只在 Atrinis 启用后存在。ATRI-X 默认不启用 Atrinis，因此未启用时不能用 `/healthz` 判断 ATRI-X、模型 API 或 OneBot 是否正常。
+
 ## 事件会怎样被处理
 
 Atrinis 收到事件后，会按 `mode` 决定处理方式。

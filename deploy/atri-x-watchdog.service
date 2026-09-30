@@ -1,0 +1,13 @@
+[Unit]
+Description=ATRI-X external watchdog (live check + controlled restart)
+Documentation=https://github.com/fujiwarashigure/ATRI-X
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/atri-x/deploy
+EnvironmentFile=-/opt/atri-x/deploy/watchdog.env
+ExecStart=/opt/atri-x/deploy/atri-x-watchdog.sh
+TimeoutStartSec=120
+Nice=10
