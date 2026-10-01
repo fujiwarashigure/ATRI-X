@@ -3,27 +3,52 @@
 # 预编译二进制版运行镜像（不需要 Go 工具链，也不需要拉 golang:1.26 大镜像）
 # 构建上下文需要包含名为 `atri-x` 的 Linux 静态二进制。
 #
-#   docker build -t atri-x:0.5.0 .
-#   docker run -d --name atri-x -v $PWD/data:/data -p 127.0.0.1:32172:32172 -p 127.0.0.1:32171:32171 atri-x:0.5.0
+#   docker build -t atri-x:0.6.0 .
+#   docker run -d --init --name atri-x -v $PWD/data:/data \
+#     -p 127.0.0.1:32172:32172 -p 127.0.0.1:32171:32171 atri-x:0.6.0
 #
 # 国内服务器拉 debian 慢时，可换镜像源：
-#   docker build --build-arg BASE_IMAGE=registry.cn-hangzhou.aliyuncs.com/library/debian:bookworm-slim -t atri-x:0.5.0 .
+#   docker build --build-arg BASE_IMAGE=registry.cn-hangzhou.aliyuncs.com/library/debian:bookworm-slim -t atri-x:0.6.0 .
+# 需要 pin digest 时：
+#   docker build --build-arg BASE_IMAGE=debian:bookworm-slim@sha256:<digest> -t atri-x:0.6.0 .
 
 ARG BASE_IMAGE=debian:bookworm-slim
 FROM ${BASE_IMAGE}
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG VERSION=dev
+# 只用于“追加”更多命令；下面的默认命令列表是内联的。
+ARG EXTRA_TOOLS=
 
 ENV TZ=Asia/Shanghai \
     XDG_CONFIG_HOME=/data/config \
     XDG_DATA_HOME=/data \
+    XDG_CACHE_HOME=/data/cache \
     XDG_RUNTIME_DIR=/data/run \
     HOME=/home/atri-x \
     LANG=C.UTF-8 \
     ATRIX_HEALTH_ADDR=0.0.0.0:32171
 
-# 保留常用 CLI 工具，保证 ATRI-X 的 shell 工具可用
+# 保留常用 CLI 工具，保证 ATRI-X 的 shell 工具可用（只增不减）。
+#
+# 实测：部分网络会黑洞明文 HTTP(80)，且直连 deb.debian.org 很慢，所以下面换 https +
+# 国内镜像。但 slim 镜像里没有 CA 证书，直接切 https 会报
+# "No system certificates available"，因此先用原始源装上 ca-certificates 再切换。
+# 可用 --build-arg APT_MIRROR=mirrors.aliyun.com 指定国内镜像。
+ARG APT_MIRROR=
+
 RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN for f in /etc/apt/sources.list /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/*.list; do \
+        [ -f "${f}" ] || continue; \
+        sed -i "s|http://deb[.]debian[.]org|https://deb.debian.org|g" "${f}" 2>/dev/null || true; \
+        if [ -n "${APT_MIRROR}" ]; then \
+            sed -i "s|deb[.]debian[.]org|${APT_MIRROR}|g" "${f}" 2>/dev/null || true; \
+        fi; \
+    done \
+ && apt-get update \
  && apt-get install -y --no-install-recommends \
         ca-certificates \
         tzdata \
@@ -33,15 +58,36 @@ RUN apt-get update \
         git \
         jq \
         unzip \
+        bash \
+        procps \
+        iputils-ping \
+        dnsutils \
+        netcat-openbsd \
+        iproute2 \
+        less \
+        file \
+        tree \
+        tar \
+        gzip \
+        xz-utils \
+        rsync \
+        zip \
+        python3 \
+        ${EXTRA_TOOLS} \
  && rm -rf /var/lib/apt/lists/* \
  && groupadd -g 10001 atri-x \
  && useradd -u 10001 -g 10001 -d /home/atri-x -m -s /usr/sbin/nologin atri-x \
- && mkdir -p /data/config /data/run /home/atri-x \
+ && mkdir -p /data/config /data/cache /data/run /home/atri-x \
  && chown -R atri-x:atri-x /data /home/atri-x \
  && chmod 750 /data/run
 
 COPY atri-x /usr/local/bin/atri-x
 RUN chmod 0755 /usr/local/bin/atri-x
+
+LABEL org.opencontainers.image.title="atri-x" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.source="https://github.com/fujiwarashigure/ATRI-X" \
+      org.opencontainers.image.licenses="Apache-2.0"
 
 USER atri-x:atri-x
 WORKDIR /home/atri-x
