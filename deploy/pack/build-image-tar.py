@@ -10,7 +10,7 @@
 
 用法：
   python build-image-tar.py --binary ./atri-x-linux-amd64 --arch amd64 \
-      --version 0.6.0 --output atri-x-0.6.0-linux-amd64.tar.gz
+      --version 0.6.1 --output atri-x-0.6.1-linux-amd64.tar.gz
 
 注意：scratch 镜像内没有 /bin/sh 和 coreutils，ATRI-X 的 shell 工具不可用；
 需要完整工具能力请用同目录的 Dockerfile（基于 debian:bookworm-slim）在服务器上构建。
@@ -353,7 +353,7 @@ def main():
     ap = argparse.ArgumentParser(description="构造 ATRI-X 离线 Docker 镜像 tar.gz")
     ap.add_argument("--binary", required=True, type=Path)
     ap.add_argument("--arch", default="amd64", choices=["amd64", "arm64"])
-    ap.add_argument("--version", default=os.environ.get("ATRIX_VERSION", "0.6.0"))
+    ap.add_argument("--version", default=os.environ.get("ATRIX_VERSION", "0.6.1"))
     ap.add_argument("--tag", default=None, help="默认为 atri-x:<version>")
     ap.add_argument("--output", required=True, type=Path)
     ap.add_argument("--zoneinfo", default=None, type=Path,

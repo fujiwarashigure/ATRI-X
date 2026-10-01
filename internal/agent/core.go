@@ -19,8 +19,8 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/media"
-	"github.com/fujiwarashigure/ATRI-X/internal/ops/ratelimit"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
+	"github.com/fujiwarashigure/ATRI-X/internal/ops/ratelimit"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
@@ -89,6 +89,15 @@ type Agent struct {
 	rateLimitGroup          *ratelimit.Limiter
 	rateLimitAllowed        atomic.Int64
 	rateLimitRejected       atomic.Int64
+	rateLimitUserRejected   atomic.Int64
+	rateLimitGroupRejected  atomic.Int64
+	rateLimitUserPerMinute  int
+	rateLimitUserBurst      int
+	rateLimitGroupPerMinute int
+	rateLimitGroupBurst     int
+	rateLimitMu             sync.Mutex
+	rateLimitLastReason     string
+	rateLimitLastRejectedAt time.Time
 	userConfirmationTimeout time.Duration
 	discoveredTools         map[string]map[string]llm.ToolSchema
 	actorID                 string
@@ -288,6 +297,10 @@ func NewWithOptions(opts Options) (*Agent, error) {
 		scopeID:         "local",
 	}
 	a.contextRuntime.compressTimeout = durationFromSeconds(opts.Ops.CompressTimeoutSeconds)
+	a.rateLimitUserPerMinute = opts.Ops.UserMessagesPerMinute
+	a.rateLimitUserBurst = opts.Ops.UserBurst
+	a.rateLimitGroupPerMinute = opts.Ops.GroupMessagesPerMinute
+	a.rateLimitGroupBurst = opts.Ops.GroupBurst
 	if opts.Ops.UserMessagesPerMinute > 0 {
 		a.rateLimitUser = newRateLimiter(opts.Ops.UserMessagesPerMinute, opts.Ops.UserBurst, opts.Ops.RateLimitIdleTTLSeconds)
 	}

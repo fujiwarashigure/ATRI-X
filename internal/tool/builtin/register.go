@@ -6,8 +6,8 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/character"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/media"
-	"github.com/fujiwarashigure/ATRI-X/internal/ops/concurrency"
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
+	"github.com/fujiwarashigure/ATRI-X/internal/ops/concurrency"
 	"github.com/fujiwarashigure/ATRI-X/internal/processenv"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -29,6 +29,7 @@ type RegisterOptions struct {
 	LongMemoryDir       string
 	FileManager         *FileManager
 	ProcessEnv          processenv.Environment
+	ChildProcessEnv     processenv.Environment
 }
 
 func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
@@ -142,7 +143,11 @@ func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
 	if err := registry.Register(NewEditFileTool(fileGuard)); err != nil {
 		return err
 	}
-	shell := NewShellToolWithEnvironment(opts.ProcessEnv, fileGuard)
+	shellEnv := opts.ChildProcessEnv
+	if !shellEnv.Configured() {
+		shellEnv = opts.ProcessEnv
+	}
+	shell := NewShellToolWithEnvironment(shellEnv, fileGuard)
 	shell.Media = mediaRuntime
 	if err := registry.Register(shell); err != nil {
 		return err
@@ -157,7 +162,7 @@ func RegisterAll(registry *tool.Registry, opts RegisterOptions) error {
 	if err := registry.Register(skill.NewAgentSkillTool(opts.SkillManager)); err != nil {
 		return err
 	}
-	goRunner := skill.NewGoRunner(catalog, opts.ProcessEnv)
+	goRunner := skill.NewGoRunner(catalog, shellEnv)
 	goRunner.Media = mediaRuntime
 	if err := registry.Register(goRunner); err != nil {
 		return err
