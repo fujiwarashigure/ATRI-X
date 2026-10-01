@@ -10,6 +10,7 @@ import (
 	"time"
 
 	agentcommands "github.com/fujiwarashigure/ATRI-X/internal/agent/commands"
+	"github.com/fujiwarashigure/ATRI-X/internal/angelmemory"
 	"github.com/fujiwarashigure/ATRI-X/internal/character"
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/completion"
@@ -25,6 +26,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
+	"github.com/fujiwarashigure/ATRI-X/internal/selflearning"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -38,6 +40,9 @@ type Agent struct {
 	modelRuntime       modelRuntimeState
 	statePath          string
 	stateModTime       time.Time
+	stateMu            sync.Mutex
+	contextOverflowMu  sync.RWMutex
+	contextOverflow    map[string]config.ContextOverflowConfig
 	store              storage.Store
 	media              *media.Manager
 	sessions           *session.Service
@@ -49,6 +54,8 @@ type Agent struct {
 	titleGen           *titleGenerator
 	soul               SoulProvider
 	residentMemory     *resident.Store
+	angelMemory        *angelmemory.Service
+	selfLearning       *selflearning.Service
 	characters         *character.Store
 	modelProfiles      map[string]config.ModelSelection
 	modelAliases       map[string]string
@@ -255,6 +262,7 @@ func NewWithOptions(opts Options) (*Agent, error) {
 		modelRuntime:            newModelRuntimeState(client, workModel.Model, workModel.Provider, provider, providers, modeModels, clients),
 		statePath:               statePath,
 		stateModTime:            stateModTime,
+		contextOverflow:         cloneContextOverflow(opts.ContextOverflow),
 		store:                   store,
 		media:                   opts.Media,
 		mediaRetentionDays:      opts.MediaRetentionDays,
@@ -264,6 +272,8 @@ func NewWithOptions(opts Options) (*Agent, error) {
 		commands:                command.NewRouter(prefixes),
 		soul:                    promptSoul,
 		residentMemory:          opts.ResidentMemoryStore,
+		angelMemory:             opts.AngelMemory,
+		selfLearning:            opts.SelfLearning,
 		characters:              opts.CharacterStore,
 		modelProfiles:           opts.ModelProfiles,
 		modelAliases:            opts.ModelAliases,
@@ -339,10 +349,13 @@ func NewWithOptions(opts Options) (*Agent, error) {
 		Models:        a,
 		Compact:       a,
 		ContextStatus: a,
+		ContextPolicy: a,
 		Tools:         a,
 		Hooks:         hookService,
 		SessionState:  sessionCommands,
 		Characters:    a.characters,
+		AngelMemory:   a.angelMemory,
+		SelfLearning:  a.selfLearning,
 		Audit:         a.audit,
 		Logs:          a,
 		RuntimeStatus: a.runtimeStatusForSession,

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	agentcommands "github.com/fujiwarashigure/ATRI-X/internal/agent/commands"
+	"github.com/fujiwarashigure/ATRI-X/internal/angelmemory"
 	"github.com/fujiwarashigure/ATRI-X/internal/character"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
@@ -15,6 +16,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/memory/resident"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
+	"github.com/fujiwarashigure/ATRI-X/internal/selflearning"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -27,6 +29,7 @@ type Options struct {
 	ModeModels            map[string]config.ModelSelection
 	Providers             map[string]config.ProviderConfig
 	StatePath             string
+	ContextOverflow       map[string]config.ContextOverflowConfig
 	Store                 storage.Store
 	Media                 *media.Manager
 	CommandPrefixes       []string
@@ -35,6 +38,8 @@ type Options struct {
 	NamingNotifier        session.NamingNotifier
 	SoulPath              string
 	ResidentMemoryStore   *resident.Store
+	AngelMemory           *angelmemory.Service
+	SelfLearning          *selflearning.Service
 	CharacterStore        *character.Store
 	LLMRequestConfig      config.LLMRequestConfig
 	Ops                   config.OpsConfig

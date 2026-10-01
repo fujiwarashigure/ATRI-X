@@ -3,6 +3,7 @@ package commands
 import (
 	"context"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/angelmemory"
 	"github.com/fujiwarashigure/ATRI-X/internal/character"
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
@@ -10,6 +11,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
+	"github.com/fujiwarashigure/ATRI-X/internal/selflearning"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
@@ -87,6 +89,12 @@ type CompactService interface {
 	CompactCurrent(ctx context.Context, triggerReason string) (string, error)
 }
 
+type ContextPolicyService interface {
+	ContextPolicyStatus(ctx context.Context) string
+	SetContextPolicy(ctx context.Context, target, value string) (string, error)
+	ResetContextPolicy(ctx context.Context, target string) (string, error)
+}
+
 type ToolService interface {
 	List() []tool.Info
 	Unregister(name string) error
@@ -117,10 +125,13 @@ type Deps struct {
 	Models        ModelService
 	Compact       CompactService
 	ContextStatus ContextStatusService
+	ContextPolicy ContextPolicyService
 	Tools         ToolService
 	Hooks         HookService
 	SessionState  *SessionCommandState
 	Characters    *character.Store
+	AngelMemory   *angelmemory.Service
+	SelfLearning  *selflearning.Service
 	Audit         func(event string, attrs ...any)
 	Logs          LogService
 	RuntimeStatus func(sessionID string) runtimestatus.Snapshot
@@ -150,11 +161,13 @@ func DefaultModules() []Module {
 		ModelModule{},
 		SessionModule{},
 		CompactModule{},
+		ContextPolicyModule{},
 		RequestModule{},
 		LogModule{},
 		ToolModule{},
 		CharacterModule{},
 		HookModule{},
+		MemoryLearningModule{},
 	}
 }
 

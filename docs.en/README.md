@@ -14,6 +14,7 @@ This is the user-facing ATRI-X documentation. Development plans, task breakdowns
 6. [Atrinis Listening Hub](atrinis.md): Learn about Atrinis, Atriwisp, Atriena, and external event access.
 7. [Atrinis Configuration and Usage](atrinis-usage.md): Enable Atrinis, configure Atriwisp, and deliver events using Atriena.
 8. [Frontend API](frontend-api.md): WebSocket protocol, message types, and completion interfaces, used for writing custom frontends.
+9. [Deployment and operations](../deploy/README.md): cloud / Linux container deployment, health endpoints, watchdog, backup and restore, upgrade and rollback, plus [local Windows container deployment](../deploy/windows/README.md).
 
 ## Documentation Maintenance Conventions
 

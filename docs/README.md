@@ -15,6 +15,7 @@
 9. [Atrinis 监听枢纽](atrinis.md)：了解 Atrinis、Atriwisp、Atriena 和外部事件接入。
 10. [Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp，并用 Atriena 投递事件。
 11. [前端 API](frontend-api.md)：WebSocket 协议、消息类型和补全接口，用于编写自定义前端。
+12. [部署与运维](../deploy/README.md)：云服务器 / Linux 容器部署、健康接口、watchdog、备份恢复、升级回滚，以及 [Windows 本地容器部署](../deploy/windows/README.md)。
 
 ## 文档维护约定
 
