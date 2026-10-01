@@ -5,12 +5,12 @@
 #   docker compose build
 #   docker compose up -d
 #
-# 如果已经用 `docker load` 载入了 atri-x-0.6.1-linux-amd64.tar.gz，
+# 如果已经用 `docker load` 载入了 atri-x-0.6.2-linux-amd64.tar.gz，
 # 可直接 `docker compose up -d`，无需 build。
 
 services:
   atri-x:
-    image: ${ATRIX_IMAGE:-atri-x:0.6.1}
+    image: ${ATRIX_IMAGE:-atri-x:0.6.2}
     build:
       context: .
       dockerfile: Dockerfile
