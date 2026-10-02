@@ -10,6 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
+	"github.com/fujiwarashigure/ATRI-X/internal/redact"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
@@ -131,7 +132,8 @@ func (a *Agent) notifyHookError(ctx context.Context, source hook.Event, err erro
 	}
 	event := source
 	event.Point = hook.PointErrorOccurred
-	event.Error = err
+	event.Error = safeError(err)
+	event.ErrorInfo = &hook.ErrorPayload{Message: redact.Error(err)}
 	a.notifyHook(ctx, event)
 }
 
@@ -162,13 +164,7 @@ func hookFailureNoticeText(event hook.Event, err error) string {
 }
 
 func trimHookNoticeText(text string) string {
-	text = strings.TrimSpace(text)
-	const max = 1200
-	runes := []rune(text)
-	if len(runes) <= max {
-		return text
-	}
-	return string(runes[:max]) + "\n...（已截断）"
+	return redact.Summarize(text, 1200)
 }
 
 func (a *Agent) NotifyPlatformConnected(ctx context.Context, platformName string) {
