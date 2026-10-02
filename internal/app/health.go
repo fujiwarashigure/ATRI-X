@@ -21,6 +21,7 @@ const (
 	healthAddrEnv                 = "ATRIX_HEALTH_ADDR"
 	healthLiveStaleEnv            = "ATRIX_HEALTH_LIVE_STALE_SECONDS"
 	healthOpsTokenEnv             = "ATRIX_OPS_TOKEN"
+	healthAllowUnauthenticatedEnv = "ATRIX_OPS_ALLOW_UNAUTHENTICATED"
 	healthRestartReasonEnv        = "ATRIX_RESTART_REASON_FILE"
 	healthRestartReasonValueEnv   = "ATRIX_LAST_RESTART_REASON"
 )
@@ -54,17 +55,34 @@ func startHealthServer(cfg *config.Config, logger *slog.Logger, version string, 
 	if tokenErr != nil {
 		return nil, nil, fmt.Errorf("resolve %s: %w", healthOpsTokenEnv, tokenErr)
 	}
-	if strings.TrimSpace(opsToken) == "" && !isLoopbackHealthAddr(addr) && logger != nil {
-		logger.Warn("health server is reachable on a non-loopback address without ATRIX_OPS_TOKEN; protect /tasks and /metrics before exposing them through a reverse proxy", "addr", addr)
+	allowUnauthenticated := false
+	if raw, allowOK, allowErr := config.ConfigEnv(healthAllowUnauthenticatedEnv, configDir); allowErr != nil {
+		return nil, nil, fmt.Errorf("resolve %s: %w", healthAllowUnauthenticatedEnv, allowErr)
+	} else if allowOK && strings.TrimSpace(raw) != "" {
+		parsed, parseErr := strconv.ParseBool(strings.TrimSpace(raw))
+		if parseErr != nil {
+			return nil, nil, fmt.Errorf("%s must be a boolean, got %q", healthAllowUnauthenticatedEnv, raw)
+		}
+		allowUnauthenticated = parsed
+	}
+	if strings.TrimSpace(opsToken) == "" {
+		if allowUnauthenticated {
+			if logger != nil {
+				logger.Warn("ATRIX_OPS_ALLOW_UNAUTHENTICATED is enabled; sensitive ops handlers are exposed without authentication", "addr", addr, "loopback", isLoopbackHealthAddr(addr))
+			}
+		} else if logger != nil {
+			logger.Warn("ATRIX_OPS_TOKEN is not set; sensitive ops handlers are disabled and /healthz is not authenticated", "addr", addr, "loopback", isLoopbackHealthAddr(addr))
+		}
 	}
 
 	state := health.NewState(health.Options{Version: version, LiveStale: liveStale})
 	server, err := health.NewServer(health.ServerOptions{
-		Addr:              addr,
-		State:             state,
-		ExtraHandlerToken: strings.TrimSpace(opsToken),
-		Logger:            logger,
-		ExtraHandlers:     extraHandlers,
+		Addr:                              addr,
+		State:                             state,
+		ExtraHandlerToken:                 strings.TrimSpace(opsToken),
+		AllowUnauthenticatedExtraHandlers: allowUnauthenticated,
+		Logger:                            logger,
+		ExtraHandlers:                     extraHandlers,
 		Checkers: []health.Checker{
 			health.DirWritable{CheckName: "sessions_sqlite_dir", Dir: filepath.Dir(cfg.Storage.SessionsSQLitePath)},
 			health.DirWritable{CheckName: "chat_history_sqlite_dir", Dir: filepath.Dir(cfg.Storage.ChatHistorySQLitePath)},
