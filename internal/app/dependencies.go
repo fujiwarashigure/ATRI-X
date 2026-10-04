@@ -117,7 +117,10 @@ type RuntimeComponents struct {
 	CronService  *elcron.Service
 	AtrienaBus    *atriena.Bus
 	ImageLimiter *concurrency.Limiter
-	Lifecycle    Lifecycle
+	// VisionStats reports the shared image-description instrumentation for the
+	// ops /metrics endpoint. Nil when the feature is not configured.
+	VisionStats func() *visionMetrics
+	Lifecycle   Lifecycle
 }
 
 type RuntimeFactory interface {
