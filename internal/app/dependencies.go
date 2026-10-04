@@ -12,6 +12,7 @@ import (
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/health"
+	"github.com/fujiwarashigure/ATRI-X/internal/historygate"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/maintenance"
 	"github.com/fujiwarashigure/ATRI-X/internal/media"
@@ -58,6 +59,7 @@ type FoundationRequest struct {
 
 type FoundationComponents struct {
 	Maintenance      *maintenance.Service
+	HistoryPolicy    *historygate.Policy
 	Config           *config.Config
 	Logs             LogManager
 	Logger           *slog.Logger
