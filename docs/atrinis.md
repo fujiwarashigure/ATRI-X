@@ -168,14 +168,14 @@ Atrinis 收到事件后，会按 `mode` 决定处理方式。
 
 ## 查看 Atriwisp 日志
 
-可以用 `/*atriwisp` 查看 Atrinis/Atriwisp 事件日志。它读取 `atrinis-YYYY-MM-DD.log`，支持按 Atriwisp 名称、事件来源、事件 ID、模式和时间范围过滤。
+可以用 `/atriwisp` 查看 Atrinis/Atriwisp 事件日志。它读取 `atrinis-YYYY-MM-DD.log`，支持按 Atriwisp 名称、事件来源、事件 ID、模式和时间范围过滤。
 
 示例：
 
 ```text
-/*atriwisp
-/*atriwisp server-watchdog -n 20
-/*atriwisp --source minecraft-main --mode llm --since 2h
+/atriwisp
+/atriwisp server-watchdog -n 20
+/atriwisp --source minecraft-main --mode llm --since 2h
 ```
 
 ## 与 Cron、Atriyph 和 Skill 的关系
