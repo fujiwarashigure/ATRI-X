@@ -19,6 +19,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/turn"
+	"github.com/fujiwarashigure/ATRI-X/internal/utils/fileops"
 )
 
 type Registrar interface {
@@ -218,6 +219,9 @@ type Deps struct {
 	// CancelSessionInbox drops ordinary chat messages that are still waiting
 	// in the agent-side merge/serialization queue for one Session.
 	CancelSessionInbox func(sessionID string) int
+	// FileBackups keeps the pre-edit content of files ATRI-X edited, so
+	// /rollback can undo the latest edit of each file in the current Session.
+	FileBackups *fileops.RollbackStore
 }
 
 func RegisterFactories(registrar Registrar, deps Deps, factories ...HandlerFactory) error {
@@ -250,6 +254,7 @@ func DefaultModules() []Module {
 		MemberPanelModule{},
 		GroupServicesModule{},
 		RequestModule{},
+		FileModule{},
 		LogModule{},
 		ToolModule{},
 		CharacterModule{},
