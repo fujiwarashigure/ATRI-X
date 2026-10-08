@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 )
 
@@ -46,6 +47,7 @@ func (n namingLogger) NotifyNamingFailed(ctx context.Context, event session.Nami
 			"failure_count", event.FailureCount,
 			"fallback_applied", event.FallbackApplied,
 			"error", event.Err,
+			"result", logging.ResultFailed,
 		)
 	}
 	if n.logger == nil {
