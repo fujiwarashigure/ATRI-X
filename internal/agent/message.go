@@ -8,6 +8,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 )
 
@@ -32,7 +33,7 @@ func (a *Agent) HandleMessage(ctx context.Context, text string) (err error) {
 	defer func() {
 		if err != nil {
 			details := newUserErrorDetails("请求失败", err)
-			a.auditError("message_error", "error_id", details.ID, "error", details.Safe)
+			a.auditError("message_error", "error_id", details.ID, "error", details.Safe, "result", logging.ResultFailed)
 			a.notifyHookError(ctx, hook.Event{Point: hook.PointAgentInputPrepared, Actor: actorContext(actor), Message: hook.MessagePayload{Role: string(llm.RoleUser), Segments: segments}}, errors.New(details.Safe))
 			if shouldNotifyUserError(err) {
 				a.sendChat(ctx, details.Text)

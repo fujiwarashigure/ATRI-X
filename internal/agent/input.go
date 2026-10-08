@@ -11,6 +11,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
@@ -245,7 +246,7 @@ func (a *Agent) expireIdleCurrentSession(ctx context.Context) error {
 		return err
 	}
 	if result.Expired {
-		a.audit("session_idle_expired", "session_id", result.SessionID, "actor_id", actor.ID, "ttl_minutes", result.TTLMinutes)
+		a.audit("session_idle_expired", "session_id", result.SessionID, "actor_id", actor.ID, "ttl_minutes", result.TTLMinutes, "result", logging.ResultSkipped)
 	}
 	return nil
 }
@@ -325,5 +326,5 @@ func (a *Agent) handleRiskConfirmationInput(ctx context.Context, sessionID, text
 }
 
 func (a *Agent) logRiskConfirmationAction(sessionID, action string, confirmation turn.RiskConfirmation, extra string) {
-	a.audit("risk_confirmation_command", "session_id", sessionID, "action", action, "tool", confirmation.ToolName, "risk", confirmation.Risk, "extra", extra)
+	a.audit("risk_confirmation_command", "session_id", sessionID, "action", action, "tool", confirmation.ToolName, "risk", confirmation.Risk, "extra", extra, "result", logging.ResultSucceeded)
 }

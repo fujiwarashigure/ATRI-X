@@ -17,6 +17,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/redact"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
@@ -701,7 +702,7 @@ func (a *Agent) saveRuntimeState() error {
 			a.logger.Warn("reload externally edited state config", "path", a.statePath, "error", err.Error())
 		}
 	} else if reload.Applied && len(reload.Changed) > 0 {
-		a.audit("runtime_state_reloaded", "path", reload.Path, "sections", strings.Join(reload.Changed, ","), "trigger", "write_back")
+		a.audit("runtime_state_reloaded", "path", reload.Path, "sections", strings.Join(reload.Changed, ","), "trigger", "write_back", "result", logging.ResultSucceeded)
 	}
 	a.stateMu.Lock()
 	defer a.stateMu.Unlock()
