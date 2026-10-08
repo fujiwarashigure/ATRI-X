@@ -10,6 +10,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
+	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/request"
 	runtimestatus "github.com/fujiwarashigure/ATRI-X/internal/runtime"
@@ -167,7 +168,7 @@ func (d agentToolRunDeps) RecordToolCall(ctx context.Context, sessionID string, 
 }
 
 func (d agentToolRunDeps) AuditToolDenied(ctx context.Context, sessionID string, call llm.ToolCallRequest, risk tool.RiskLevel, reason string) {
-	d.agent.audit("permission_denied", "actor_id", d.agent.actor(ctx).ID, "session_id", sessionID, "tool", call.Name, "risk", risk, "reason", reason)
+	d.agent.audit("permission_denied", "actor_id", d.agent.actor(ctx).ID, "session_id", sessionID, "tool", call.Name, "risk", risk, "reason", reason, "result", logging.ResultRejected)
 }
 
 func (d agentToolRunDeps) RememberDiscoveryResult(ctx context.Context, session *storage.Session, result *tool.Result) {
