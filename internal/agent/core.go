@@ -126,6 +126,7 @@ type Agent struct {
 	contextRuntime            contextRuntimeState
 	hooks                     hookRunner
 	hookRuntime               HookRouter
+	platformEvents            platformSubscriptions // 平台连接信号订阅与按平台队列，见 platform_signals.go
 	outputs                   delivery.Manager
 	namingModelMu             sync.RWMutex
 	namingModel               config.ModelSelection

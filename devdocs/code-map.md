@@ -269,6 +269,8 @@ rg -n "SKILL.atriyph|ATRIX_SKILL|AgentSkill|go_skill_run|finalize|Lint|Catalog" 
 - `internal/hook/rules/`：规则 Hook；`rules.go` 提供类型和模块入口，`config.go`/`toml_error.go` 负责配置加载与诊断，`rule.go`/`action.go`/`exec.go` 负责规则及 Action 执行，`exec_process_*.go` 负责一次性 exec 的跨平台进程树终止，`detail.go` 负责列表详情。
 - `internal/hook/runtime/`：Worker Hook 配置、进程、双向 Pipe RPC、waiting 路由、工具桥接和进程内 SharedState。
 - `internal/agent/hooks.go`：Agent 的 Hook 执行、上下文和 continuation 接入。
+- `internal/agent/platform_signals.go`：平台连接事实的订阅方。`StartPlatformEvents` 订阅 `platform.PlatformConnected` 并按平台建 `signal.Queue`（同平台串行），worker 上跑 `handlePlatformConnected`（`hooks.go`）执行 `platform.connected` 的 Hook；`ClosePlatformEvents` 先停止接纳再排空。发布方在 `internal/app/platforms.go` 的连接回调里只 `Emit`。
+- `internal/platform/platform.go`：平台契约（适配器、消息、群资料等）与 `ConnectedEvent` / `PlatformConnected` 全局信号。
 - `internal/agent/output.go`：Agent 的 Output Manager 与平台 sender 接入。
 - `internal/agent/media_output.go`：平台发送前解析 Hook/Tool 输出中的 media，并清理受控临时导出。
 - `internal/signal/`：通用类型化信号（`Signal[T,R]` / `Emit` / `EmitAsync` / `Connect` / `ConnectForward` / `Observe` / `Disconnect` / `CancelPending` / `Drain`），每个信号自带独立的调度队列、容量与并发上限、按 key 串行、超时和关闭策略；**不依赖任何 `atri-x/internal/*` 包**，因此是上游唯一可以整包移植的东西（来源见 `upstream-sync-todo.md` §8.2）。目前只落包 + 自带测试，尚未接管平台连接扇出。

@@ -7,6 +7,7 @@ import (
 
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
+	"github.com/fujiwarashigure/ATRI-X/internal/signal"
 )
 
 // PlatformAdapter is the interface for message platform adapters (CLI, QQ, etc.).
@@ -54,6 +55,18 @@ type PlatformEventHandler interface {
 type ConnectNotifier interface {
 	SetConnectNotifier(func(context.Context, string))
 }
+
+// ConnectedEvent 描述"某个平台连接成功"，只带发布方（适配器）的非空 Name，不含会话、
+// 用户或消息身份。
+type ConnectedEvent struct{ Platform string }
+
+// PlatformConnected 是进程生命期内稳定的全局信号，不重放。发布方直接 Emit；
+// 每个订阅方自己持有订阅、队列和关闭，不经过 App 或别的消费者转发。
+//
+// 归属放在平台契约里而不是新开 internal/events：连接事实是适配器发布的事实，与
+// ConnectNotifier 同一层；同时避免与"不引入上游 internal/events 九字段日志契约"
+// 的既有决策混淆（见 devdocs/upstream-sync-todo.md §8.2）。
+var PlatformConnected = signal.New[ConnectedEvent, signal.Empty]("platform.connected")
 
 // Runtime is the lifecycle and send surface shared by platform adapters.
 type Runtime interface {

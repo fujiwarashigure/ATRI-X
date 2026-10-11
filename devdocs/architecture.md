@@ -230,6 +230,8 @@ shell 导出缓存位于 sandbox 的 `media-inputs/`，按内容 ID 命名，首
 
 普通 Hook Manager 按事件点和优先级串行执行 Handler，`hook/control.Service` 作为 `/hooks` 的独立管理入口，组合普通 Manager、持久 Runtime 和配置 loader。
 
+平台连接成功是**进程级事实**，不再由连接回调直接转给 Hook：适配器（`platform.ConnectNotifier`）只 `Emit` 全局信号 `platform.PlatformConnected`（`internal/platform` 的 `ConnectedEvent{Platform}`），Agent 在 `StartPlatformEvents` 里 `Observe` 它，并按平台各自排进一条 `signal.Queue`（`internal/agent/platform_signals.go`；默认 256 等待 / 1 并发，同一平台串行、平台之间互不排队），再在队列 worker 上跑 `platform.connected` 的规则 Hook 与 `builtin.cron.missed_once` 补投递。因此连接回调不会被 Hook 规则或 cron 的模型补投递阻塞。关闭时 `ClosePlatformEvents` 先停止接纳、再排空，超出 `internal/app` 的 30 秒关闭预算则记为关闭错误。
+
 常见来源：
 
 - 规则 Hook：读取 `plugins/hooks.toml`。

@@ -51,7 +51,6 @@ type platformLifecycle interface {
 
 type platformHookAgent interface {
 	RegisterPlatformSender(name string, sender delivery.MessageSender)
-	NotifyPlatformConnected(ctx context.Context, platformName string)
 }
 
 type completionPlatform interface {
@@ -124,7 +123,9 @@ func registerPlatformHooks(agt platformHookAgent, adapters []platformRuntime, he
 					platformName = name
 				}
 				healthState.MarkPlatformConnected(platformName)
-				agt.NotifyPlatformConnected(ctx, platformName)
+				// 只发布事实：订阅方（hook 侧）自己排在自己的按平台队列里执行，
+				// 连接回调不再等 hook 规则或 cron 补投递跑完。
+				_, _ = platform.PlatformConnected.Emit(ctx, platform.ConnectedEvent{Platform: platformName})
 			})
 		}
 	}

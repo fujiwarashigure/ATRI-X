@@ -99,6 +99,8 @@ text = "你好呀"
 
 `send` action 虽可在所有 Hook 点创建 output intent，但只有上表“outputs 会被发送”的点会消费它。`timing = "after_assistant"` 当前也只有 `llm.response.received` 的输出会真正延后；其他点的输出仍按当前流程立即发送。
 
+`platform.connected` 由平台适配器在连接成功后发布，但**执行不与连接回调同步**：Hook 侧把连接事实排进一条按平台的执行队列（同一平台串行、平台之间互不排队），因此连接回调不会等规则 Hook 和 cron 补投递跑完。关闭时先停止接纳新的连接事实，再在 30 秒关闭预算内排空队列；预算用尽会记入关闭错误，且该事实不会重放。
+
 最终 assistant 文本通常先经过 `agent.turn.output.prepared`，再经过 `agent.output.prepared`。不要在两个点配置同一 append/prepend 规则，否则文本会被处理两次。
 
 ### 匹配条件与角色

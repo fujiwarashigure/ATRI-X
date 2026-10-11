@@ -61,6 +61,12 @@ func (defaultIntegrationFactory) Attach(ctx context.Context, req IntegrationRequ
 	registerCommandCatalogs(runtime.Agent, platforms.Runtimes)
 	registerPlatformHooks(runtime.Agent, platforms.Runtimes, req.Health)
 	req.Profiler.Mark("platform hooks")
+	// 适配器启动前先订阅：平台连接事实走全局信号，订阅方必须在第一个 Emit 之前就位，
+	// 否则那次连接会被丢掉（信号不缓存、不重放）。
+	if err := runtime.Agent.StartPlatformEvents(ctx); err != nil {
+		return PlatformComponents{}, fmt.Errorf("app: start platform event subscription: %w", err)
+	}
+	req.Profiler.Mark("platform events")
 	return platforms, nil
 }
 

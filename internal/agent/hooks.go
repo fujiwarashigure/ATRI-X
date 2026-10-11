@@ -169,7 +169,10 @@ func trimHookNoticeText(text string) string {
 	return redact.Summarize(text, 1200)
 }
 
-func (a *Agent) NotifyPlatformConnected(ctx context.Context, platformName string) {
+// handlePlatformConnected 是平台连接事实的实际执行体：它跑在 Agent 自己那条按平台的
+// 队列上（见 platform_signals.go），不在平台适配器的连接回调里，因此这里的 hook 规则
+// 和 cron 补投递不会阻塞连接。
+func (a *Agent) handlePlatformConnected(ctx context.Context, platformName string) {
 	event, err := a.runHook(ctx, hook.Event{Point: hook.PointPlatformConnected, Platform: hook.PlatformContext{Name: platformName}})
 	if err != nil {
 		// The hook manager already logged the failure.

@@ -270,7 +270,7 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 		AtrienaBus:    atrienaBus,
 		ImageLimiter: toolRuntime.ImageLimiter,
 		VisionStats:  visionMetrics.snapshot,
-		Lifecycle:    hookRuntimeLifecycle{runtime: hookRuntime},
+		Lifecycle:    hookRuntimeLifecycle{runtime: hookRuntime, agent: agt},
 	}, nil
 }
 
@@ -558,10 +558,20 @@ func auditFunc(logs LogManager) func(string, ...any) {
 
 type hookRuntimeLifecycle struct {
 	runtime *hookruntime.Manager
+	agent   *agent.Agent
 }
 
+// Close 先停平台连接订阅并排空它那条按平台的队列，再关 hook 运行时：平台连接的补做
+// 本身就跑在 hook 运行时上，反过来的顺序会打断在途工作。
 func (l hookRuntimeLifecycle) Close(ctx context.Context) error {
-	return l.runtime.Close(ctx)
+	var err error
+	if l.agent != nil {
+		err = l.agent.ClosePlatformEvents(ctx)
+	}
+	if l.runtime != nil {
+		err = errors.Join(err, l.runtime.Close(ctx))
+	}
+	return err
 }
 
 func registerTurnAlias(aliases map[string]string, alias, name string) {
