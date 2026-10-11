@@ -13,7 +13,7 @@
 
 | 设施 | 位置 | 是什么 | 谁在用 |
 | --- | --- | --- | --- |
-| 通用类型化信号 | `internal/signal/` | `Signal[T,R]` + 每个信号独立的队列 / 容量 / 并发上限 / 同 key 串行 / 超时 / 关闭策略；**零 `atri-x/internal/*` 依赖** | 目前只有 `platform.PlatformConnected` |
+| 通用类型化信号 | `internal/signal/` | `Signal[T,R]` + 每个信号独立的队列 / 容量 / 并发上限 / 同 key 串行 / 超时 / 关闭策略；**零 `atri-x/internal/*` 依赖** | `platform.PlatformConnected` 的订阅，以及通知的按平台发送队列 |
 | Hook 点 | `internal/hook/` | 12 个稳定边界，规则与插件 Handler 按优先级**串行**执行，可返回可编辑字段与输出意图 | 规则 Hook、进程 Hook、内置 Hook（含 `builtin.cron.missed_once`） |
 
 **同一件事只允许走其中一条**：可以被改写的业务边界走 Hook；只读的进程级事实走信号。
@@ -28,6 +28,7 @@ flowchart TD
     AP["internal/app/platforms.go<br/>连接回调：MarkPlatformConnected + Emit（单一发布点）"]
     PC["internal/platform/platform.go<br/>ConnectedEvent + PlatformConnected"]
     PS["internal/agent/platform_signals.go<br/>Observe + 每平台 Queue + 关闭排空"]
+    NQ["internal/agent/notice_queue.go<br/>按平台发送队列 + 同目标串行 + 队满背压"]
     SQ["internal/signal/*<br/>Signal / Queue / Connection / Emission"]
     HE["internal/hook/event.go<br/>12 个 Point 与 Event payload"]
     HM["internal/hook/manager.go<br/>注册、排序、串行执行、Observer 包装"]
@@ -50,8 +51,11 @@ flowchart TD
     LC -.->|"取值约束"| AL
     LM -->|"文本行落盘"| LR
     LR -.->|"/log /audit /atriwisp /usage 与维护报告"| AL
+    AH -->|"sendOutputs / SendNotice"| NQ
+    NQ -->|"按平台发送"| AD
+    NQ -.->|"Submit / CancelPending / Drain"| SQ
     classDef boundary fill:#e8f5e9,stroke:#388e3c,color:#222
-    class PC,PS,SQ,HE,HM,AH,LC,LM,AL boundary
+    class PC,PS,NQ,SQ,HE,HM,AH,LC,LM,AL boundary
 ```
 
 ## 3. 表一：信号所有权与依赖边界
@@ -77,7 +81,7 @@ flowchart TD
 | Session / `state.toml` 关键持久化 | **必须同步**：失败要让调用方知道 | `internal/session`、`Agent.saveRuntimeState`（写前先 `mergeExternalRuntimeState`） |
 | 日志落盘 | **异步**：不阻塞业务，失败只影响可观测性 | `internal/logging/logging.go` |
 | 平台连接成功事实 | **广播**：消费者各自排队，发布方不等 | `internal/platform` → `internal/agent/platform_signals.go` |
-| 通知 / 发送 | **同步直达**（fork 现状，与上游不同）：没有队列与容量上限 | `Agent.SendNotice` → `internal/agent/output.go` → 平台适配器 |
+| 通知 / 发送 | **同步但受限**：调用方仍等真实结果，但每个平台最多 8 条并发、256 条在等，同一目标串行，队满立刻返回错误（不是故障，是背压） | `Agent.SendNotice` → `internal/agent/notice_queue.go`（`signal.Queue`）→ 平台适配器 |
 | Cron / Atrinis 报告 | 在本轮后台运行内同步准备，发送走 delivery | `internal/cron`、`internal/atrinis` |
 | 模型重试 | 重试由客户端自己执行；面向用户的提示跟随真实调用，重试日志独立落盘 | `internal/llm` 的 `RetryNotifier` + `Agent.attachLLMRetryNotifier` |
 | 媒体清理 | 后台并发（最多 4 个对象，按媒体 ID 互斥） | `internal/media` |
@@ -116,5 +120,5 @@ flowchart TD
 | 没有 `internal/events` | 进程级信号的定义跟着事实的归属走（目前唯一一处：`internal/platform`） |
 | Cron 不独立订阅平台连接 | cron 仍挂在 hook 点 `builtin.cron.missed_once` 上，因此在 hook 侧的按平台队列里执行（上游让 Cron 自己订阅、自己排队） |
 | 发布点是 App 里的单一回调 | 上游让每个平台适配器自己 `Emit`；fork 保留 `registerPlatformHooks` 的 notifier 作为唯一发布点，改动面更小 |
-| 通知没有队列 | 发送同步直达适配器，没有上游 `notification.Manager` 的发送槽 / 等待项 / 队列满语义（见台账 §8.5） |
+| 通知保持同步语义 | 上游的 `notification.Manager` 允许异步侧只确认接纳；fork 的调用方（命令回复、continuation、Hook 失败通知）靠返回的 `Receipt` / error 决定后续，因此队列只做并发上限、同目标串行与队满快速失败，**不改变调用契约** |
 | 保留脱敏 | 见 §5 |

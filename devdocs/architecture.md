@@ -271,6 +271,7 @@ shell 导出缓存位于 sandbox 的 `media-inputs/`，按内容 ID 命名，首
 - Agent 在发送前统一把 URL/Path/Data 归一为 MediaID，发送副本经 `ResolveForOutput` 临时解析，回执按实际成功的输出索引建立关联。多目标 scope 由 adapter 明确提供；缓存期限复用 sandbox retention，非正值不缓存。
 - QQ OneBot 把 record 输出转换为原生语音段；暂不支持 record 的平台使用统一文字 fallback。
 - 流式输出、notice、reasoning、runtime status 由 Agent turn 输出适配层区分前后台发送。
+- 通知（`Agent.SendNotice`）按平台排队后再发：每个平台一条 `internal/signal.Queue`（默认 256 等待 / 8 并发），串行键是"平台 + scope + 收件人"，所以同一目标的发送不交叉、平台之间互不排队；调用方仍然同步等回执，队列满时立刻拿到 `ErrQueueFull`（背压，不是故障）。关闭时先停止接纳再排空，纳入 `internal/app` 的 30 秒关闭预算。实现见 `internal/agent/notice_queue.go`。
 
 <!-- locator:platform -->
 ## 平台适配层

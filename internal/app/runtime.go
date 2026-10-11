@@ -561,12 +561,13 @@ type hookRuntimeLifecycle struct {
 	agent   *agent.Agent
 }
 
-// Close 先停平台连接订阅并排空它那条按平台的队列，再关 hook 运行时：平台连接的补做
-// 本身就跑在 hook 运行时上，反过来的顺序会打断在途工作。
+// Close 先停平台连接订阅并排空它那条按平台的队列，再停通知发送队列，最后关 hook 运行时：
+// 平台连接的补做本身就跑在 hook 运行时上，反过来的顺序会打断在途工作。
 func (l hookRuntimeLifecycle) Close(ctx context.Context) error {
 	var err error
 	if l.agent != nil {
 		err = l.agent.ClosePlatformEvents(ctx)
+		err = errors.Join(err, l.agent.CloseNoticeQueues(ctx))
 	}
 	if l.runtime != nil {
 		err = errors.Join(err, l.runtime.Close(ctx))

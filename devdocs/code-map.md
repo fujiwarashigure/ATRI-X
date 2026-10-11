@@ -291,7 +291,8 @@ rg -n "Event|Handler|Control|plugins/hooks.toml|exec|hook.v2|runtime|SharedState
 
 - `internal/delivery/`：平台无关输出意图和发送管理。`ToolPreviewPrefix` / `Output.IsToolPreview` / `IsToolPreviewNotice` 是"这条通知是不是工具调用进度预览"的唯一判定入口：Agent 写前缀（`formatToolPreview`）、hook 出站记录用它跳过预览；`ShouldDropGroupToolPreview(target, outputs, groupContext)` 是"群聊里不投递进度预览"这条平台跳过规则的唯一入口（OneBot 与 QQ 官方调用它，各自只提供"当前上下文是不是群聊"：`isGroupContext`）。Telegram 与本地 CLI 不跳过预览。
 - `internal/agent/turn_output.go`：Agent turn 输出适配。
-- `internal/agent/output.go`：Agent 的 Hook/工具输出意图和平台 sender 接入；`Agent.SendNotice` 是全部通知投递（含 cron / Atrinis / hook 经 `app` 注入的 `sendNotice` 闭包）的统一裁决点，先过 `turnOutputAllowed` 与 `noticeTargetBlocked` 再下发。
+- `internal/agent/output.go`：Agent 的 Hook/工具输出意图和平台 sender 接入；`Agent.SendNotice` 是全部通知投递（含 cron / Atrinis / hook 经 `app` 注入的 `sendNotice` 闭包）的统一裁决点，先过 `turnOutputAllowed` 与 `noticeTargetBlocked` 再下发；`noticeDispatch` 解析这次通知的落点（当前会话 sender 还是某个平台的 sender）并把平台名交给队列。
+- `internal/agent/notice_queue.go`：通知的按平台发送队列与背压。每个平台一条 `signal.Queue`（默认 256 等待 / 8 并发），串行键是"平台 + scope + 收件人"（`noticeTargetKey`），因此同一目标按到达顺序发送、平台之间互不排队；调用方语义不变（提交后等真实 `Receipt` / error），队满立刻返回 `signal.ErrQueueFull` 并由 `output.go` 记一条 WARN；`Agent.CloseNoticeQueues` 先停止接纳再排空，由 `internal/app` 的运行时关闭步骤在 30 秒预算内调用。
 - `internal/platform/platform.go`：平台发送抽象。
 
 常用搜索：

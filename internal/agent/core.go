@@ -127,6 +127,7 @@ type Agent struct {
 	hooks                     hookRunner
 	hookRuntime               HookRouter
 	platformEvents            platformSubscriptions // 平台连接信号订阅与按平台队列，见 platform_signals.go
+	noticeQueues              noticeQueues          // 通知的按平台发送队列与背压，见 notice_queue.go
 	outputs                   delivery.Manager
 	namingModelMu             sync.RWMutex
 	namingModel               config.ModelSelection

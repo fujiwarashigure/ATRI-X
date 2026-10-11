@@ -2,6 +2,7 @@ package agent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/logging"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
+	"github.com/fujiwarashigure/ATRI-X/internal/signal"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
@@ -58,38 +60,73 @@ func (s agentOutputSender) SendChat(ctx context.Context, outputs []delivery.Outp
 	})
 }
 
+// noticeDispatch 是一次通知的落点：队列按平台分条，串行键按目标分。
+type noticeDispatch struct {
+	platform string
+	send     func(context.Context, delivery.Notice) (delivery.Receipt, error)
+}
+
+// noticeDispatch 解析这次通知该发给谁。解析放在入队之前：平台没配好就不必占队列。
+func (a *Agent) noticeDispatch(ctx context.Context, target delivery.Target) (noticeDispatch, error) {
+	if target.Empty() {
+		if msg, ok := platform.MessageContextFrom(ctx); ok && msg.Sender != nil {
+			return noticeDispatch{platform: noticePlatformName(msg.Platform), send: msg.Sender.SendNotice}, nil
+		}
+	}
+	platformName := strings.TrimSpace(target.Platform)
+	if platformName == "" {
+		if msg, ok := platform.MessageContextFrom(ctx); ok {
+			platformName = msg.Platform
+		}
+	}
+	if platformName == "" && a.platform != nil {
+		platformName = a.platform.Name()
+	}
+	if platformName == "" {
+		return noticeDispatch{}, fmt.Errorf("notice target platform is not configured")
+	}
+	sender := a.platformSenders[platformName]
+	if sender == nil {
+		return noticeDispatch{}, fmt.Errorf("target platform %q is not configured", platformName)
+	}
+	return noticeDispatch{
+		platform: platformName,
+		send: func(sendCtx context.Context, notice delivery.Notice) (delivery.Receipt, error) {
+			notice.Target.Platform = platformName
+			return sender.SendNotice(sendCtx, notice)
+		},
+	}, nil
+}
+
+// noticePlatformName 给"没有平台名的当前会话发送"一条稳定的队列名。
+func noticePlatformName(name string) string {
+	if strings.TrimSpace(name) == "" {
+		return "context"
+	}
+	return name
+}
+
 func (s agentOutputSender) SendNotice(ctx context.Context, notice delivery.Notice) (delivery.Receipt, error) {
-	target := notice.Target
 	outputs := notice.Outputs
 	if s.agent == nil {
 		return delivery.Receipt{}, fmt.Errorf("agent output sender is not configured")
 	}
-	return s.agent.sendPreparedMedia(s.ctx, outputs, func(resolved []delivery.Output) (delivery.Receipt, error) {
-		notice.Outputs = resolved
-		if target.Empty() {
-			if msg, ok := platform.MessageContextFrom(s.ctx); ok && msg.Sender != nil {
-				return msg.Sender.SendNotice(s.ctx, notice)
-			}
-		}
-		platformName := strings.TrimSpace(target.Platform)
-		if platformName == "" {
-			if msg, ok := platform.MessageContextFrom(s.ctx); ok {
-				platformName = msg.Platform
-			}
-		}
-		if platformName == "" && s.agent.platform != nil {
-			platformName = s.agent.platform.Name()
-		}
-		if platformName == "" {
-			return delivery.Receipt{}, fmt.Errorf("notice target platform is not configured")
-		}
-		sender := s.agent.platformSenders[platformName]
-		if sender == nil {
-			return delivery.Receipt{}, fmt.Errorf("target platform %q is not configured", platformName)
-		}
-		notice.Target.Platform = platformName
-		return sender.SendNotice(s.ctx, notice)
+	dispatch, err := s.agent.noticeDispatch(s.ctx, notice.Target)
+	if err != nil {
+		return delivery.Receipt{}, err
+	}
+	// 媒体解析与真正发送放进同一段串行执行：同一目标的导出、上传与发送不交叉。
+	receipt, err := s.agent.noticeQueues.send(s.ctx, dispatch.platform, notice, func(runCtx context.Context) (delivery.Receipt, error) {
+		return s.agent.sendPreparedMedia(runCtx, outputs, func(resolved []delivery.Output) (delivery.Receipt, error) {
+			notice.Outputs = resolved
+			return dispatch.send(runCtx, notice)
+		})
 	})
+	// 队列满是背压信号，不是故障；调用方可能忽略返回值，所以这里留一条可查的记录。
+	if errors.Is(err, signal.ErrQueueFull) && s.agent.logger != nil {
+		s.agent.logger.WarnContext(s.ctx, "notice queue full", "platform", dispatch.platform, "error", err.Error())
+	}
+	return receipt, err
 }
 
 type contextTextSender struct {
