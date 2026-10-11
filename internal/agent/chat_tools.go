@@ -142,7 +142,7 @@ func (a *Agent) recordToolCall(ctx context.Context, sessionID string, call llm.T
 	resultPreview := ""
 	argumentsPreview := ""
 	if a.historyEnabled(ctx) {
-		resultPreview = previewLogText(result)
+		resultPreview = previewRunes(result, toolLogResultLimit(call.Name))
 		argumentsPreview = previewArguments(call.Arguments)
 	}
 	record := &storage.ToolCallRecord{
@@ -231,16 +231,57 @@ func riskConfirmationResult(action string) string {
 }
 
 func previewLogText(text string) string {
+	return previewRunes(text, previewTextRunes)
+}
+
+// 工具日志正文的预算按工具类别取值，对齐上游 internal/tool 的分类：读取／查询／说明类
+// 用短正文，执行／编辑／写入／媒体类留长一点；参数正文统一按上游 Runner 的口径取 256。
+const (
+	toolLogQueryLimit    = 128
+	toolLogActionLimit   = 256
+	toolLogArgumentLimit = 256
+	// previewTextRunes 是用户输入、助手正文这类非工具正文的预览长度。
+	previewTextRunes = 120
+)
+
+// toolLogQueryTools 是"读取／查询／说明"类工具。它们的结果正文是摘要性质，留在 128
+// 字符内既够定位又不会把整篇文档抄进日志；其余工具（执行、编辑、写入、媒体、后台任务）
+// 按 256 处理。新增读取类工具时在这里登记，未登记的工具默认走执行类。
+var toolLogQueryTools = map[string]bool{
+	"read_file":             true,
+	"web_search":            true,
+	"web_extract":           true,
+	"discover_tool":         true,
+	"workspace":             true,
+	"resident_memory_read":  true,
+	"long_memory_search":    true,
+	"atrix_skill":              true,
+	"read_atrix_skill":         true,
+	"agent_skill":           true,
+	"character_list":        true,
+	"character_read":        true,
+	"character_search":      true,
+	"prompt_library_search": true,
+	"angel_recall":          true,
+}
+
+func toolLogResultLimit(toolName string) int {
+	if toolLogQueryTools[strings.TrimSpace(toolName)] {
+		return toolLogQueryLimit
+	}
+	return toolLogActionLimit
+}
+
+func previewRunes(text string, maxRunes int) string {
 	text = strings.TrimSpace(text)
-	if text == "" {
+	if text == "" || maxRunes <= 0 {
 		return ""
 	}
-	const maxPreviewRunes = 120
-	if len([]rune(text)) <= maxPreviewRunes {
+	runes := []rune(text)
+	if len(runes) <= maxRunes {
 		return text
 	}
-	runes := []rune(text)
-	return string(runes[:maxPreviewRunes]) + "..."
+	return string(runes[:maxRunes]) + "..."
 }
 
 func joinAssistantText(first, second string) string {
@@ -279,13 +320,7 @@ func compactArguments(args string) string {
 }
 
 func previewArguments(args string) string {
-	args = compactArguments(args)
-	const maxPreviewRunes = 160
-	if len([]rune(args)) <= maxPreviewRunes {
-		return args
-	}
-	runes := []rune(args)
-	return string(runes[:maxPreviewRunes]) + "..."
+	return previewRunes(compactArguments(args), toolLogArgumentLimit)
 }
 
 // sessionToolsEnabled reports whether one session may use tools at all. Only

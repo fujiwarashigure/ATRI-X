@@ -218,7 +218,7 @@ rg -n "discover_tool|NewBuilder|Risk|Confirm|ToolRun|Result\{|Outputs|workspace|
 
 先看：
 
-- `internal/agent/chat_tools.go`：Agent 工具执行主入口。
+- `internal/agent/chat_tools.go`：Agent 工具执行主入口；`recordToolCall` 写 `tool_call` 审计时按工具类别限长正文（读取／查询／说明类 128 字符，其余 256，参数统一 256，见 `toolLogResultLimit`）。
 - `internal/toolrun/`：执行前解析、过滤、确认、排队后授权复核、额度预占和预览。
 - `internal/tool/executor.go`：Tool Runtime 执行适配。
 - `internal/tool/tool.go`：Tool 核心类型。
