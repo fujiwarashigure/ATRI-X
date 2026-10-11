@@ -117,6 +117,38 @@ atri-x.exe service run                          # 不传 --config，走平台默
 - `--config <不存在的文件>` 会直接失败（`read config ... cannot find the file specified`），自动生成默认配置只发生在**不传 `--config`** 时；
 - 默认配置目录在 `%APPDATA%\ATRI-X`，本机 dpx 环境的 `%APPDATA%` 目录 mkdir 被拒（`Access is denied`），因此冒烟把 `APPDATA` 指到工作目录下的可写目录。仓库路径带空格时 `Start-Process` 的 `-ArgumentList` 会被拆开，冒烟目录放在无空格路径下。
 
+### 6.1 平台连接信号（后续追加）
+
+平台连接事实从"连接回调直接转给 Agent（`Agent.NotifyPlatformConnected`）"改成"适配器发布全局信号
+`platform.PlatformConnected` + hook 侧订阅后按平台排队执行"（`67508075`）之后，同样补了一次进程级
+冒烟（无 Docker，直接跑构建产物）：
+
+```
+go build -o <临时目录>\atri-x.exe ./cmd/atri-x
+set APPDATA=<临时目录>\appdata
+set ATRIX_HEALTH_ADDR=127.0.0.1:33291
+set ATRIX_OPS_TOKEN=smoke-token
+atri-x.exe service run
+```
+
+| 项目 | 结果 |
+| --- | --- |
+| 启动 | stderr 只有 `atri-x startup completed in 110.2586ms`，进程存活 |
+| `GET /live` | `200` |
+| `GET /ready` | `200`，`chat_history_sqlite_dir` / `process` / `scheduler` / `sessions_sqlite_dir` 全 `ok` |
+| `GET /metrics` | `200`，`goroutines=14`，字段正常 |
+| stderr 全程 | 没有信号订阅或关闭相关报错 |
+
+**本次没覆盖到的（诚实标注）**：`service run` 用新生成的默认配置启动，`/metrics` 报
+`checks.platforms = "none configured"`，因此**没有真实平台连接发生**。这条链路只由单元测试覆盖：
+`internal/app/platforms_signal_test.go` 验证连接回调确实发布信号（并验证适配器不报名字时用适配器名），
+`internal/agent/platform_signals_test.go` 验证信号驱动 hook、发布方不等 hook 业务完成、同平台串行、
+关闭后不再接纳、`StartPlatformEvents` 幂等且关闭后不可重启。真实平台端到端需要外部服务与密钥。
+
+**本机跑冒烟时的一个坑（实测）**：`atri-x service run` 会持有服务标记用的命名互斥体，进程没退干净时
+`go test ./internal/app/` 会以 `atri-x service already appears to be running`
+（`service_marker_windows_test.go`）失败——这不是代码缺陷，跑完冒烟先停进程再跑测试。
+
 ## 7. 未覆盖的部分（诚实标注）
 
 - 没有跑完整 `go test ./...` 全仓（只覆盖了改动相关的包集合 + `hook/...`）。
