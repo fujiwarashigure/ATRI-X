@@ -149,6 +149,19 @@ atri-x.exe service run
 `go test ./internal/app/` 会以 `atri-x service already appears to be running`
 （`service_marker_windows_test.go`）失败——这不是代码缺陷，跑完冒烟先停进程再跑测试。
 
+### 6.2 全量改动回归（后续追加）
+
+项2（`/model` 兼容性裁决）、项5（通知按平台排队）与 §9 的查询层改动落地后，再跑了一次同样的进程级冒烟，确认启动链路没有被这些改动影响：
+
+| 项目 | 结果 |
+| --- | --- |
+| 启动 | stderr 只有 `atri-x startup completed in 122.3965ms` |
+| `GET /live` | `200` |
+| `GET /ready` | `200`，4 项检查全 `ok` |
+| 进程 | 存活，无 panic |
+
+**没覆盖到的（诚实标注）**：`CloseNoticeQueues` / `ClosePlatformEvents` 的"先停止接纳再排空"只由单元测试覆盖——`atri-x service run` 没有优雅停机入口（`Stop-Process` 是硬杀，不经 30 秒关闭预算），所以进程级没有验证"关闭时排空在途通知"这件事；`internal/app` 的 Runner 测试覆盖了 cleanups 的执行顺序与预算。
+
 ## 7. 未覆盖的部分（诚实标注）
 
 - 没有跑完整 `go test ./...` 全仓（只覆盖了改动相关的包集合 + `hook/...`）。
