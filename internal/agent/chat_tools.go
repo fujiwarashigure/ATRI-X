@@ -145,6 +145,7 @@ func (a *Agent) recordToolCall(ctx context.Context, sessionID string, call llm.T
 		resultPreview = previewRunes(result, toolLogResultLimit(call.Name))
 		argumentsPreview = previewArguments(call.Arguments)
 	}
+	runSource := toolRunSource(ctx)
 	record := &storage.ToolCallRecord{
 		SessionID:     sessionID,
 		ToolCallID:    call.ID,
@@ -171,6 +172,7 @@ func (a *Agent) recordToolCall(ctx context.Context, sessionID string, call llm.T
 			"arguments", argumentsPreview,
 			"result", resultPreview,
 			"tool", call.Name,
+			logging.FieldRunSource, runSource,
 			"tool_call_id", call.ID,
 			"actor_id", record.ActorID,
 			"risk", risk,
@@ -183,6 +185,7 @@ func (a *Agent) recordToolCall(ctx context.Context, sessionID string, call llm.T
 		"session_id", sessionID,
 		"arguments", argumentsPreview,
 		"tool", call.Name,
+		logging.FieldRunSource, runSource,
 		"tool_call_id", call.ID,
 		"actor_id", record.ActorID,
 		"risk", risk,
@@ -191,6 +194,25 @@ func (a *Agent) recordToolCall(ctx context.Context, sessionID string, call llm.T
 		"error", record.Error,
 		"result", resultFromSuccess(record.Success),
 	)
+}
+
+// toolRunSource 固定这次工具调用的运行来源。后台运行（Cron / Atrinis）在进入模型前就把
+// SandboxContext 的 BackgroundKind 写进 ctx，前台调用没有该标记。取值只看调用现场：
+// 会话被前台接管后 background_kind 会被清掉，用会话元数据回推会把历史算成前台。
+func toolRunSource(ctx context.Context) string {
+	sandbox, ok := tool.SandboxContextFromContext(ctx)
+	if !ok || (!sandbox.Background && strings.TrimSpace(string(sandbox.BackgroundKind)) == "") {
+		return logging.RunSourceForeground
+	}
+	switch sandbox.BackgroundKind {
+	case tool.BackgroundKindCron:
+		return logging.RunSourceCron
+	case tool.BackgroundKindAtrinis:
+		return logging.RunSourceAtrinis
+	default:
+		// 后台运行但没有可辨识来源：宁可不写，也不要假装是前台。
+		return ""
+	}
 }
 
 // resultFromSuccess 把工具执行的布尔结果映射成契约里的操作结果。工具"执行了但失败"

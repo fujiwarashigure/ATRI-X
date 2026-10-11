@@ -112,3 +112,32 @@ func ValidLogResult(result string) bool {
 	_, ok := logResults[strings.TrimSpace(result)]
 	return ok
 }
+
+// 工具调用的运行来源。写入 tool_call 审计记录的 run_source 字段，供
+// `/audit --run_source` 按前台／Cron／Atrinis 筛选。
+//
+// 取值在**调用现场**固定（进入模型调用前就写进 ctx 的 SandboxContext），不从会话
+// 元数据回推：会话被前台接管后 background_kind 会被清掉，回推会把历史记录算成前台。
+// 缺字段的历史记录不补造，因此查不到就是查不到。
+const (
+	// RunSourceForeground 表示这次调用由前台会话发起。
+	RunSourceForeground = "foreground"
+	// RunSourceCron 表示这次调用由 Cron 后台任务发起。
+	RunSourceCron = "cron"
+	// RunSourceAtrinis 表示这次调用由 Atrinis 后台任务发起。
+	RunSourceAtrinis = "atrinis"
+	// FieldRunSource 是承载运行来源的字段名（写入与 `/audit --run_source` 共用）。
+	FieldRunSource = "run_source"
+)
+
+var runSources = map[string]struct{}{
+	RunSourceForeground: {},
+	RunSourceCron:       {},
+	RunSourceAtrinis:      {},
+}
+
+// ValidRunSource 报告运行来源取值是否合法。
+func ValidRunSource(source string) bool {
+	_, ok := runSources[strings.TrimSpace(source)]
+	return ok
+}

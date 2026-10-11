@@ -473,3 +473,47 @@ func TestAuditCommandDebugShowsRawEntries(t *testing.T) {
 		t.Fatalf("content = %q", result.Content)
 	}
 }
+
+// `/audit --run_source` 按工具调用的运行来源筛选，取值只接受 foreground / cron / atrinis。
+func TestAuditCommandFiltersRunSource(t *testing.T) {
+	service := &fakeLogService{entries: []logging.LogEntry{{
+		Time:   time.Date(2026, 6, 3, 15, 0, 0, 0, time.Local),
+		Fields: map[string]string{"event": "tool_call", "tool": "shell", logging.FieldRunSource: logging.RunSourceCron},
+	}}}
+	result, err := NewAudit(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "-t --run_source cron -n 3"})
+	if err != nil {
+		t.Fatalf("audit handle: %v", err)
+	}
+	if got := service.query.Fields[logging.FieldRunSource]; got != logging.RunSourceCron {
+		t.Fatalf("run_source field = %q, want cron (query %#v)", got, service.query.Fields)
+	}
+	if !strings.Contains(result.Content, "run_source=cron") {
+		t.Fatalf("content = %q", result.Content)
+	}
+}
+
+func TestAuditCommandRejectsInvalidRunSource(t *testing.T) {
+	for _, args := range []string{"--run_source", "--run_source other", `--run_source ""`, "--run_source foreground cron"} {
+		if _, err := NewAudit(Deps{Logs: &fakeLogService{}}).Handle(context.Background(), command.Request{Args: args}); err == nil {
+			t.Fatalf("args %q must be rejected", args)
+		}
+	}
+}
+
+func TestAuditCommandCompletesRunSource(t *testing.T) {
+	auditCmd := NewAudit(Deps{}).(command.Completer)
+	options := auditCmd.Complete(context.Background(), command.CompletionRequest{Raw: "/audit --run", Prefix: "/", Name: "audit", Args: "--run", Cursor: len("/audit --run")})
+	if len(options) != 1 || options[0].Text != "--run_source" {
+		t.Fatalf("option Complete = %#v", options)
+	}
+	values := auditCmd.Complete(context.Background(), command.CompletionRequest{Raw: "/audit --run_source ", Prefix: "/", Name: "audit", Args: "--run_source ", Cursor: len("/audit --run_source ")})
+	got := map[string]bool{}
+	for _, item := range values {
+		got[item.Text] = true
+	}
+	for _, want := range []string{logging.RunSourceForeground, logging.RunSourceCron, logging.RunSourceAtrinis} {
+		if !got[want] {
+			t.Fatalf("value completion %#v is missing %q", got, want)
+		}
+	}
+}

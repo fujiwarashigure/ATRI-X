@@ -477,6 +477,7 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 | `--actor <id>` | 按 actor ID 过滤。 |
 | `--session <id>` | 按 Session ID 过滤。 |
 | `--tool <name>` | 按工具名过滤。 |
+| `--run_source <foreground\|cron\|atrinis>` | 按工具调用的来源过滤。来源在调用现场固定：前台会话发起的调用记 `foreground`，Cron／Atrinis 后台任务分别记 `cron`、`atrinis`；没有该字段的历史记录不会被补造，也查不到。 |
 
 `/atriwisp` 查询 `atrinis-YYYY-MM-DD.log`，额外支持：
 
@@ -502,6 +503,7 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 /log --msg startup --days 3
 /audit --event tool_call --risk high -n 10
 /audit -t --raw -n 20
+/audit -t --run_source cron -n 20
 /audit --actor cli:local --since 24h
 /atriwisp
 /atriwisp server-watchdog -n 20

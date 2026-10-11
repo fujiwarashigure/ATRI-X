@@ -52,3 +52,19 @@ func TestValidLogResultAcceptsOnlyContractValues(t *testing.T) {
 		}
 	}
 }
+
+func TestValidRunSourceAcceptsOnlyContractValues(t *testing.T) {
+	for _, source := range []string{RunSourceForeground, RunSourceCron, RunSourceAtrinis} {
+		if !ValidRunSource(source) {
+			t.Fatalf("ValidRunSource(%q) = false", source)
+		}
+	}
+	for _, source := range []string{"", "  ", "Foreground", "background", "cron:", "hook", "foreground cron"} {
+		if ValidRunSource(source) {
+			t.Fatalf("ValidRunSource(%q) = true, want false", source)
+		}
+	}
+	if !ValidRunSource(" cron ") {
+		t.Fatal("ValidRunSource must ignore surrounding spaces")
+	}
+}

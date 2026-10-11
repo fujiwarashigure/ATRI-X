@@ -35,12 +35,14 @@ func auditInfo() command.Info {
   --actor <id>          Filter by actor_id.
   --session <id>        Filter by session_id.
   --tool <name>         Filter by tool.
+  --run_source <name>   Filter tool calls by run source: foreground, cron, atrinis.
   --msg <text>          Filter by msg field.
   --contains <text>     Filter by text/arguments/result/raw fields.
 
 Examples:
   /audit
   /audit --event tool_call --risk high -n 10
+  /audit -t --run_source cron -n 20
   /audit -d --contains "hello"
   /audit --actor cli:local --since 24h`),
 	}
@@ -170,6 +172,9 @@ func (c logCommand) Complete(ctx context.Context, req command.CompletionRequest)
 	if c.audit && previous == "--tool" {
 		return completeToolNames(c.deps, token.Text, token.Start, token.End)
 	}
+	if c.audit && previous == "--run_source" {
+		return completeStringOptions([]string{logging.RunSourceForeground, logging.RunSourceCron, logging.RunSourceAtrinis}, token.Text, token.Start, token.End, "run_source")
+	}
 	if c.atriwisp && previous == "--mode" {
 		return completeStringOptions([]string{"record", "direct", "llm"}, token.Text, token.Start, token.End, "atrinis_mode")
 	}
@@ -216,6 +221,7 @@ func logCompletionOptions(audit, atriwisp bool) []completionOption {
 			completionOption{Text: "--actor", Description: "Filter actor ID"},
 			completionOption{Text: "--session", Description: "Filter session ID"},
 			completionOption{Text: "--tool", Description: "Filter tool name"},
+			completionOption{Text: "--run_source", Description: "Filter tool run source"},
 		)
 	}
 	if atriwisp {
@@ -277,6 +283,12 @@ func parseAuditQuery(args string) (logging.LogQuery, error) {
 			fields["session_id"] = value
 		case "tool":
 			fields["tool"] = value
+		case "run_source":
+			value = strings.TrimSpace(value)
+			if !logging.ValidRunSource(value) {
+				return fmt.Errorf("invalid --run_source %q: expected foreground, cron or atrinis", value)
+			}
+			fields[logging.FieldRunSource] = value
 		default:
 			return fmt.Errorf("unknown option: --%s", name)
 		}
@@ -599,6 +611,7 @@ func formatAuditEntries(raw bool) func([]logging.LogEntry) string {
 			appendField(&sb, "session", f["session_id"])
 			appendField(&sb, "actor", f["actor_id"])
 			appendField(&sb, "tool", f["tool"])
+			appendField(&sb, "run_source", f[logging.FieldRunSource])
 			appendField(&sb, "risk", f["risk"])
 			appendField(&sb, "provider", f["provider"])
 			appendField(&sb, "model", f["model"])
