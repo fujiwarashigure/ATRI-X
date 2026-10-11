@@ -212,13 +212,33 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 	securityPolicy := security.NewPolicy(cfg.Security.UserMaxToolRisk, cfg.Security.SuperadminConfirmRisk, cfg.Security.Superadmins)
 	atrienaBus := atriena.NewBus()
 
-	startupHookNotices := []string{}
+	// 启动期的 Hook 加载告警必须等平台发送器注册好才能送达（那是
+	// `Integrations.Attach` → `registerPlatformHooks` 的事），而平台发送器在
+	// `buildAgent` 之后、`Runtime.Build` 返回之前都还没有。因此 Agent 就绪之前
+	// 先攒起来，由 runner 在 Attach 之后用 `deliverHookNotices` 统一投递；
+	// 背景与为什么不能只发到主平台见 devdocs/upstream-sync-todo.md §9.1。
+	hookNotices := []string{}
+	hookNoticeChannel := hookNoticeTarget(req.Platforms.Primary, req.Platforms.Runtimes)
 	notifyHookIssue := func(ctx context.Context, text string) {
-		if agt == nil {
-			startupHookNotices = append(startupHookNotices, text)
+		text = strings.TrimSpace(text)
+		if text == "" {
 			return
 		}
-		_, _ = agt.SendNotice(ctx, delivery.Notice{Outputs: []delivery.Output{delivery.Text(text)}, Level: slog.LevelWarn})
+		if agt == nil {
+			hookNotices = append(hookNotices, text)
+			return
+		}
+		if hookNoticeChannel == "" {
+			logger.Warn("hook notice", "text", text)
+			return
+		}
+		if _, err := agt.SendNotice(ctx, delivery.Notice{
+			Target:  delivery.Target{Platform: hookNoticeChannel, Superadmins: true},
+			Outputs: []delivery.Output{delivery.Text(text)},
+			Level:   slog.LevelWarn,
+		}); err != nil {
+			logger.Warn("hook notice was not delivered", "text", text, "platform", hookNoticeChannel, "error", err.Error())
+		}
 	}
 
 	hookRuntime := hookruntime.NewManager(hookruntime.Options{
@@ -257,9 +277,6 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 			return err
 		}
 	}
-	for _, notice := range startupHookNotices {
-		notifyHookIssue(context.Background(), notice)
-	}
 	req.Profiler.Mark("agent init")
 
 	return &RuntimeComponents{
@@ -270,6 +287,7 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 		AtrienaBus:    atrienaBus,
 		ImageLimiter: toolRuntime.ImageLimiter,
 		VisionStats:  visionMetrics.snapshot,
+		HookNotices:  hookNotices,
 		Lifecycle:    hookRuntimeLifecycle{runtime: hookRuntime, agent: agt},
 	}, nil
 }

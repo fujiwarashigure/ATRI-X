@@ -24,7 +24,7 @@ rg -n "locator:tool" devdocs/code-map.md
 - `cmd/atri-x/main.go`：程序入口。
 - `internal/launcher/cli.go`：命令行解析和补全生成。
 - `internal/app/app.go`、`runner.go`、`dependencies.go`：稳定启动入口、分阶段 Runner 和可替换依赖组。
-- `internal/app/foundation.go`、`models.go`、`runtime.go`：配置/存储基础设施、模型客户端，以及 Cron/Tool/Hook/Agent 核心装配。
+- `internal/app/foundation.go`、`models.go`、`runtime.go`：配置/存储基础设施、模型客户端，以及 Cron/Tool/Hook/Agent 核心装配。`runtime.go` 在 Agent 就绪前把 Hook 加载告警攒进 `RuntimeComponents.HookNotices`（真实平台发送器要等 `Integrations.Attach` 才注册），由 `runner.go` 在 Attach 之后用 `platforms.go` 的 `deliverHookNotices` 发到 `hookNoticeTarget` 选出的落地平台超管，无可用平台时退回日志。
 - `internal/app/image_rewriter.go`、`image_to_prompt.go`：把 `image_generate` 的低成本改写模型和 `image_to_prompt` 的视觉模型接到已有 `ModelClients`，再以接口形式注入 builtin 工具；`image_to_prompt` 显式启用但 provider/model 有误时在启动阶段报错。
 - `internal/app/vision.go`、`internal/agent/vision.go`、`internal/vision/`：自动视觉兜底。`[vision]` 段显式开启后，`agent.callLLM` 在 `APIError.Category == vision_unsupported` 时调用 `VisionDescriber` 把图片段替换成文字描述（有界并行 + 整批时间预算），失败则降级回文本引用；`internal/vision` 是 `image_to_prompt` 工具与兜底共用的唯一描述引擎（预处理 + 流式调用 + 版本化指纹缓存 + 成功/负缓存 + 同 key 合并 + 运行器/等待者上限 + `Stats()` 接入 `/metrics` + panic 隔离），不反向依赖 `internal/media`。`internal/llm/openai` 的 `parseError` 负责把上游错误映射为 `APIError.Category`，`shouldFallbackVision` 只读该字段。
 - `internal/app/asr.go`、`internal/agent/asr.go`、`internal/asr/`：可选语音转写。`[asr]` 显式开启后，`HandleMessage` 在已唤醒的入站消息上调用 `AudioTranscriber` 把语音段替换成 `[语音 N 自动转写（可能有误）：...]` 文本段；`internal/asr` 负责 OpenAI 兼容 multipart 上传、有界并发/队列、录音大小与响应上限、成功/负缓存和重试；预算按 `asr` kind 预占，受全局、群和群内单用户四级每日额度约束。

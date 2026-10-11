@@ -175,6 +175,52 @@ func notifyPlatformFailure(ctx context.Context, cfg *config.Config, sender notic
 	}
 }
 
+// hookNoticeTarget 给启动期的 Hook 告警挑一个真正能送达的平台：优先主平台（它一定
+// 已经注册成发送器——CLI-only 与完整前台模式下就是交互式 CLI），否则退到第一个真实
+// 平台适配器。service 模式的 headless 主平台（名字是 service）与 atrinis 都不是可送达
+// 落点：前者只会报错，后者不是消息平台。
+func hookNoticeTarget(primary platform.PlatformAdapter, runtimes []platformRuntime) string {
+	names := runtimeNames(runtimes)
+	if primary != nil {
+		name := strings.TrimSpace(primary.Name())
+		for _, candidate := range names {
+			if candidate == name {
+				return name
+			}
+		}
+	}
+	if len(names) > 0 {
+		return names[0]
+	}
+	return ""
+}
+
+// deliverHookNotices 在平台发送器注册完成之后投递启动期攒下的 Hook 告警。此前这些
+// 告警在 Agent 构造完成后就直接发，而那时真实平台发送器还没注册，于是 service 模式
+// 下只会落到 headless 主平台并留下一句"无法发送"的 WARN——用户根本看不到配置写错的
+// 提示。没有可用平台时退回日志，不再静默丢弃。
+func deliverHookNotices(ctx context.Context, logger *slog.Logger, sender noticeSender, platformName string, notices []string) {
+	for _, text := range notices {
+		text = strings.TrimSpace(text)
+		if text == "" {
+			continue
+		}
+		if sender == nil || platformName == "" {
+			if logger != nil {
+				logger.Warn("hook notice", "text", text)
+			}
+			continue
+		}
+		if _, err := sender.SendNotice(ctx, delivery.Notice{
+			Target:  delivery.Target{Platform: platformName, Superadmins: true},
+			Outputs: []delivery.Output{delivery.Text(text)},
+			Level:   slog.LevelWarn,
+		}); err != nil && logger != nil {
+			logger.Warn("hook notice was not delivered", "text", text, "platform", platformName, "error", err.Error())
+		}
+	}
+}
+
 // runPlatforms 启动全部平台运行时并等待它们结束。适配器自己负责重连退避，所以这里
 // 只处理"运行时真的退出"的两种情况：
 //   - 非预期退出（运行上下文还没结束）：记 WARN，并交给 app 处理（health + 超管通知）；

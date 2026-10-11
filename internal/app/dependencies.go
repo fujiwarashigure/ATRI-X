@@ -119,6 +119,10 @@ type RuntimeComponents struct {
 	CronService  *elcron.Service
 	AtrienaBus    *atriena.Bus
 	ImageLimiter *concurrency.Limiter
+	// HookNotices are the Hook load warnings collected while the Agent was still
+	// being built. Platform senders only exist after Integrations.Attach, so the
+	// runner delivers them then (deliverHookNotices).
+	HookNotices []string
 	// VisionStats reports the shared image-description instrumentation for the
 	// ops /metrics endpoint. Nil when the feature is not configured.
 	VisionStats func() *visionMetrics

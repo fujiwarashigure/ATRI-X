@@ -255,3 +255,54 @@ func TestNotifyPlatformFailureWithoutSuperadminsSendsNothing(t *testing.T) {
 		t.Fatalf("notices = %#v, want none", got)
 	}
 }
+
+// 启动期 Hook 告警要挑一个真能送达的平台：主平台已注册就用它（CLI 模式），
+// headless 的 service 主平台与 atrinis 都不算落点。
+func TestHookNoticeTarget(t *testing.T) {
+	cases := []struct {
+		name     string
+		primary  platform.PlatformAdapter
+		runtimes []platformRuntime
+		want     string
+	}{
+		{name: "primary is a runtime", primary: lifecycleRuntime{name: "cli"}, runtimes: []platformRuntime{lifecycleRuntime{name: "cli"}}, want: "cli"},
+		{name: "headless primary falls back to a real platform", primary: lifecycleRuntime{name: "service"}, runtimes: []platformRuntime{lifecycleRuntime{name: "qqonebot"}}, want: "qqonebot"},
+		{name: "atrinis is not a landing spot", primary: lifecycleRuntime{name: "service"}, runtimes: []platformRuntime{lifecycleRuntime{name: "atrinis"}}, want: ""},
+		{name: "first real platform wins", primary: lifecycleRuntime{name: "service"}, runtimes: []platformRuntime{lifecycleRuntime{name: "atrinis"}, lifecycleRuntime{name: "telegram"}, lifecycleRuntime{name: "qqonebot"}}, want: "telegram"},
+		{name: "no runtime", primary: lifecycleRuntime{name: "service"}, runtimes: nil, want: ""},
+		{name: "no primary", primary: nil, runtimes: []platformRuntime{lifecycleRuntime{name: "telegram"}}, want: "telegram"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := hookNoticeTarget(tc.primary, tc.runtimes); got != tc.want {
+				t.Fatalf("hookNoticeTarget = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestDeliverHookNoticesSendsToTheChosenPlatform(t *testing.T) {
+	sender := &recordingNoticeSender{}
+	deliverHookNotices(context.Background(), nil, sender, "qqonebot", []string{"  ", "Hook 插件 rules 已禁用：bad toml", ""})
+	notices := sender.recorded()
+	if len(notices) != 1 {
+		t.Fatalf("notices = %#v, want one", notices)
+	}
+	if notices[0].Target.Platform != "qqonebot" || !notices[0].Target.Superadmins {
+		t.Fatalf("notice target = %#v", notices[0].Target)
+	}
+	if notices[0].Level != slog.LevelWarn {
+		t.Fatalf("notice level = %v, want warn", notices[0].Level)
+	}
+	if text := notices[0].Outputs[0].Text; !strings.Contains(text, "bad toml") {
+		t.Fatalf("notice text = %q", text)
+	}
+}
+
+func TestDeliverHookNoticesWithoutAPlatformSendsNothing(t *testing.T) {
+	sender := &recordingNoticeSender{}
+	deliverHookNotices(context.Background(), slog.New(slog.DiscardHandler), sender, "", []string{"no platform"})
+	if got := sender.recorded(); len(got) != 0 {
+		t.Fatalf("notices = %#v, want none", got)
+	}
+}

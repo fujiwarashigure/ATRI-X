@@ -128,6 +128,9 @@ func (r *Runner) Run(ctx context.Context, opts Options) (runErr error) {
 	if err != nil {
 		return err
 	}
+	// Hook 加载告警在 Agent 构造期只能先攒着：真实平台发送器要等 Attach 里的
+	// registerPlatformHooks 才注册，所以在这里补投递（没有可用平台时退回日志）。
+	deliverHookNotices(ctx, foundation.Logger, runtime.Agent, hookNoticeTarget(platforms.Primary, platforms.Runtimes), runtime.HookNotices)
 
 	tasksProvider.Set(func() any { return runtime.Agent.ActiveRequests() })
 	metricsProvider.Set(func() any {
