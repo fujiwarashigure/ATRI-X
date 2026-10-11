@@ -221,3 +221,45 @@ func TestUsageCompletionOptions(t *testing.T) {
 		}
 	}
 }
+
+// 字段缺失 / 非法 / 溢出的用量一律按"未知"处理并显示 null，向上污染所在分组与总计项；
+// 其他完全已知的分组与字段不受影响，显式的 0 仍然是 0。用量未知的调用仍计入 calls。
+func TestUsageTreatsUnknownValuesAsNull(t *testing.T) {
+	entries := []logging.LogEntry{
+		makeUsageEntry(time.Date(2026, 7, 1, 10, 0, 0, 0, time.Local), "deepseek", "deepseek-v4", "sess-1", 100, 10, 110, 0, 500),
+		{
+			Time:    time.Date(2026, 7, 1, 11, 0, 0, 0, time.Local),
+			Level:   "INFO",
+			Message: "audit event",
+			Fields: map[string]string{
+				"event":             "llm_usage",
+				"provider":          "deepseek",
+				"model":             "deepseek-v4",
+				"session_id":        "sess-1",
+				"completion_tokens": "abc",                  // 非法
+				"total_tokens":      "99999999999999999999", // 溢出
+				"elapsed_ms":        "300",                  // prompt_tokens / cache_hit_tokens 缺失
+			},
+		},
+		makeUsageEntry(time.Date(2026, 7, 1, 12, 0, 0, 0, time.Local), "openai", "gpt-4o", "sess-2", 500, 50, 550, 0, 300),
+	}
+	service := &fakeLogService{entries: entries}
+	result, err := NewUsage(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: ""})
+	if err != nil {
+		t.Fatalf("usage handle: %v", err)
+	}
+	for _, want := range []string{
+		"[deepseek/deepseek-v4] calls: 2",
+		"prompt: null | completion: null | total: null",
+		"cache: null | elapsed: 0.8s",
+		"[openai/gpt-4o] calls: 1",
+		"prompt: 500 | completion: 50 | total: 550",
+		"cache: 0 | elapsed: 0.3s",
+		"[total] calls: 3",
+		"prompt: null | completion: null | total: null",
+	} {
+		if !strings.Contains(result.Content, want) {
+			t.Fatalf("content missing %q:\n%s", want, result.Content)
+		}
+	}
+}

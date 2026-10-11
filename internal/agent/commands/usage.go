@@ -182,46 +182,92 @@ func parseUsageQuery(args string) (logging.LogQuery, usageGroupKey, error) {
 	return query, groupBy, nil
 }
 
+// usageValue 是"已知数值 / 未知"的三态值。未知（字段缺失、非法、溢出）在输出里显示 null，
+// 并向上传递到受影响的分组与总计项——否则"没记录"会和"真的是 0"混成同一样东西，
+// 让统计看起来完整而实际不是。
+type usageValue struct {
+	known bool
+	value int64
+}
+
+// knownUsageValue 构造一个已知数值；累计器必须用它起步，零值 usageValue 表示未知。
+func knownUsageValue(value int64) usageValue {
+	return usageValue{known: true, value: value}
+}
+
+// add 并入一个来源值：任一来源未知，累计结果就未知。
+func (v usageValue) add(other usageValue) usageValue {
+	if !v.known || !other.known {
+		return usageValue{}
+	}
+	return usageValue{known: true, value: v.value + other.value}
+}
+
+func (v usageValue) format() string {
+	if !v.known {
+		return "null"
+	}
+	return formatThousands(v.value)
+}
+
+// parseUsageValue 解析一个用量字段：字段缺失、非法值和溢出都算未知，显式的 0 是已知的 0。
+func parseUsageValue(raw string) usageValue {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return usageValue{}
+	}
+	n, err := strconv.ParseInt(raw, 10, 64)
+	if err != nil {
+		return usageValue{}
+	}
+	return knownUsageValue(n)
+}
+
 type usageBucket struct {
 	key              string
 	calls            int
-	promptTokens     int64
-	completionTokens int64
-	totalTokens      int64
-	cacheHitTokens   int64
-	elapsedMs        int64
+	promptTokens     usageValue
+	completionTokens usageValue
+	totalTokens      usageValue
+	cacheHitTokens   usageValue
+	elapsedMs        usageValue
+}
+
+func newUsageBucket(key string) *usageBucket {
+	return &usageBucket{
+		key:              key,
+		promptTokens:     knownUsageValue(0),
+		completionTokens: knownUsageValue(0),
+		totalTokens:      knownUsageValue(0),
+		cacheHitTokens:   knownUsageValue(0),
+		elapsedMs:        knownUsageValue(0),
+	}
+}
+
+func (b *usageBucket) addEntry(entry logging.LogEntry) {
+	b.calls++
+	b.promptTokens = b.promptTokens.add(parseUsageValue(entry.Fields["prompt_tokens"]))
+	b.completionTokens = b.completionTokens.add(parseUsageValue(entry.Fields["completion_tokens"]))
+	b.totalTokens = b.totalTokens.add(parseUsageValue(entry.Fields["total_tokens"]))
+	b.cacheHitTokens = b.cacheHitTokens.add(parseUsageValue(entry.Fields["cache_hit_tokens"]))
+	b.elapsedMs = b.elapsedMs.add(parseUsageValue(entry.Fields["elapsed_ms"]))
 }
 
 func formatUsageSummary(entries []logging.LogEntry, query logging.LogQuery, groupBy usageGroupKey) string {
 	buckets := map[string]*usageBucket{}
 	var order []string
-	grand := &usageBucket{key: "total"}
+	grand := newUsageBucket("total")
 
 	for _, entry := range entries {
 		key := usageGroupKeyFor(entry, groupBy)
 		b := buckets[key]
 		if b == nil {
-			b = &usageBucket{key: key}
+			b = newUsageBucket(key)
 			buckets[key] = b
 			order = append(order, key)
 		}
-		prompt := atoiSafe(entry.Fields["prompt_tokens"])
-		completion := atoiSafe(entry.Fields["completion_tokens"])
-		total := atoiSafe(entry.Fields["total_tokens"])
-		cache := atoiSafe(entry.Fields["cache_hit_tokens"])
-		elapsed := atoiSafe(entry.Fields["elapsed_ms"])
-		b.calls++
-		b.promptTokens += prompt
-		b.completionTokens += completion
-		b.totalTokens += total
-		b.cacheHitTokens += cache
-		b.elapsedMs += elapsed
-		grand.calls++
-		grand.promptTokens += prompt
-		grand.completionTokens += completion
-		grand.totalTokens += total
-		grand.cacheHitTokens += cache
-		grand.elapsedMs += elapsed
+		b.addEntry(entry)
+		grand.addEntry(entry)
 	}
 
 	sort.Strings(order)
@@ -276,18 +322,6 @@ func usageRangeDesc(query logging.LogQuery) string {
 	return "all time"
 }
 
-func atoiSafe(value string) int64 {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return 0
-	}
-	n, err := strconv.ParseInt(value, 10, 64)
-	if err != nil {
-		return 0
-	}
-	return n
-}
-
 func formatThousands(n int64) string {
 	if n == 0 {
 		return "0"
@@ -326,14 +360,17 @@ func formatThousands(n int64) string {
 func formatUsageBucket(sb *strings.Builder, label string, b *usageBucket) {
 	sb.WriteString(fmt.Sprintf("[%s] calls: %d\n", label, b.calls))
 	sb.WriteString(fmt.Sprintf("  prompt: %s | completion: %s | total: %s\n",
-		formatThousands(b.promptTokens),
-		formatThousands(b.completionTokens),
-		formatThousands(b.totalTokens)))
+		b.promptTokens.format(),
+		b.completionTokens.format(),
+		b.totalTokens.format()))
 	sb.WriteString(fmt.Sprintf("  cache: %s | elapsed: %s\n",
-		formatThousands(b.cacheHitTokens),
+		b.cacheHitTokens.format(),
 		formatElapsed(b.elapsedMs)))
 }
 
-func formatElapsed(ms int64) string {
-	return fmt.Sprintf("%.1fs", float64(ms)/1000)
+func formatElapsed(elapsed usageValue) string {
+	if !elapsed.known {
+		return "null"
+	}
+	return fmt.Sprintf("%.1fs", float64(elapsed.value)/1000)
 }

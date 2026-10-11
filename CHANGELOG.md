@@ -5,6 +5,7 @@
 - `/model` 在切换**当前会话正在用的**模式时会先做协议/厂商兼容性裁决：会话历史由 Responses 产生时只允许切到同厂商的 Responses 模型，由 Chat Completions 产生时允许跨厂商切换；不兼容时命令直接失败，内存与 `state.toml` 都不改动，并提示新建会话或切回兼容模型（新入口 `internal/llm/origin.go` 的 `CanSwitch`）。此前 `llm_origin` 只记不用，切换后上下文可能续不上或跨协议重放历史。切换**其他**模式槽位（当前会话用不到，例如 work 会话里 `/model --chat`）不做检查；没有当前会话、或会话还没记过来源时也放行。
 - 平台连接成功改为进程级信号：适配器连接回调只发布 `platform.PlatformConnected`（`internal/platform` 的 `ConnectedEvent`），Hook 侧由 Agent 在 `StartPlatformEvents` 里订阅，并把每个平台排进自己那条执行队列再跑（`internal/agent/platform_signals.go`；默认 256 等待 / 1 并发，同一平台串行、平台之间互不排队）。此前连接回调会同步跑完所有 `platform.connected` 处理器，其中 `builtin.cron.missed_once` 会调模型并发送消息，等于把一次 LLM 补投递压在平台连接路径上。关闭时 `ClosePlatformEvents` 先停止接纳再排空，超出 30 秒关闭预算记为关闭错误，不宣称已接纳的回调已经退出。
 - `/log`、`/audit`、`/atriwisp` 新增独立的 `--raw`（显示文件里的完整原始记录），并把等级筛选与展示方式彻底解耦：`--level debug` 与 `-d` 现在只降低门槛，**不再**顺带显示原始记录（此前 `-d` 与 `--level debug` 会隐式开启，想看原始记录又不想降门槛时没有办法）。工具调用只记录在 audit，因此 `/log` 不再接受 `-t`（`/audit -t` 不变）。`/atriwisp` 的选项补全同时补上 `--tag`。
+- `/usage` 把缺失、非法或溢出的用量字段显示为 `null` 并向上传递到受影响的分组与总计项；此前一律按 `0` 累加，于是"调用没有记录用量"（例如模型调用失败、上游没返回 usage）会被当成"用了 0 token"，让统计看起来完整而实际不是。显式的 `0` 照常统计，`calls` 仍然计入用量未知的调用。
 
 ## [v0.6.8 - 2026-10-04]
 
