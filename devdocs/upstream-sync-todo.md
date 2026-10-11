@@ -21,6 +21,7 @@
 - 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `fe0d08a`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `96fc697` → 见任务 3。
 - 其他台账：Windows 部署文档修正 `d3cf410`、待办哈希回填 `77080ee`、进程级冒烟记录 `3492f26`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
 - 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则。
+- 已落地（§9 上游查询层搬运）：`--raw` 解耦与移除 `/log -t` `7ac49156`、`/usage` null 容错 `ff70d4d7`。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
   2. Telegram 群聊是否也跳过工具调用进度预览——OneBot 与 QQ 官方都跳过（`delivery.ShouldDropGroupToolPreview`），Telegram 从来没有这条规则。无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，因此未擅自改；若要一致，加一行该调用 + "目标是否群聊"的判断即可（见任务 4 的盘点表）。
@@ -299,14 +300,14 @@
 
 | # | 功能 | 落点 | 状态 |
 | --- | --- | --- | --- |
-| 1 | `--raw` 与 `-d` 解耦（`/log` `/audit` `/atriwisp`）+ 补全项 | `internal/agent/commands/log.go` | `[ ]` |
-| 2 | 移除 `/log -t`（保留 `/audit -t`）+ 补全表更新（`session_naming_failed`→`session_naming_completed`、加 `hook_tool_log`） | 同上 | `[ ]` |
+| 1 | `--raw` 与 `-d` 解耦（`/log` `/audit` `/atriwisp`）+ 补全项 | `internal/agent/commands/log.go` | `[x]` 提交 `7ac49156`（与第 2 项同一提交） |
+| 2 | 移除 `/log -t`（保留 `/audit -t`）+ 补全表更新 | 同上 | `[x]` 提交 `7ac49156`；`--event` 补全的事件改名**未采纳**（fork 的事件名与命名流程不同），改为补上一直缺失的 `--tag` 补全 |
 | 3 | 损坏行计数与提示（`Reader.Query` 返回 `{Entries, DamagedCount, DamagedLines}`） | `internal/logging/reader.go` + `log.go` + `usage.go` + `maintenance/report.go` + `agent/logging.go` | `[ ]` |
 | 4 | `/audit --run_source foreground\|cron\|atrinis`（需先在 `tool_call` 审计写入侧加稳定字段） | `internal/agent/chat_tools.go` 等写入点 + `log.go` | `[ ]` |
 | 5 | 工具日志正文按类别限长（读/查/说明 ≤128、执行/编辑/写入/媒体 ≤256） | 工具日志写入侧 | `[ ]` |
-| 6 | `/usage` 未知/非法/溢出显示 `null`（现在 `atoiSafe` 把非法值当 0） | `internal/agent/commands/usage.go` | `[ ]` |
+| 6 | `/usage` 未知/非法/溢出显示 `null`（原来 `atoiSafe` 把非法值当 0） | `internal/agent/commands/usage.go` | `[x]` 提交 `ff70d4d7` |
 | 7 | `/audit` 不再显示 JSON 转义 | 需先复现：fork 存的是 `body_json` 文本字段并在 raw 视图里缩进，可能不存在该缺陷 | `[ ]` |
-| 8 | `/atriwisp --tag` | — | `[x]` fork 早已有（`f15924be`），上游只是换了实现 |
+| 8 | `/atriwisp --tag` | — | `[x]` fork 早已有（`f15924be`），上游只是换了实现；本次补上了它的选项补全 |
 
 **不搬**：上游的 `ContentFields` / `ContentFieldContains`（那是"字段被塞进 JSON content 里"的补偿机制；fork 的 `key=value` 文本属性本来就能直接按字段筛 `risk` / `tool` / `actor_id`）、九字段 `LogRecord`、`ContentLimit` 强约束。**若要做，只搬查询层与写入侧的加法式字段**。
 
