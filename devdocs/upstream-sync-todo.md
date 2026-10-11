@@ -20,7 +20,7 @@
 - 已落地（P2 决策后按路线 D 补的接缝）：`72949a6` → 见任务 5。
 - 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `fe0d08a`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `96fc697` → 见任务 3。
 - 其他台账：Windows 部署文档修正 `d3cf410`、待办哈希回填 `77080ee`、进程级冒烟记录 `3492f26`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
-- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则。
+- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则；通知队列与背压 `e184df99`。**§8 五项全部完成。**
 - 已落地（§9 上游查询层搬运）：`--raw` 解耦与移除 `/log -t` `7ac49156`、`/usage` null 容错 `ff70d4d7`。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
@@ -288,9 +288,19 @@
 - **本项为纯 devdocs/规则文档交付，没有用户可见行为变化，因此按仓库规则不写 `CHANGELOG.md`。**
 - **遗留待确认**：本次会话收到的 `AGENTS.md` 指令里还有两条本仓库文件里**没有**的规则——"所有包、文件位置、包名、文件名、函数名、变量名不能自作主张，必须和用户讨论"与"对于比较底层的定义型字段，需在代码的注释中说明字段作用"（这两条在上游 `AGENTS.md` 里存在）。按约定只采纳了 mermaid 规则，是否把这两条也补进本仓库请用户决定。
 
-### 8.5 [ ] 通知队列与背压
+### 8.5 [x] 通知队列与背压 — 提交 `e184df99`
 
-上游 `notification.Manager`：每平台默认 8 个发送槽 / 256 等待、同目标串行、队列满返回 `ErrQueueFull` 且不自动重试、真正发送前重查 binding、部分失败保留已发送 ID。fork 的 `agentOutputSender.SendNotice`（`internal/agent/output.go`）是同步直达平台适配器，这一层没有队列与容量上限（只有 OneBot 适配器内部另有 normal/high 队列），慢平台会拖住整轮对话。风险最高，放最后。
+**改动前的问题**：`agentOutputSender.SendNotice`（`internal/agent/output.go`）同步直达平台适配器，这一层没有队列与容量上限（只有 OneBot 适配器内部另有 normal/high 队列）；一个发不动的平台会让所有通知无限堆在它上面。上游 `notification.Manager` 的做法是每平台 8 个发送槽 / 256 等待、同目标串行、队列满返回 `ErrQueueFull` 且不自动重试。
+
+**已确认的两个决策**（用户选定）：队列放 `internal/agent/notice_queue.go`（复用已移植的 `internal/signal.Queue`，与 `platform_signals.go` 同一套写法）；**保持调用方同步语义**（提交后等真实 `Receipt` / error），只加并发上限、同目标串行与队满快速失败。
+
+**落地**：每个平台一条 `signal.Queue`（默认 256 等待 / 8 并发），串行键 `noticeTargetKey` = 平台 + scope + 收件人；`noticeDispatch` 先解析落点（当前会话 sender 还是某平台 sender）再入队，解析失败不进队列；队满记一条 `notice queue full` WARN 并原样返回错误；`Agent.CloseNoticeQueues` 先停止接纳再排空，由 `internal/app` 的运行时关闭步骤在 30 秒预算内调用（顺序：平台连接订阅 → 通知队列 → hook 运行时）。
+
+**与上游的差异（有意）**：不做异步化（fork 的调用方靠返回的 `Receipt`/error 决定后续：命令回复、continuation、Hook 失败通知）；不做"发送前重查 binding"（fork 没有上游的 `session.Binding`）。
+
+**验证**：`gofmt -l internal/` 干净；`go build ./...` 通过；`./internal/app/`、`./internal/agent/...`、`./internal/delivery/...` 全绿（`internal/agent` 仅剩 §6 既有环境失败）。新用例 `internal/agent/notice_queue_test.go`：同目标串行（最大并发 = 1）、不同目标可并发、队满返回 `ErrQueueFull`、关闭后 `ErrClosed`、关闭预算耗尽时在途与等待的发送都会拿到结果而不挂住、`noticeTargetKey` 的同/异目标区分。
+
+**风险说明**：这一项动的是对话主链路上的通知发送，因此刻意只加"上限"、不改"契约"；`SendChat`（对话正文）与流式输出**没有**进队列，行为与改动前一致。
 
 **明确不搬**（已逐个核对，写在这里避免下一轮重新论证）：`internal/events`（九字段契约的载体）、`internal/modelmgr`、`internal/contextinfo`（只借"按域快照"的模式）、`*/module` 五个装配包、`internal/app` 拆成 12 个文件。`internal/fileops` / `internal/workspace` / `internal/sandbox` / `internal/doctor` / `internal/notification` 在 fork 都已有等价物（分别是 `internal/utils/fileops`、`internal/agent/workspace.go` + `internal/tool/builtin/workspace.go`、`tool.SandboxContext`、`internal/app/doctor.go`、`internal/delivery` + `Agent.SendNotice`），上游只是把它们提成了独立包——纯搬家，零收益、大冲突面。
 
