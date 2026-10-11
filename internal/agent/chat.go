@@ -239,7 +239,7 @@ func (a *Agent) runChat(ctx context.Context, session *storage.Session, text stri
 	// 半途写入，停下是安全的；前台 turn 不付这个成本。
 	_, isBackgroundOutput := out.(backgroundTurnOutput)
 	for {
-		if isBackgroundOutput && a.backgroundSessionTakenOver(ctx, session.ID) {
+		if isBackgroundOutput && a.backgroundSessionMustStop(ctx, session.ID) {
 			return errBackgroundTakenOver
 		}
 		var pending *pendingUserMessage
@@ -351,7 +351,7 @@ func (a *Agent) runChat(ctx context.Context, session *storage.Session, text stri
 		if err := a.persistTurnMessages(ctx, session.ID, "append_tool_transcript", execution.Transcript); err != nil {
 			return err
 		}
-		if isBackgroundOutput && a.backgroundSessionTakenOver(ctx, session.ID) {
+		if isBackgroundOutput && a.backgroundSessionMustStop(ctx, session.ID) {
 			// 工具批次是安全的停止点：这一批已经跑完并写入转录，这样前台接管后
 			// 看得到已执行过的工具；下一轮模型调用不再发起，也不会写入迟到的助手
 			// 消息。
@@ -365,7 +365,7 @@ func (a *Agent) runChat(ctx context.Context, session *storage.Session, text stri
 			llmMessages = append(llmMessages, llm.LLMMessage{Role: llm.RoleUser, Segments: llm.TextSegments("补充：" + execution.ConfirmationExtra)})
 		}
 	}
-	if isBackgroundOutput && a.backgroundSessionTakenOver(ctx, session.ID) {
+	if isBackgroundOutput && a.backgroundSessionMustStop(ctx, session.ID) {
 		// 模型已经给出终态文本，但 Session 已被前台接管：不再写助手消息，避免
 		// 接管后的会话被迟到的后台回答污染。
 		return errBackgroundTakenOver
@@ -403,6 +403,12 @@ func (a *Agent) runChat(ctx context.Context, session *storage.Session, text stri
 		if err := out.SendOutputs(reqCtx, deferredOutputs); err != nil {
 			return err
 		}
+	}
+
+	// 安全点 3 之后还有输出 hook（可能很慢）：它期间提交的接管同样必须生效——终态文本
+	// 已经在内存里，也不能再把它写进一个已经属于前台的会话。
+	if isBackgroundOutput && a.backgroundSessionMustStop(ctx, session.ID) {
+		return errBackgroundTakenOver
 	}
 
 	// 工具调用消息按 OpenAI messages 形态保存；discover 结果持久化时会压缩 schema，避免历史上下文膨胀。

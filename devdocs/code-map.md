@@ -105,7 +105,7 @@ rg -n "ATRIX_OPS_TOKEN|WATCHDOG_OPS_TOKEN|restore-verify|fallback_mode|doctor|up
 - `internal/agent/reference.go`：只读提供当前 Session ID，供平台引用续聊/fork 判定。
 - `internal/agent/media_output.go`：发送前归一、发送副本解析与有序媒体回执缓存。
 - `internal/agent/options.go`、`logging.go`、`identity.go`：运行配置、日志和 Actor/Scope 解析。
-- `internal/agent/chat.go`：普通对话主流程；群级默认模型只在本轮没有显式 `@model:` 覆盖时生效。后台 turn（`backgroundTurnOutput`）在每次模型调用前、工具批次落库后与最终输出前各查一次前台接管标记（`backgroundSessionTakenOver` → `session.WasPromoted`），命中即返回 `errBackgroundTakenOver`，不发布 PhaseError、不写迟到助手消息。
+- `internal/agent/chat.go`：普通对话主流程；群级默认模型只在本轮没有显式 `@model:` 覆盖时生效。后台 turn（`backgroundTurnOutput`）在每次模型调用前、工具批次落库后、最终输出前与输出 hook 之后各查一次前台接管标记（`backgroundSessionMustStop` → `session.WasPromoted`），命中即返回 `errBackgroundTakenOver`，不发布 PhaseError、不写迟到助手消息；标记**查不出来**时保守停下并记 `background_takeover_check_failed`（不拿"读不到"当"没被接管"继续烧 token），上下文已结束时交给原有取消路径。`internal/agent/cron.go` 的 `RunBackground` 在 turn 正常结束后再复核一次接管，避免向已被接管的会话投递后台报告。
 - `internal/agent/group_policy.go`：群级策略解析、唤醒/静默判断、模型目录、learning 审核动作授权；策略保存在 `state.toml` 的 `group_policy`。
 - `internal/agent/group_knowledge.go`、`internal/groupkb/`：按群 scope 的本地确定性 FAQ 匹配与状态；`groupkb` 只做归一化和 exact/contains/keywords 匹配，不调用模型；Agent 负责权限、上限、`state.toml [group_knowledge]` 持久化和命中后的直接回答。
 - `internal/agent/member_panel.go`、`internal/agent/commands/member_panel.go`：普通成员 `/me` 自助面板；按 FairKey 过滤自己的请求和排队消息，并汇总自己的生图/视觉/聊天额度，不暴露跨群全局聚合用量。

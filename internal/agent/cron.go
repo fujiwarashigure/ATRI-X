@@ -116,7 +116,7 @@ func (a *Agent) RunBackground(ctx context.Context, req background.RunRequest) (b
 	}
 	prompt := backgroundPromptWithSkills(req.Prompt, preloaded.SkillPrompt)
 	// 预载期间前台可能刚刚接管这个 Session，进入模型前再确认一次。
-	if a.backgroundSessionTakenOver(ctx, bgSession.ID) {
+	if a.backgroundSessionMustStop(ctx, bgSession.ID) {
 		return backgroundTakenOverResult(bgSession.ID), nil
 	}
 	if err := a.startBackgroundChat(ctx, bgSession, prompt); err != nil {
@@ -124,6 +124,14 @@ func (a *Agent) RunBackground(ctx context.Context, req background.RunRequest) (b
 			return backgroundTakenOverResult(bgSession.ID), nil
 		}
 		return background.RunResult{}, err
+	}
+	// turn 正常结束之后再确认一次：最后一个安全点（写助手消息之前）到这里之间提交的
+	// 接管会被这一步接住，报告不会投递到一个已经属于前台的会话。
+	if taken, err := a.backgroundSessionTakenOver(context.WithoutCancel(ctx), bgSession.ID); err != nil || taken {
+		if err != nil {
+			a.reportTakeoverCheckFailure(ctx, bgSession.ID, err)
+		}
+		return backgroundTakenOverResult(bgSession.ID), nil
 	}
 	message, err := a.latestAssistantMessage(ctx, bgSession.ID)
 	if err != nil {
@@ -190,16 +198,43 @@ func (a *Agent) ensureBackgroundSession(ctx context.Context, bgSession *storage.
 
 // backgroundSessionTakenOver 报告后台任务的目标 Session 是否已被前台接管。接管标记
 // 由前台激活（/resume、/unarchive）写在同一个事务里，因此这里读到的一定是已提交的
-// 状态。
-func (a *Agent) backgroundSessionTakenOver(ctx context.Context, sessionID string) bool {
+// 状态。与上游 internal/background 的同名判定一样带 error 出口：读不出状态时调用方
+// 要保守停下，而不是当成"没被接管"继续跑。
+func (a *Agent) backgroundSessionTakenOver(ctx context.Context, sessionID string) (bool, error) {
 	if a == nil || a.store == nil || sessionID == "" {
-		return false
+		return false, nil
 	}
 	row, err := a.store.Sessions().Get(ctx, sessionID)
 	if err != nil {
+		if errors.Is(err, storage.ErrNotFound) {
+			return false, nil
+		}
+		return false, err
+	}
+	return session.WasPromoted(row), nil
+}
+
+// backgroundSessionMustStop 报告后台 turn 在安全点是否必须停下。接管标记查不出来时
+// 保守返回 true：继续跑既可能向已被前台接管的会话写入迟到的助手回答，也可能白白烧
+// token。上下文已经结束（用户取消、超时、关停）时不走这条路径，交给原有取消处理，
+// 免得把取消记成"接管检查失败"。
+func (a *Agent) backgroundSessionMustStop(ctx context.Context, sessionID string) bool {
+	taken, err := a.backgroundSessionTakenOver(ctx, sessionID)
+	if err == nil {
+		return taken
+	}
+	if ctx.Err() != nil {
 		return false
 	}
-	return session.WasPromoted(row)
+	a.reportTakeoverCheckFailure(ctx, sessionID, err)
+	return true
+}
+
+func (a *Agent) reportTakeoverCheckFailure(ctx context.Context, sessionID string, err error) {
+	a.auditWarn("background_takeover_check_failed", "session_id", sessionID, "error", err.Error(), "result", logging.ResultFailed)
+	if a.logger != nil {
+		a.logger.WarnContext(ctx, "background takeover check failed; stopping the background turn", "session_id", sessionID, "error", err.Error())
+	}
 }
 
 func backgroundTakenOverResult(sessionID string) background.RunResult {

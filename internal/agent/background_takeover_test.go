@@ -2,12 +2,14 @@ package agent
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
+	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
@@ -144,6 +146,165 @@ func TestRunBackgroundStopsWhenForegroundTakesOverSession(t *testing.T) {
 	}
 	if !hasStoredUserMessage(messages, "run the probe") {
 		t.Fatalf("taken-over run lost the user message: %#v", messages)
+	}
+}
+
+// takeoverFailingSessions 让 Get 在探针打开开关之后失败，模拟"接管标记查不出来"
+// （数据库临时故障）。其余读写照常，因此后台 turn 能正常跑到安全点。
+type takeoverFailingSessions struct {
+	storage.SessionRepository
+	fail bool
+}
+
+func (s *takeoverFailingSessions) Get(ctx context.Context, id string) (*storage.Session, error) {
+	if s.fail {
+		return nil, errors.New("session store is unavailable")
+	}
+	return s.SessionRepository.Get(ctx, id)
+}
+
+type takeoverFailingStore struct {
+	storage.Store
+	sessions *takeoverFailingSessions
+}
+
+func (s *takeoverFailingStore) Sessions() storage.SessionRepository { return s.sessions }
+
+// failingCheckProbeTool 接管 Session 之后让后续的接管检查读不出来。
+type failingCheckProbeTool struct {
+	sessions *session.Service
+	scope    session.Scope
+	id       string
+	failing  *takeoverFailingSessions
+}
+
+func (t failingCheckProbeTool) Name() string { return "takeover_probe" }
+
+func (t failingCheckProbeTool) Info() tool.Info {
+	return tool.Info{Name: "takeover_probe", Description: "take over and break the check", Source: tool.SourceBuiltin, Risk: tool.RiskLow}
+}
+
+func (t failingCheckProbeTool) Schema() llm.ToolSchema {
+	return llm.ToolSchema{Type: "function", Function: llm.ToolFunctionSchema{Name: "takeover_probe", Parameters: map[string]any{"type": "object"}}}
+}
+
+func (t failingCheckProbeTool) Call(context.Context, tool.CallRequest) (*tool.Result, error) {
+	if _, err := t.sessions.Resume(context.Background(), t.scope, t.id); err != nil {
+		return nil, err
+	}
+	t.failing.fail = true
+	return &tool.Result{Content: "taken over"}, nil
+}
+
+// 接管标记读不出来时必须保守停下：既不能继续调模型烧 token，也不能写出迟到的助手回答。
+func TestRunBackgroundStopsWhenTakeoverCheckFails(t *testing.T) {
+	ctx := context.Background()
+	base := newTestStore(t)
+	sessions := &takeoverFailingSessions{SessionRepository: base.Sessions()}
+	store := &takeoverFailingStore{Store: base, sessions: sessions}
+
+	f := &fakeLLM{chunks: [][]llm.StreamChunk{
+		{{ToolCallDeltas: []llm.ToolCallDelta{{ID: "call_1", Name: "takeover_probe", Args: "{}"}}, FinishReason: "tool_calls"}},
+		{{DeltaContent: `{"completed":true,"need_report":true,"report":"late report"}`}},
+	}}
+	a := newTakeoverTestAgent(&fakePlatform{}, f, store, tool.NewRegistry())
+	a.SetToolConfig(config.ToolsConfig{MaxRoundsPerTurn: 1})
+
+	request := takeoverRunRequest("")
+	bgSession, err := a.backgroundSession(ctx, request, session.Scope{ActorID: "cli:local", Platform: "cli", PlatformScopeID: "cron:takeover"})
+	if err != nil {
+		t.Fatalf("create background session: %v", err)
+	}
+	request.SessionID = bgSession.ID
+
+	registry := tool.NewRegistry()
+	_ = registry.Register(failingCheckProbeTool{sessions: a.sessions, scope: takeoverForegroundScope(), id: bgSession.ID, failing: sessions})
+	a.SetToolRuntime(registry, nil)
+
+	result, err := a.RunBackground(ctx, request)
+	if err != nil {
+		t.Fatalf("RunBackground: %v", err)
+	}
+	if !result.TakenOver || result.Outcome != background.OutcomeTakenOver {
+		t.Fatalf("result = %#v, want taken over", result)
+	}
+	if result.Text != "" {
+		t.Fatalf("taken-over run produced text: %#v", result)
+	}
+	if requests := f.chatRequests(); len(requests) != 1 {
+		t.Fatalf("chat requests = %d, want 1 (read failure must stop the turn)", len(requests))
+	}
+	waitNoExtraChatRequest(t, f, 1, 100*time.Millisecond)
+	messages, err := base.Messages().ListBySession(ctx, bgSession.ID)
+	if err != nil {
+		t.Fatalf("list messages: %v", err)
+	}
+	if count := countAssistantTextMessages(messages); count != 0 {
+		t.Fatalf("failing check persisted %d assistant answer(s): %#v", count, messages)
+	}
+}
+
+// hookManagerOnTurnOutput 在终态输出 hook 上回调，用来把接管精确放进"安全点 3 之后、
+// 助手消息落库之前"这个窗口。
+type hookManagerOnTurnOutput struct {
+	hook.NoopManager
+	onTurnOutput func()
+}
+
+func (m hookManagerOnTurnOutput) Run(ctx context.Context, event hook.Event) (hook.Event, error) {
+	if event.Point == hook.PointAgentTurnOutputPrepared && m.onTurnOutput != nil {
+		m.onTurnOutput()
+	}
+	return event, nil
+}
+
+// 接管在安全点 3 与落库之间到达：turn 必须停下，且不写迟到的助手回答，后台报告也不投递。
+func TestRunBackgroundStopsWhenTakeoverArrivesAfterFinalOutputHook(t *testing.T) {
+	ctx := context.Background()
+	store := newTestStore(t)
+	f := &fakeLLM{chunks: [][]llm.StreamChunk{
+		{{DeltaContent: `{"completed":true,"need_report":true,"report":"late report"}`}},
+	}}
+	a := newTakeoverTestAgent(&fakePlatform{}, f, store, tool.NewRegistry())
+
+	request := takeoverRunRequest("")
+	bgSession, err := a.backgroundSession(ctx, request, session.Scope{ActorID: "cli:local", Platform: "cli", PlatformScopeID: "cron:takeover"})
+	if err != nil {
+		t.Fatalf("create background session: %v", err)
+	}
+	request.SessionID = bgSession.ID
+
+	takeovers := 0
+	a.SetHookManager(hookManagerOnTurnOutput{onTurnOutput: func() {
+		if _, err := a.sessions.Resume(context.Background(), takeoverForegroundScope(), bgSession.ID); err != nil {
+			t.Errorf("resume in hook: %v", err)
+			return
+		}
+		takeovers++
+	}})
+
+	result, err := a.RunBackground(ctx, request)
+	if err != nil {
+		t.Fatalf("RunBackground: %v", err)
+	}
+	if takeovers != 1 {
+		t.Fatalf("hook takeovers = %d, want 1", takeovers)
+	}
+	if !result.TakenOver || result.Outcome != background.OutcomeTakenOver {
+		t.Fatalf("result = %#v, want taken over", result)
+	}
+	if result.Text != "" || result.MessageID != "" {
+		t.Fatalf("taken-over run produced output: %#v", result)
+	}
+	if requests := f.chatRequests(); len(requests) != 1 {
+		t.Fatalf("chat requests = %d, want 1", len(requests))
+	}
+	messages, err := store.Messages().ListBySession(ctx, bgSession.ID)
+	if err != nil {
+		t.Fatalf("list messages: %v", err)
+	}
+	if count := countAssistantTextMessages(messages); count != 0 {
+		t.Fatalf("window takeover persisted %d assistant answer(s): %#v", count, messages)
 	}
 }
 
