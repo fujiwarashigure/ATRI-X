@@ -20,7 +20,7 @@
 - 已落地（P2 决策后按路线 D 补的接缝）：`72949a6` → 见任务 5。
 - 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `fe0d08a`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `96fc697` → 见任务 3。
 - 其他台账：Windows 部署文档修正 `d3cf410`、待办哈希回填 `77080ee`、进程级冒烟记录 `3492f26`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
-- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）。
+- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
   2. Telegram 群聊是否也跳过工具调用进度预览——OneBot 与 QQ 官方都跳过（`delivery.ShouldDropGroupToolPreview`），Telegram 从来没有这条规则。无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，因此未擅自改；若要一致，加一行该调用 + "目标是否群聊"的判断即可（见任务 4 的盘点表）。
@@ -279,9 +279,13 @@
 
 **本项为纯 devdocs 交付，没有用户可见行为变化，因此按仓库规则不写 `CHANGELOG.md`。**
 
-### 8.4 [ ] fork 版信号/日志边界表 + `AGENTS.md` 采纳 mermaid 规则
+### 8.4 [x] fork 版信号/日志边界表 + `AGENTS.md` 采纳 mermaid 规则
 
-上游 `devdocs/signals-and-logging.md` 是唯一一份契约设计文档，其中"信号所有权与依赖边界"和"哪些场景必须同步完成、哪些可以广播"两张表值得照抄一份给 fork（不采用九字段契约也可以照抄）。`AGENTS.md` 建议采纳上游 `73b81e90` 那条：**"在架构规划时，写 Mermaid，并在其中注明每个文件职责"**。
+- **边界表**：新增 [`signals-and-logging.md`](signals-and-logging.md)。它不采用上游那套实现，只写 fork 现在的真实边界：§1 两条独立设施（`internal/signal` 的进程级广播 vs `internal/hook` 的可改写边界，同一事实只允许走一条）；§2 mermaid 处理链路并把每个文件职责标在节点上；**§3 表一"信号所有权与依赖边界"**（`internal/signal` / 定义方 / 发布方 / 订阅方 / hook / App / logging 各自做什么、不做什么）；**§4 表二"必须同步完成 vs 可以广播"**（权限裁决、可改写 Hook、确认等待、Usage 记账、关键持久化必须同步；日志异步；平台连接广播；通知在 fork 里是同步直达；媒体清理后台并发）；§5 日志侧边界（`module`/`result` 契约、等级与结果独立、审计独立下限、文本行 + `body_json` 的正文形态、fork 保留脱敏）；§6 新增信号时的检查单；§7 有意差异清单。
+- **`AGENTS.md`**：采纳上游 `73b81e90` 的"在架构规划时，写 Mermaid，并在其中注明每个文件职责"，并在 locator 表补 `locator:signals` 入口。
+- **验证**：`locator:signals` 在文档与 `AGENTS.md` 两端都在；新文档里的相对链接逐个 `Test-Path` 存在；未触碰 `docs.en/`、`README.md`、`CHANGELOG.en.md`。
+- **本项为纯 devdocs/规则文档交付，没有用户可见行为变化，因此按仓库规则不写 `CHANGELOG.md`。**
+- **遗留待确认**：本次会话收到的 `AGENTS.md` 指令里还有两条本仓库文件里**没有**的规则——"所有包、文件位置、包名、文件名、函数名、变量名不能自作主张，必须和用户讨论"与"对于比较底层的定义型字段，需在代码的注释中说明字段作用"（这两条在上游 `AGENTS.md` 里存在）。按约定只采纳了 mermaid 规则，是否把这两条也补进本仓库请用户决定。
 
 ### 8.5 [ ] 通知队列与背压
 

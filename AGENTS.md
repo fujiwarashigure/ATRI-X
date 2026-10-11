@@ -16,6 +16,7 @@
 - 优先复用已有接口和模式，不为一次性需求做抽象。
 - 不考虑历史兼容到让代码变复杂,除非用户明确要求。
 - 暂不实现但未来可能需要的能力，可以留接口或 TODO，但不要写投机性代码。
+- 在架构规划时，写 Mermaid，并在其中注明每个文件职责（来源：上游 `ATRI-X` 的 `73b81e90 update agents.md`；示例见 `devdocs/signals-and-logging.md`）。
 
 <!-- locator:locate -->
 ## 快速定位流程
@@ -44,6 +45,7 @@ rg -n "locator:agent-chat" AGENTS.md devdocs/*.md
 | Tool/工具调用 | `locator:tool`, `locator:tool-flow` | `devdocs/architecture.md`, `devdocs/code-map.md` |
 | Skill | `locator:skill` | `devdocs/code-map.md` |
 | Hook/插件 | `locator:hook` | `docs/hooks.md`, `devdocs/code-map.md` |
+| 信号与日志边界 | `locator:signals` | `devdocs/signals-and-logging.md` |
 | 健康状态与运维接口 | `locator:health-ops` | `devdocs/architecture.md`, `devdocs/code-map.md` |
 | Output/发送 | `locator:output` | `devdocs/architecture.md`, `devdocs/code-map.md` |
 | 平台适配 | `locator:platform` | `devdocs/code-map.md` |
