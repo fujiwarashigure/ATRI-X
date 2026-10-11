@@ -13,7 +13,7 @@
 
 ## 0. 现状快照
 
-- 基线：fork `main` @ `e724f4a`；上游 `refs/remotes/upstream/main` @ `8457fdd`；共同祖先 `3fb1234`。
+- 基线：fork `main` @ `7701af3a`；上游 `refs/remotes/upstream/main` @ `a0304ad4`；共同祖先 `3fb1234`。
 - 已落地：命名对齐（`api` → `api_mode`）、P0 全部 8 项、P1#3 工具发现/预载事务化、P1#5 会话整行快照 → 事务内字段更新、P1#4 后台接管（fork 原生最小版，`f9882b5`）、P1#2 模型/会话服务化（`state.toml` 写回串行化，`bb8226d`）。
 - 已落地（P1#1 最小版 A）：契约与事实丢失修复 `2fca418`、结果契约两批 `04e255a` / `fb17b9f`、收尾事件 `1c31637`、app 来源标识 `e6fa8c6`、端到端验证 `7a762d8` → 见任务 2。
 - 已落地（P1#6）：工具预览识别规则集中到交付层 `ed602e8`、群聊跳过规则整体集中 `66826c7` → 见任务 4。
@@ -22,6 +22,7 @@
 - 其他台账：Windows 部署文档修正 `d3cf410`、待办哈希回填 `77080ee`、进程级冒烟记录 `3492f26`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
 - 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则；通知队列与背压 `e184df99`。**§8 五项全部完成。**
 - 已落地（§9 上游查询层搬运）：`--raw` 解耦与移除 `/log -t` `7ac49156`、`/usage` null 容错 `ff70d4d7`。
+- 已研究未落地：上游最新 5 个提交（`1aa10fd9..a0304ad4`）与 §9 剩余项的**逐项判定（直接移植 / 改造 / 不搬）**见 §9.1 与 §10。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
   2. Telegram 群聊是否也跳过工具调用进度预览——OneBot 与 QQ 官方都跳过（`delivery.ShouldDropGroupToolPreview`），Telegram 从来没有这条规则。无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，因此未擅自改；若要一致，加一行该调用 + "目标是否群聊"的判断即可（见任务 4 的盘点表）。
@@ -234,6 +235,11 @@
     - **用户可见的新功能只有 8 项**：`/log`、`/audit`、`/atriwisp` 新增 `--raw`（并从 `-d` 解耦）；移除 `/log -t`（`-t` 只留在 `/audit`，工具调用只进 audit）；`/audit --run_source foreground|cron|atrinis`；`/atriwisp --tag`（fork 早已有，见下）；损坏日志行不再中断查询并提示数量；`/usage` 未知/非法/溢出显示 `null`；工具日志正文按类别限长（读/查/说明 ≤128、执行/编辑/写入/媒体 ≤256）；模型信息超时 5s→30s（上游 `internal/modelmgr`，fork 无对应实现）。`### Added` 只有 `--raw` 一条，其余全在 Changed / Fixed。
     - **可挑拣性判断**：这批新功能**没有一项能低成本单挑**——它们都长在 `internal/signal` + `internal/events` + `*/module` 这套新骨架上，而 fork 走 hook 路线、没有 `internal/signal`。但 `/log` 与 `/audit` 的**查询层**改动是可分离的：fork 的 `internal/agent/commands/log.go`（774 行）与上游 `internal/command/builtin/log.go`（780 行）是**兄弟版本**（同名同形的 `formatRawLogEntries` / `previousLogToken` / `completionOption` / `jsonQuotedLogValue`），上游本轮该文件只 +208/−153，因此按"对齐行为、不对齐实现"移植成本很低。已登记的待办见 §9。
     - 另：上游本轮 `AGENTS.md` 两条改动建议采纳（见 §8.4）。
+  - **再一轮盘点（本轮实测）**：`git fetch` 重新取回 ref 后，上游从 `1aa10fd9` 又推进到 **`a0304ad4`**，新增 **5 个提交**（`1aa10fd9..a0304ad4`，38+2 文件 / +826 / −125）。逐条内容：
+    - `6fd1d1c` **`fix: sync foreground takeover via local signals and isolate platform failures with cross-platform admin notifications`**（38 文件 / +770 / −89）：前台接管由"注入回调 `SetForegroundActivation`"改为**局部信号** `session.ForegroundActivated`；工具边界刷新由**重读数据库**改为**只合并内存快照**；平台异常退出改为**隔离 + 跨平台超管通知**；服务模式不再随全部消息平台退出而结束；`delivery` 抽出 `LogSendResult` 并让失败日志用 `context.WithoutCancel`。
+    - `a0304ad` **`fix bug`**：把 `runCtx.Err() == err` 修成 `errors.Is(err, runCtx.Err())`（`internal/platform/module/module.go` 的 `runPlatforms`，1 行）。
+    - `8ae5f6f` / `549287e` / `132e930`：`docs: auto-translate …`（`CHANGELOG.md`、`docs/getting-started.md`、`docs/commands.md` 的英文镜像）——本 fork 不手改英文镜像，**不跟**。
+    - **判定**：这 5 个提交里没有"可整段照抄"的东西（都长在上游 `internal/session` + `internal/turn` + `internal/platform/module` 骨架上），但**有两项行为值得在 fork 的等价落点改造**（平台失败隔离 / 服务模式保活 / 超管通知，以及启动插件告警的投递时机）。逐项结论见 §10，§9 剩余项的结论见 §9.1。
   - **注意**：本仓库**没有配置 `upstream` remote**（只有 `origin`）。`refs/remotes/upstream/main` 是手工 fetch 留下的 ref（会被 `git fetch --prune` 清掉）；每次增量盘点前先 `git fetch https://github.com/Elflare/elbot.git main:refs/remotes/upstream/main`，否则会拿到过期结论。
 
 ## 8. 上游借鉴项（本轮计划，按序落地）
@@ -322,4 +328,104 @@
 
 **不搬**：上游的 `ContentFields` / `ContentFieldContains`（那是"字段被塞进 JSON content 里"的补偿机制；fork 的 `key=value` 文本属性本来就能直接按字段筛 `risk` / `tool` / `actor_id`）、九字段 `LogRecord`、`ContentLimit` 强约束。**若要做，只搬查询层与写入侧的加法式字段**。
 
-除本表之外，§8.3 的核对单还确认了几个**不在查询层**的缺口，同样可以独立搬运：`shell` stdout/stderr 上限 16 KiB → 256 KiB（`internal/tool/builtin/shell.go:24`）、启动插件告警不再等 Agent 创建后补发（`internal/app/runtime.go:260`）、`internal/fileops/rollback.go` 的上游增量（会话绑定有效期与编码保持）。
+除本表之外，§8.3 的核对单还确认了几个**不在查询层**的缺口（`shell` stdout/stderr 上限 16 KiB → 256 KiB，`internal/tool/builtin/shell.go:24`；启动插件告警的投递时机，`internal/app/runtime.go:260`；`internal/fileops/rollback.go` 的上游增量）。这三项与 §9 的剩余项一起在本轮做了逐项判定，见 §9.1（结论：前两项要做，第三项不搬）。
+
+### 9.1 逐项判定（本轮研究结论）
+
+判定分三档：**直接移植**（可整段照抄）· **改造**（只搬行为，在 fork 的等价落点重写）· **不搬**（依赖上游骨架，或 fork 不存在该缺陷）。
+
+| # | 项目 | 判定 | 依据 |
+| --- | --- | --- | --- |
+| 3 | 损坏行处理（跳过 + 计数提示） | **改造（推荐；换理由，不是"移植上游的修复"）** | 上游修的是**上游 JSONL 读取器**把坏行当致命错误（`internal/logging/reader.go` 的判定全部建立在 `category/type/result_status/content` 等 fork 没有的字段上，整段搬会把 fork 自己的日志全判成损坏）。fork 没有"坏行导致查询失败"这个失败模式：`internal/logging/reader.go:46` 的 `Query` 不会因坏行失败，`parseLogLine`（`:125`）对任何一行都返回条目。**但实测发现 fork 的真实问题在别处**（污染行 = 非 key=value 行 + 全 JSON 行，用临时探针实测）：坏行被当成**零字段记录返回并占掉 `--limit` 配额**，`/audit` 会把它渲染成一条"未知事件"的空记录（`internal/agent/commands/log.go:598` 的 `fieldOr`）。所以要做的是"**坏行跳过 + 计数提示**"：`Reader.Query` 需返回 `{Entries, DamagedCount, DamagedLines}`，判定规则要**按 fork 的文本格式另写**（保守：非空行且既无 `time=` 也无 `msg=`、解析不出任何合法 key/value 才算损坏），样本上限沿用上游语义（10 条 / 256 KiB，且不参与匹配）。波及 `internal/agent/commands/log.go:254`、`usage.go:62`、`internal/agent/commands/register.go:199`（接口签名）与 `internal/maintenance/report.go`，另有大量测试要跟着改签名。属**用户可见变化**（正常结果里不再出现零字段坏行；扫描到坏行时末尾多一句提示）。 |
+| 4 | `/audit --run_source foreground\|cron\|atrinis` | **改造（建议做，比上游简单）** | 上游把来源塞进工具调用正文的 JSON（`internal/toolrun/runner.go` 的 `recordCall`：结构体字段 `RunSource`，值在调用前由 `sandboxctx.SandboxContextFromContext(ctx)` 的 `Background`/`BackgroundKind` 固定，读取侧还要在 `internal/logging/reader.go:464` 特判 `ContentFields`，命令行侧在 `internal/command/builtin/log.go:301` 校验取值）。fork 的审计记录本来就是 `key=value` 属性（`internal/agent/logging.go:73`），写侧多一个属性、查询侧用现成的 `query.Fields`（与 `--tool`/`--risk` 同一套）即可，**读取侧零改动**（`parseTextAttrs` 自动解析新 key）。来源事实 fork 已经有：`tool.SandboxContextFromContext(ctx).BackgroundKind`（`internal/tool/sandbox.go:13-40`；后台运行在 `internal/agent/cron.go:90` 写入 `Background: true` + kind）。**不要走"查询层按 `session_id` 前缀猜来源"这条路**：会话 ID 由存储层生成（`internal/agent/cron.go:155-156`），且 `background_kind` 会被前台接管清掉（`internal/session/promotion.go:90`），猜出来的结果不可解释。落点：`internal/agent/chat_tools.go:167`/`:182` 加 `run_source`、`internal/logging/contract.go` 登记三个取值常量、`internal/agent/commands/log.go` 的选项/帮助/补全/展示。缺字段的历史记录按上游语义**不补造**，查不到就是查不到。 |
+| 5 | 工具日志正文按类别限长 | **改造（可选，收益有限）** | 上游是每个工具自己 `defer func() { logContent = tool.TruncateLogContent(logContent, N) }()`（读/查/说明 128、执行/编辑/写入/媒体 256，例：上游 `internal/tool/builtin/{file_tools,shell,cron,long_memory}.go`），并且**按工具逐个自报预算**而非按类别枚举（同一个 `cron.go` 里 128 与 256 都有）。fork 的工具接口**没有独立 logContent**（`internal/tool/tool.go:61` 是 `Call(ctx, req) (*Result, error)`），审计正文是 Agent 侧从业务结果生成的预览，且**已经有统一限长**：`resultPreview` 120 rune、`argumentsPreview` 160 rune（`internal/agent/chat_tools.go` 的 `maxPreviewRunes`）。所以要做的是**只把限长改成分类取值**（读/查/说明 128、执行/编辑/写入/媒体 256）+ 一张按工具名的分类表，落点只有 `recordToolCall`（`internal/agent/chat_tools.go:141-194`）与两个预览函数，不需要动工具接口。注意 fork 的审计是单行 slog 文本，`result` 里的真实换行会被引号转义；提到 256 时要么保留短预览，要么把换行归一到 `\n` 字面，别把单行结构撑坏。属整洁性收益，不是缺陷修复。 |
+| 7 | `/audit` 不再显示 JSON 转义 | **不搬**（fork 无此缺陷） | 上游的病灶是审计正文存成 JSON `body`、非 raw 视图直接打印该 JSON 字符串（`\n` 显示为字面量），修法是展示层再解码一次（上游 `internal/command/builtin/log.go` 的 `formatLogContent`）。fork 的文本行在**读取时**就 `strconv.Unquote` 还原引号内的值（`internal/logging/reader.go:159-190` 的 `parseTextValue`），展示层 `appendField`（`internal/agent/commands/log.go:768`）直接把值写出去，本来就是真实换行；raw 视图里唯一单独排版的是 `body_json`（`log.go:730` 的 `formatDebugLogEntry`），也是按纯文本缩进，不做二次转义。**已有回归保护**：`internal/agent/commands/log_test.go:403` 的 `TestLogCommandDebugShowsParsedBodyJSON` 断言输出必须含解码后的 `body_json:` 且不得含 `body_json="{\"`。另：fork 现在连 `body_json` 都不再写（`internal/llm/openai/openai.go:345` 是注释行，测试 `openai_test.go:170` 明确禁止该字段），链路两端都是闭合的。 |
+| — | `shell` stdout/stderr 上限 16 KiB → 256 KiB | **直接移植（1 行常量）** | 上游 `internal/tool/builtin/shell.go:27` 的 `maxShellOutput = 256 * 1024` 与 fork `internal/tool/builtin/shell.go:24` 的 `16 * 1024` 是同一常量，两侧 `shellOutputBuffer`（fork `:347-374` ↔ 上游 `:377-396`）逐行同构（同样的 `min` 截断、同样的"仍返回 len(p) 让进程排空"、同样的 `... output too long; truncated to first N KiB ...` 文案），stdout/stderr 各自独立计数。所以这是本清单里唯一可以整段照抄的项。已核查连带影响：`internal/tool/builtin/shell_test.go:441-463` 全程用 `maxShellOutput` 符号、全目录无写死 16 KiB 的断言（改常量自动跟随）；该缓冲不回写日志（审计正文是 120 rune 预览）、不直接发平台；代价是单次 shell 结果变大（内存 ~32 KiB → ~512 KiB，给模型的 token 变多）。注意别顺手改 `internal/tool/skill/runner.go:21` 的 `maxRunnerOutput`（同名数值，与 shell 无关）。 |
+| — | 启动插件告警的投递时机 | **改造（建议做；影响面比初判小）** | 加载告警在 Agent 存在前先攒起来（`internal/app/runtime.go:215` 的 `startupHookNotices`，写入点 `:385`/`:389`），`buildAgent` 成功后回放（`runtime.go:260-262`，`context.Background()`）；真实平台发送器要到 `Integrations.Attach` 才注册（`internal/app/integrations.go:62` → `internal/app/platforms.go:118`，Attach 在 `internal/app/runner.go:120`、即 `Runtime.Build` 之后）。**回放落到哪里取决于主平台**：Agent 构造时已把 `platforms.Primary` 注册成发送器（`internal/agent/core.go:439-441`），所以 `noticeDispatch`（`internal/agent/output.go:82-91`）在启动期总能解析到它——full/CLI 模式的 primary 是 cli 适配器，告警进 `sendTUIMessage`（TUI 未起来时压在 `a.output` 缓冲里，界面起来才显示；非 TTY 直接打印），**属于"能到但被推迟"**；service 模式的 primary 是 headless（名字 `service`，`internal/platform/builtin/builtin.go:42-43`），`headless.SendNotice` 直接报 `service platform cannot send notice without a target platform`，只剩 `delivery.Manager` 一条 WARN（`internal/delivery/delivery.go:341-348`），**用户侧完全看不到**——而 hook 配置写错恰恰是 service 部署最常见的运维问题。改造方向与上游一致（上游把首次 Reload 从构造期移到模块 `Start()`、接线完成后才跑）：把 `hookService.HookReload()` 与告警处理移出 `buildHookService`（`runtime.go:383-390`），改在 `Integrations.Attach` 成功之后调用；告警送到"已启用且有超管配置"的平台（`Target{Platform: name, Superadmins: true}`，超管由适配器内部解析），一个可用通道都没有时至少落一条明确的 WARN。顺带删掉 `startupHookNotices` 与补发循环，避免两套通道。 |
+| — | `internal/fileops/rollback.go` 的上游增量 | **不搬整文件**；顺带核对出 fork 自己的缺陷，见 §10.6 | 两侧不是同一件东西：上游 `RollbackManager` 以 `Binding` 为键（`Forget(binding)`/`Session(binding)`/`validLocked`），fork `internal/utils/fileops/rollback.go` 是以 `sessionID` 为键的备份存储（`Record`/`List`/`Restore`/`Forget`）；绑定租约在 fork 无对应概念（`session.Binding` 已列为有意差异），"编码保持"fork 早已具备（`internal/utils/fileops/encoding_test.go:83` 的 `TestEditFilePreservesEncodingAndBOM`）。**但逐条对上游 diff 时发现三条 fork 真缺陷（新建文件回滚不校验内容=会删掉用户后来的修改、符号链接目标不复核、无界读取），已单列 §10.6。** |
+
+---
+
+## 10. 上游最新提交评估（`1aa10fd9..a0304ad4`）：平台失败隔离与接管同步
+
+`6fd1d1c` 一个提交里塞了三件互相独立的事，且都落在"fork 有对应物但结构不同"的位置。
+
+| 项 | 上游落点 | 判定 | fork 落点 |
+| --- | --- | --- | --- |
+| 平台异常退出隔离 + 服务模式保活 + 跨平台超管通知 | `internal/platform/module/{module.go,notifications.go}` | **改造（本轮第一优先）** | `internal/app/platforms.go` + `PlatformRunRequest` |
+| 前台接管局部信号 / `Execution` 内存快照 / 发送时改道 | `internal/session` + `internal/turn` + `internal/agent/dialogue` | **不搬机制**；但**要跟**"查不到就停下"的口径与跑完复核 | `internal/agent/{cron.go,chat.go}` |
+| `delivery.LogSendResult` + 失败日志 `context.WithoutCancel` | `internal/delivery/delivery.go` | **不搬** | — |
+| `a0304ad` 的 `errors.Is(err, runCtx.Err())` 口径 | `internal/platform/module/module.go` | **随平台项一起对齐（1 行）** | `internal/app/platforms.go:149` |
+
+### 10.1 平台失败隔离、服务模式保活、超管通知 —— 建议**改造**（本轮价值最高）
+
+**上游做法**：`runPlatforms` 里每个适配器退出后从 `running` 集合里删掉；退出过滤从 `!errors.Is(err, context.Canceled)` 改成 `runCtx.Err() != nil && errors.Is(err, runCtx.Err())`（`a0304ad` 把 `==` 修成 `errors.Is`）；**非预期**退出（`runCtx.Err() == nil`）时调 `notifyPlatformFailure`——从 `m.superadmins[其他仍在运行的平台]` 收集**去重后**的私聊目标，用 `events.NotificationRequested.EmitAsync` 异步发一条 `平台 %s 异常退出：%v`（Error 级）；`platformStopsAppOnExit` 只在**非** service 模式生效，service 模式下即使全部平台循环退出也继续 `<-ctx.Done()` 等外部停止。上游 `CHANGELOG.md` 对应条目："服务模式不再随全部消息平台退出而结束。"
+
+**fork 现状**（`internal/app/platforms.go:139` 的 `runPlatforms`）：
+- 适配器退出只写一条 WARN（`:149`），且只过滤 `errors.Is(err, context.Canceled)`；只有 `StopAppOnExit()` 为真才 `cancel()`（`:152`）——全仓库只有 CLI 适配器实现它（`internal/platform/cli/cli.go:61`），而 CLI 适配器只在 CLI-only 模式加入 `Runtimes`（`internal/platform/builtin/builtin.go:45-47`，service 模式的 primary 是 headless）；
+- `wg` 全部结束就 `return nil`（`:199-200`），进程随之退出：service 模式下"最后一个平台异常退出"会**静默停服**。只有"一个平台都没启用"才有保活分支（`:168-185`，注释里已经写明 Docker/systemd 的 restart policy 考虑）——也就是说上游这次补的正是**其余情况**；
+- 没有任何"平台死了"的通知，而且 health 侧也**不会**反映：`health.State.MarkPlatformDisconnected`（`internal/health/state.go:251`）在全仓库**只有测试调用**（`grep` 命中 4 处全是 `_test.go`），`MarkPlatformConnected` 之后平台状态永远停在 connected，`/ready` 不会因平台死亡转 not-ready；
+- 适配器本身已内含重连退避（`qq-onebot`/`telegram` 只在 ctx 结束时返回；`qqofficial` 只在 `reason.fatal` 时返回），所以"全部退出"主要来自 qqofficial 致命错误或多个适配器同时被取消。
+
+**建议（三件事一起做，都落在 `runPlatforms` 的退出分支）**：
+1. 把模式带进 `runPlatforms`（`PlatformRunRequest` 现在只有 `Handler/Logger/Runtimes/AfterStart/Heartbeat`，见 `internal/app/dependencies.go:145`；`runner.go:37` 已经有解析好的 `mode`，加一个字段即可），service 模式下全部平台退出后继续等 `ctx.Done()`；**做法上要把 `:168-185` 的"无平台保活"与 `:186-206` 的等待合并成一个循环**（保留 10 秒心跳与"no platform is enabled"那条 warn 只在真的没有平台时打印），不要并列两套等待逻辑；
+2. 非预期退出时调 `healthState.MarkPlatformDisconnected(name, err)`——**这个 API 已经存在但没人用**，顺手让 `/ready` 说真话；
+3. 通知其他平台的配置超管：`cfg.Security.Superadmins` 就是 `map[平台名][]id`（键与运行时名一致：`cli`/`qqofficial`/`qqonebot`/`telegram`，见 `internal/platform/qq-onebot/adapter.go:262`、`internal/platform/qqofficial/adapter.go:43`），发送走现成的 `delivery.Target{Platform: 名字, Superadmins: true}`（超管由适配器内部解析，见 `internal/platform/qqofficial/adapter.go:121-131`）+ `Agent.SendNotice`；注入点在 `internal/app/runner.go:183`（那里同时有 `runtime.Agent`、`foundation.Config` 与 `platforms.Runtimes`，且已在 `Attach` 之后、发送器已注册），只需给 `PlatformRunRequest` 加一个回调字段，不引入新包或全局状态。**"只通知仍在运行的平台"要靠本项第 1 条的 running 集合**（fork 现在没有这个集合）；目标 ID 若要与上游一样**去重**，需要在 app 层按 `cfg.Security.Superadmins[name]` 展开并逐条 `PrivateUserID` 发送（适配器的 `Superadmins: true` 分支自己不去重）。
+
+**风险与边界**：只在 service 模式改退出语义，CLI-only 的 `/exit` 仍要退出；`StopAppOnExit` 的"service 下不认"保护在 fork **今天是空转**（service 模式的 `Runtimes` 里没有交互 CLI，只有 remote CLI server），属于未来保险；`atrinisRuntimeAdapter` 也在 `Runtimes` 里（`internal/app/integrations.go:56`，上游把 Atrinis 放在 background 模块、天然不在平台列表里），要明确它的退出**不影响保活**、也**不作为通知对象**（fork 别处已经显式把它当"非平台"，见 `integration.go` 的 `runtimeNames`）；通知必须用未被取消的 ctx 或 `context.WithoutCancel(runCtx)`（`Agent.SendNotice` 会先在 `turnOutputAllowed` 里检查 `ctx.Err()`，见 `internal/agent/turn_gate.go:41-49`，fork 已有同款写法 `internal/agent/platform_signals.go:84`），且只在 `runCtx.Err() == nil` 时发；非 service 模式下 `case <-done: return nil` 之后进程就会退出，**异步通知会被截断**，所以建议在失败适配器的 goroutine 内同步发（受通知队列 256 等待 / 8 并发与适配器自身超时约束），或至少在返回前等一次结果。
+
+**现实触发面**（决定这一项的优先级）：qq/telegram 的 `Run` 是无限重连循环，只在 ctx 取消时返回；交互 CLI 只在 `/exit` 或 stdin EOF 返回（CLI-only 模式，本就应该退出）。真正会"非预期退出"的是 remote CLI server（端口被占，`internal/platform/cli/remote_server.go`）与 Atrinis 的 HTTP server 启动失败——都是**启动期配置错误**，而且此刻日志里已经有一条 WARN。因此第 1 条的价值在于"最后一个 runtime 退出后 health 接口不再消失、SIGTERM 仍是干净的退出路径"，第 2/3 条的价值在于"某平台死了但其它平台还在服务、进程不会重启"这个场景。
+
+### 10.2 前台接管改局部信号 / 内存快照 / 发送时改道 —— 机制**不搬**，但有一条**要跟**
+
+**上游做法**（`6fd1d1c`）：`internal/session/signals.go` 新增 `ForegroundActivatedEvent{Session, Binding}` 与 `Service.ForegroundActivated()`，`promotion.go` 在接管提交后、准入释放前用 `context.WithoutCancel(ctx)` 同步 `Emit`（原来注入的是回调 `SetForegroundActivation`），`internal/agent/module/signals.go` 把信号连到 `ExecutionCoordinator.AdoptForeground`；`internal/turn/execution.go` 的 `Adopt` 同时保存前台 ctx 与会话快照并新增 `ForegroundState()`（同一把锁返回两者）；工具边界刷新从**重读数据库**的 `RefreshSession` 换成**只合并内存快照**的 `RefreshExecution`；`internal/toolrun/runner.go` 的刷新失败从静默 `Stopped: true` 改成返回 `Err`。
+
+**为什么 fork 不该搬**：
+- fork 的接管是**安全点中止**而不是"接管继续"：`internal/session/promotion.go` 在同一事务里写 `foreground_origin`，在途后台 turn 在三个安全点（`internal/agent/chat.go:242`、`:354`、`:368`，另有 `internal/agent/cron.go:119`）判定后返回哨兵，由 `RunBackground`/cron/Atrinis 收敛成 `TakenOver`。上游那两条"接管后继续跑"才有的缺陷——上下文与路由来自不同次接管、重读整行覆盖已提交工具状态——**在 fork 不存在**（全仓 `RefreshExecution`/`RefreshSession` 0 命中；工具边界只用内存 session，工具状态写入走事务内合并，`internal/agent/tool_cache.go:114-136`）。
+- fork **没有可注入的对象**：`internal/turn/` 只有 `manager.go`（没有上游的 `Execution`），信号订阅方拿到事实后只能写一张 Agent 内存 map，再由现有轮询读取——行为增益≈0（少一次主键 SELECT），却要新增跨包信号、发布点、订阅与关闭顺序（约 60–100 行）。而且信号**不能替换**轮询：`/resume` 可能在订阅建立之前发生（启动恢复、工具内触发），按 fork 自己的规范"订阅必须早于第一次 Emit、信号不缓存不重放"（`devdocs/signals-and-logging.md`），必须保留读库兜底。
+- 硬约束：`Emit` 是**同步等待**（默认 30 秒超时），而 fork 的 SQLite 是**单连接**（`internal/storage/sqlite/store.go:39` 的 `db.SetMaxOpenConns(1)`）——订阅方一旦在派发里碰数据库就是硬死锁，所以"订阅方只更新内存"在 fork 是强制条件而不是优化建议。
+
+**要跟的那一条（真实缺陷，成本很小）**：fork 的 `backgroundSessionTakenOver`（`internal/agent/cron.go:194-203`）在 `Sessions().Get` 失败时 `return false`，把"读不出来"当成"没被接管"——在途安全点会继续烧 token 跑到自然结束，随后 cron/Atrinis 照常解析报告并**按 job 目标投递**（上游的策略相反：取不到就保守当作已接管并停下，见上游 `internal/background/takeover.go`、`internal/cron/execution.go`、`internal/atrinis/llm.go`）。上游同一次修复里"静默吞掉刷新错误"针对的正是这类问题。建议最小改造：
+- `backgroundSessionTakenOver` 改成 `(bool, error)`：`storage.ErrNotFound` 视为未接管返回 `nil`，其他错误原样返回；
+- 四个采样点（`chat.go:242`/`:354`/`:368`、`cron.go:119`）在 `err != nil` 时按"已接管"中止，并留一条可查的审计/日志说明原因；
+- `internal/agent/cron.go:122-136`（`startBackgroundChat` 正常返回之后）**补一次跑完复核**，对齐上游的兜底；这一条同时关掉另一个窗口：安全点 3（`chat.go:368`）与助手消息落库（`chat.go:423-428`）之间还夹着 `prepareAssistantOutput`（hook，可能很慢），这期间提交的接管会让**迟到的后台回答写进已被提升的前台会话历史**，cron/Atrinis 也可能据此投递报告。
+- 合计约 25–30 行源码 + 测试；不动 `internal/session`、不动 `internal/signal`、不动装配顺序、不引入 `session.Binding`。
+
+### 10.3 `delivery.LogSendResult` 与失败日志 `context.WithoutCancel` —— 不搬
+
+上游这么做是因为他们的发送失败日志走 `events.EmitLog`（会随请求取消而丢），且 CLI 这类"原生通知发送方"绕过了 Delivery。fork 的失败日志是普通 `slog` 调用（`internal/delivery/delivery.go:345` 的 `Logger.WarnContext`，TextHandler 不看 ctx），审计记录走 `a.audit`（内部固定 `context.Background()`，`internal/agent/logging.go:83`），并且**所有**通知发送都经过 `delivery.Manager`（`agentOutputSender` 就是 `Manager.Sender`，`internal/agent/output.go:27`/`:246`），没有"绕过 Delivery"的第二条路。没有可修的缺陷，抽一个 `LogSendResult` 只是搬家。
+
+### 10.4 取消口径的两处小差异（低优先，可选）
+
+1. `internal/app/platforms.go:149` 只过滤 `errors.Is(err, context.Canceled)`；上游用 `runCtx.Err() != nil && errors.Is(err, runCtx.Err())`。差异表现为 `DeadlineExceeded` 或带自定义 cause 的取消会多打一条"platform stopped with error"。做 10.1 时顺手对齐（1 行）。
+2. `internal/cron` 全包没有取消分类（`context.Canceled`/`errors.Is` 0 命中）：`internal/cron/service.go:133-137` 对任何运行错误都发 `cron.trigger_failed` WARN；上游把它记成 `ResultCanceled`。关机时在途 cron 运行会在 fork 留下一条"失败"审计 + WARN。建议单独立项（约 6 行），不要与 10.1/10.2 混在一个提交里。
+
+### 10.5 本轮建议的执行顺序（供决策）
+
+| 顺序 | 项 | 性质 | 成本 |
+| --- | --- | --- | --- |
+| 1 | §10.6 `/rollback` 对"新建文件"分支补冲突校验 | **缺陷修复（数据丢失级：会删掉用户后来的修改）** | 很小（~10 行 + 测试） |
+| 2 | §10.1 平台失败隔离 + service 保活 + 超管通知（含 §10.4.1 的 `errors.Is`） | 用户可见（不再静默停服 / 超管收到告警 / `/ready` 说真话） | 中 |
+| 3 | §10.2 接管检查失败"保守停下" + 跑完复核 | 缺陷修复（不再向已接管会话投递后台报告） | 小 |
+| 4 | §9.1 启动插件告警的投递时机 | 缺陷修复（service 模式下这类告警用户看不到） | 小-中 |
+| 5 | §9.1 `/audit --run_source`（写入侧加字段） | 新功能（对齐上游查询能力） | 小-中 |
+| 6 | §10.6 的 symlink 目标复核与有界读取（F/G） | 安全性与内存边界 | 小 |
+| 7 | §9.1 `shell` 上限 1 行 + 工具日志分类限长 | 行为对齐 / 整洁性 | 很小 |
+| 8 | §9.1 损坏行跳过与计数 | 行为对齐（中成本，涉及 `Reader.Query` 签名与 4 个消费点） | 中 |
+
+**明确不做**：§9.1 的 `/audit` JSON 转义（fork 无此缺陷，已有回归测试）、`internal/fileops/rollback.go` 的整文件替换（结构不同；只搬 §10.6 列出的几条独立缺陷）、§10.3（无对应结构）、§10.2 的局部信号与 `Execution` 快照（依赖 fork 没有的骨架）。
+
+### 10.6 顺带发现：`/rollback` 的几条真缺陷（不由 `6fd1d1c` 引入，核对上游实现时发现）
+
+逐条对着上游 `internal/fileops/rollback.go` 看 fork `internal/utils/fileops/rollback.go`，结论如下（**A/D/I/J 不搬**：绑定租约、`encoding` 字段、返回值形状、错误文案，都是结构差异或 fork 已更好）：
+
+| # | 上游行为 | fork 现状 | 判定 |
+| --- | --- | --- | --- |
+| **E** | 提交前对**新建**路径同样复核 `RevisionAfter`（上游 `inspectFileState`，覆盖新建与覆盖两条路径） | 只在"文件原本存在"分支比对 `ContentRevision(current) != record.RevisionAfter`（`rollback.go:186-203`）；`!existed` 分支只 `os.Lstat` 看**存不存在**，存在就 `os.Remove`（`:204-214`） | **必修（数据丢失）**：ATRI-X 新建的文件、用户随后改了它，`/rollback` 与 `rollback_file` 会**直接删掉用户的新内容**，既不报 `ErrRollbackConflict`，也与工具自述"不覆盖 Shell 或外部程序在编辑之后做的修改"（`internal/tool/builtin/file_rollback.go:37`）矛盾。现有测试 `TestRollbackStoreRemovesFileCreatedByTheEdit`（`rollback_test.go:64-81`）只覆盖"没被改过"。修法与既有分支对称：删除前读当前内容 + `ContentRevision != RevisionAfter` → `ErrRollbackConflict`（并确认是普通文件），约 10 行 + 一个用例。 |
+| **F** | 记录"解析后的真实目标"并在回滚前复核（`ResolveFileTarget` / `checkFileTarget` / "file target changed; rollback refused"） | 直接对 `record.Path` 做 `os.ReadFile` / `os.Remove` / `AtomicWriteFile`（`:187/205/211/201`），而 `AtomicWriteFile` 明确**会写穿符号链接**（`internal/utils/fileops/atomic_write.go:10-12`） | **建议做**：记录后该路径的符号链接被改指别处时，回滚会读/写新目标，可能覆盖用户没编辑过的文件。需要在 `rollbackRecord` 里存下解析后的目标（会改 `RollbackInfo` 结构与 `Record` 签名，调用点 4 处），约 20–30 行。 |
+| **G** | 有界读取 `readRevisionBytes`（先 stat 判普通文件与大小，再 `io.LimitReader`） | `os.ReadFile` 整文件入内存，无类型/大小前置（`rollback.go:187`） | **建议做**：外部把该路径换成超大文件时 `/rollback` 会读满内存。约 20 行（需在记录里存 after 大小）。 |
+| **B** | 备份取自**编辑自己那次读取**的字节（`options.beforeWrite`，上游 `:189-231`） | 编辑**之前另做一次** `captureEditBackup`（`internal/tool/builtin/file_tools.go:530`、`:542-554`）再调 `EditFileWithOptions`（`:531`）：两次读取之间有 TOCTOU 窗口，期间被并发改写时记下的"编辑前内容"不是紧邻编辑前的版本 | **单独排期**（要动编辑核心，给 `fileops.EditFileOptions` 加钩子，约 50–70 行）。今天的两次读取用同一个 100 MiB 上限，所以不存在"采集失败被当成新建"的问题。 |
+| **A** | `Binding` 租约 + 失效回收 | fork 以 `sessionID` 为键，`Forget` **全仓库没有生产调用点**（只有 `rollback_test.go:106`） | **不搬语义**，但**文案与实现不一致**：`/rollback` 帮助写着"切换 Session、重启或容量淘汰后记录失效"（`internal/agent/commands/rollback.go:81`），实际同一 sessionID 切回来记录仍在。要么把 `Forget` 接进会话切离/删除（app 层已有接线点），要么把文案改成与实现一致。 |
+| **H** | 目标锁 `lockTarget`（同一目标的读→写串行） | `Restore` 取完记录就释放锁（`rollback.go:179-181`），读文件→写文件之间没有串行保护，与并发的 `edit_file`/`rollback` 可能交错 | **可选（低）**：概率低，但顺着 E/F 一起改成本很小。 |
+
+**装配/发送路径的一条通用结论**（§10.1 与 §9.1 的启动告警都要用）：任何"启动期要发通知"的代码都必须放在 `internal/app/runner.go:120` 的 `Integrations.Attach` **之后**，因为 `RegisterPlatformSender` 只有一条链路（`runner.go:120 → integrations.go:62 → platforms.go:118`），在此之前 `agent.platformSenders` 里只有主平台（`internal/agent/core.go:439-441`）。用窄回调注入（`PlatformRunRequest` 加字段）而不是把 `*agent.Agent` 传进 `runPlatforms`：不引入循环依赖（`internal/app` 已经 import `agent`/`delivery`），测试面也更窄。
