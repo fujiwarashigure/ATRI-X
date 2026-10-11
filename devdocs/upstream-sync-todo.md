@@ -20,7 +20,7 @@
 - 已落地（P2 决策后按路线 D 补的接缝）：`72949a6` → 见任务 5。
 - 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `fe0d08a`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `96fc697` → 见任务 3。
 - 其他台账：Windows 部署文档修正 `d3cf410`、待办哈希回填 `77080ee`、进程级冒烟记录 `3492f26`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
-- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`。
+- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
   2. Telegram 群聊是否也跳过工具调用进度预览——OneBot 与 QQ 官方都跳过（`delivery.ShouldDropGroupToolPreview`），Telegram 从来没有这条规则。无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，因此未擅自改；若要一致，加一行该调用 + "目标是否群聊"的判断即可（见任务 4 的盘点表）。
@@ -267,9 +267,17 @@
   - **验证**：`gofmt -l internal/` 干净；`go build ./...` 通过；`./internal/agent/`、`./internal/app/`、`./internal/platform/...`、`./internal/cron/...`、`./internal/hook/...`、`./internal/signal/` 全绿（`internal/agent` 仅剩 §6 既有环境失败）。新用例：`internal/agent/platform_signals_test.go`（信号驱动 hook、发布方不等 hook 业务、同平台串行 max 并发 = 1、关闭后不再接纳、幂等且不可重启）、`internal/app/platforms_signal_test.go`（连接回调确实发布信号、适配器不报名字时用适配器名）。进程级冒烟见 [`smoke-test-report.md`](smoke-test-report.md) §6.1。
   - **与上游的差异（有意）**：上游让**每个平台适配器**直接 `Emit`，并让 Hook 与 Cron 各自订阅；fork 保留 App 里的单一发布点（`registerPlatformHooks` 的 notifier），只让 hook 侧订阅。
 
-### 8.3 [ ] 上游 CHANGELOG × fork 现状核对单
+### 8.3 [x] 上游 CHANGELOG × fork 现状核对单
 
-逐条标"已跟 / 未跟 / 不适用"。已发现的具体缺口：`internal/fileops/rollback.go` 上游 566 行 vs fork `internal/utils/fileops/rollback.go` 243 行——两者共享同一批常量（`256*1024*1024` / `1024`）和逐字相同的错误文案，说明 fork 拿到的是早期版本；上游后来加了会话绑定有效性与过期（`Binding` / `ErrRollbackExpired`）、目标路径、编码保持。另外 `/log`、`/audit` 的 8 项查询层功能也没有跟。
+产出独立文档 [`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)：把上游 `## Unreleased`（`v0.5.0` → `1aa10fd`，与本 fork 共同祖先同日，共 44 条）逐条判成 `已跟 / 部分 / 未跟 / 未跟（有意） / 不搬 / 不适用 / 相反 / 待复现`，并给出证据（`CHANGELOG.md` 行号或 `file:line`）。
+
+**结论**：已跟 19、部分 5、未跟 12、未跟（有意）2、不搬 3、不适用 1、相反 1、待复现 1。**真正算"fork 漏了且值得补"的只有 6～7 条**，集中在日志查询/写入侧与几个一行常量级的改动上；其余未跟项要么依赖上游那套 `internal/signal` + `internal/events` + `*/module` + `internal/turn` 骨架（结构级，已判"不搬"），要么是 fork 的有意差异。
+
+已确认的具体缺口（按优先级）：日志查询 `--raw` 解耦 / 移除 `/log -t` / 损坏行计数（§9.1～§9.3）、工具日志正文按类别限长（§9.5）、`shell` stdout/stderr 上限仍是 16 KiB（`internal/tool/builtin/shell.go:24`）、`/usage` 把非法值当 0（`internal/agent/commands/usage.go:279`）、`internal/fileops/rollback.go` 的上游增量（见 8.1 项 A3 说明）、启动插件告警仍在 Agent 创建后补发（`internal/app/runtime.go:260`）。
+
+已确认的**有意差异**（不再当"漏跟"）：`additional_tools` / `Session.Binding` / 九字段日志契约 / 按 API 类型限制工具 / 压缩的服务端实现 / 日志脱敏（fork 保留并加强，与上游删除相反）。
+
+**本项为纯 devdocs 交付，没有用户可见行为变化，因此按仓库规则不写 `CHANGELOG.md`。**
 
 ### 8.4 [ ] fork 版信号/日志边界表 + `AGENTS.md` 采纳 mermaid 规则
 
@@ -297,3 +305,5 @@
 | 8 | `/atriwisp --tag` | — | `[x]` fork 早已有（`f15924be`），上游只是换了实现 |
 
 **不搬**：上游的 `ContentFields` / `ContentFieldContains`（那是"字段被塞进 JSON content 里"的补偿机制；fork 的 `key=value` 文本属性本来就能直接按字段筛 `risk` / `tool` / `actor_id`）、九字段 `LogRecord`、`ContentLimit` 强约束。**若要做，只搬查询层与写入侧的加法式字段**。
+
+除本表之外，§8.3 的核对单还确认了几个**不在查询层**的缺口，同样可以独立搬运：`shell` stdout/stderr 上限 16 KiB → 256 KiB（`internal/tool/builtin/shell.go:24`）、启动插件告警不再等 Agent 创建后补发（`internal/app/runtime.go:260`）、`internal/fileops/rollback.go` 的上游增量（会话绑定有效期与编码保持）。
