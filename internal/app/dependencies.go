@@ -148,6 +148,15 @@ type PlatformRunRequest struct {
 	Runtimes   []platform.Runtime
 	AfterStart func(context.Context)
 	Heartbeat  func()
+	// Mode decides whether the platform loops own the process lifetime: a
+	// service keeps running after every runtime exits and only stops on an
+	// external signal (see runPlatforms).
+	Mode RunMode
+	// PlatformFailure reports one runtime that exited unexpectedly (not because
+	// the run context ended). App wires it to platform health and to the
+	// notification of the other platforms' superadmins. stillRunning lists the
+	// runtimes that had not exited yet.
+	PlatformFailure func(ctx context.Context, platform string, stillRunning []string, err error)
 }
 
 type PlatformExecutor interface {

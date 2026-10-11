@@ -56,6 +56,7 @@ rg -n "locator:tool-flow" devdocs/architecture.md
 - `/ready` 由进程初始化、数据目录/SQLite 目录可写、以及调度心跳“已知且未过期”决定；平台未连接、模型 API 故障不会让 `/ready` 失败。
 - `/healthz` 汇总上述状态；平台或模型异常显示为 `degraded`，调度心跳过期时因 readiness 检查失败返回 `not_ready`；平台与模型状态数组始终保留。
 - `runPlatforms` 无论是否有已启用平台都约每 10 秒发送一次心跳，避免空平台部署被误判为卡死。
+- 平台运行时的退出分两类：运行上下文未结束的**非预期退出**会记 WARN、把该平台在 health 里标成断开（`MarkPlatformDisconnected`），并通知其他仍在运行平台的配置超管；`StopAppOnExit`（交互式 CLI）只在**非** service 模式拥有应用退出职责。service 模式下平台循环不拥有进程生命周期——全部运行时退出后仍等待外部停止，`/live`、`/ready`、`/tasks` 保持可用。
 
 运维接口：
 

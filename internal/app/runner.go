@@ -186,5 +186,14 @@ func (r *Runner) Run(ctx context.Context, opts Options) (runErr error) {
 		Runtimes:   platforms.Runtimes,
 		AfterStart: afterStart,
 		Heartbeat:  heartbeat,
+		Mode:       mode,
+		// 平台非预期退出：先让 /ready 说真话（此前平台一旦连上就永远算 connected），
+		// 再通知其他仍在运行平台上的配置超管。
+		PlatformFailure: func(failureCtx context.Context, platformName string, stillRunning []string, failureErr error) {
+			if healthState != nil {
+				healthState.MarkPlatformDisconnected(platformName, failureErr)
+			}
+			notifyPlatformFailure(failureCtx, foundation.Config, runtime.Agent, platformName, stillRunning, failureErr)
+		},
 	})
 }

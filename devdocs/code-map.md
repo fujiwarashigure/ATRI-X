@@ -29,7 +29,7 @@ rg -n "locator:tool" devdocs/code-map.md
 - `internal/app/vision.go`、`internal/agent/vision.go`、`internal/vision/`：自动视觉兜底。`[vision]` 段显式开启后，`agent.callLLM` 在 `APIError.Category == vision_unsupported` 时调用 `VisionDescriber` 把图片段替换成文字描述（有界并行 + 整批时间预算），失败则降级回文本引用；`internal/vision` 是 `image_to_prompt` 工具与兜底共用的唯一描述引擎（预处理 + 流式调用 + 版本化指纹缓存 + 成功/负缓存 + 同 key 合并 + 运行器/等待者上限 + `Stats()` 接入 `/metrics` + panic 隔离），不反向依赖 `internal/media`。`internal/llm/openai` 的 `parseError` 负责把上游错误映射为 `APIError.Category`，`shouldFallbackVision` 只读该字段。
 - `internal/app/asr.go`、`internal/agent/asr.go`、`internal/asr/`：可选语音转写。`[asr]` 显式开启后，`HandleMessage` 在已唤醒的入站消息上调用 `AudioTranscriber` 把语音段替换成 `[语音 N 自动转写（可能有误）：...]` 文本段；`internal/asr` 负责 OpenAI 兼容 multipart 上传、有界并发/队列、录音大小与响应上限、成功/负缓存和重试；预算按 `asr` kind 预占，受全局、群和群内单用户四级每日额度约束。
 - `internal/llm/errors.go`：结构化 `APIError`（`StatusCode`/`Code`/`Type`/`Param`/`Message`/`Cause`）与确定性失败分类；`openai` 适配器的 `parseError` 在此保留上游错误码，供视觉兜底判定和负缓存使用。
-- `internal/app/platforms.go`、`integrations.go`：平台运行、Atrinis 和平台能力接线；同目录 `service_marker*.go` 使用 `flock` 文件锁做服务单实例互斥，避免陈旧 PID 在容器重建后误判。
+- `internal/app/platforms.go`、`integrations.go`：平台运行、Atrinis 和平台能力接线；`runPlatforms` 维护"仍在运行的运行时"集合并区分非预期退出（记 WARN + 交给 `PlatformRunRequest.PlatformFailure` → health 标断开 + `notifyPlatformFailure` 通知其他平台超管）与交互式 CLI 退出（`StopAppOnExit`，非 service 模式才取消整轮运行），service 模式下全部运行时退出后仍等外部停止；同目录 `service_marker*.go` 使用 `flock` 文件锁做服务单实例互斥，避免陈旧 PID 在容器重建后误判。
 
 常用搜索：
 

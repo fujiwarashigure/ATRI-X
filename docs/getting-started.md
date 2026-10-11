@@ -88,6 +88,8 @@ atri-x service run  # Linux/headless 服务模式：不启动 CLI，启动已启
 
 自动模式下，Linux 如果检测到当前用户已有 `atri-x service run` 在运行，会进入本地 CLI-only，避免重复连接平台或重复运行 Cron；否则进入完整前台模式。Windows 不做 service 检测，默认完整前台启动。
 
+服务模式下进程的生命周期由外部信号决定：所有已启用平台运行时都退出后进程仍然存活（`/live`、`/ready`、`/tasks` 继续可用），停止请发送 `SIGTERM` / `Ctrl+C`。某个平台运行时**非预期**退出时，`/healthz` 会把它标成断开，并给其他仍在运行平台的配置超管（`security.superadmins`）发一条错误通知；正常关停与应用取消不会通知，没有配置超管的平台只留日志。
+
 `atri-x cli` 是独立本地进程，会使用同一套配置和 SQLite 数据，但不会接管 service 进程中的当前请求、确认状态或内存里的当前 Session。需要继续历史会话时，可用 `/list` 和 `/resume`。
 
 CLI TUI 常用按键：
