@@ -39,8 +39,8 @@ func TestContractFieldsRoundTripThroughProductionPipeline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Query by module: %v", err)
 	}
-	if len(hookOnly) != 1 || hookOnly[0].Fields["event"] != "tool_call" {
-		t.Fatalf("module=%s 筛选结果 = %#v", ModuleHook, hookOnly)
+	if len(hookOnly.Entries) != 1 || hookOnly.Entries[0].Fields["event"] != "tool_call" {
+		t.Fatalf("module=%s 筛选结果 = %#v", ModuleHook, hookOnly.Entries)
 	}
 
 	// 2. module + event 组合筛选（--hook 与 --event 同时给出的场景）。
@@ -48,8 +48,8 @@ func TestContractFieldsRoundTripThroughProductionPipeline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Query by module+event: %v", err)
 	}
-	if len(combined) != 1 || combined[0].Fields["result"] != ResultRejected {
-		t.Fatalf("module+event 筛选结果 = %#v", combined)
+	if len(combined.Entries) != 1 || combined.Entries[0].Fields["result"] != ResultRejected {
+		t.Fatalf("module+event 筛选结果 = %#v", combined.Entries)
 	}
 
 	// 3. 按 result 筛选：新契约的核心价值，此刻必须真的可查。
@@ -57,8 +57,8 @@ func TestContractFieldsRoundTripThroughProductionPipeline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Query by result: %v", err)
 	}
-	if len(rejected) != 1 || rejected[0].Fields["reason"] != "tool_risk_above_allowed_level" {
-		t.Fatalf("result=%s 筛选结果 = %#v", ResultRejected, rejected)
+	if len(rejected.Entries) != 1 || rejected.Entries[0].Fields["reason"] != "tool_risk_above_allowed_level" {
+		t.Fatalf("result=%s 筛选结果 = %#v", ResultRejected, rejected.Entries)
 	}
 
 	// 4. 不同 result 取值互不串台。
@@ -66,8 +66,8 @@ func TestContractFieldsRoundTripThroughProductionPipeline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Query by result=failed: %v", err)
 	}
-	if len(failed) != 1 || failed[0].Fields["event"] != "session_naming_failed" {
-		t.Fatalf("result=%s 筛选结果 = %#v", ResultFailed, failed)
+	if len(failed.Entries) != 1 || failed.Entries[0].Fields["event"] != "session_naming_failed" {
+		t.Fatalf("result=%s 筛选结果 = %#v", ResultFailed, failed.Entries)
 	}
 
 	// 5. 按 module 统计：三类来源都能被分辨出来，没有记录缺来源。
@@ -75,10 +75,10 @@ func TestContractFieldsRoundTripThroughProductionPipeline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Query all: %v", err)
 	}
-	if len(all) != 3 {
-		t.Fatalf("记录数 = %d, want 3: %#v", len(all), all)
+	if len(all.Entries) != 3 {
+		t.Fatalf("记录数 = %d, want 3: %#v", len(all.Entries), all.Entries)
 	}
-	for _, entry := range all {
+	for _, entry := range all.Entries {
 		if !ValidLogModule(entry.Fields["module"]) {
 			t.Fatalf("记录缺少合法来源标识: %#v", entry.Fields)
 		}

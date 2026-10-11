@@ -39,38 +39,57 @@ type LogEntry struct {
 	Raw     string
 }
 
+// QueryResult 是一次日志扫描的结果。损坏行（解析不出 time/level/msg 的行）会被跳过
+// 并计数：它们既不该占用 `--limit` 配额，也不该在结果里冒充一条记录。
+type QueryResult struct {
+	Entries []LogEntry
+	// DamagedCount 是本次扫描遇到的损坏行数，不是整个文件的行数。
+	DamagedCount int
+	// DamagedLines 是损坏行的原始内容样本（最多 damagedSampleLimit 条），只在
+	// `--raw` 查询里收集，且不参与任何筛选匹配。
+	DamagedLines []string
+}
+
 type Reader struct {
 	Dir string
 }
 
-func (r Reader) Query(ctx context.Context, query LogQuery) ([]LogEntry, error) {
+// damagedSampleLimit 限制损坏行样本的条数：提示用，不追求完整。
+const damagedSampleLimit = 10
+
+func (r Reader) Query(ctx context.Context, query LogQuery) (QueryResult, error) {
 	if strings.TrimSpace(r.Dir) == "" {
-		return nil, fmt.Errorf("log directory is not configured")
+		return QueryResult{}, fmt.Errorf("log directory is not configured")
 	}
 	query = normalizeLogQuery(query)
-	entries := []LogEntry{}
+	result := QueryResult{Entries: []LogEntry{}}
 	for _, path := range logPaths(r.Dir, query.Prefix, query.Days) {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return QueryResult{}, err
 		}
-		fileEntries, err := readLogFile(path)
+		fileResult, err := readLogFile(path, query.Raw)
 		if err != nil {
 			if os.IsNotExist(err) {
 				continue
 			}
-			return nil, err
+			return QueryResult{}, err
 		}
-		for i := len(fileEntries) - 1; i >= 0; i-- {
-			entry := fileEntries[i]
+		result.DamagedCount += fileResult.DamagedCount
+		result.DamagedLines = append(result.DamagedLines, fileResult.DamagedLines...)
+		if len(result.DamagedLines) > damagedSampleLimit {
+			result.DamagedLines = result.DamagedLines[:damagedSampleLimit]
+		}
+		for i := len(fileResult.Entries) - 1; i >= 0; i-- {
+			entry := fileResult.Entries[i]
 			if matchLogEntry(entry, query) {
-				entries = append(entries, entry)
-				if len(entries) >= query.Limit {
-					return entries, nil
+				result.Entries = append(result.Entries, entry)
+				if len(result.Entries) >= query.Limit {
+					return result, nil
 				}
 			}
 		}
 	}
-	return entries, nil
+	return result, nil
 }
 
 func normalizeLogQuery(query LogQuery) LogQuery {
@@ -101,34 +120,49 @@ func logPaths(dir, prefix string, days int) []string {
 	return paths
 }
 
-func readLogFile(path string) ([]LogEntry, error) {
+func readLogFile(path string, collectDamaged bool) (QueryResult, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return QueryResult{}, err
 	}
 	defer file.Close()
 
-	entries := []LogEntry{}
+	result := QueryResult{Entries: []LogEntry{}}
 	scanner := bufio.NewScanner(file)
 	scanner.Buffer(make([]byte, 64*1024), maxLogLineBytes)
 	for scanner.Scan() {
 		raw := scanner.Text()
-		entry := parseLogLine(raw)
-		entries = append(entries, entry)
+		if strings.TrimSpace(raw) == "" {
+			continue
+		}
+		entry, damaged := parseLogLine(raw)
+		if damaged {
+			result.DamagedCount++
+			if collectDamaged && len(result.DamagedLines) < damagedSampleLimit {
+				result.DamagedLines = append(result.DamagedLines, raw)
+			}
+			continue
+		}
+		result.Entries = append(result.Entries, entry)
 	}
 	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("read log file %s: %w", path, err)
+		return QueryResult{}, fmt.Errorf("read log file %s: %w", path, err)
 	}
-	return entries, nil
+	return result, nil
 }
 
-func parseLogLine(raw string) LogEntry {
+// parseLogLine 解析一行日志。损坏行（解析不出 time/level/msg 任意一个字段的行，例如
+// 被截断的半行、早期格式或非本系统的内容）由第二个返回值报告，调用方负责跳过与计数。
+func parseLogLine(raw string) (LogEntry, bool) {
 	fields := parseTextAttrs(raw)
 	entry := LogEntry{Raw: raw, Fields: fields, Level: fields["level"], Message: fields["msg"]}
 	if ts, err := time.ParseInLocation("2006-01-02 15:04:05", fields["time"], time.Local); err == nil {
 		entry.Time = ts
 	}
-	return entry
+	if entry.Level == "" && entry.Message == "" && strings.TrimSpace(fields["time"]) == "" {
+		return LogEntry{Raw: raw, Fields: map[string]string{}}, true
+	}
+	return entry, false
 }
 
 func parseTextAttrs(line string) map[string]string {

@@ -35,7 +35,7 @@ func (a *Agent) SetLogManager(logs LogManager) {
 	}
 }
 
-func (a *Agent) QueryLogs(ctx context.Context, query logging.LogQuery) ([]logging.LogEntry, error) {
+func (a *Agent) QueryLogs(ctx context.Context, query logging.LogQuery) (logging.QueryResult, error) {
 	return a.logReader.Query(ctx, query)
 }
 

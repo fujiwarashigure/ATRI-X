@@ -74,7 +74,7 @@ func (s *Service) buildDailyReport(ctx context.Context, since, until time.Time) 
 }
 
 func (s *Service) queryImageStats(ctx context.Context, reader logging.Reader, since, until time.Time) (imageReportStats, error) {
-	entries, err := reader.Query(ctx, logging.LogQuery{
+	scanned, err := reader.Query(ctx, logging.LogQuery{
 		Prefix:   "audit",
 		Limit:    200000,
 		Days:     logQueryDays(since, until),
@@ -87,7 +87,7 @@ func (s *Service) queryImageStats(ctx context.Context, reader logging.Reader, si
 		return imageReportStats{}, err
 	}
 	stats := imageReportStats{}
-	for _, entry := range entries {
+	for _, entry := range scanned.Entries {
 		if strings.EqualFold(strings.TrimSpace(entry.Fields["success"]), "true") {
 			stats.Success++
 		} else {
@@ -98,7 +98,7 @@ func (s *Service) queryImageStats(ctx context.Context, reader logging.Reader, si
 }
 
 func (s *Service) queryUsage(ctx context.Context, reader logging.Reader, since, until time.Time) ([]modelUsageReport, error) {
-	entries, err := reader.Query(ctx, logging.LogQuery{
+	scanned, err := reader.Query(ctx, logging.LogQuery{
 		Prefix:   "audit",
 		Limit:    400000,
 		Days:     logQueryDays(since, until),
@@ -113,7 +113,7 @@ func (s *Service) queryUsage(ctx context.Context, reader logging.Reader, since, 
 	provider := strings.ToLower(strings.TrimSpace(s.report.Provider))
 	buckets := map[string]*modelUsageReport{}
 	order := []string{}
-	for _, entry := range entries {
+	for _, entry := range scanned.Entries {
 		if provider != "" && strings.ToLower(strings.TrimSpace(entry.Fields["provider"])) != provider {
 			continue
 		}

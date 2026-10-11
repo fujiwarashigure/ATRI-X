@@ -257,14 +257,36 @@ func queryLogs(ctx context.Context, deps Deps, query logging.LogQuery, formatter
 	if deps.Logs == nil {
 		return &command.Result{Content: "log reader is not configured"}, nil
 	}
-	entries, err := deps.Logs.QueryLogs(ctx, query)
+	scanned, err := deps.Logs.QueryLogs(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	if len(entries) == 0 {
-		return &command.Result{Content: "no log entries found"}, nil
+	damaged := formatDamagedLogNotice(query.Raw, scanned)
+	if len(scanned.Entries) == 0 {
+		return &command.Result{Content: strings.TrimSpace("no log entries found\n" + damaged)}, nil
 	}
-	return &command.Result{Content: formatter(entries)}, nil
+	return &command.Result{Content: formatter(scanned.Entries) + damaged}, nil
+}
+
+// formatDamagedLogNotice 汇报本次扫描跳过了多少损坏行（解析不出 time/level/msg 的行）。
+// 这些行既不占用 `--limit` 配额，也不在结果里冒充记录，但"结果可能不完整"这件事必须
+// 让用户看到；`--raw` 时另外列出样本。
+func formatDamagedLogNotice(raw bool, scanned logging.QueryResult) string {
+	if scanned.DamagedCount <= 0 {
+		return ""
+	}
+	var sb strings.Builder
+	fmt.Fprintf(&sb, "\n\n本次扫描跳过 %d 条损坏记录（无法解析 time/level/msg），结果可能不完整。", scanned.DamagedCount)
+	if raw && len(scanned.DamagedLines) > 0 {
+		sb.WriteString("\n损坏记录（不参与筛选匹配）：")
+		for _, line := range scanned.DamagedLines {
+			sb.WriteString("\n  " + line)
+		}
+		if remaining := scanned.DamagedCount - len(scanned.DamagedLines); remaining > 0 {
+			fmt.Fprintf(&sb, "\n  另有 %d 条损坏记录未展示。", remaining)
+		}
+	}
+	return sb.String()
 }
 
 func parseAuditQuery(args string) (logging.LogQuery, error) {

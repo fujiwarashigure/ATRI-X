@@ -14,11 +14,13 @@ import (
 type fakeLogService struct {
 	query   logging.LogQuery
 	entries []logging.LogEntry
+	damaged int
+	samples []string
 }
 
-func (s *fakeLogService) QueryLogs(ctx context.Context, query logging.LogQuery) ([]logging.LogEntry, error) {
+func (s *fakeLogService) QueryLogs(ctx context.Context, query logging.LogQuery) (logging.QueryResult, error) {
 	s.query = query
-	return s.entries, nil
+	return logging.QueryResult{Entries: s.entries, DamagedCount: s.damaged, DamagedLines: s.samples}, nil
 }
 
 func TestAuditCommandParsesFilters(t *testing.T) {
@@ -515,5 +517,46 @@ func TestAuditCommandCompletesRunSource(t *testing.T) {
 		if !got[want] {
 			t.Fatalf("value completion %#v is missing %q", got, want)
 		}
+	}
+}
+
+// 跳过损坏行之后必须告诉用户"结果可能不完整"：条数要报，`--raw` 时给出样本与被截掉的
+// 数量；一条记录都没有时也不能把损坏行说成"没有日志"。
+func TestLogCommandsReportDamagedLines(t *testing.T) {
+	service := &fakeLogService{
+		entries: []logging.LogEntry{{Time: time.Date(2026, 6, 3, 15, 0, 0, 0, time.Local), Fields: map[string]string{"event": "tool_call", "tool": "shell"}}},
+		damaged: 4,
+		samples: []string{"damaged one", "damaged two"},
+	}
+	result, err := NewAudit(Deps{Logs: service}).Handle(context.Background(), command.Request{})
+	if err != nil {
+		t.Fatalf("audit handle: %v", err)
+	}
+	if !strings.Contains(result.Content, "跳过 4 条损坏记录") || !strings.Contains(result.Content, "tool=shell") {
+		t.Fatalf("content = %q", result.Content)
+	}
+
+	raw, err := NewAudit(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "--raw"})
+	if err != nil {
+		t.Fatalf("audit raw handle: %v", err)
+	}
+	for _, want := range []string{"damaged one", "damaged two", "另有 2 条损坏记录未展示"} {
+		if !strings.Contains(raw.Content, want) {
+			t.Fatalf("raw content missing %q:\n%s", want, raw.Content)
+		}
+	}
+
+	// 非 raw 查询只报数量，不列样本。
+	if strings.Contains(result.Content, "damaged one") {
+		t.Fatalf("non-raw query must not list damaged samples: %q", result.Content)
+	}
+
+	empty := &fakeLogService{damaged: 2}
+	emptyResult, err := NewLog(Deps{Logs: empty}).Handle(context.Background(), command.Request{})
+	if err != nil {
+		t.Fatalf("log handle: %v", err)
+	}
+	if !strings.Contains(emptyResult.Content, "no log entries found") || !strings.Contains(emptyResult.Content, "跳过 2 条损坏记录") {
+		t.Fatalf("content = %q", emptyResult.Content)
 	}
 }

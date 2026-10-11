@@ -30,6 +30,29 @@ func makeUsageEntry(t time.Time, provider, model, sessionID string, prompt, comp
 	}
 }
 
+// 用量统计和损坏行是两件事：字段缺失显示 null，整行读不出来则要单独提示"统计可能不完整"。
+func TestUsageReportsDamagedLines(t *testing.T) {
+	service := &fakeLogService{
+		entries: []logging.LogEntry{makeUsageEntry(time.Date(2026, 7, 1, 10, 0, 0, 0, time.Local), "deepseek", "deepseek-v4", "sess-1", 10, 5, 15, 0, 100)},
+		damaged: 3,
+	}
+	result, err := NewUsage(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: ""})
+	if err != nil {
+		t.Fatalf("usage handle: %v", err)
+	}
+	if !strings.Contains(result.Content, "跳过 3 条损坏记录") || !strings.Contains(result.Content, "deepseek-v4") {
+		t.Fatalf("content = %q", result.Content)
+	}
+
+	empty, err := NewUsage(Deps{Logs: &fakeLogService{damaged: 1}}).Handle(context.Background(), command.Request{Args: ""})
+	if err != nil {
+		t.Fatalf("usage handle: %v", err)
+	}
+	if !strings.Contains(empty.Content, "no usage data found") || !strings.Contains(empty.Content, "跳过 1 条损坏记录") {
+		t.Fatalf("content = %q", empty.Content)
+	}
+}
+
 func TestUsageDefaultQueryByModel(t *testing.T) {
 	entries := []logging.LogEntry{
 		makeUsageEntry(time.Date(2026, 7, 1, 10, 0, 0, 0, time.Local), "deepseek", "deepseek-v4", "sess-1", 1000, 200, 1200, 500, 1500),

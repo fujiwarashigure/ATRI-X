@@ -59,14 +59,23 @@ func (c usageCommand) Handle(ctx context.Context, req command.Request) (*command
 	if c.deps.Logs == nil {
 		return &command.Result{Content: "log reader is not configured"}, nil
 	}
-	entries, err := c.deps.Logs.QueryLogs(ctx, query)
+	scanned, err := c.deps.Logs.QueryLogs(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	if len(entries) == 0 {
-		return &command.Result{Content: "no usage data found"}, nil
+	if len(scanned.Entries) == 0 {
+		return &command.Result{Content: strings.TrimSpace("no usage data found\n" + usageDamagedNotice(scanned))}, nil
 	}
-	return &command.Result{Content: formatUsageSummary(entries, query, groupBy)}, nil
+	return &command.Result{Content: formatUsageSummary(scanned.Entries, query, groupBy) + usageDamagedNotice(scanned)}, nil
+}
+
+// usageDamagedNotice 提醒这次统计跳过了损坏行：用量统计本来就可能因为"没有记录用量"
+// 而偏高或偏低，但整行读不出来是另一种不完整，必须与 null 区分开。
+func usageDamagedNotice(scanned logging.QueryResult) string {
+	if scanned.DamagedCount <= 0 {
+		return ""
+	}
+	return fmt.Sprintf("\n\n本次扫描跳过 %d 条损坏记录（无法解析 time/level/msg），用量统计可能不完整。", scanned.DamagedCount)
 }
 
 func (c usageCommand) Complete(ctx context.Context, req command.CompletionRequest) []command.Completion {

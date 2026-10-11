@@ -196,7 +196,7 @@ type HookService interface {
 }
 
 type LogService interface {
-	QueryLogs(ctx context.Context, query logging.LogQuery) ([]logging.LogEntry, error)
+	QueryLogs(ctx context.Context, query logging.LogQuery) (logging.QueryResult, error)
 }
 
 // RuntimeStateReloadReport describes one state.toml hot reload.
