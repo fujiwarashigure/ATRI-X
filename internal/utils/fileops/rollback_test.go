@@ -80,6 +80,58 @@ func TestRollbackStoreRemovesFileCreatedByTheEdit(t *testing.T) {
 	}
 }
 
+func TestRollbackStoreKeepsCreatedFileChangedAfterTheEdit(t *testing.T) {
+	ctx := context.Background()
+	dir := t.TempDir()
+	path := filepath.Join(dir, "new.txt")
+	after := []byte("created\n")
+	if err := os.WriteFile(path, after, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	store := NewRollbackStore()
+	info, _ := store.Record("s1", path, nil, 0, false, "", ContentRevision(after))
+
+	// The owner edited the file the record created: removing it would discard a
+	// change this record never backed up.
+	if err := os.WriteFile(path, []byte("owner edited\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := store.Restore(ctx, "s1", info.ID); !errors.Is(err, ErrRollbackConflict) {
+		t.Fatalf("restore error = %v, want ErrRollbackConflict", err)
+	}
+	if content, _ := os.ReadFile(path); string(content) != "owner edited\n" {
+		t.Fatalf("conflicting created file was removed: %q", string(content))
+	}
+
+	// The record survives a conflict: once the content matches the recorded edit
+	// again, removing the created file succeeds.
+	if err := os.WriteFile(path, after, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := store.Restore(ctx, "s1", info.ID); err != nil {
+		t.Fatalf("restore after conflict: %v", err)
+	}
+	if _, err := os.Stat(path); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("created file must be removed, stat err = %v", err)
+	}
+}
+
+func TestRollbackStoreReportsMissingCreatedFile(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "gone.txt")
+	if err := os.WriteFile(path, []byte("created\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	store := NewRollbackStore()
+	info, _ := store.Record("s1", path, nil, 0, false, "", ContentRevision([]byte("created\n")))
+	if err := os.Remove(path); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := store.Restore(context.Background(), "s1", info.ID); !errors.Is(err, ErrRollbackNotFound) {
+		t.Fatalf("restore error = %v, want ErrRollbackNotFound", err)
+	}
+}
+
 func TestRollbackStoreScopesSessionsAndReplacesOlderRecords(t *testing.T) {
 	dir := t.TempDir()
 	first := filepath.Join(dir, "a.txt")

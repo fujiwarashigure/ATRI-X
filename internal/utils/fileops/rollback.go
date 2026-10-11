@@ -168,7 +168,8 @@ func (s *RollbackStore) Forget(sessionID string) {
 
 // Restore puts the recorded content back and consumes the record. It refuses to
 // overwrite a file that changed after the edit (shell, another program or an
-// external editor), so only ATRI-X's own last edit can be undone.
+// external editor), and likewise refuses to delete a file the edit created once
+// its content has changed, so only ATRI-X's own last edit can be undone.
 func (s *RollbackStore) Restore(ctx context.Context, sessionID string, id uint64) (RollbackInfo, error) {
 	if s == nil {
 		return RollbackInfo{}, ErrRollbackNotFound
@@ -202,11 +203,19 @@ func (s *RollbackStore) Restore(ctx context.Context, sessionID string, id uint64
 			return RollbackInfo{}, err
 		}
 	} else {
-		if _, err := os.Lstat(record.Path); err != nil {
+		// Removing a created file is only safe while it still holds exactly what
+		// the recorded edit wrote. The owner may have edited it afterwards (or
+		// replaced it with a directory), and deleting that would destroy work
+		// that this record never backed up.
+		current, err := os.ReadFile(record.Path)
+		if err != nil {
 			if errors.Is(err, os.ErrNotExist) {
 				return RollbackInfo{}, ErrRollbackNotFound
 			}
-			return RollbackInfo{}, fmt.Errorf("check created file before rollback: %w", err)
+			return RollbackInfo{}, fmt.Errorf("read created file before rollback: %w", err)
+		}
+		if ContentRevision(current) != record.RevisionAfter {
+			return RollbackInfo{}, ErrRollbackConflict
 		}
 		if err := os.Remove(record.Path); err != nil {
 			return RollbackInfo{}, fmt.Errorf("remove created file: %w", err)
