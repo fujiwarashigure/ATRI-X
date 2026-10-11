@@ -45,7 +45,7 @@
 | 工具调用仅记录 audit；移除 `/log -t`；日志精简工具内容记录 | **未跟** | fork 的 `/log` 仍接受 `-t`（`log.go:442-446` + `logInfo()` 帮助里的 `-u, -a, -t`）；工具参数/结果没有按类别限长。→ 台账 §9.2 / §9.5 |
 | 平台连接事件改为发布全局信号，Hook 与 Cron 各自订阅、按平台排队并管理关闭 | **部分** | hook 侧已跟（`67508075`：`platform.PlatformConnected` + `internal/agent/platform_signals.go` 按平台队列 + `ClosePlatformEvents` 排空，纳入 `internal/app` 的 30 秒关闭预算）；**cron 侧仍挂在 hook 点 `builtin.cron.missed_once` 上**，没有独立订阅与独立队列（台账 §8.2 已记为有意差异）。另外 fork 保留 App 里的单一发布点，没有让每个适配器各自 `Emit`。 |
 | 工具支持按 API 类型限制发现、补全、预载和执行 | **未跟** | 代码里没有"协议类型 → 工具可用性"的联结（`git grep -E 'APIType\|apiType' internal` 无结果）。这是 P2 路线 D 里明确未实施的部分（台账 §5「仍未做」）。 |
-| `shell` 的 stdout／stderr 返回上限从各 16 KiB 提高到各 256 KiB | **未跟** | `internal/tool/builtin/shell.go:24` 仍是 `maxShellOutput = 16 * 1024`。**注意**：同一条里的"边收边限容"部分 fork 已跟，见 Fixed 表第 2 条。 |
+| `shell` 的 stdout／stderr 返回上限从各 16 KiB 提高到各 256 KiB | **已跟** | `internal/tool/builtin/shell.go:24` 已改成 `maxShellOutput = 256 * 1024`（提交见台账 §9.1）。同一条里的"边收边限容"部分 fork 本来就已跟，见 Fixed 表第 2 条。 |
 | Responses 工具定义改为递增 `additional_tools` | **未跟（有意）** | `internal/llm/openai/responses.go:59` 明确写着 "never sends previous_response_id / additional_tools"；`internal/llm/protocol.go:14` 也把这一点记为 fork 的 Responses 适配器定位。台账 §5「仍未做」。 |
 | 后台路径说明从四个路径工具的 schema 移至系统提示 | **未跟** | `internal/toolrun/toolrun.go:152` 仍把 `tool.BackgroundPathInstruction()` 拼进 `schema.Function.Description`。 |
 | 压缩按会话协议分派（Chat 用摘要模型、Responses 用当前模型并保存原生窗口） | **部分** | `72949a6` 只落了接缝：`contextRuntimeState.compactorFor` 按 `ProtocolCapabilities` 选后端，但目前恒定选中客户端摘要后端 `client_summary`，没有 Responses 原生窗口实现（台账 §5「仍未做」）。 |
@@ -91,7 +91,7 @@
 | --- | --- | --- | --- |
 | 高 | 日志查询 `--raw` 解耦、移除 `/log -t`、损坏行计数 | `internal/agent/commands/log.go`、`internal/logging/reader.go` | 用户可见；fork 与上游的 `log.go` 是兄弟版本，可对位移植 → 台账 §9.1～§9.3 |
 | 高 | 工具日志正文按类别限长 | 工具日志写入侧 | 与移除 `/log -t` 同一件事的另一半 → §9.5 |
-| 中 | `shell` stdout/stderr 上限 16 KiB → 256 KiB | `internal/tool/builtin/shell.go:24` | 一行常量 + 文档；"边收边限容"已经在了 |
+| 中 | ~~`shell` stdout/stderr 上限 16 KiB → 256 KiB~~ **已完成** | `internal/tool/builtin/shell.go:24` | 一行常量 + CHANGELOG；"边收边限容"本来就在 |
 | 中 | `/usage` 未知/非法/溢出显示 `null` | `internal/agent/commands/usage.go` | `atoiSafe` 现在把非法值当 0，混淆"坏了"与"真的是 0" → §9.6 |
 | 中 | `internal/fileops` rollback 的上游增量（会话绑定有效期、编码保持） | `internal/utils/fileops/rollback.go` | 需要把上游那 566 行读一遍再决定取哪部分，不要整文件替换 |
 | 低 | 启动插件告警不再等 Agent 创建 | `internal/app/runtime.go:215-260` | 上游行为更合理，但 fork 的告警通道与上游不同，需要先想清楚 service 模式往哪写 |
