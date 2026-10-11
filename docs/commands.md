@@ -447,24 +447,31 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 | `-n, --limit <n>` | 返回条数，默认 5。 |
 | `--days <n>` | 读取最近 n 天日志，默认 1。 |
 | `--level <level>` | 最低等级：`debug`、`info`、`warn`、`error`。 |
-| `-d, -i, -w, -e` | 等级快捷方式。 |
+| `-d, -i, -w, -e` | 最低等级快捷方式，**不改变展示方式**。 |
+| `--raw` | 显示文件里的完整原始记录，与等级筛选互相独立。 |
 | `--since <time>` | 只看某时间之后，例如 `2h`、`30m`、`2026-06-03`。 |
 | `--until <time>` | 只看某时间之前。 |
 | `--msg <text>` | 按 msg 字段过滤。 |
 | `--contains <text>` | 按文本、参数、结果或 raw 内容过滤。 |
 
+`--level debug` 与 `-d` 只降低门槛，**不会**顺带显示原始记录；要看原始记录显式加 `--raw`
+（例：`/log -d --raw`）。`--raw` 在 `/log`、`/audit`、`/atriwisp` 上都可用。
+
 `/log` 额外支持：
 
 | 选项 | 作用 |
 | --- | --- |
-| `-u`、`-a`、`-t` | 分别筛选用户、助手、工具事件。 |
+| `-u`、`-a` | 分别筛选用户、助手事件。 |
 | `-s, --system` | 筛选并显示 `system prompt` 日志。 |
 | `--hook` | 筛选 Hook 模块记录（`module=hook`）；可与 `--event` 等条件同时使用，不会互相覆盖。 |
+
+工具调用**只记录在 audit**，因此 `/log` 不再接受 `-t`；`/audit -t` 仍然可用。
 
 `/audit` 额外支持：
 
 | 选项 | 作用 |
 | --- | --- |
+| `-t` | 筛选 `event=tool_call` 的工具审计。 |
 | `--event <name>` | 按审计事件过滤，例如 `tool_call`、`llm_usage`、`permission_denied`。 |
 | `--risk <level>` | 按风险等级过滤。 |
 | `--actor <id>` | 按 actor ID 过滤。 |
@@ -483,6 +490,7 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 | `--event-key <key>` | 按 Atrinis event key 过滤。 |
 | `--event-id <id>` | 按内部 Atrinis event ID 过滤。 |
 | `--token <name>` | 按 token name 过滤，不包含 token 原文。 |
+| `--tag <tag>` | 按 Atriwisp tag 过滤，可重复，要求全部匹配。 |
 
 示例：
 
@@ -490,11 +498,14 @@ LLM 在 work 模式下可以通过 `discover_tool` 按需发现工具详情。�
 /log
 /log -w -n 10
 /log --system
+/log -d --raw
 /log --msg startup --days 3
 /audit --event tool_call --risk high -n 10
+/audit -t --raw -n 20
 /audit --actor cli:local --since 24h
 /atriwisp
 /atriwisp server-watchdog -n 20
+/atriwisp --tag watchdog --raw
 /atriwisp --source minecraft-main --mode llm --since 2h
 ```
 

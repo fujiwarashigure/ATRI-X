@@ -190,12 +190,9 @@ func TestLogCommandParsesTypeFiltersAndQuotedContains(t *testing.T) {
 		}
 	}
 
-	_, err = NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `-t`})
-	if err != nil {
-		t.Fatalf("log handle -t: %v", err)
-	}
-	if service.query.Fields["event"] != "tool_call" {
-		t.Fatalf("query = %#v", service.query)
+	// 工具调用只记录在 audit：/log -t 不再接受（与上游一致）。
+	if _, err = NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `-t`}); err == nil {
+		t.Fatal("/log -t must be rejected: tool calls are audit-only")
 	}
 
 	_, err = NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `--hook`})
@@ -290,6 +287,46 @@ func TestLogAndAuditCommandsCompleteOptionsAndValues(t *testing.T) {
 	}
 }
 
+// `--raw` 与 `-d` 解耦、`-t` 只留在 /audit、`--tag` 出现在 /atriwisp 的补全里。
+func TestLogCompletionReflectsRawAndToolFilterChanges(t *testing.T) {
+	options := func(handler command.Handler) map[string]string {
+		completer := handler.(command.Completer)
+		got := completer.Complete(context.Background(), command.CompletionRequest{Raw: "/x -", Prefix: "/", Name: "x", Args: "-", Cursor: len("/x -")})
+		out := map[string]string{}
+		for _, item := range got {
+			out[item.Text] = item.Description
+		}
+		return out
+	}
+
+	logOptions := options(NewLog(Deps{}))
+	if _, ok := logOptions["--raw"]; !ok {
+		t.Fatalf("/log completion must offer --raw: %#v", logOptions)
+	}
+	if _, ok := logOptions["-t"]; ok {
+		t.Fatalf("/log completion must not offer -t: %#v", logOptions)
+	}
+	if logOptions["-d"] != "Minimum debug level" {
+		t.Fatalf("-d description = %q", logOptions["-d"])
+	}
+
+	auditOptions := options(NewAudit(Deps{}))
+	if _, ok := auditOptions["-t"]; !ok {
+		t.Fatalf("/audit completion must keep -t: %#v", auditOptions)
+	}
+	if _, ok := auditOptions["--raw"]; !ok {
+		t.Fatalf("/audit completion must offer --raw: %#v", auditOptions)
+	}
+
+	atriwispOptions := options(NewAtriwisp(Deps{}))
+	if _, ok := atriwispOptions["--raw"]; !ok {
+		t.Fatalf("/atriwisp completion must offer --raw: %#v", atriwispOptions)
+	}
+	if _, ok := atriwispOptions["--tag"]; !ok {
+		t.Fatalf("/atriwisp completion must offer --tag: %#v", atriwispOptions)
+	}
+}
+
 func TestLogCommandHelpAndRawDebug(t *testing.T) {
 	service := &fakeLogService{}
 	result, err := NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `-h`})
@@ -302,9 +339,20 @@ func TestLogCommandHelpAndRawDebug(t *testing.T) {
 	if !strings.Contains(result.Content, "-s, --system") {
 		t.Fatalf("log help missing system filter: %q", result.Content)
 	}
+	if !strings.Contains(result.Content, "--raw") {
+		t.Fatalf("log help missing --raw: %q", result.Content)
+	}
 
+	// -d 只降等级，不再顺带打开原始记录；要看原始记录必须显式加 --raw。
 	service.entries = []logging.LogEntry{{Message: "debug", Level: "DEBUG", Raw: "raw debug"}}
-	result, err = NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `-d`})
+	if _, err = NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `-d`}); err != nil {
+		t.Fatalf("log -d: %v", err)
+	}
+	if service.query.Raw {
+		t.Fatalf("-d must not enable raw records: %#v", service.query)
+	}
+
+	result, err = NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: `-d --raw`})
 	if err != nil {
 		t.Fatalf("log raw: %v", err)
 	}
@@ -322,7 +370,7 @@ func TestAtriwispCommandDebugShowsRawEntries(t *testing.T) {
 		Fields:  map[string]string{"atriwisp_name": "server-watchdog"},
 		Raw:     raw,
 	}}}
-	result, err := NewAtriwisp(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "-d"})
+	result, err := NewAtriwisp(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "-d --raw"})
 	if err != nil {
 		t.Fatalf("atriwisp handle: %v", err)
 	}
@@ -340,7 +388,7 @@ func TestLogCommandDebugShowsRawEntries(t *testing.T) {
 		Fields:  map[string]string{"body": "{big request}"},
 		Raw:     raw,
 	}}}
-	result, err := NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "--level debug"})
+	result, err := NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "--raw --level debug"})
 	if err != nil {
 		t.Fatalf("log handle: %v", err)
 	}
@@ -362,7 +410,7 @@ func TestLogCommandDebugShowsParsedBodyJSON(t *testing.T) {
 		Fields:  map[string]string{"body_json": body},
 		Raw:     raw,
 	}}}
-	result, err := NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "--level debug"})
+	result, err := NewLog(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "--raw --level debug"})
 	if err != nil {
 		t.Fatalf("log handle: %v", err)
 	}
@@ -414,7 +462,7 @@ func TestAuditCommandDebugShowsRawEntries(t *testing.T) {
 		Fields:  map[string]string{"event": "llm_usage"},
 		Raw:     raw,
 	}}}
-	result, err := NewAudit(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "--level debug"})
+	result, err := NewAudit(Deps{Logs: service}).Handle(context.Background(), command.Request{Args: "--raw --level debug"})
 	if err != nil {
 		t.Fatalf("audit handle: %v", err)
 	}

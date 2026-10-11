@@ -23,7 +23,8 @@ func auditInfo() command.Info {
   -n, --limit <n>       Number of events to show. Default: 5.
   --days <n>            Read logs from the last n days. Default: 1.
   --level <level>       Minimum level: debug, info, warn, error. Default: debug.
-  -d, -i, -w, -e       Shorthand for --level debug/info/warn/error. -d also shows raw entries.
+  -d, -i, -w, -e       Shorthand for --level debug/info/warn/error.
+  --raw                Show original physical log records.
   -u, -a, -t           Filter user/assistant/tool events.
   --hook               Filter hook events.
   --since <time>        Show events after a time, e.g. 2h, 30m, 2026-06-03, 2026-06-03T15:04:05.
@@ -59,7 +60,8 @@ func atriwispInfo() command.Info {
   -n, --limit <n>       Number of log lines to show. Default: 5.
   --days <n>            Read logs from the last n days. Default: 1.
   --level <level>       Minimum level: debug, info, warn, error. Default: debug.
-  -d, -i, -w, -e       Shorthand for --level debug/info/warn/error. -d also shows raw entries.
+  -d, -i, -w, -e       Shorthand for --level debug/info/warn/error.
+  --raw                Show original physical log records.
   --since <time>        Show logs after a time, e.g. 2h, 30m, 2026-06-03, 2026-06-03T15:04:05.
   --until <time>        Show logs before a time.
   --name <name>         Filter by Atriwisp name.
@@ -96,8 +98,9 @@ func logInfo() command.Info {
   -n, --limit <n>       Number of log lines to show. Default: 5.
   --days <n>            Read logs from the last n days. Default: 1.
   --level <level>       Minimum level: debug, info, warn, error. Default: debug.
-  -d, -i, -w, -e       Shorthand for --level debug/info/warn/error. -d also shows raw entries.
-  -u, -a, -t           Filter user/assistant/tool events.
+  -d, -i, -w, -e       Shorthand for --level debug/info/warn/error.
+  --raw                Show original physical log records.
+  -u, -a               Filter user/assistant events.
   -s, --system         Filter system prompt events.
   --hook               Filter hook events.
   --since <time>        Show logs after a time, e.g. 2h, 30m, 2026-06-03, 2026-06-03T15:04:05.
@@ -182,7 +185,8 @@ func logCompletionOptions(audit, atriwisp bool) []completionOption {
 		{Text: "--limit", Description: "Number of entries"},
 		{Text: "--days", Description: "Read logs from recent days"},
 		{Text: "--level", Description: "Minimum level"},
-		{Text: "-d", Description: "Debug level and raw entries"},
+		{Text: "--raw", Description: "Original physical records"},
+		{Text: "-d", Description: "Minimum debug level"},
 		{Text: "-i", Description: "Info level"},
 		{Text: "-w", Description: "Warn level"},
 		{Text: "-e", Description: "Error level"},
@@ -195,7 +199,6 @@ func logCompletionOptions(audit, atriwisp bool) []completionOption {
 		options = append(options,
 			completionOption{Text: "-u", Description: "User events"},
 			completionOption{Text: "-a", Description: "Assistant events"},
-			completionOption{Text: "-t", Description: "Tool events"},
 			completionOption{Text: "--hook", Description: "Hook events"},
 		)
 	}
@@ -207,6 +210,7 @@ func logCompletionOptions(audit, atriwisp bool) []completionOption {
 	}
 	if audit {
 		options = append(options,
+			completionOption{Text: "-t", Description: "Tool events"},
 			completionOption{Text: "--event", Description: "Filter audit event"},
 			completionOption{Text: "--risk", Description: "Filter risk level"},
 			completionOption{Text: "--actor", Description: "Filter actor ID"},
@@ -219,6 +223,7 @@ func logCompletionOptions(audit, atriwisp bool) []completionOption {
 			completionOption{Text: "--name", Description: "Filter Atriwisp name"},
 			completionOption{Text: "--atriwisp", Description: "Filter Atriwisp name"},
 			completionOption{Text: "--source", Description: "Filter event source"},
+			completionOption{Text: "--tag", Description: "Filter Atriwisp tag"},
 			completionOption{Text: "--id", Description: "Filter source event ID"},
 			completionOption{Text: "--source-id", Description: "Filter source event ID"},
 			completionOption{Text: "--mode", Description: "Filter Atrinis mode"},
@@ -296,7 +301,7 @@ func parseRuntimeLogQuery(args string) (logging.LogQuery, error) {
 	fields := map[string]string{}
 	if err := parseLogArgsWithOptions(args, &query, fields, func(name, value string) error {
 		return fmt.Errorf("unknown option: --%s", name)
-	}, logArgOptions{eventFilters: true, systemFilter: true}); err != nil {
+	}, logArgOptions{eventFilters: true, systemFilter: true, messageFilters: true}); err != nil {
 		return query, err
 	}
 	query.Fields = fields
@@ -362,7 +367,10 @@ func parseLogArgs(args string, query *logging.LogQuery, fields map[string]string
 type logArgOptions struct {
 	eventFilters bool
 	systemFilter bool
-	positional   func(value string) error
+	// messageFilters 表示这条命令按"消息事件"分类（-u / -a）：此时 -t 不适用，
+	// 工具调用只记录在 audit（见 docs/commands.md 的日志和审计）。
+	messageFilters bool
+	positional     func(value string) error
 }
 
 func parseLogArgsWithOptions(args string, query *logging.LogQuery, fields map[string]string, extra func(name, value string) error, opts logArgOptions) error {
@@ -419,10 +427,13 @@ func parseLogArgsWithOptions(args string, query *logging.LogQuery, fields map[st
 				return err
 			}
 			query.MinLevel = value
-			query.Raw = strings.EqualFold(value, "debug")
-		case "-d":
-			query.MinLevel = "debug"
+			// 等级筛选与展示方式互相独立：--level debug 只降低门槛，不再顺带打开原始记录。
+		case "--raw":
 			query.Raw = true
+		case "-d":
+			// 等级筛选与展示方式彻底解耦：-d 等价于 --level debug，
+			// 要看原始记录必须显式加 --raw。
+			query.MinLevel = "debug"
 		case "-i":
 			query.MinLevel = "info"
 		case "-w":
@@ -440,7 +451,7 @@ func parseLogArgsWithOptions(args string, query *logging.LogQuery, fields map[st
 			}
 			fields["event"] = "assistant_message"
 		case "-t":
-			if !opts.eventFilters {
+			if !opts.eventFilters || opts.messageFilters {
 				return fmt.Errorf("unknown option: %s", name)
 			}
 			fields["event"] = "tool_call"
