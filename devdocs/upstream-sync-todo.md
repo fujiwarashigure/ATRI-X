@@ -255,9 +255,13 @@
 
 **验证**：`gofmt -l` 干净；`go build ./...` 通过；`internal/llm`、`internal/agent/commands`、`internal/app` 测试全绿；`internal/agent` 仅剩 §6 既有环境失败。新用例见 `internal/agent/model_switch_test.go`（跨协议拒绝、responses 跨厂商拒绝、同厂商同协议放行、chat 跨厂商放行、无来源放行、其他模式槽位不拦、快照拒绝与放行）与 `internal/llm/origin_test.go`（规则表，对齐上游 `compatibility_test.go` 用例）。
 
-### 8.2 [ ] 移植 `internal/signal`，替换 hook 侧裸扇出
+### 8.2 [~] 移植 `internal/signal`，替换 hook 侧裸扇出
 
-上游 `internal/signal`（857 行源码 + 933 行测试 + 10 个 benchmark）**零 `atri-x/internal/*` 依赖**，只用标准库，是这次盘出来的唯一"可以整包搬"的东西。fork 现在靠 `hook.PointPlatformConnected` 手工扇出，没有背压、等待/执行超时、按 key 串行、panic→error 转换和关闭预算。搬包时**只搬包**，不引入 `internal/events` 与 `LogSubmitted`。
+上游 `internal/signal`（857 行源码 + 933 行测试 + 10 个 benchmark）**零 `atri-x/internal/*` 依赖**，只用标准库，是这次盘出来的唯一"可以整包搬"的东西。
+
+- [x] **1a 只落包** — 提交 `43a4e995`：8 个源文件 + 7 个测试文件原样移植（`git checkout refs/remotes/upstream/main -- internal/signal`，字节级一致），不改任何现有行为。验证：`gofmt -l internal/signal` 无输出、`go vet ./internal/signal/...` 通过、`go build ./...` 通过、`go test -count=1 -p 1 ./internal/signal/...` 通过。`devdocs/code-map.md` 的 Hook 与插件段已登记。
+- [ ] **1b 接管平台连接扇出**：现在 `internal/app/platforms.go` 的 connect notifier 直接把平台连接事实同步转给 `Agent.NotifyPlatformConnected`，由 hook 管理器在**同一条 goroutine** 上跑完所有 `platform.connected` 处理器，其中 `builtin.cron.missed_once` 会调模型并发送消息——即"平台连接回调被一次 LLM 补投递阻塞"，且没有按平台排队、超时和关闭预算。上游的做法（参考实现：`internal/events/platform.go` + `internal/agent/platform_signals.go` + `internal/cron/platform_signals.go`）是各平台适配器直接 `Emit` 全局信号，Hook 与 Cron **各自 `Observe` 订阅、各自持有按平台的 `signal.Queue`、各自管理关闭**。
+  - **待用户决策**（仓库规则要求新增包/符号先确认）：全局信号放哪个包；是只改 hook 侧（cron 继续挂在 hook 点上）还是 hook 与 cron 各自独立订阅。
 
 ### 8.3 [ ] 上游 CHANGELOG × fork 现状核对单
 
