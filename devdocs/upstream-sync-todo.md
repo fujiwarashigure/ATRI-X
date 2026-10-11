@@ -20,6 +20,7 @@
 - 已落地（P2 决策后按路线 D 补的接缝）：`72949a6` → 见任务 5。
 - 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `fe0d08a`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `96fc697` → 见任务 3。
 - 其他台账：Windows 部署文档修正 `d3cf410`、待办哈希回填 `77080ee`、进程级冒烟记录 `3492f26`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
+- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
   2. Telegram 群聊是否也跳过工具调用进度预览——OneBot 与 QQ 官方都跳过（`delivery.ShouldDropGroupToolPreview`），Telegram 从来没有这条规则。无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，因此未擅自改；若要一致，加一行该调用 + "目标是否群聊"的判断即可（见任务 4 的盘点表）。
@@ -225,5 +226,66 @@
 ## 7. 待盘点（增量）
 
 - [x] 上游是否有新的 `### Added` / `### Fixed` 需要挑拣：`git log --oneline HEAD..upstream/main` + 上游 `CHANGELOG.md` 的 Unreleased 段。
-  - **本轮盘点结果（无需挑拣）**：本地 `upstream/main` 仍是 `8457fdd`（"update dev docs"），未移动；`git ls-remote https://github.com/Elflare/elbot.git main` 返回同一个 `8457fdd`，与上一轮盘点一致。截至本次盘点，上游没有新的提交可供挑拣，`HEAD..upstream/main` 为空。
-  - **注意**：本仓库**没有配置 `upstream` remote**（只有 `origin`）。`refs/remotes/upstream/main` 是之前手工 fetch 留下的 ref；下一次增量盘点需要先 `git fetch https://github.com/Elflare/elbot.git main:refs/remotes/upstream/main`，否则会拿到过期结论。
+  - **上一轮（无新提交）**：本地 `upstream/main` 仍是 `8457fdd`（"update dev docs"），未移动；`git ls-remote` 返回同一个 `8457fdd`，`HEAD..upstream/main` 为空。
+  - **本轮盘点（2026-10-11 之后）**：上游已推进到 **`1aa10fd`**（"update log format"），自上次盘点新增 **25 个提交**（`8457fdd..1aa10fd`，510 文件 / +27580 / −12222）。上一轮之后 `refs/remotes/upstream/main` 一度被 prune 掉，已按下面的命令重新取回。
+    - 主题分布：信号与日志重做 11（`546408a2` `12266e17` `8faa9d34` step1、`e476f72c` `3540fc35` step2、`7d32594b` `e5bfc27a` `9549975d` `1aa10fd9` log format、`1dcb61c7` `32e22cdb` fix）、结构重构 3（`9234f85f` app、`d03af071` notify、`1ecaf4f2` cli ui）、其他修复 1、devdocs/AGENTS 4、自动翻译镜像 6。
+    - **用户可见的新功能只有 8 项**：`/log`、`/audit`、`/atriwisp` 新增 `--raw`（并从 `-d` 解耦）；移除 `/log -t`（`-t` 只留在 `/audit`，工具调用只进 audit）；`/audit --run_source foreground|cron|atrinis`；`/atriwisp --tag`（fork 早已有，见下）；损坏日志行不再中断查询并提示数量；`/usage` 未知/非法/溢出显示 `null`；工具日志正文按类别限长（读/查/说明 ≤128、执行/编辑/写入/媒体 ≤256）；模型信息超时 5s→30s（上游 `internal/modelmgr`，fork 无对应实现）。`### Added` 只有 `--raw` 一条，其余全在 Changed / Fixed。
+    - **可挑拣性判断**：这批新功能**没有一项能低成本单挑**——它们都长在 `internal/signal` + `internal/events` + `*/module` 这套新骨架上，而 fork 走 hook 路线、没有 `internal/signal`。但 `/log` 与 `/audit` 的**查询层**改动是可分离的：fork 的 `internal/agent/commands/log.go`（774 行）与上游 `internal/command/builtin/log.go`（780 行）是**兄弟版本**（同名同形的 `formatRawLogEntries` / `previousLogToken` / `completionOption` / `jsonQuotedLogValue`），上游本轮该文件只 +208/−153，因此按"对齐行为、不对齐实现"移植成本很低。已登记的待办见 §9。
+    - 另：上游本轮 `AGENTS.md` 两条改动建议采纳（见 §8.4）。
+  - **注意**：本仓库**没有配置 `upstream` remote**（只有 `origin`）。`refs/remotes/upstream/main` 是手工 fetch 留下的 ref（会被 `git fetch --prune` 清掉）；每次增量盘点前先 `git fetch https://github.com/Elflare/elbot.git main:refs/remotes/upstream/main`，否则会拿到过期结论。
+
+## 8. 上游借鉴项（本轮计划，按序落地）
+
+除"挑拣上游新功能"之外，本轮还把上游整库盘了一遍，找出 4 类值得借鉴的东西。执行顺序与状态：
+
+### 8.1 [x] 模型切换兼容性裁决（借鉴上游 `modelmgr.CanSwitch`）— 提交 `2bb0bbf0`
+
+**为什么值得借鉴**：上游 `modelmgr/compatibility.go` 的 `CanSwitch` 只有 30 行，却把"这段历史能不能交给目标模型"做成一个明确的裁决入口。fork 在 P2 路线 D 已经记下同样的事实（会话 metadata 的 `llm_origin`，`72949a6`），却**只记不用**：`/model` 能把一个 Responses 会话切到别的厂商的 Responses 模型、或直接切到 Chat Completions，切完才发现上下文续不上。这是"借鉴裁决而不是搬实现"的低成本样例。
+
+| 改动 | 位置 |
+| --- | --- |
+| `Origin{Protocol, Provider}` + `CanSwitch`（与上游同名同形，规则逐条对齐；错误文案改英文与 fork 现有 Go 错误统一） | `internal/llm/origin.go`（新） |
+| 切当前会话模式前裁决；`llmOriginFor` 归约协议（与 `recordLLMOrigin` 共用同一次判定） | `internal/agent/model.go` |
+| `/model --apply <快照>` 走同一个裁决（否则是现成的绕过口） | `internal/agent/model_snapshot.go` |
+| `SelectModelForMode` / `ApplyModelSnapshot` 补 `ctx` | `internal/agent/commands/{register.go,model.go}` |
+
+**行为**：目标缺协议/厂商 → 拒绝；来源没记协议（旧会话）→ 放行；同协议且（chat_completions 或同厂商）→ 放行；其余 → 拒绝，且内存与 `state.toml` 都不改动。只拦**当前会话正在用的模式**；切其他模式槽位（如 work 会话里 `/model --chat`）不拦。
+
+**故意不做的**：不搬 `internal/modelmgr`（580 行；fork 的模型目录与选择在 `internal/agent/model.go` + `internal/app/models.go`，搬过来是纯搬家）；不引入上游的 `PrepareModel` / `CommitModelForMode` 两段式（fork 的 `SelectModelForMode` 一次完成，裁决插在中间即可）。
+
+**验证**：`gofmt -l` 干净；`go build ./...` 通过；`internal/llm`、`internal/agent/commands`、`internal/app` 测试全绿；`internal/agent` 仅剩 §6 既有环境失败。新用例见 `internal/agent/model_switch_test.go`（跨协议拒绝、responses 跨厂商拒绝、同厂商同协议放行、chat 跨厂商放行、无来源放行、其他模式槽位不拦、快照拒绝与放行）与 `internal/llm/origin_test.go`（规则表，对齐上游 `compatibility_test.go` 用例）。
+
+### 8.2 [ ] 移植 `internal/signal`，替换 hook 侧裸扇出
+
+上游 `internal/signal`（857 行源码 + 933 行测试 + 10 个 benchmark）**零 `atri-x/internal/*` 依赖**，只用标准库，是这次盘出来的唯一"可以整包搬"的东西。fork 现在靠 `hook.PointPlatformConnected` 手工扇出，没有背压、等待/执行超时、按 key 串行、panic→error 转换和关闭预算。搬包时**只搬包**，不引入 `internal/events` 与 `LogSubmitted`。
+
+### 8.3 [ ] 上游 CHANGELOG × fork 现状核对单
+
+逐条标"已跟 / 未跟 / 不适用"。已发现的具体缺口：`internal/fileops/rollback.go` 上游 566 行 vs fork `internal/utils/fileops/rollback.go` 243 行——两者共享同一批常量（`256*1024*1024` / `1024`）和逐字相同的错误文案，说明 fork 拿到的是早期版本；上游后来加了会话绑定有效性与过期（`Binding` / `ErrRollbackExpired`）、目标路径、编码保持。另外 `/log`、`/audit` 的 8 项查询层功能也没有跟。
+
+### 8.4 [ ] fork 版信号/日志边界表 + `AGENTS.md` 采纳 mermaid 规则
+
+上游 `devdocs/signals-and-logging.md` 是唯一一份契约设计文档，其中"信号所有权与依赖边界"和"哪些场景必须同步完成、哪些可以广播"两张表值得照抄一份给 fork（不采用九字段契约也可以照抄）。`AGENTS.md` 建议采纳上游 `73b81e90` 那条：**"在架构规划时，写 Mermaid，并在其中注明每个文件职责"**。
+
+### 8.5 [ ] 通知队列与背压
+
+上游 `notification.Manager`：每平台默认 8 个发送槽 / 256 等待、同目标串行、队列满返回 `ErrQueueFull` 且不自动重试、真正发送前重查 binding、部分失败保留已发送 ID。fork 的 `agentOutputSender.SendNotice`（`internal/agent/output.go`）是同步直达平台适配器，这一层没有队列与容量上限（只有 OneBot 适配器内部另有 normal/high 队列），慢平台会拖住整轮对话。风险最高，放最后。
+
+**明确不搬**（已逐个核对，写在这里避免下一轮重新论证）：`internal/events`（九字段契约的载体）、`internal/modelmgr`、`internal/contextinfo`（只借"按域快照"的模式）、`*/module` 五个装配包、`internal/app` 拆成 12 个文件。`internal/fileops` / `internal/workspace` / `internal/sandbox` / `internal/doctor` / `internal/notification` 在 fork 都已有等价物（分别是 `internal/utils/fileops`、`internal/agent/workspace.go` + `internal/tool/builtin/workspace.go`、`tool.SandboxContext`、`internal/app/doctor.go`、`internal/delivery` + `Agent.SendNotice`），上游只是把它们提成了独立包——纯搬家，零收益、大冲突面。
+
+## 9. 待办：上游查询层新功能（可分离搬运）
+
+按 §7 的结论，这 8 项可以只动查询/展示层与写入侧的少量字段，不需要吞下上游的信号/日志骨架。按成本从低到高：
+
+| # | 功能 | 落点 | 状态 |
+| --- | --- | --- | --- |
+| 1 | `--raw` 与 `-d` 解耦（`/log` `/audit` `/atriwisp`）+ 补全项 | `internal/agent/commands/log.go` | `[ ]` |
+| 2 | 移除 `/log -t`（保留 `/audit -t`）+ 补全表更新（`session_naming_failed`→`session_naming_completed`、加 `hook_tool_log`） | 同上 | `[ ]` |
+| 3 | 损坏行计数与提示（`Reader.Query` 返回 `{Entries, DamagedCount, DamagedLines}`） | `internal/logging/reader.go` + `log.go` + `usage.go` + `maintenance/report.go` + `agent/logging.go` | `[ ]` |
+| 4 | `/audit --run_source foreground\|cron\|atrinis`（需先在 `tool_call` 审计写入侧加稳定字段） | `internal/agent/chat_tools.go` 等写入点 + `log.go` | `[ ]` |
+| 5 | 工具日志正文按类别限长（读/查/说明 ≤128、执行/编辑/写入/媒体 ≤256） | 工具日志写入侧 | `[ ]` |
+| 6 | `/usage` 未知/非法/溢出显示 `null`（现在 `atoiSafe` 把非法值当 0） | `internal/agent/commands/usage.go` | `[ ]` |
+| 7 | `/audit` 不再显示 JSON 转义 | 需先复现：fork 存的是 `body_json` 文本字段并在 raw 视图里缩进，可能不存在该缺陷 | `[ ]` |
+| 8 | `/atriwisp --tag` | — | `[x]` fork 早已有（`f15924be`），上游只是换了实现 |
+
+**不搬**：上游的 `ContentFields` / `ContentFieldContains`（那是"字段被塞进 JSON content 里"的补偿机制；fork 的 `key=value` 文本属性本来就能直接按字段筛 `risk` / `tool` / `actor_id`）、九字段 `LogRecord`、`ContentLimit` 强约束。**若要做，只搬查询层与写入侧的加法式字段**。
