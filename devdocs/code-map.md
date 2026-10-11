@@ -271,6 +271,7 @@ rg -n "SKILL.atriyph|ATRIX_SKILL|AgentSkill|go_skill_run|finalize|Lint|Catalog" 
 - `internal/agent/hooks.go`：Agent 的 Hook 执行、上下文和 continuation 接入。
 - `internal/agent/output.go`：Agent 的 Output Manager 与平台 sender 接入。
 - `internal/agent/media_output.go`：平台发送前解析 Hook/Tool 输出中的 media，并清理受控临时导出。
+- `internal/signal/`：通用类型化信号（`Signal[T,R]` / `Emit` / `EmitAsync` / `Connect` / `ConnectForward` / `Observe` / `Disconnect` / `CancelPending` / `Drain`），每个信号自带独立的调度队列、容量与并发上限、按 key 串行、超时和关闭策略；**不依赖任何 `atri-x/internal/*` 包**，因此是上游唯一可以整包移植的东西（来源见 `upstream-sync-todo.md` §8.2）。目前只落包 + 自带测试，尚未接管平台连接扇出。
 - `docs/hooks.md`：用户侧 Hook 文档。
 
 常用搜索：
