@@ -163,16 +163,21 @@ func (a *Agent) SelectNamingModel(arg string) (agentcommands.ModelOption, error)
 }
 
 func (a *Agent) SelectModel(ctx context.Context, arg string) (agentcommands.ModelOption, error) {
-	return a.SelectModelForMode(a.currentMode(ctx), arg)
+	return a.SelectModelForMode(ctx, a.currentMode(ctx), arg)
 }
 
-func (a *Agent) SelectModelForMode(mode, arg string) (agentcommands.ModelOption, error) {
+func (a *Agent) SelectModelForMode(ctx context.Context, mode, arg string) (agentcommands.ModelOption, error) {
 	selected, err := a.selectModelOption(arg)
 	if err != nil {
 		return agentcommands.ModelOption{}, err
 	}
 	// 与 SelectCompactModel 同理：先合并外部编辑，再改内存。
 	a.mergeExternalRuntimeState()
+	// 兼容性裁决必须在改内存之前：拒绝时内存与 state.toml 都要保持原样，
+	// 否则命令报了失败、选择却已经落地（见 checkModelSwitch）。
+	if err := a.checkModelSwitch(ctx, mode, selected.Provider, selected.Model); err != nil {
+		return agentcommands.ModelOption{}, err
+	}
 	if err := a.applyModeModelSelection(mode, selected.Provider, selected.Model); err != nil {
 		return agentcommands.ModelOption{}, err
 	}
@@ -529,6 +534,34 @@ func (a *Agent) clientForProvider(providerName string) llm.LLM {
 	a.modelRuntime.clientsMu.RLock()
 	defer a.modelRuntime.clientsMu.RUnlock()
 	return a.modelRuntime.clients[providerName]
+}
+
+// llmOriginFor 把"这个 provider/model 实际用哪套协议"归约成 llm.Origin。判定入口与
+// recordLLMOrigin 相同：取适配器**实际**报告的协议，而不是配置里声明的 api_mode——
+// 同一个 provider 可以按模型混用两种协议，只有实际那套决定这段历史能不能续链。
+func (a *Agent) llmOriginFor(provider, model string) llm.Origin {
+	return llm.Origin{
+		Protocol: llm.ProtocolCapabilitiesOf(a.clientForProvider(provider), model).Protocol,
+		Provider: provider,
+	}
+}
+
+// checkModelSwitch 在把"当前会话正在用的模式"切到另一个模型之前做兼容性裁决。
+//
+// 只拦当前会话：切换别的模式槽位（当前会话用不到，例如在一个 work 会话里
+// `/model --chat`）时放行，否则预配置会被一个无关会话的历史卡住。没有当前会话、
+// 或会话还没记过 llm_origin 时也放行，由 llm.CanSwitch 决定剩下的规则。
+func (a *Agent) checkModelSwitch(ctx context.Context, mode, provider, model string) error {
+	if a.sessions == nil || provider == "" || model == "" {
+		return nil
+	}
+	current, err := a.sessions.Current(ctx, a.scope(ctx))
+	if err != nil || current == nil || current.Mode != mode {
+		return nil
+	}
+	saved := decodeSessionMetadata(current.Metadata).LLMOrigin
+	source := llm.Origin{Protocol: llm.Protocol(saved.Protocol), Provider: saved.Provider}
+	return llm.CanSwitch(source, a.llmOriginFor(provider, model))
 }
 
 func (a *Agent) attachLLMRetryNotifier(client llm.LLM, providerName string) {

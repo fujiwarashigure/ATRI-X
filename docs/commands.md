@@ -42,6 +42,10 @@ ATRI-X 的 slash 命令由 Agent Core 统一处理，CLI、QQ、后续平台共�
 
 模型参数可以是列表编号、模型名或 `provider/model`。
 
+切换**当前会话正在用的**模式时会先做协议/厂商兼容性裁决：会话历史由 Responses 产生时只允许切到同厂商的
+Responses 模型，由 Chat Completions 产生时允许跨厂商切换。不兼容时命令直接失败且不改动任何选择，按提示
+新建会话或切回兼容模型即可；切换其他模式槽位（当前会话用不到，例如在 work 会话里 `/model --chat`）不做检查。
+
 `/model --profiles` 列出的名字可以直接用于 `@model:<名字>` 和群策略的 `default-model`；
 标注 `unavailable` 的名字表示它指向的 provider 在当前进程里没有可用客户端，配置存在但用不了。
 

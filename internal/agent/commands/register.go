@@ -103,7 +103,9 @@ type ModelService interface {
 	CurrentCompactModel() ModelOption
 	CurrentNamingModel() ModelOption
 	SelectModel(ctx context.Context, arg string) (ModelOption, error)
-	SelectModelForMode(mode, arg string) (ModelOption, error)
+	// SelectModelForMode 切换某个模式槽位的模型。切的是当前会话正在用的模式时，
+	// 实现必须先做协议/厂商兼容性裁决（llm.CanSwitch），不兼容则整体拒绝、不改状态。
+	SelectModelForMode(ctx context.Context, mode, arg string) (ModelOption, error)
 	SelectCompactModel(arg string) (ModelOption, error)
 	SelectNamingModel(arg string) (ModelOption, error)
 	Models(query string) []ModelOption
@@ -115,7 +117,7 @@ type ModelService interface {
 	// 命名模型快照的读写入口，快照本身保存在 state.toml。
 	ModelSnapshots() []ModelSnapshot
 	SaveModelSnapshot(name string) error
-	ApplyModelSnapshot(name string) (ModelSnapshot, error)
+	ApplyModelSnapshot(ctx context.Context, name string) (ModelSnapshot, error)
 	DeleteModelSnapshot(name string) error
 }
 

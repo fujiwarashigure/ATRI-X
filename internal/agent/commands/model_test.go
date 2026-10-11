@@ -36,7 +36,7 @@ func (s *fakeModelService) SaveModelSnapshot(name string) error {
 	return nil
 }
 
-func (s *fakeModelService) ApplyModelSnapshot(name string) (ModelSnapshot, error) {
+func (s *fakeModelService) ApplyModelSnapshot(_ context.Context, name string) (ModelSnapshot, error) {
 	if s.applyErr != nil {
 		return ModelSnapshot{}, s.applyErr
 	}
@@ -63,7 +63,7 @@ func (s fakeModelService) SelectModel(context.Context, string) (ModelOption, err
 }
 func (s fakeModelService) SelectCompactModel(string) (ModelOption, error) { return ModelOption{}, nil }
 func (s fakeModelService) SelectNamingModel(string) (ModelOption, error)  { return ModelOption{}, nil }
-func (s fakeModelService) SelectModelForMode(string, string) (ModelOption, error) {
+func (s fakeModelService) SelectModelForMode(context.Context, string, string) (ModelOption, error) {
 	return ModelOption{}, nil
 }
 func (s fakeModelService) Models(query string) []ModelOption {
@@ -365,7 +365,7 @@ type recordingModelService struct {
 	arg  string
 }
 
-func (s *recordingModelService) SelectModelForMode(mode, arg string) (ModelOption, error) {
+func (s *recordingModelService) SelectModelForMode(_ context.Context, mode, arg string) (ModelOption, error) {
 	s.mode = mode
 	s.arg = arg
 	return ModelOption{Provider: "openai", Model: "gpt-4.1"}, nil

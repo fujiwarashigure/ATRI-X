@@ -92,7 +92,7 @@ func (c modelCommand) Handle(ctx context.Context, req command.Request) (*command
 		if deps.Models == nil {
 			return nil, fmt.Errorf("model service unavailable")
 		}
-		applied, err := deps.Models.ApplyModelSnapshot(args)
+		applied, err := deps.Models.ApplyModelSnapshot(ctx, args)
 		if err != nil {
 			return nil, err
 		}
@@ -109,11 +109,11 @@ func (c modelCommand) Handle(ctx context.Context, req command.Request) (*command
 	var selected ModelOption
 	switch target {
 	case modelTargetChat:
-		selected, err = deps.Models.SelectModelForMode(storage.SessionModeChat, args)
+		selected, err = deps.Models.SelectModelForMode(ctx, storage.SessionModeChat, args)
 	case modelTargetWork:
-		selected, err = deps.Models.SelectModelForMode(storage.SessionModeWork, args)
+		selected, err = deps.Models.SelectModelForMode(ctx, storage.SessionModeWork, args)
 	case modelTargetAtriwisp1, modelTargetAtriwisp2, modelTargetAtriwisp3:
-		selected, err = deps.Models.SelectModelForMode(string(target), args)
+		selected, err = deps.Models.SelectModelForMode(ctx, string(target), args)
 	case modelTargetCompact:
 		selected, err = deps.Models.SelectCompactModel(args)
 	case modelTargetNaming:

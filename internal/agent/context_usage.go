@@ -122,19 +122,16 @@ func (a *Agent) recordLLMOrigin(ctx context.Context, session *storage.Session, s
 	if a.store == nil || session == nil || session.ID == "" || selection.Provider == "" || selection.Model == "" {
 		return
 	}
-	origin := llmOriginState{
-		Protocol: string(llm.ProtocolCapabilitiesOf(a.clientForProvider(selection.Provider), selection.Model).Protocol),
-		Provider: selection.Provider,
-		Model:    selection.Model,
-	}
-	if decodeSessionMetadata(session.Metadata).LLMOrigin == origin {
+	origin := a.llmOriginFor(selection.Provider, selection.Model)
+	state := llmOriginState{Protocol: string(origin.Protocol), Provider: origin.Provider, Model: selection.Model}
+	if decodeSessionMetadata(session.Metadata).LLMOrigin == state {
 		return
 	}
 	err := a.mutateSessionMetadata(ctx, session, func(metadata *sessionMetadata) bool {
-		if metadata.LLMOrigin == origin {
+		if metadata.LLMOrigin == state {
 			return false
 		}
-		metadata.LLMOrigin = origin
+		metadata.LLMOrigin = state
 		return true
 	})
 	if err != nil && a.logger != nil {

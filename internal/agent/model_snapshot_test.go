@@ -1,6 +1,7 @@
 package agent
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strings"
@@ -124,7 +125,7 @@ func TestApplyModelSnapshotRestoresEverySlot(t *testing.T) {
 	a.setNamingModel(config.ModelSelection{Provider: "other", Model: "changed-naming"})
 	a.contextRuntime.setCompactModel(config.ModelSelection{Provider: "other", Model: "changed-compact"})
 
-	applied, err := a.ApplyModelSnapshot("cheap")
+	applied, err := a.ApplyModelSnapshot(context.Background(), "cheap")
 	if err != nil {
 		t.Fatalf("ApplyModelSnapshot: %v", err)
 	}
@@ -164,7 +165,7 @@ func TestApplyModelSnapshotRejectsUnknownProviderWithoutPartialApply(t *testing.
 			storage.SessionModeChat: {Provider: "missing", Model: "ghost"},
 		}},
 	}
-	if _, err := a.ApplyModelSnapshot("broken"); err == nil {
+	if _, err := a.ApplyModelSnapshot(context.Background(), "broken"); err == nil {
 		t.Fatal("ApplyModelSnapshot with an unknown provider must fail")
 	}
 	current := a.modeModelsSnapshot()
@@ -175,11 +176,11 @@ func TestApplyModelSnapshotRejectsUnknownProviderWithoutPartialApply(t *testing.
 
 func TestApplyModelSnapshotExplainsMissingName(t *testing.T) {
 	a := newModelSnapshotTestAgent(t)
-	if _, err := a.ApplyModelSnapshot("nope"); err == nil || !strings.Contains(err.Error(), "--snapshots") {
+	if _, err := a.ApplyModelSnapshot(context.Background(), "nope"); err == nil || !strings.Contains(err.Error(), "--snapshots") {
 		t.Fatalf("missing snapshot error = %v", err)
 	}
 	a.modelProfiles = map[string]config.ModelSelection{"fast": {Provider: "prov", Model: "fast-model"}}
-	if _, err := a.ApplyModelSnapshot("fast"); err == nil || !strings.Contains(err.Error(), "profile") {
+	if _, err := a.ApplyModelSnapshot(context.Background(), "fast"); err == nil || !strings.Contains(err.Error(), "profile") {
 		t.Fatalf("static profile error = %v", err)
 	}
 }
@@ -206,10 +207,10 @@ func TestApplyModelSnapshotMergesExternalEditFirst(t *testing.T) {
 	if err := os.Chtimes(a.statePath, future, future); err != nil {
 		t.Fatalf("chtimes: %v", err)
 	}
-	if _, err := a.ApplyModelSnapshot("first"); err == nil {
+	if _, err := a.ApplyModelSnapshot(context.Background(), "first"); err == nil {
 		t.Fatal("first was replaced externally, applying it must fail")
 	}
-	if _, err := a.ApplyModelSnapshot("second"); err != nil {
+	if _, err := a.ApplyModelSnapshot(context.Background(), "second"); err != nil {
 		t.Fatalf("externally added snapshot must be merged in: %v", err)
 	}
 }
@@ -288,7 +289,7 @@ func TestModelSnapshotsSurviveRuntimeStateReload(t *testing.T) {
 	if len(list) != 1 || list[0].Name != "cheap" {
 		t.Fatalf("ModelSnapshots after reload = %#v", list)
 	}
-	if _, err := b.ApplyModelSnapshot("cheap"); err != nil {
+	if _, err := b.ApplyModelSnapshot(context.Background(), "cheap"); err != nil {
 		t.Fatalf("ApplyModelSnapshot after reload: %v", err)
 	}
 }

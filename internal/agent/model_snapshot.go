@@ -1,6 +1,7 @@
 package agent
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"sort"
@@ -90,7 +91,7 @@ func (a *Agent) SaveModelSnapshot(name string) error {
 
 // ApplyModelSnapshot 把命名快照里的模型选择整体切回去。任何 provider 在当前进程里不存在
 // 时整条拒绝、不做部分应用——半个模型集合比不改更糟。
-func (a *Agent) ApplyModelSnapshot(name string) (agentcommands.ModelSnapshot, error) {
+func (a *Agent) ApplyModelSnapshot(ctx context.Context, name string) (agentcommands.ModelSnapshot, error) {
 	if a == nil {
 		return agentcommands.ModelSnapshot{}, errors.New("agent unavailable")
 	}
@@ -116,6 +117,11 @@ func (a *Agent) ApplyModelSnapshot(name string) (agentcommands.ModelSnapshot, er
 		selection := snapshot.ModeModels[mode]
 		if _, ok := a.modelRuntime.providers[selection.Provider]; !ok {
 			return agentcommands.ModelSnapshot{}, fmt.Errorf("快照 %q 的 %s 指向未知 provider %q", key, mode, selection.Provider)
+		}
+		// 与 `/model` 同一个裁决：当前会话正在用的模式不能被快照悄悄切到不兼容的
+		// 协议/厂商。切其他模式槽位时 checkModelSwitch 直接放行。
+		if err := a.checkModelSwitch(ctx, mode, selection.Provider, selection.Model); err != nil {
+			return agentcommands.ModelSnapshot{}, fmt.Errorf("快照 %q 不能应用：%w", key, err)
 		}
 	}
 	if snapshot.CompactModel.Provider != "" {
