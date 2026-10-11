@@ -162,9 +162,39 @@ atri-x.exe service run
 
 **没覆盖到的（诚实标注）**：`CloseNoticeQueues` / `ClosePlatformEvents` 的"先停止接纳再排空"只由单元测试覆盖——`atri-x service run` 没有优雅停机入口（`Stop-Process` 是硬杀，不经 30 秒关闭预算），所以进程级没有验证"关闭时排空在途通知"这件事；`internal/app` 的 Runner 测试覆盖了 cleanups 的执行顺序与预算。
 
+### 6.3 平台失败隔离、service 保活与跨平台超管通知（后续追加）
+
+项2（平台失败隔离 + service 保活 + 超管通知 `fa3d31e`）改的是进程生命周期与 health 语义，因此专门做了一次**能真正触发平台失败**的进程级冒烟：把 CLI WebSocket 服务端指向一个已被占用的端口，让唯一的平台运行时以 `bind: address already in use` 立刻退出；同时启用一个只会重连退避、不会退出的 Telegram 适配器（bogus token）作为"另一个仍在运行"的平台，`security.superadmins.telegram = ["999"]`。
+
+```
+go build -o <临时目录>\atri-x-smoke\atri-x.exe ./cmd/atri-x
+# app.toml: [platform.cli.server] enabled = true / listen = "127.0.0.1:33172"（先被一个 TcpListener 占住）
+#           [platform.telegram] enabled = true / bot_token = bogus / api_timeout_seconds = 1
+#           [security.superadmins] telegram = ["999"]
+set APPDATA=<临时目录>\atri-x-smoke\appdata
+set ATRIX_HEALTH_ADDR=127.0.0.1:33180
+set ATRIX_OPS_TOKEN=smoke-token
+atri-x.exe service run
+```
+
+| 项目 | 结果 |
+| --- | --- |
+| 平台失败 | `level=WARN msg="platform stopped with error" platform=cli error="listen tcp 127.0.0.1:33172: bind: Only one usage of each socket address ..."` |
+| 进程 | **存活**（12 秒后 `alive=True`）——改动前这里会 `return nil` 让进程以 exit 0 静默结束 |
+| `GET /live` | `200`，`uptime_seconds=11`（进程确实没退） |
+| `GET /ready` | `200`，`ready=true`，4 项检查全 `ok`（平台断开不影响 ready，与文档一致） |
+| `GET /healthz`（带 `X-Atrix-Ops-Token`） | `200`，`"degraded":true`；`platforms` 里 `cli` 为 `connected=false` + `last_disconnected_at` + `last_error` = 上面那条 bind 错误，`telegram` 为 `not connected` |
+| 超管通知 | 失败后 2 秒：`level=WARN msg="notice output failed" platform=telegram error="Post \"https://api.telegram.org/bot<redacted>/sendMessage\": context deadline exceeded"` —— 目标平台与收件人确实被解析并发起了真实发送（失败原因是假 token / 无外网） |
+
+**结论**：`MarkPlatformDisconnected`（此前全仓库只有测试调用）现在真的被调用，`/healthz` 会反映平台断开；service 模式在全部运行时退出后不再跟着退出；跨平台超管通知走到了真实发送路径。**没覆盖到的**：没有可用的真实平台，因此没有验证"通知成功送达"（只验证到发起发送）；`StopAppOnExit` 在非 service 模式下的退出（`atri-x run` + `/exit`）也只由单元测试覆盖。
+
 ## 7. 未覆盖的部分（诚实标注）
 
-- 没有跑完整 `go test ./...` 全仓（只覆盖了改动相关的包集合 + `hook/...`）。
+- 本轮（§6.3 这批改动）跑过完整 `go test -count=1 -vet=off -p 1 ./...`：全仓只有本机既有失败——
+  `internal/agent` 的 2 个 `TestEmoticonHook*`（`exec: "sh"` 缺失）与 1 例随机 `state.toml` 临时目录
+  清理竞态（本轮命中 `TestApplyModelSnapshotMergesExternalEditFirst`，单独跑通过）、
+  `internal/tool/builtin` 的 7 个 shell/PATH 相关用例、`internal/character` 与 `internal/request`
+  的 `[build failed]`（写测试二进制时 `Access is denied`，见 §6 的说明）。没有**新**失败。
 - 没有用真实平台（OneBot / Telegram / QQ 官方）做端到端消息冒烟：这些需要外部服务与
   密钥，本次没有条件。
 - 没有跑 `-race`：本机 Go 报 `-race requires cgo`，本机未启用 cgo。

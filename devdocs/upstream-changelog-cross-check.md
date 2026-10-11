@@ -12,16 +12,21 @@
 
 ## 0. 速览
 
+> **本轮（按台账 §10.5 执行）之后的增量**：原"未跟"里已有 6 条落地——`--raw` 解耦与移除
+> `/log -t` `7ac49156`、损坏行处理 `02ab47bb`、工具正文分类限长 `ff0a705`、`shell` 上限
+> `f14c47f`、`/usage` null `ff70d4d7`、启动插件告警 `275dfa75`。下表是首次核对时的口径，
+> 逐条的最新状态以各表行的"已跟/已完成"标注为准。
+
 | 状态 | 条数 | 说明 |
 | --- | --- | --- |
 | 已跟 | 19 | 上游改了、fork 也有等价实现 |
 | 部分 | 5 | 行为只对上一部分，或只落了接缝 |
-| 未跟 | 12 | fork 确实还没有（其中 10 条值得单独评估） |
+| 未跟 | 12 | fork 确实还没有（其中 10 条值得单独评估）；本轮已落地 6 条 |
 | 未跟（有意） | 2 | 是 fork 明确选定不做的差异，已记在 §1/§5 与台账 |
 | 不搬 | 3 | 纯包/文件结构重构，零行为收益、冲突面大 |
 | 不适用 | 1 | 上游条目依赖 fork 没有的包 |
 | 相反 | 1 | 两边取向相反（日志脱敏） |
-| 待复现 | 1 | 需要先复现才能判定（`/audit` JSON 转义） |
+| 待复现 | 1 | 需要先复现才能判定（`/audit` JSON 转义；本轮判定为**不存在该缺陷**，见台账 §9.1 第 7 项） |
 | **合计** | **44** | |
 
 ## 1. `### Added`（5 条）
@@ -32,7 +37,7 @@
 | Provider 新增 `api_mode="chat"/"response"` | **已跟** | `CHANGELOG.md:53`；`internal/app/models.go` 的 `newProviderLLM` 按 `[providers.*].api_mode` / `model_configs.<model>.api_mode` 选择适配器，混用时返回按模型分发的 `protocolRouter` |
 | `edit_file` 内存备份 + `/rollback` + `rollback_file` | **部分** | `CHANGELOG.md:36` 有；但实现规模差一倍：上游 `internal/fileops/rollback.go` 566 行 vs fork `internal/utils/fileops/rollback.go` 243 行。两者共享同一批常量（`256*1024*1024` / `1024`）和逐字相同的错误文案，说明 fork 拿到的是早期版本；上游后来加了**会话绑定有效性与过期**（`Binding` / `ErrRollbackExpired`）、`Target`、编码保持。→ 台账 §8.3 |
 | 仅超管可用的 `/doctor` | **已跟** | 台账 §0；`internal/app/doctor.go` + `internal/agent/commands/doctor.go` |
-| `/log` `/audit` `/atriwisp` 新增独立 `--raw`；损坏日志行不再中断查询并提示数量 | **未跟** | fork 的 raw 仍由 `-d` / `--level debug` 隐式打开（`internal/agent/commands/log.go:422-425`），没有 `--raw` 选项；`internal/logging/reader.go` 逐行 `append` 因此本来就不中断，但没有损坏计数与提示。→ 台账 §9.1 / §9.3 |
+| `/log` `/audit` `/atriwisp` 新增独立 `--raw`；损坏日志行不再中断查询并提示数量 | **已跟** | `--raw` 与 `-d` 解耦 `7ac49156`；损坏行处理 `02ab47bb`（fork 的病灶不是"中断"而是坏行占 `--limit` 配额并冒充记录，见台账 §9.1 第 3 项）。 |
 
 ## 2. `### Changed`（16 条）
 
@@ -42,7 +47,7 @@
 | 重构日志系统 | **不搬** | 九字段 `LogRecord` + 全局 `LogSubmitted` 信号（`internal/events`）。台账 P1#1 已判定不做。 |
 | 重构通知系统 | **部分** | 行为侧：群聊跳过工具预览规则已集中到 `internal/delivery`（`66826c7`）；结构侧：fork 仍是 `agentOutputSender.SendNotice` 同步直达适配器，没有上游 `notification.Manager` 的队列/背压/同目标串行。→ 台账 §8.5 |
 | 优化 CLI UI 逻辑 | **不搬** | 上游 `1ecaf4f2`，纯结构。 |
-| 工具调用仅记录 audit；移除 `/log -t`；日志精简工具内容记录 | **未跟** | fork 的 `/log` 仍接受 `-t`（`log.go:442-446` + `logInfo()` 帮助里的 `-u, -a, -t`）；工具参数/结果没有按类别限长。→ 台账 §9.2 / §9.5 |
+| 工具调用仅记录 audit；移除 `/log -t`；日志精简工具内容记录 | **已跟** | 移除 `/log -t` `7ac49156`；工具正文按类别限长 `ff0a705`（读取／查询／说明 128，执行／编辑／写入／媒体 256，参数统一 256）。→ 台账 §9.1 |
 | 平台连接事件改为发布全局信号，Hook 与 Cron 各自订阅、按平台排队并管理关闭 | **部分** | hook 侧已跟（`67508075`：`platform.PlatformConnected` + `internal/agent/platform_signals.go` 按平台队列 + `ClosePlatformEvents` 排空，纳入 `internal/app` 的 30 秒关闭预算）；**cron 侧仍挂在 hook 点 `builtin.cron.missed_once` 上**，没有独立订阅与独立队列（台账 §8.2 已记为有意差异）。另外 fork 保留 App 里的单一发布点，没有让每个适配器各自 `Emit`。 |
 | 工具支持按 API 类型限制发现、补全、预载和执行 | **未跟** | 代码里没有"协议类型 → 工具可用性"的联结（`git grep -E 'APIType\|apiType' internal` 无结果）。这是 P2 路线 D 里明确未实施的部分（台账 §5「仍未做」）。 |
 | `shell` 的 stdout／stderr 返回上限从各 16 KiB 提高到各 256 KiB | **已跟** | `internal/tool/builtin/shell.go:24` 已改成 `maxShellOutput = 256 * 1024`（提交见台账 §9.1）。同一条里的"边收边限容"部分 fork 本来就已跟，见 Fixed 表第 2 条。 |
@@ -89,12 +94,13 @@
 
 | 优先级 | 条目 | 落点 | 备注 |
 | --- | --- | --- | --- |
-| 高 | 日志查询 `--raw` 解耦、移除 `/log -t`、损坏行计数 | `internal/agent/commands/log.go`、`internal/logging/reader.go` | 用户可见；fork 与上游的 `log.go` 是兄弟版本，可对位移植 → 台账 §9.1～§9.3 |
-| 高 | 工具日志正文按类别限长 | 工具日志写入侧 | 与移除 `/log -t` 同一件事的另一半 → §9.5 |
+| 高 | ~~日志查询 `--raw` 解耦、移除 `/log -t`、损坏行计数~~ **已完成** | `internal/agent/commands/log.go`、`internal/logging/reader.go` | `7ac49156` / `02ab47bb` → 台账 §9.1 |
+| 高 | ~~工具日志正文按类别限长~~ **已完成** | 工具日志写入侧 | `ff0a705` → 台账 §9.1 |
 | 中 | ~~`shell` stdout/stderr 上限 16 KiB → 256 KiB~~ **已完成** | `internal/tool/builtin/shell.go:24` | 一行常量 + CHANGELOG；"边收边限容"本来就在 |
-| 中 | `/usage` 未知/非法/溢出显示 `null` | `internal/agent/commands/usage.go` | `atoiSafe` 现在把非法值当 0，混淆"坏了"与"真的是 0" → §9.6 |
-| 中 | `internal/fileops` rollback 的上游增量（会话绑定有效期、编码保持） | `internal/utils/fileops/rollback.go` | 需要把上游那 566 行读一遍再决定取哪部分，不要整文件替换 |
-| 低 | 启动插件告警不再等 Agent 创建 | `internal/app/runtime.go:215-260` | 上游行为更合理，但 fork 的告警通道与上游不同，需要先想清楚 service 模式往哪写 |
+| 中 | ~~`/usage` 未知/非法/溢出显示 `null`~~ **已完成** | `internal/agent/commands/usage.go` | `ff70d4d7` |
+| 中 | `/audit --run_source`（写入侧 `run_source` 字段 + 查询选项） | `internal/agent/chat_tools.go`、`internal/agent/commands/log.go` | **已完成 `6be328b`** |
+| 中 | `internal/fileops` rollback 的上游增量（会话绑定有效期、编码保持） | `internal/utils/fileops/rollback.go` | 整文件不搬（Binding 结构差异、编码保持本来就有）；核出的真缺陷 E 已修 `f96c2728`，F/G/B/A/H 仍在 §10.6 待定 |
+| 低 | ~~启动插件告警不再等 Agent 创建~~ **已完成** | `internal/app/runtime.go`、`internal/app/platforms.go` | `275dfa75`：告警改到 `Integrations.Attach` 之后由 `deliverHookNotices` 投递 |
 | 待定 | 高风险确认 / 追加确认的两个 bug、压缩交接先结束旧 Turn | `internal/agent`、`internal/turn` | 这三条都是上游"core refactor"的一部分（自建 `internal/turn` 状态机 + `execution_lifecycle.go`）。要吃它们就得先吃那套 `internal/turn` 重写，成本远高于前几条 —— **建议先单独复现"确认等待"和"压缩交接"是否真的在 fork 上出问题**，只在能复现时才考虑动 |
 
 ### 4.2 不适用 / 有意差异（不要再当"漏跟"处理）

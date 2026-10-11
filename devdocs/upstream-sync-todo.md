@@ -23,6 +23,15 @@
 - 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则；通知队列与背压 `e184df99`。**§8 五项全部完成。**
 - 已落地（§9 上游查询层搬运）：`--raw` 解耦与移除 `/log -t` `7ac49156`、`/usage` null 容错 `ff70d4d7`。
 - 已研究未落地：上游最新 5 个提交（`1aa10fd9..a0304ad4`）与 §9 剩余项的**逐项判定（直接移植 / 改造 / 不搬）**见 §9.1 与 §10。
+- 已落地（本轮按 §10.5 顺序执行，6 项 6 个提交）：
+  1. `/rollback` 新建文件冲突校验 `f96c2728`（§10.6 E，数据丢失级缺陷）；
+  2. 平台失败隔离 + service 模式保活 + 跨平台超管通知 + health 断开 + `errors.Is` 口径 `fa3d31e`（§10.1 / §10.4.1）；
+  3. 后台接管检查失败保守停下 + 两处漏检窗口 `474d304`（§10.2）；
+  4. 启动阶段 Hook 加载告警改到平台发送器就绪后投递 `275dfa75`（§9.1）；
+  5. `shell` 输出上限 256 KiB `f14c47f`、工具审计正文按类别限长 `ff0a705`、`/audit --run_source` `6be328b`（§9.1）；
+  6. 日志查询跳过损坏行并计数 `02ab47bb`（§9.1）。
+  研究结论本身记录在 `52e90fb`。
+- **仍留在 §10.6 的独立小项**：`/rollback` 的符号链接目标复核（F）、有界读取（G）、编辑备份 TOCTOU（B）、`Forget` 文案与实现不一致（A）、同目标锁（H）；§10.4.2 的 cron 取消分类。这些都在 §10.5 的"可选"档，未开工。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
   2. Telegram 群聊是否也跳过工具调用进度预览——OneBot 与 QQ 官方都跳过（`delivery.ShouldDropGroupToolPreview`），Telegram 从来没有这条规则。无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，因此未擅自改；若要一致，加一行该调用 + "目标是否群聊"的判断即可（见任务 4 的盘点表）。
@@ -214,6 +223,7 @@
 - `internal/agent`：`TestMemberPanelShowsOwnTasksAndQuota` / `TestGroupServicesCommandIntegration` / `TestModelsGroupsProvidersAndSwitchPersistsState` / `TestGroupKnowledge*` / `TestReminderCreateListRemoveAndDispatch` / `TestLearningModerationActionsAreGranularAndRevocable` 等**偶发**失败，报错是 `TempDir RemoveAll cleanup: unlinkat ...: The directory is not empty` —— 测试返回后仍有迟到的 `state.toml` 写入落在那次 `t.TempDir()` 里，属于测试夹具的清理竞态，与 `stateWriteMu`（只串行化同一实例的写回）无关；单独跑这些测试稳定通过，全包连跑约每次命中 1 例。
   - **归属已实测**：用 `git worktree add` 检出改动前的 `fe0d08a`，在同样的并行负载下（`./internal/agent/ ./internal/tool/builtin/ ./internal/platform/refcontext/`）跑 4 轮，同样出现 `TestLearningModerationActionsAreGranularAndRevocable` / `TestModelsGroupsProvidersAndSwitchPersistsState` 等偶发失败；单独跑 `./internal/agent/` 3 轮则稳定只有 2 个 `TestEmoticonHook*`。因此这些 flake 是既有的负载敏感问题，不是本次改动引入。
   - **本轮（§8.2 / §8.5 之后）追加观察**：连跑 8 轮 `./internal/agent/`，每轮固定只有 2 个 `TestEmoticonHook*`，另外每轮随机命中 **1 例** `TempDir RemoveAll cleanup: ... The directory is not empty`，命中的用例在三轮里分别是 `TestBudgetLedgerPersistsAndIsIdempotent`、`TestLearningModerationActionsAreGranularAndRevocable`、`TestModelsGroupsProvidersAndSwitchPersistsState`；另有一次扫描命中 `TestSaveModelSnapshotKeepsSnapshotWithConcurrentExternalEdit`（该用例随后单独跑 3/3、全包再跑 8 轮均通过）。这些用例都往 `t.TempDir()` 里写 `state.toml`，命中对象随机 → 与上面的"迟到写入落在已删除临时目录"是同一类，不是本次改动引入。
+  - **本轮（§10.5 六项落地后）追加观察**：完整 `go test -count=1 -vet=off -p 1 ./...` 过一遍，全仓没有新失败；`internal/agent` 除 2 个 `TestEmoticonHook*` 外仍随机命中 1 例 `state.toml` 临时目录清理竞态（本轮命中 `TestApplyModelSnapshotMergesExternalEditFirst`，单独跑 1/1 通过），`internal/character` 与 `internal/request` 仍因写测试二进制 `Access is denied` 报 `[build failed]`。
 - `internal/tool/builtin`：4 个 `TestAnalyzeBashShellAdvice*`，以及 `TestShellToolUsesConfiguredEnvironment` / `TestResolveWindowsShellCachedAndValid` / `TestShellMediaInputsAndCleanup`（本机 `bash` 来自 WSL 但 `sh` 不存在、且 shell 解析结果随 PATH 变化）。
 - `internal/tool/skill`：`TestFinalizeAtrixSkillReturnsBuildFailure`（测试内部跑 `go build`）。
 - `internal/hook/rules`：`TestExecCancellationKillsDescendantProcesses`（依赖 TCP 回连，本机 accept 超时）。
@@ -332,6 +342,8 @@
 
 ### 9.1 逐项判定（本轮研究结论）
 
+**本轮执行结果（6 项 6 个提交）**：第 3 项损坏行 `02ab47bb`；第 4 项 `/audit --run_source` `6be328b`；第 5 项工具正文分类限长 `ff0a705`；第 7 项判定"不搬"（fork 无该缺陷）；`shell` 上限 `f14c47f`；启动插件告警 `275dfa75`；`internal/fileops/rollback.go` 整文件不搬，但其中核对出的真缺陷 E 已修 `f96c2728`。
+
 判定分三档：**直接移植**（可整段照抄）· **改造**（只搬行为，在 fork 的等价落点重写）· **不搬**（依赖上游骨架，或 fork 不存在该缺陷）。
 
 | # | 项目 | 判定 | 依据 |
@@ -413,6 +425,8 @@
 | 7 | §9.1 `shell` 上限 1 行 + 工具日志分类限长 | 行为对齐 / 整洁性 | 很小 |
 | 8 | §9.1 损坏行跳过与计数 | 行为对齐（中成本，涉及 `Reader.Query` 签名与 4 个消费点） | 中 |
 
+**执行结果**：1 → `f96c2728`；2 → `fa3d31e`（含 §10.4.1 的 `errors.Is` 口径）；3 → `474d304`；4 → `275dfa75`；5 → `6be328b`；6 → `ff0a705`；7（与 5 同项）→ `f14c47f`；8 → `02ab47bb`。未开工：§10.4.2（cron 取消分类）与 §10.6 的 F / G / B / A / H。
+
 **明确不做**：§9.1 的 `/audit` JSON 转义（fork 无此缺陷，已有回归测试）、`internal/fileops/rollback.go` 的整文件替换（结构不同；只搬 §10.6 列出的几条独立缺陷）、§10.3（无对应结构）、§10.2 的局部信号与 `Execution` 快照（依赖 fork 没有的骨架）。
 
 ### 10.6 顺带发现：`/rollback` 的几条真缺陷（不由 `6fd1d1c` 引入，核对上游实现时发现）
@@ -421,7 +435,7 @@
 
 | # | 上游行为 | fork 现状 | 判定 |
 | --- | --- | --- | --- |
-| **E** | 提交前对**新建**路径同样复核 `RevisionAfter`（上游 `inspectFileState`，覆盖新建与覆盖两条路径） | 只在"文件原本存在"分支比对 `ContentRevision(current) != record.RevisionAfter`（`rollback.go:186-203`）；`!existed` 分支只 `os.Lstat` 看**存不存在**，存在就 `os.Remove`（`:204-214`） | **必修（数据丢失）**：ATRI-X 新建的文件、用户随后改了它，`/rollback` 与 `rollback_file` 会**直接删掉用户的新内容**，既不报 `ErrRollbackConflict`，也与工具自述"不覆盖 Shell 或外部程序在编辑之后做的修改"（`internal/tool/builtin/file_rollback.go:37`）矛盾。现有测试 `TestRollbackStoreRemovesFileCreatedByTheEdit`（`rollback_test.go:64-81`）只覆盖"没被改过"。修法与既有分支对称：删除前读当前内容 + `ContentRevision != RevisionAfter` → `ErrRollbackConflict`（并确认是普通文件），约 10 行 + 一个用例。 |
+| **E** | 提交前对**新建**路径同样复核 `RevisionAfter`（上游 `inspectFileState`，覆盖新建与覆盖两条路径） | 已在删除前先 `os.ReadFile` 并比对 `ContentRevision(current) != record.RevisionAfter`（不一致返回 `ErrRollbackConflict`） | **已修 `f96c2728`（数据丢失）**：此前 `!existed` 分支只看文件是否存在就删除，用户改过 ATRI-X 新建的文件后再回滚会静默删掉那些改动；也与工具自述"不覆盖 Shell 或外部程序在编辑之后做的修改"矛盾。新增 `TestRollbackStoreKeepsCreatedFileChangedAfterTheEdit` 与 `TestRollbackStoreReportsMissingCreatedFile`。 |
 | **F** | 记录"解析后的真实目标"并在回滚前复核（`ResolveFileTarget` / `checkFileTarget` / "file target changed; rollback refused"） | 直接对 `record.Path` 做 `os.ReadFile` / `os.Remove` / `AtomicWriteFile`（`:187/205/211/201`），而 `AtomicWriteFile` 明确**会写穿符号链接**（`internal/utils/fileops/atomic_write.go:10-12`） | **建议做**：记录后该路径的符号链接被改指别处时，回滚会读/写新目标，可能覆盖用户没编辑过的文件。需要在 `rollbackRecord` 里存下解析后的目标（会改 `RollbackInfo` 结构与 `Record` 签名，调用点 4 处），约 20–30 行。 |
 | **G** | 有界读取 `readRevisionBytes`（先 stat 判普通文件与大小，再 `io.LimitReader`） | `os.ReadFile` 整文件入内存，无类型/大小前置（`rollback.go:187`） | **建议做**：外部把该路径换成超大文件时 `/rollback` 会读满内存。约 20 行（需在记录里存 after 大小）。 |
 | **B** | 备份取自**编辑自己那次读取**的字节（`options.beforeWrite`，上游 `:189-231`） | 编辑**之前另做一次** `captureEditBackup`（`internal/tool/builtin/file_tools.go:530`、`:542-554`）再调 `EditFileWithOptions`（`:531`）：两次读取之间有 TOCTOU 窗口，期间被并发改写时记下的"编辑前内容"不是紧邻编辑前的版本 | **单独排期**（要动编辑核心，给 `fileops.EditFileOptions` 加钩子，约 50–70 行）。今天的两次读取用同一个 100 MiB 上限，所以不存在"采集失败被当成新建"的问题。 |
