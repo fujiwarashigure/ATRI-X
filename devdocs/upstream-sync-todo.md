@@ -20,7 +20,7 @@
 - 已落地（P2 决策后按路线 D 补的接缝）：`72949a6` → 见任务 5。
 - 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `fe0d08a`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `96fc697` → 见任务 3。
 - 其他台账：Windows 部署文档修正 `d3cf410`、待办哈希回填 `77080ee`、进程级冒烟记录 `3492f26`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
-- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`。
+- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `2bb0bbf0`；移植 `internal/signal` 并接管平台连接扇出 `43a4e995` / `67508075`。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
   2. Telegram 群聊是否也跳过工具调用进度预览——OneBot 与 QQ 官方都跳过（`delivery.ShouldDropGroupToolPreview`），Telegram 从来没有这条规则。无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，因此未擅自改；若要一致，加一行该调用 + "目标是否群聊"的判断即可（见任务 4 的盘点表）。
@@ -255,13 +255,17 @@
 
 **验证**：`gofmt -l` 干净；`go build ./...` 通过；`internal/llm`、`internal/agent/commands`、`internal/app` 测试全绿；`internal/agent` 仅剩 §6 既有环境失败。新用例见 `internal/agent/model_switch_test.go`（跨协议拒绝、responses 跨厂商拒绝、同厂商同协议放行、chat 跨厂商放行、无来源放行、其他模式槽位不拦、快照拒绝与放行）与 `internal/llm/origin_test.go`（规则表，对齐上游 `compatibility_test.go` 用例）。
 
-### 8.2 [~] 移植 `internal/signal`，替换 hook 侧裸扇出
+### 8.2 [x] 移植 `internal/signal`，替换 hook 侧裸扇出
 
 上游 `internal/signal`（857 行源码 + 933 行测试 + 10 个 benchmark）**零 `atri-x/internal/*` 依赖**，只用标准库，是这次盘出来的唯一"可以整包搬"的东西。
 
 - [x] **1a 只落包** — 提交 `43a4e995`：8 个源文件 + 7 个测试文件原样移植（`git checkout refs/remotes/upstream/main -- internal/signal`，字节级一致），不改任何现有行为。验证：`gofmt -l internal/signal` 无输出、`go vet ./internal/signal/...` 通过、`go build ./...` 通过、`go test -count=1 -p 1 ./internal/signal/...` 通过。`devdocs/code-map.md` 的 Hook 与插件段已登记。
-- [ ] **1b 接管平台连接扇出**：现在 `internal/app/platforms.go` 的 connect notifier 直接把平台连接事实同步转给 `Agent.NotifyPlatformConnected`，由 hook 管理器在**同一条 goroutine** 上跑完所有 `platform.connected` 处理器，其中 `builtin.cron.missed_once` 会调模型并发送消息——即"平台连接回调被一次 LLM 补投递阻塞"，且没有按平台排队、超时和关闭预算。上游的做法（参考实现：`internal/events/platform.go` + `internal/agent/platform_signals.go` + `internal/cron/platform_signals.go`）是各平台适配器直接 `Emit` 全局信号，Hook 与 Cron **各自 `Observe` 订阅、各自持有按平台的 `signal.Queue`、各自管理关闭**。
-  - **待用户决策**（仓库规则要求新增包/符号先确认）：全局信号放哪个包；是只改 hook 侧（cron 继续挂在 hook 点上）还是 hook 与 cron 各自独立订阅。
+- [x] **1b 接管平台连接扇出** — 提交 `67508075`（+ 断言测试与冒烟记录 `1b5ae845`）。
+  - **改动前的问题**：`internal/app/platforms.go` 的 connect notifier 直接把平台连接事实同步转给 `Agent.NotifyPlatformConnected`，由 hook 管理器在**同一条 goroutine** 上跑完所有 `platform.connected` 处理器，其中 `builtin.cron.missed_once` 会调模型并发送消息——等于把一次 LLM 补投递压在平台连接回调上，而且没有队列、超时和关闭预算。
+  - **已确认的两个决策**（用户选定）：全局信号放 `internal/platform`（不新开 `internal/events`，避免与"不引入上游九字段日志契约"的既有决策混淆）；范围只改 hook 侧，cron 继续挂在 hook 点 `builtin.cron.missed_once` 上。
+  - **落地**：`internal/platform/platform.go` 新增 `ConnectedEvent{Platform}` + `PlatformConnected`；`internal/agent/platform_signals.go`（新）里 `StartPlatformEvents` 订阅并按平台建 `signal.Queue`（默认 256 等待 / 1 并发），worker 上跑 `handlePlatformConnected`，`ClosePlatformEvents` 先停止接纳再排空；`internal/app/integrations.go` 在适配器启动前订阅（信号不缓存、不重放）；`internal/app/runtime.go` 的 `hookRuntimeLifecycle` 先关平台连接订阅、再关 hook 运行时。
+  - **验证**：`gofmt -l internal/` 干净；`go build ./...` 通过；`./internal/agent/`、`./internal/app/`、`./internal/platform/...`、`./internal/cron/...`、`./internal/hook/...`、`./internal/signal/` 全绿（`internal/agent` 仅剩 §6 既有环境失败）。新用例：`internal/agent/platform_signals_test.go`（信号驱动 hook、发布方不等 hook 业务、同平台串行 max 并发 = 1、关闭后不再接纳、幂等且不可重启）、`internal/app/platforms_signal_test.go`（连接回调确实发布信号、适配器不报名字时用适配器名）。进程级冒烟见 [`smoke-test-report.md`](smoke-test-report.md) §6.1。
+  - **与上游的差异（有意）**：上游让**每个平台适配器**直接 `Emit`，并让 Hook 与 Cron 各自订阅；fork 保留 App 里的单一发布点（`registerPlatformHooks` 的 notifier），只让 hook 侧订阅。
 
 ### 8.3 [ ] 上游 CHANGELOG × fork 现状核对单
 
