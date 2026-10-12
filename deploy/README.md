@@ -9,7 +9,7 @@
 > **不想在服务器上编译 Go？**
 > 仓库**不提交**预编译 / 离线产物，`deploy/dist/` 默认不存在；需要时先在本地或 CI 运行
 > `deploy/pack/prepare-offline.sh` 生成，再上传服务器。生成方式见 [`pack/README-OFFLINE.md`](pack/README-OFFLINE.md)：
-> - `deploy/dist/atri-x-0.6.8-linux-amd64.tar.gz`：`docker load` 直接可用（scratch 精简版，无 shell）；
+> - `deploy/dist/atri-x-0.9.0-linux-amd64.tar.gz`：`docker load` 直接可用（scratch 精简版，无 shell）；
 > - `deploy/dist/offline-amd64/`：预编译二进制 + Debian 运行时，服务器只需拉约 30MB debian 基础镜像，功能完整；
 > - 如果从仓库里找不到 `deploy/dist/`，属于正常现象，请先自行生成。
 
@@ -666,7 +666,7 @@ bash /opt/atri-x/deploy/restore-verify.sh /opt/atri-x/deploy/backups/atri-x-data
 
 ```bash
 # 1 / 0 / auto 之外，也接受 required / require / true / yes / false / no / off
-RESTORE_VERIFY_START=required RESTORE_VERIFY_IMAGE=atri-x:0.6.8 bash /opt/atri-x/deploy/restore-verify.sh /path/to/atri-x-data-*.tar.gz
+RESTORE_VERIFY_START=required RESTORE_VERIFY_IMAGE=atri-x:0.9.0 bash /opt/atri-x/deploy/restore-verify.sh /path/to/atri-x-data-*.tar.gz
 # 等待 /ready 的上限，默认 45 秒：
 RESTORE_VERIFY_START_TIMEOUT=90 ...
 # 关闭隔离启动检查：
@@ -742,7 +742,7 @@ bash rollback.sh
 `upgrade.sh` 只从**当前工作区**构建镜像，不会自动切换代码，所以它有两条硬性保护：
 
 - `deploy/VERSION` 与目标版本不一致时直接拒绝执行（`ATRIX_VERSION` / 默认值任一与源码不符都算），避免“只给旧代码贴新版本号”；确实只想改版本号时用 `ATRIX_ALLOW_VERSION_MISMATCH=1`；
-- 需要自动切源码时可以设置 `ATRIX_GIT_REF`（例如 `ATRIX_GIT_REF=v0.6.8 bash upgrade.sh`），脚本会先用 `git rev-parse --show-toplevel` 找到仓库根目录，再在根目录 `git fetch --tags` + `checkout --detach` 后校验一次版本；不要求 `.git` 在 `deploy/` 下。
+- 需要自动切源码时可以设置 `ATRIX_GIT_REF`（例如 `ATRIX_GIT_REF=v0.9.0 bash upgrade.sh`），脚本会先用 `git rev-parse --show-toplevel` 找到仓库根目录，再在根目录 `git fetch --tags` + `checkout --detach` 后校验一次版本；不要求 `.git` 在 `deploy/` 下。
 
 重建之后 `upgrade.sh` 会等待容器 healthcheck 变成 `healthy`，再在容器内执行 `atri-x doctor --no-model` 作为验收；任一步失败都会提示回滚命令并以非 0 退出。需要跳过或加严：
 
@@ -814,14 +814,14 @@ s3_secret_key_env = "ATRIX_S3_SECRET_ACCESS_KEY"
 
 ```bash
 docker login registry.cn-hangzhou.aliyuncs.com
-bash deploy/build-push.sh registry.cn-hangzhou.aliyuncs.com/<命名空间>/atri-x:0.6.8
+bash deploy/build-push.sh registry.cn-hangzhou.aliyuncs.com/<命名空间>/atri-x:0.9.0
 ```
 
 ### 9.2 腾讯云 TCR
 
 ```bash
 docker login ccr.ccs.tencentyun.com
-bash deploy/build-push.sh ccr.ccs.tencentyun.com/<命名空间>/atri-x:0.6.8
+bash deploy/build-push.sh ccr.ccs.tencentyun.com/<命名空间>/atri-x:0.9.0
 ```
 
 ### 9.3 服务器使用远端镜像
@@ -829,7 +829,7 @@ bash deploy/build-push.sh ccr.ccs.tencentyun.com/<命名空间>/atri-x:0.6.8
 编辑 `deploy/.env`：
 
 ```dotenv
-ATRIX_IMAGE=registry.cn-hangzhou.aliyuncs.com/<命名空间>/atri-x:0.6.8
+ATRIX_IMAGE=registry.cn-hangzhou.aliyuncs.com/<命名空间>/atri-x:0.9.0
 ```
 
 服务器登录私有仓库后：
@@ -853,7 +853,7 @@ Dockerfile 的 `VERSION` 构建参数只影响镜像内的版本字符串与 OCI
 
 ```bash
 PLATFORM=linux/amd64,linux/arm64 \
-  bash deploy/build-push.sh registry.cn-hangzhou.aliyuncs.com/<命名空间>/atri-x:0.6.8
+  bash deploy/build-push.sh registry.cn-hangzhou.aliyuncs.com/<命名空间>/atri-x:0.9.0
 ```
 
 多平台只能 `--push`（buildx 限制），脚本已处理。Dockerfile 的构建阶段固定在

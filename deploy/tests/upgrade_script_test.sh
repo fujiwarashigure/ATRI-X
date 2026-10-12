@@ -60,7 +60,7 @@ case "${1:-}" in
         ;;
     checkout)
         case "$*" in
-            *" v0.6.8"*) printf '0.6.8
+            *" v0.9.0"*) printf '0.9.0
 ' >"${FAKE_DEPLOY}/VERSION" ;;
         esac
         exit 0
@@ -161,11 +161,11 @@ if ! grep -q 'run .*config check' "${DOCKER_LOG}"; then
 fi
 
 echo "== case 3: GIT_REF alone resolves target version after checkout =="
-if ! run_upgrade "git-ref-only" ATRIX_GIT_REF=v0.6.8 ATRIX_VERSION=; then
+if ! run_upgrade "git-ref-only" ATRIX_GIT_REF=v0.9.0 ATRIX_VERSION=; then
     fail=1
 fi
-if ! grep -q '源码版本 0.6.8' "${TMP}/git-ref-only.log"; then
-    echo "FAIL: 未在切换源码后解析出 0.6.8 目标版本"
+if ! grep -q '源码版本 0.9.0' "${TMP}/git-ref-only.log"; then
+    echo "FAIL: 未在切换源码后解析出 0.9.0 目标版本"
     fail=1
 fi
 

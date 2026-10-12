@@ -120,7 +120,22 @@ Shell 补全可通过 `atri-x completion <shell>` 生成，支持 `bash`、`zsh`
 
 ## 本地定制版：相对原版 v0.5.0 的新增功能
 
-当前定制版版本：`0.6.8`。
+当前定制版版本：`0.9.0`。
+
+### v0.9.0 版本亮点
+
+- **项目改名为 ATRI-X**：仓库名、Go module、二进制与服务名、镜像名、环境变量前缀（`ELBOT_*` → `ATRIX_*`）、配置与数据目录、数据文件名和运维接口请求头（`X-Elbot-Ops-Token` → `X-Atrix-Ops-Token`）一起改；子系统更名为 `Atrinis` / `Atriwisp` / `Atriena` / `Atriyph`（技能扩展名 `SKILL.atriyph`），`EL Skill` 更名为 `ATRI-X Skill`（工具 `create_atrix_skill` 等）。**不提供旧名兼容**，已有部署请先按 `deploy/README.md` 的「改名迁移」清单改名。
+- `/audit --run_source foreground|cron|atrinis` 按工具调用的来源筛选；`/log`、`/audit`、`/atriwisp` 新增独立的 `--raw`，等级筛选不再顺带显示原始记录。
+- `/model` 切换**当前会话正在用的**模式时先做协议/厂商兼容性裁决，不兼容就直接失败并提示新建会话或切回兼容模型，不再出现切完续不上上下文的情况。
+- 平台连接改为进程级信号，连接回调不再把一次 LLM 补投递压在连接路径上；平台**非预期**退出会标记 health 断开并通知其他平台的超管。
+- `/usage` 把缺失、非法或溢出的用量显示为 `null` 并向上传递，不再把"没有记录用量"当成"用了 0 token"。
+- `shell` 工具单流输出上限从 16 KiB 提到 256 KiB；工具审计正文改为按工具类别限长，长命令的退出码与错误尾巴不再被挤掉。
+- 通知发送改为按平台排队（每平台 8 并发 / 256 等待，同一目标串行），队列满时立即报错而不是无限堆积。
+- 后台任务（Cron / Atrinis）的前台接管检查改为**读不到状态就保守停下**，并补齐两个晚到输出的漏检窗口。
+- 启动阶段的 Hook 插件加载告警不再静默，改为平台适配器就绪后投递给落地平台的超管。
+- 日志查询跳过解析不出 `time` / `level` / `msg` 的损坏行并计数，坏行不再冒充记录或占用 `--limit` 配额。
+- `/rollback` 删除「本次编辑新建的文件」前先核对内容，用户后来的修改不会被静默删掉。
+- `atri-x service run` 不再随全部平台运行时退出而结束，最后一个平台异常退出后进程仍存活并继续心跳。
 
 ### v0.6.8 版本亮点
 
@@ -612,15 +627,15 @@ docker compose up -d
 ```bash
 bash deploy/pack/prepare-offline.sh
 # 或使用已下载产物
-docker load -i atri-x-0.6.8-linux-amd64.tar.gz
+docker load -i atri-x-0.9.0-linux-amd64.tar.gz
 ```
 
 多架构构建：
 
 ```bash
 docker buildx build --platform linux/amd64,linux/arm64 \
-  -f deploy/Dockerfile --build-arg VERSION=0.6.8 \
-  --push -t <registry>/<namespace>/atri-x:0.6.8 .
+  -f deploy/Dockerfile --build-arg VERSION=0.9.0 \
+  --push -t <registry>/<namespace>/atri-x:0.9.0 .
 ```
 
 构建参数：

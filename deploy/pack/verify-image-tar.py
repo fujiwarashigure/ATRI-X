@@ -119,8 +119,8 @@ def verify(path: str, expect_tag: str = "") -> dict:
 def parse_args(argv):
     """返回 (expect_tag, 文件列表)。
 
-    --tag atri-x:0.6.8     指定期望 tag
-    --version 0.6.8       等价于 --tag atri-x:0.6.8
+    --tag atri-x:0.9.0     指定期望 tag
+    --version 0.9.0       等价于 --tag atri-x:0.9.0
     环境变量 ATRIX_VERSION 作为兜底；都没有时只做结构校验。
     """
     expect_tag = ""

@@ -11,8 +11,8 @@
 #
 # 多架构（需 buildx；一次产出 amd64 + arm64 的 manifest list）：
 #   docker buildx build --platform linux/amd64,linux/arm64 \
-#     -f deploy/Dockerfile --build-arg VERSION=0.6.8 \
-#     --push -t <registry>/<namespace>/atri-x:0.6.8 .
+#     -f deploy/Dockerfile --build-arg VERSION=0.9.0 \
+#     --push -t <registry>/<namespace>/atri-x:0.9.0 .
 #
 # 基础镜像可以覆盖（国内加速 / pin digest）：
 #   --build-arg GO_BASE_IMAGE=registry.cn-hangzhou.aliyuncs.com/library/golang

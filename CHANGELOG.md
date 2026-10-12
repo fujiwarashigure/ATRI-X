@@ -1,7 +1,8 @@
-## Unreleased
+## [v0.9.0 - 2026-10-12]
 
 ### Added
 
+- 版本号提升到 `0.9.0`；`deploy/VERSION`、Compose 默认镜像、构建/离线脚本和中文部署文档中的版本示例同步更新。这是项目从 `elbot_mk.2` 改名为 **ATRI-X** 之后的第一个发行版，仓库地址为 <https://github.com/fujiwarashigure/ATRI-X>，**改名不提供旧名兼容回退**，升级已有部署前请先按 [`deploy/README.md`](deploy/README.md) 的「改名迁移」清单改名。
 - `/audit --run_source foreground|cron|atrinis`：按工具调用的来源筛选。来源在调用现场固定并写进 `tool_call` 审计记录的 `run_source` 字段（前台会话、Cron、Atrinis 三种），`/audit` 的普通视图与 `--raw` 都能看到它；缺该字段的历史记录不会被补造，因此查不到就是查不到。取值只接受这三个字面量，非法值报错。
 
 ### Changed
