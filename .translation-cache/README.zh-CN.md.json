@@ -1,10 +1,10 @@
 {
   "segments": {
-    "README.zh-CN.md:code-comment:bash:61cdc2969aca2084ee70c5a0d7a826812aa0e7206c87d9ba3371a37f23fc241e": {
+    "README.zh-CN.md:code-comment:bash:491cd8e9cd8180fabfea3e8f4fdde620facc58b76ad73b657168c173999154c5": {
       "kind": "code-comment:bash",
       "source": "远程 CLI 客户端：连接常驻 ATRI-X 服务端",
       "source_file": "README.zh-CN.md",
-      "source_hash": "61cdc2969aca2084ee70c5a0d7a826812aa0e7206c87d9ba3371a37f23fc241e",
+      "source_hash": "491cd8e9cd8180fabfea3e8f4fdde620facc58b76ad73b657168c173999154c5",
       "translation": "Remote CLI client: Connect to a resident ATRI-X server",
       "updated_at": 1781965623
     },
@@ -56,6 +56,14 @@
       "translation": "1. Lightweight and Efficient",
       "updated_at": 1781749522
     },
+    "README.zh-CN.md:heading:2b4847dc66ad98a0e1edfdc43eb683b9befd4459824771119e88547dc8b5ca04": {
+      "kind": "heading",
+      "source": "三、Atrinis 事件感知系统",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "2b4847dc66ad98a0e1edfdc43eb683b9befd4459824771119e88547dc8b5ca04",
+      "translation": "III. Atrinis Event Perception System",
+      "updated_at": 1781749522
+    },
     "README.zh-CN.md:heading:5faa30fb295d4a928e75accbd303b682586ff582b35b9ecbbbbf27f151f9d6a0": {
       "kind": "heading",
       "source": "开发状态",
@@ -88,14 +96,6 @@
       "translation": "IV. Flexible Deployment and Enhanced Sessions",
       "updated_at": 1781749522
     },
-    "README.zh-CN.md:heading:d5311aa1777c001e0f60955eaa01463502c39bec02f68ee1cc614eba203642ec": {
-      "kind": "heading",
-      "source": "三、Atrinis 事件感知系统",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "d5311aa1777c001e0f60955eaa01463502c39bec02f68ee1cc614eba203642ec",
-      "translation": "III. Atrinis Event Perception System",
-      "updated_at": 1781749522
-    },
     "README.zh-CN.md:heading:df91bb1f6dfba1e0d9c02c6ccedbc6b23710d60921cdae26a55a90b9c0a9e9bc": {
       "kind": "heading",
       "source": "五、安全可靠",
@@ -104,14 +104,6 @@
       "translation": "V. Secure and Reliable",
       "updated_at": 1781749522
     },
-    "README.zh-CN.md:list:113d5c6c3a8591768ce4e14350d57601329232ba840bc27e3305a75d1757f3eb": {
-      "kind": "list",
-      "source": "[Atrinis 监听枢纽](docs/atrinis.md)",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "113d5c6c3a8591768ce4e14350d57601329232ba840bc27e3305a75d1757f3eb",
-      "translation": "[Atrinis Listening Hub](docs/atrinis.md)",
-      "updated_at": 1781709186
-    },
     "README.zh-CN.md:list:2a8cd679d6923429a0581d7dd60323a7218b259ec4fb783096bd559e342594b2": {
       "kind": "list",
       "source": "[快速开始](docs/getting-started.md)",
@@ -119,6 +111,14 @@
       "source_hash": "2a8cd679d6923429a0581d7dd60323a7218b259ec4fb783096bd559e342594b2",
       "translation": "[Quick Start](docs/getting-started.md)",
       "updated_at": 1781513003
+    },
+    "README.zh-CN.md:list:3918d45d9c7a1387be116b2993bcc38378a40b3cd1460a39d3337316b3b9ea96": {
+      "kind": "list",
+      "source": "[Atrinis 监听枢纽](docs/atrinis.md)",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "3918d45d9c7a1387be116b2993bcc38378a40b3cd1460a39d3337316b3b9ea96",
+      "translation": "[Atrinis Listening Hub](docs/atrinis.md)",
+      "updated_at": 1781709186
     },
     "README.zh-CN.md:list:3c8f5205ecf80196dc37f2660dfb4e9fe234cf1bde680f8b2518234d537bcf58": {
       "kind": "list",
@@ -144,45 +144,29 @@
       "translation": "[Command Cheat Sheet](docs/commands.md)",
       "updated_at": 1781513003
     },
-    "README.zh-CN.md:list:5e230c44f97af7244b97bc308f5a8e20355da2ae9b217d18697dd7731a72a968": {
+    "README.zh-CN.md:list:a14d7cda09ad8e4832a3cac2ccc2ec24a0f4e6409f0334d195bf36383c150118": {
       "kind": "list",
-      "source": "或手动在 __ATRIX_CODE_0__ 选择默认 __ATRIX_CODE_1__ / __ATRIX_CODE_2__ 模式和模型。",
+      "source": "通过系统环境变量或配置目录 __ATRIX_CODE_0__ 设置 __ATRIX_CODE_1__ 对应的 API Key。",
       "source_file": "README.zh-CN.md",
-      "source_hash": "5e230c44f97af7244b97bc308f5a8e20355da2ae9b217d18697dd7731a72a968",
-      "translation": "Or manually select the default __ATRIX_CODE_1__ / __ATRIX_CODE_2__ mode and model in __ATRIX_CODE_0__.",
-      "updated_at": 1782973974
-    },
-    "README.zh-CN.md:list:a0f2e99146f50ef99971aaaf97bdb0ea5c5581a95f4587bbbcdea4059016948c": {
-      "kind": "list",
-      "source": "输入 __ATRIX_CODE_0__ 查看命令，或直接开始对话。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "a0f2e99146f50ef99971aaaf97bdb0ea5c5581a95f4587bbbcdea4059016948c",
-      "translation": "Enter __ATRIX_CODE_0__ to view commands, or start a conversation directly.",
-      "updated_at": 1782973974
-    },
-    "README.zh-CN.md:list:a5308c5257a7cfe4edde08791e41c9954fd0a407bff2ce6aaabf33478c050847": {
-      "kind": "list",
-      "source": "启动后使用命令 __ATRIX_CODE_0__ 查看然后使用 __ATRIX_CODE_1__ 选择模型。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "a5308c5257a7cfe4edde08791e41c9954fd0a407bff2ce6aaabf33478c050847",
-      "translation": "After starting, use the command __ATRIX_CODE_0__ to view and then use __ATRIX_CODE_1__ to select the model.",
-      "updated_at": 1782973974
-    },
-    "README.zh-CN.md:list:ad921ab7ca2cf9c1add35945d2b5bb1c0e3a1bbec314b0a5d3267b5bb5824aac": {
-      "kind": "list",
-      "source": "在 __ATRIX_CODE_0__ 配置 OpenAI-compatible Provider。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "ad921ab7ca2cf9c1add35945d2b5bb1c0e3a1bbec314b0a5d3267b5bb5824aac",
-      "translation": "Configure the OpenAI-compatible Provider in __ATRIX_CODE_0__.",
+      "source_hash": "a14d7cda09ad8e4832a3cac2ccc2ec24a0f4e6409f0334d195bf36383c150118",
+      "translation": "Set the API Key corresponding to __ATRIX_CODE_1__ via system environment variables or the configuration directory __ATRIX_CODE_0__.",
       "updated_at": 1781513003
     },
-    "README.zh-CN.md:list:b401bffca8cad93248852a7976d6d917a32e1345a4a2134d081c420d7123c489": {
+    "README.zh-CN.md:list:a254c82e9adeb43244a109c765b41ffc1e1ef20176212a3d084b101fad44e023": {
       "kind": "list",
       "source": "[Atrinis 配置与使用](docs/atrinis-usage.md)",
       "source_file": "README.zh-CN.md",
-      "source_hash": "b401bffca8cad93248852a7976d6d917a32e1345a4a2134d081c420d7123c489",
+      "source_hash": "a254c82e9adeb43244a109c765b41ffc1e1ef20176212a3d084b101fad44e023",
       "translation": "[Atrinis Configuration and Usage](docs/atrinis-usage.md)",
       "updated_at": 1781709186
+    },
+    "README.zh-CN.md:list:c2cad872e71e46e2d34b5b2759d50eb42b20c1c1be640d5514c5e5d224a1cb1c": {
+      "kind": "list",
+      "source": "输入 __ATRIX_CODE_0__ 查看命令，或直接开始对话。",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "c2cad872e71e46e2d34b5b2759d50eb42b20c1c1be640d5514c5e5d224a1cb1c",
+      "translation": "Enter __ATRIX_CODE_0__ to view commands, or start a conversation directly.",
+      "updated_at": 1782973974
     },
     "README.zh-CN.md:list:dc9d6c8159287e85374b87b2ebb98929cc466dcd72aadd6866e8c2985a46e4ae": {
       "kind": "list",
@@ -192,13 +176,29 @@
       "translation": "[Core Concepts](docs/concepts.md)",
       "updated_at": 1781513003
     },
-    "README.zh-CN.md:list:de66a81bf5bf9dfb8d96bf909844ce411cc1008a05f739a97df2ff4f859ed9dd": {
+    "README.zh-CN.md:list:ee4709dc83c65033ef5a2782560e14ae08a44078c1d9f375486c841aa353e3f0": {
       "kind": "list",
-      "source": "通过系统环境变量或配置目录 __ATRIX_CODE_0__ 设置 __ATRIX_CODE_1__ 对应的 API Key。",
+      "source": "在 __ATRIX_CODE_0__ 配置 OpenAI-compatible Provider。",
       "source_file": "README.zh-CN.md",
-      "source_hash": "de66a81bf5bf9dfb8d96bf909844ce411cc1008a05f739a97df2ff4f859ed9dd",
-      "translation": "Set the API Key corresponding to __ATRIX_CODE_1__ via system environment variables or the configuration directory __ATRIX_CODE_0__.",
+      "source_hash": "ee4709dc83c65033ef5a2782560e14ae08a44078c1d9f375486c841aa353e3f0",
+      "translation": "Configure the OpenAI-compatible Provider in __ATRIX_CODE_0__.",
       "updated_at": 1781513003
+    },
+    "README.zh-CN.md:list:fb211ea867e87c392706ae494ebf39b02e8cacb00e5f911f14146873d61ac3e6": {
+      "kind": "list",
+      "source": "或手动在 __ATRIX_CODE_0__ 选择默认 __ATRIX_CODE_1__ / __ATRIX_CODE_2__ 模式和模型。",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "fb211ea867e87c392706ae494ebf39b02e8cacb00e5f911f14146873d61ac3e6",
+      "translation": "Or manually select the default __ATRIX_CODE_1__ / __ATRIX_CODE_2__ mode and model in __ATRIX_CODE_0__.",
+      "updated_at": 1782973974
+    },
+    "README.zh-CN.md:list:ff6b49c44bdda168927c76bb6701260cffec723374ff4541e0b9c7735b354310": {
+      "kind": "list",
+      "source": "启动后使用命令 __ATRIX_CODE_0__ 查看然后使用 __ATRIX_CODE_1__ 选择模型。",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "ff6b49c44bdda168927c76bb6701260cffec723374ff4541e0b9c7735b354310",
+      "translation": "After starting, use the command __ATRIX_CODE_0__ to view and then use __ATRIX_CODE_1__ to select the model.",
+      "updated_at": 1782973974
     },
     "README.zh-CN.md:paragraph:034b3aa1227601c0ec15c5be9a773e32f9bb074f7c1bad2ee507d122e623c048": {
       "kind": "paragraph",
@@ -208,20 +208,20 @@
       "translation": "**Session, Fork, and Context Compaction**: Built-in persistent Session service, supporting Session recovery, archiving, pinning, Forking, deletion, paginated viewing, and platform isolation.",
       "updated_at": 1781779200
     },
-    "README.zh-CN.md:paragraph:044b1197e356e6d82c78f9e8f153cb5b1d345e90012c0ee665c2184cdbefcca9": {
+    "README.zh-CN.md:paragraph:03c509ac2fbeb55d86c8219b092fe80865411a3646febe497f01c2b10c49ef3f": {
       "kind": "paragraph",
-      "source": "传统 Agent 通常只会等待用户输入；Cron 只能响应时间。Atrinis 让 ATRI-X 多了一种触发方式：外部事件。\n",
+      "source": "创建后的纯 Atriyph 文本或 Go 源码由统一的 __ATRIX_CODE_0__ / __ATRIX_CODE_1__ 维护，源码改完后通过 __ATRIX_CODE_2__ 统一格式化、编译并返回检查结果。\n",
       "source_file": "README.zh-CN.md",
-      "source_hash": "044b1197e356e6d82c78f9e8f153cb5b1d345e90012c0ee665c2184cdbefcca9",
-      "translation": "Traditional Agents usually only wait for user input; Cron can only respond to time. Atrinis provides ATRI-X with another trigger method: external events.\n",
-      "updated_at": 1781709186
+      "source_hash": "03c509ac2fbeb55d86c8219b092fe80865411a3646febe497f01c2b10c49ef3f",
+      "translation": "The pure Atriyph text or Go source code created is maintained by a unified __ATRIX_CODE_0__ / __ATRIX_CODE_1__; after the source code is modified, it is uniformly formatted and compiled via __ATRIX_CODE_2__, and the check results are returned.\n",
+      "updated_at": 1781857840
     },
-    "README.zh-CN.md:paragraph:050f455498260e4b2f05593e54122b4f1f5dadd8a3f09e3bc031295aed99f26e": {
+    "README.zh-CN.md:paragraph:0b6fc147c6b73cf8abf2b2e552c8f0b3adc30db1e0790d2a8e3972aa2c8a36f5": {
       "kind": "paragraph",
-      "source": "详细说明见 [Atrinis 监听枢纽](docs/atrinis.md)。\n",
+      "source": "Atrinis 是 ATRI-X 的监听枢纽，Atriwisp 是分布在各地的外部监听器，Atriena 是统一的 JSON over HTTP 事件协议。",
       "source_file": "README.zh-CN.md",
-      "source_hash": "050f455498260e4b2f05593e54122b4f1f5dadd8a3f09e3bc031295aed99f26e",
-      "translation": "For detailed information, see [Atrinis Listening Hub](docs/atrinis.md).\n",
+      "source_hash": "0b6fc147c6b73cf8abf2b2e552c8f0b3adc30db1e0790d2a8e3972aa2c8a36f5",
+      "translation": "Atrinis is the listening hub of ATRI-X, Atriwisp consists of external listeners distributed in various locations, and Atriena is a unified JSON over HTTP event protocol.",
       "updated_at": 1781749522
     },
     "README.zh-CN.md:paragraph:179892a297c6b77d22b79d247b680d619e17759035c3f9808f574495e50dfe78": {
@@ -232,6 +232,14 @@
       "translation": "Long conversations automatically trigger context compaction to keep the window controllable; normal conversation can continue after compaction.\n",
       "updated_at": 1781749522
     },
+    "README.zh-CN.md:paragraph:199359126d97adf3d5cee6002c5d1cf1d54c12d52fec7c2cfd52151d761bf958": {
+      "kind": "paragraph",
+      "source": "相比随意 Markdown，Atriyph 更适合 LLM 之间复用和传递任务，也便于 lint、审计和工具化处理。\n",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "199359126d97adf3d5cee6002c5d1cf1d54c12d52fec7c2cfd52151d761bf958",
+      "translation": "Compared to arbitrary Markdown, Atriyph is better suited for reusing and passing tasks between LLMs, and is also easier to lint, audit, and process with tools.\n",
+      "updated_at": 1781749522
+    },
     "README.zh-CN.md:paragraph:1f060a9dccfc97e6c41d42e6fda0cd16dd0922e73bfe62bb14521c2f144ff1c6": {
       "kind": "paragraph",
       "source": "**安全策略与风险确认**： 工具系统内置风险等级、角色权限判断和高风险确认流程。普通用户只能发现和调用低风险工具；超级管理员调用高风险工具时也需逐项确认。\n",
@@ -239,38 +247,6 @@
       "source_hash": "1f060a9dccfc97e6c41d42e6fda0cd16dd0922e73bfe62bb14521c2f144ff1c6",
       "translation": "**Security Policies and Risk Confirmation**: The tool system has built-in risk levels, role permission checks, and high-risk confirmation processes. Regular users can only discover and invoke low-risk tools; even superadmins must confirm each item when invoking high-risk tools.\n",
       "updated_at": 1781779200
-    },
-    "README.zh-CN.md:paragraph:21da0415c7211d8579b633e9c31933484c1966c7e388698d1ec43b676e5e4017": {
-      "kind": "paragraph",
-      "source": "**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "21da0415c7211d8579b633e9c31933484c1966c7e388698d1ec43b676e5e4017",
-      "translation": "**Extensible Hook system**: ATRI-X has a built-in Hook Layer, allowing extension logic to be inserted at key event points such as Agent input, LLM request, LLM response, platform sending, and platform connection.",
-      "updated_at": 1781779200
-    },
-    "README.zh-CN.md:paragraph:269ef0efed1d38bab7ed21495376e4a5ad88047208ba8d2cb29453a775d334b1": {
-      "kind": "paragraph",
-      "source": "ATRI-X 仍在快速开发中，接口、配置和内部实现可能继续调整。当前更适合作为个人 Agent/机器人框架探索使用。\n",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "269ef0efed1d38bab7ed21495376e4a5ad88047208ba8d2cb29453a775d334b1",
-      "translation": "ATRI-X is still under rapid development; interfaces, configurations, and internal implementations may continue to be adjusted. It is currently more suitable for exploration as a personal Agent/bot framework.\n",
-      "updated_at": 1781513003
-    },
-    "README.zh-CN.md:paragraph:2f78c5cb347d4542e112458fd2cb8f25ab068a4b4f1da621f414bab7459f6a9d": {
-      "kind": "paragraph",
-      "source": "**兼容外置 AgentSkill**： ATRI-X 兼容遵从 agentskills.io 风格的外置 AgentSkill。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "2f78c5cb347d4542e112458fd2cb8f25ab068a4b4f1da621f414bab7459f6a9d",
-      "translation": "**Compatible with external AgentSkill**: ATRI-X is compatible with external AgentSkills that follow the agentskills.io style.",
-      "updated_at": 1784013247
-    },
-    "README.zh-CN.md:paragraph:336c271da8fa594093a784cde0b062ba64994ff1a31e2949ea1d89cce7f72f73": {
-      "kind": "paragraph",
-      "source": "**多平台与富输出抽象**： ATRI-X 抽象了平台层与输出层，目前支持 CLI、QQ OneBot、QQ Official 和 Telegram，并预留扩展其他平台的空间。\n",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "336c271da8fa594093a784cde0b062ba64994ff1a31e2949ea1d89cce7f72f73",
-      "translation": "**Multi-platform and Rich Output Abstraction**: ATRI-X abstracts the platform and output layers, currently supporting CLI, QQ OneBot, QQ Official, and Telegram, while reserving space for extending to other platforms.\n",
-      "updated_at": 1781839316
     },
     "README.zh-CN.md:paragraph:358ee39ee1b300f360519600e728207e5f953088ba7ee1faee935613e185e421": {
       "kind": "paragraph",
@@ -304,13 +280,53 @@
       "translation": "Any AgentSkill script can be used as a tool through configuration.\n",
       "updated_at": 1784013247
     },
-    "README.zh-CN.md:paragraph:3f4c2d701f7f5dea315432c1090e522b4774e275ab2f606586729300139ba6d1": {
+    "README.zh-CN.md:paragraph:444a59efb543334bfff19dd25af6e413413333cbf3f95866336516190682d22a": {
       "kind": "paragraph",
-      "source": "Atrinis 是 ATRI-X 的监听枢纽，Atriwisp 是分布在各地的外部监听器，Atriena 是统一的 JSON over HTTP 事件协议。",
+      "source": "**完善的日志与审计**： 区分运行日志、Atriwisp 日志与审计日志，支持结构化字段、日志查询、审计查询和运行期调试。\n",
       "source_file": "README.zh-CN.md",
-      "source_hash": "3f4c2d701f7f5dea315432c1090e522b4774e275ab2f606586729300139ba6d1",
-      "translation": "Atrinis is the listening hub of ATRI-X, Atriwisp consists of external listeners distributed in various locations, and Atriena is a unified JSON over HTTP event protocol.",
+      "source_hash": "444a59efb543334bfff19dd25af6e413413333cbf3f95866336516190682d22a",
+      "translation": "**Comprehensive Logging and Auditing**: Distinguishes between runtime logs, Atriwisp logs, and audit logs, supporting structured fields, log queries, audit queries, and runtime debugging.\n",
+      "updated_at": 1781779200
+    },
+    "README.zh-CN.md:paragraph:49349b86bce418591f9b8b4a0fe3270dfd414988abc40199f1d9b3aa49dc3222": {
+      "kind": "paragraph",
+      "source": "**普通 Cron 与 LLM Cron**： ATRI-X 内置 Cron Runtime 和 LLM 可编排 Cron 服务。",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "49349b86bce418591f9b8b4a0fe3270dfd414988abc40199f1d9b3aa49dc3222",
+      "translation": "**Standard Cron and LLM Cron**: ATRI-X features a built-in Cron Runtime and an LLM-orchestratable Cron service.",
+      "updated_at": 1781779200
+    },
+    "README.zh-CN.md:paragraph:4a0d6c506b9e4b015affc54a4371a298a468b548560f08a58399b9ede34d0089": {
+      "kind": "paragraph",
+      "source": "三者协作，让外部世界的任何信号如服务器告警、RSS 更新、Webhook、游戏事件、甚至外部计算机信息都能送入 Atrinis，再交由 ATRI-X 处理并返回。\n",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "4a0d6c506b9e4b015affc54a4371a298a468b548560f08a58399b9ede34d0089",
+      "translation": "Working together, these three allow any signal from the external world—such as server alerts, RSS updates, Webhooks, game events, or even external computer information—to be sent to Atrinis, then processed and returned by ATRI-X.\n",
       "updated_at": 1781749522
+    },
+    "README.zh-CN.md:paragraph:51b031bd83c4673fcd53199273769fb00f2abb26d84392de781d468f921368a5": {
+      "kind": "paragraph",
+      "source": "Shell 补全可通过 __ATRIX_CODE_0__ 生成，支持 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__、__ATRIX_CODE_5__ 和 __ATRIX_CODE_6__。\n",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "51b031bd83c4673fcd53199273769fb00f2abb26d84392de781d468f921368a5",
+      "translation": "Shell completion can be generated via __ATRIX_CODE_0__, supporting __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, __ATRIX_CODE_4__, __ATRIX_CODE_5__, and __ATRIX_CODE_6__.\n",
+      "updated_at": 1781575057
+    },
+    "README.zh-CN.md:paragraph:53f085ebae7be6e44e3c915880028a25bea0f0b78796699d636d910613765e51": {
+      "kind": "paragraph",
+      "source": "**多平台与富输出抽象**： ATRI-X 抽象了平台层与输出层，目前支持 CLI、QQ OneBot、QQ Official 和 Telegram，并预留扩展其他平台的空间。\n",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "53f085ebae7be6e44e3c915880028a25bea0f0b78796699d636d910613765e51",
+      "translation": "**Multi-platform and Rich Output Abstraction**: ATRI-X abstracts the platform and output layers, currently supporting CLI, QQ OneBot, QQ Official, and Telegram, while reserving space for extending to other platforms.\n",
+      "updated_at": 1781839316
+    },
+    "README.zh-CN.md:paragraph:60a1351322aadb5303dae270fb30b1d51cc90dc8cefe5fef811bc4997c78ef6f": {
+      "kind": "paragraph",
+      "source": "**兼容外置 AgentSkill**： ATRI-X 兼容遵从 agentskills.io 风格的外置 AgentSkill。",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "60a1351322aadb5303dae270fb30b1d51cc90dc8cefe5fef811bc4997c78ef6f",
+      "translation": "**Compatible with external AgentSkill**: ATRI-X is compatible with external AgentSkills that follow the agentskills.io style.",
+      "updated_at": 1784013247
     },
     "README.zh-CN.md:paragraph:638b1fdf9372721e8e01e87f011c48637d3cd94217fba95b9cdf3a02882ef37d": {
       "kind": "paragraph",
@@ -320,21 +336,21 @@
       "translation": "Reference: Chatterji et al., _How People Use ChatGPT_, NBER, 2025;",
       "updated_at": 1783238675
     },
-    "README.zh-CN.md:paragraph:6caefb847385d0861ca2ea3d92e08658802daa5c3e39f97d9a8de4eb587cae4f": {
+    "README.zh-CN.md:paragraph:65fe418c51045ff9b8539c12b47ca3ce6be9201eb70a1ee07373fdf292f90e85": {
       "kind": "paragraph",
-      "source": "**普通 Cron 与 LLM Cron**： ATRI-X 内置 Cron Runtime 和 LLM 可编排 Cron 服务。",
+      "source": "传统 Agent 通常只会等待用户输入；Cron 只能响应时间。Atrinis 让 ATRI-X 多了一种触发方式：外部事件。\n",
       "source_file": "README.zh-CN.md",
-      "source_hash": "6caefb847385d0861ca2ea3d92e08658802daa5c3e39f97d9a8de4eb587cae4f",
-      "translation": "**Standard Cron and LLM Cron**: ATRI-X features a built-in Cron Runtime and an LLM-orchestratable Cron service.",
-      "updated_at": 1781779200
+      "source_hash": "65fe418c51045ff9b8539c12b47ca3ce6be9201eb70a1ee07373fdf292f90e85",
+      "translation": "Traditional Agents usually only wait for user input; Cron can only respond to time. Atrinis provides ATRI-X with another trigger method: external events.\n",
+      "updated_at": 1781709186
     },
-    "README.zh-CN.md:paragraph:6e7c4981a7d21efe82a8cbdf6aa91e2cb3fdc7e9739986de56c1ae9f64ac0afc": {
+    "README.zh-CN.md:paragraph:6c3c098d031bf897e5b956f8787a07c6df54b44b80cfae587a46b483a5ff4590": {
       "kind": "paragraph",
-      "source": "相比随意 Markdown，Atriyph 更适合 LLM 之间复用和传递任务，也便于 lint、审计和工具化处理。\n",
+      "source": "**可由 LLM 创建的 ATRI-X Skill**： ATRI-X 内置 __ATRIX_CODE_0__ 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。",
       "source_file": "README.zh-CN.md",
-      "source_hash": "6e7c4981a7d21efe82a8cbdf6aa91e2cb3fdc7e9739986de56c1ae9f64ac0afc",
-      "translation": "Compared to arbitrary Markdown, Atriyph is better suited for reusing and passing tasks between LLMs, and is also easier to lint, audit, and process with tools.\n",
-      "updated_at": 1781749522
+      "source_hash": "6c3c098d031bf897e5b956f8787a07c6df54b44b80cfae587a46b483a5ff4590",
+      "translation": "**ATRI-X Skills creatable by LLM**: ATRI-X has a built-in __ATRIX_CODE_0__ meta-tool, allowing the LLM to crystallize reusable experience into ATRI-X Skills.",
+      "updated_at": 1781779200
     },
     "README.zh-CN.md:paragraph:6fd699dc570c91d9bc38beec10e68819809609303f989983867dd04d0618c38d": {
       "kind": "paragraph",
@@ -358,6 +374,14 @@
       "source_file": "README.zh-CN.md",
       "source_hash": "72779d0c59b2a18c1251ec393077cba4f4984f48069cde8371614b913f5dcb5b",
       "translation": "For detailed instructions, see:\n",
+      "updated_at": 1781513003
+    },
+    "README.zh-CN.md:paragraph:72f691e004f9a35ec240df25659032acf4882a97af1bbc9fcf384bc3bfe07a11": {
+      "kind": "paragraph",
+      "source": "ATRI-X 仍在快速开发中，接口、配置和内部实现可能继续调整。当前更适合作为个人 Agent/机器人框架探索使用。\n",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "72f691e004f9a35ec240df25659032acf4882a97af1bbc9fcf384bc3bfe07a11",
+      "translation": "ATRI-X is still under rapid development; interfaces, configurations, and internal implementations may continue to be adjusted. It is currently more suitable for exploration as a personal Agent/bot framework.\n",
       "updated_at": 1781513003
     },
     "README.zh-CN.md:paragraph:743bf0c193274ad3c8ad8db88068cf1d27a05e7f04ac90efdfb0acab7baa73cd": {
@@ -384,6 +408,14 @@
       "translation": "Hooks can modify messages, append output intents, call scripts, and more.",
       "updated_at": 1782395242
     },
+    "README.zh-CN.md:paragraph:800f3c70fe463097dc65d1475e8f43c5d2f5f689f9c2775685a4f126ef93a49e": {
+      "kind": "paragraph",
+      "source": "**Atriyph 任务表示法**： Atriyph 用于描述 LLM Cron 与原生 Skill。",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "800f3c70fe463097dc65d1475e8f43c5d2f5f689f9c2775685a4f126ef93a49e",
+      "translation": "**Atriyph Task Notation**: Atriyph is used to describe LLM Cron and native skills.",
+      "updated_at": 1781779200
+    },
     "README.zh-CN.md:paragraph:841704ee27fb54bf0e5b022401e9109bea7b1b825c1ac07abd6b1af0087fa8d9": {
       "kind": "paragraph",
       "source": "**常驻记忆与长期记忆分层**： 常驻记忆只保存短小、稳定、真正需要每轮注入的信息，并在内部区分需确认修改的 core 与可整理的 normal；",
@@ -391,14 +423,6 @@
       "source_hash": "841704ee27fb54bf0e5b022401e9109bea7b1b825c1ac07abd6b1af0087fa8d9",
       "translation": "**Layering of resident memory and long-term memory**: Resident memory only saves short, stable information that truly needs to be injected into every round, and internally distinguishes between 'core' (requiring confirmation for modification) and 'normal' (organizable);",
       "updated_at": 1782205909
-    },
-    "README.zh-CN.md:paragraph:84a016717918133589e182198ef927755a46b9080663c97bdefc483967017651": {
-      "kind": "paragraph",
-      "source": "创建时自动校验 Atriyph 语法，可选附带 Go 源码并编译；",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "84a016717918133589e182198ef927755a46b9080663c97bdefc483967017651",
-      "translation": "Automatically validate Atriyph syntax upon creation, with optional Go source code attachment and compilation;",
-      "updated_at": 1781854820
     },
     "README.zh-CN.md:paragraph:99f4e826b7d8779e0f70d6a363d00a49458939edb90cefb2fa24ec5cc88fb957": {
       "kind": "paragraph",
@@ -408,21 +432,13 @@
       "translation": "**Chat / Work dual mode**: Both modes can be configured with independent models, allowing low-cost models to handle casual chat and powerful models to focus on complex tasks.\n",
       "updated_at": 1783238675
     },
-    "README.zh-CN.md:paragraph:9fa1fed0a0b1a50942c33b57097a41cec9bbabc05b6aad9f29aae27ccd731e66": {
+    "README.zh-CN.md:paragraph:9ba5fa4104c613746c3422b9e297c83d4ffe5225a2ed5eed6c6a7f65a34239ed": {
       "kind": "paragraph",
-      "source": "ATRI-X 是一个使用 Go 编写的轻量级 Agent/Chatbot 框架，目标是在保留可扩展性的同时，尽量降低运行成本、上下文成本和维护复杂度。\n",
+      "source": "ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是仅暴露 __ATRIX_CODE_0__ 和当前可用工具名称。",
       "source_file": "README.zh-CN.md",
-      "source_hash": "9fa1fed0a0b1a50942c33b57097a41cec9bbabc05b6aad9f29aae27ccd731e66",
-      "translation": "ATRI-X is a lightweight Agent/Chatbot framework written in Go, aiming to minimize operating costs, context costs, and maintenance complexity while preserving extensibility.\n",
+      "source_hash": "9ba5fa4104c613746c3422b9e297c83d4ffe5225a2ed5eed6c6a7f65a34239ed",
+      "translation": "ATRI-X does not inject the full schema of all tools by default in every round of conversation, but only exposes __ATRIX_CODE_0__ and the names of currently available tools.",
       "updated_at": 1781513003
-    },
-    "README.zh-CN.md:paragraph:a31cd2d091db4ab3d28dd684cbc40b62ff6d679d75682532e29553b19c566f24": {
-      "kind": "paragraph",
-      "source": "**可由 LLM 创建的 ATRI-X Skill**： ATRI-X 内置 __ATRIX_CODE_0__ 元工具，允许 LLM 将可复用经验沉淀为 ATRI-X Skill。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "a31cd2d091db4ab3d28dd684cbc40b62ff6d679d75682532e29553b19c566f24",
-      "translation": "**ATRI-X Skills creatable by LLM**: ATRI-X has a built-in __ATRIX_CODE_0__ meta-tool, allowing the LLM to crystallize reusable experience into ATRI-X Skills.",
-      "updated_at": 1781779200
     },
     "README.zh-CN.md:paragraph:a3aaabb6654a17ccdd9a225bf2f6ebfaaa3b3b41ec702bbf863c1920729d0d94": {
       "kind": "paragraph",
@@ -431,14 +447,6 @@
       "source_hash": "a3aaabb6654a17ccdd9a225bf2f6ebfaaa3b3b41ec702bbf863c1920729d0d94",
       "translation": "Hook supports writing plugins in **any language**.\n",
       "updated_at": 1784013247
-    },
-    "README.zh-CN.md:paragraph:ae06f8efb42f6986fd37876867ad012905b49d2b55e3bd9fca3aec513a859ba0": {
-      "kind": "paragraph",
-      "source": "更长、更复杂的记忆由 LLM 按需通过 __ATRIX_CODE_0__ 查询。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "ae06f8efb42f6986fd37876867ad012905b49d2b55e3bd9fca3aec513a859ba0",
-      "translation": "Longer and more complex memories are queried by the LLM on demand via __ATRIX_CODE_0__.",
-      "updated_at": 1782205909
     },
     "README.zh-CN.md:paragraph:b059c4077f5b42e1dcbb962fe9aa6f7c7ee61d2b5db9499d6e4b8972a5627085": {
       "kind": "paragraph",
@@ -456,37 +464,13 @@
       "translation": "Greatly reduces invalid context overhead.\n",
       "updated_at": 1781519017
     },
-    "README.zh-CN.md:paragraph:bd5b8229918b5ece1025466f0be78687159ac8ec8a2bf810e21fcaf407aa97a8": {
+    "README.zh-CN.md:paragraph:cb8f413c92494f343e68c11fb9a5f4edb1cbf230878884188e4cbcf0d4e204ce": {
       "kind": "paragraph",
-      "source": "**完善的日志与审计**： 区分运行日志、Atriwisp 日志与审计日志，支持结构化字段、日志查询、审计查询和运行期调试。\n",
+      "source": "ATRI-X 是一个使用 Go 编写的轻量级 Agent/Chatbot 框架，目标是在保留可扩展性的同时，尽量降低运行成本、上下文成本和维护复杂度。\n",
       "source_file": "README.zh-CN.md",
-      "source_hash": "bd5b8229918b5ece1025466f0be78687159ac8ec8a2bf810e21fcaf407aa97a8",
-      "translation": "**Comprehensive Logging and Auditing**: Distinguishes between runtime logs, Atriwisp logs, and audit logs, supporting structured fields, log queries, audit queries, and runtime debugging.\n",
-      "updated_at": 1781779200
-    },
-    "README.zh-CN.md:paragraph:c14d4e025e205cbe752e5c9b8288c5680b90f7c088572f3ece18a02d10734147": {
-      "kind": "paragraph",
-      "source": "三者协作，让外部世界的任何信号如服务器告警、RSS 更新、Webhook、游戏事件、甚至外部计算机信息都能送入 Atrinis，再交由 ATRI-X 处理并返回。\n",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "c14d4e025e205cbe752e5c9b8288c5680b90f7c088572f3ece18a02d10734147",
-      "translation": "Working together, these three allow any signal from the external world—such as server alerts, RSS updates, Webhooks, game events, or even external computer information—to be sent to Atrinis, then processed and returned by ATRI-X.\n",
-      "updated_at": 1781749522
-    },
-    "README.zh-CN.md:paragraph:c56b8a5a9b5bc5f3ab0486242d39ad547143893cd039cb25c56edde3ea795424": {
-      "kind": "paragraph",
-      "source": "创建后的纯 Atriyph 文本或 Go 源码由统一的 __ATRIX_CODE_0__ / __ATRIX_CODE_1__ 维护，源码改完后通过 __ATRIX_CODE_2__ 统一格式化、编译并返回检查结果。\n",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "c56b8a5a9b5bc5f3ab0486242d39ad547143893cd039cb25c56edde3ea795424",
-      "translation": "The pure Atriyph text or Go source code created is maintained by a unified __ATRIX_CODE_0__ / __ATRIX_CODE_1__; after the source code is modified, it is uniformly formatted and compiled via __ATRIX_CODE_2__, and the check results are returned.\n",
-      "updated_at": 1781857840
-    },
-    "README.zh-CN.md:paragraph:c6eb08a7f05ed52c309c1b39b3001e3fac4d234facd0d1ef61dd6aff35279be6": {
-      "kind": "paragraph",
-      "source": "Shell 补全可通过 __ATRIX_CODE_0__ 生成，支持 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__、__ATRIX_CODE_5__ 和 __ATRIX_CODE_6__。\n",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "c6eb08a7f05ed52c309c1b39b3001e3fac4d234facd0d1ef61dd6aff35279be6",
-      "translation": "Shell completion can be generated via __ATRIX_CODE_0__, supporting __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, __ATRIX_CODE_4__, __ATRIX_CODE_5__, and __ATRIX_CODE_6__.\n",
-      "updated_at": 1781575057
+      "source_hash": "cb8f413c92494f343e68c11fb9a5f4edb1cbf230878884188e4cbcf0d4e204ce",
+      "translation": "ATRI-X is a lightweight Agent/Chatbot framework written in Go, aiming to minimize operating costs, context costs, and maintenance complexity while preserving extensibility.\n",
+      "updated_at": 1781513003
     },
     "README.zh-CN.md:paragraph:cd94f8a34fc78fdcfac3569082c77b9e5e7f07c3c6bc43776703e0f017da3b58": {
       "kind": "paragraph",
@@ -512,13 +496,21 @@
       "translation": "The following screenshots demonstrate different frontend forms; except for the TUI, all are conceptual HTML mockups and do not represent the final UI.\n",
       "updated_at": 1782897875
     },
-    "README.zh-CN.md:paragraph:d529a380cb2ed49be41a36713291327ba40177fdee617fbc107124001522d271": {
+    "README.zh-CN.md:paragraph:d55438567ff550bf95d0efec8c9a4e2bdf118e369dd425a87a5706ff72538d78": {
       "kind": "paragraph",
-      "source": "**CLI 客户端/服务端分离**： 支持任何电脑使用 ATRI-X 作为客户端连接 ATRI-X 服务端。",
+      "source": "**可扩展的 Hook 系统**： ATRI-X 内置 Hook Layer，可在 Agent 输入、LLM 请求、LLM 响应、平台发送、平台连接等关键事件点插入扩展逻辑。",
       "source_file": "README.zh-CN.md",
-      "source_hash": "d529a380cb2ed49be41a36713291327ba40177fdee617fbc107124001522d271",
-      "translation": "**CLI Client/Server Separation**: Supports using ATRI-X as a client on any computer to connect to the ATRI-X server.",
-      "updated_at": 1782901132
+      "source_hash": "d55438567ff550bf95d0efec8c9a4e2bdf118e369dd425a87a5706ff72538d78",
+      "translation": "**Extensible Hook system**: ATRI-X has a built-in Hook Layer, allowing extension logic to be inserted at key event points such as Agent input, LLM request, LLM response, platform sending, and platform connection.",
+      "updated_at": 1781779200
+    },
+    "README.zh-CN.md:paragraph:db9aebb096d76e281aced927754dce6adadcaa0a67e3a3766e78c7223b5b216d": {
+      "kind": "paragraph",
+      "source": "详细说明见 [Atrinis 监听枢纽](docs/atrinis.md)。\n",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "db9aebb096d76e281aced927754dce6adadcaa0a67e3a3766e78c7223b5b216d",
+      "translation": "For detailed information, see [Atrinis Listening Hub](docs/atrinis.md).\n",
+      "updated_at": 1781749522
     },
     "README.zh-CN.md:paragraph:e6f4153f1349157870738be3a4746bbd3c9f49dfc4ff4e8ae577e585a858eec5": {
       "kind": "paragraph",
@@ -527,6 +519,14 @@
       "source_hash": "e6f4153f1349157870738be3a4746bbd3c9f49dfc4ff4e8ae577e585a858eec5",
       "translation": "When the model needs to use a tool, it first discovers the tool details on demand, and then the Agent injects the corresponding schema.",
       "updated_at": 1781513003
+    },
+    "README.zh-CN.md:paragraph:e89913bcbffadc8eb21d917fb5721c00914030b47d6827f5742926e6f262e74c": {
+      "kind": "paragraph",
+      "source": "**CLI 客户端/服务端分离**： 支持任何电脑使用 ATRI-X 作为客户端连接 ATRI-X 服务端。",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "e89913bcbffadc8eb21d917fb5721c00914030b47d6827f5742926e6f262e74c",
+      "translation": "**CLI Client/Server Separation**: Supports using ATRI-X as a client on any computer to connect to the ATRI-X server.",
+      "updated_at": 1782901132
     },
     "README.zh-CN.md:paragraph:e95e02407bc3d819712c44ac05dad400bc146f5201f91a26f17ca31f5a45f9e9": {
       "kind": "paragraph",
@@ -544,14 +544,6 @@
       "translation": "**Ultra-lightweight Go implementation**:\n",
       "updated_at": 1783238361
     },
-    "README.zh-CN.md:paragraph:efcf45b883dbcebe2a68cb0e0a20aa48d816fe4957018b1a54172aa86b951946": {
-      "kind": "paragraph",
-      "source": "ATRI-X 不会在每轮对话中默认注入所有工具的完整 schema，而是仅暴露 __ATRIX_CODE_0__ 和当前可用工具名称。",
-      "source_file": "README.zh-CN.md",
-      "source_hash": "efcf45b883dbcebe2a68cb0e0a20aa48d816fe4957018b1a54172aa86b951946",
-      "translation": "ATRI-X does not inject the full schema of all tools by default in every round of conversation, but only exposes __ATRIX_CODE_0__ and the names of currently available tools.",
-      "updated_at": 1781513003
-    },
     "README.zh-CN.md:paragraph:f2ead8a344911defe004a651de9652ed19f79a5e23fdbdf642fefbc62a578fe5": {
       "kind": "paragraph",
       "source": "**极致节省 Token 的工具发现**： 研究表明，许多普通用户仍主要将 LLM 类产品用作更高级的搜索引擎、写作助手和倾听对象，频繁工具调用并不是所有对话的常态。\n",
@@ -568,13 +560,21 @@
       "translation": "For more screenshots, see [elbot-showcase/frontend](https://github.com/Elfreese/elbot-showcase/tree/main/frontend).\n",
       "updated_at": 1782897875
     },
-    "README.zh-CN.md:paragraph:f8e466ac367698634bd0af1045c7e3fc8de4a192358d3b74a5b2008248cc9478": {
+    "README.zh-CN.md:paragraph:fc2153b58247683892a6d519a59414e50bc8088be203f2c5e144145aa886f187": {
       "kind": "paragraph",
-      "source": "**Atriyph 任务表示法**： Atriyph 用于描述 LLM Cron 与原生 Skill。",
+      "source": "更长、更复杂的记忆由 LLM 按需通过 __ATRIX_CODE_0__ 查询。",
       "source_file": "README.zh-CN.md",
-      "source_hash": "f8e466ac367698634bd0af1045c7e3fc8de4a192358d3b74a5b2008248cc9478",
-      "translation": "**Atriyph Task Notation**: Atriyph is used to describe LLM Cron and native skills.",
-      "updated_at": 1781779200
+      "source_hash": "fc2153b58247683892a6d519a59414e50bc8088be203f2c5e144145aa886f187",
+      "translation": "Longer and more complex memories are queried by the LLM on demand via __ATRIX_CODE_0__.",
+      "updated_at": 1782205909
+    },
+    "README.zh-CN.md:paragraph:fdc6c0734f821748b5bde149a3cd8339fc797cd8cabc4f1eba5ac0009de4d93e": {
+      "kind": "paragraph",
+      "source": "创建时自动校验 Atriyph 语法，可选附带 Go 源码并编译；",
+      "source_file": "README.zh-CN.md",
+      "source_hash": "fdc6c0734f821748b5bde149a3cd8339fc797cd8cabc4f1eba5ac0009de4d93e",
+      "translation": "Automatically validate Atriyph syntax upon creation, with optional Go source code attachment and compilation;",
+      "updated_at": 1781854820
     },
     "README.zh-CN.md:table:100587977125c8c3844f25aaf755f7b998ce69c9c3c97758ae2b17eea268d13a": {
       "kind": "table",
@@ -706,7 +706,7 @@
     }
   },
   "source": "README.zh-CN.md",
-  "source_hash": "aedfc2d97b8ebfa2e024b3ded38909413c6eef336f4bf9349fed9d576978b8ed",
+  "source_hash": "331fc5c36806fd62a7b2b7cc7338a62b640f2cafca672e1a6092416f1dc9b3a0",
   "target": "README.md",
   "updated_at": 1784013247,
   "version": 2

@@ -1,28 +1,36 @@
 {
   "segments": {
-    "CHANGELOG.md:list:020bcf5591a825ef02d663682d6a9f0f7c5924e7e37d3d17923b4d07b4e8d595": {
+    "CHANGELOG.md:list:008cf283303e8662b915de5064573fa5386ec2ba1fcbc804140e5dc33fadb2f6": {
       "kind": "list",
-      "source": "同一轮多个工具调用的 __ATRIX_CODE_0__ 预览会合并为一条消息发送，减少平台刷屏。",
+      "source": "新增 __ATRIX_CODE_0__ 工具：设置当前前台 Session 的共享工作目录，路径类工具会基于该目录解析相对路径。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "020bcf5591a825ef02d663682d6a9f0f7c5924e7e37d3d17923b4d07b4e8d595",
-      "translation": "__ATRIX_CODE_0__ previews for multiple tool calls in the same round will be merged into a single message to reduce platform spam.",
-      "updated_at": 1782699038
+      "source_hash": "008cf283303e8662b915de5064573fa5386ec2ba1fcbc804140e5dc33fadb2f6",
+      "translation": "Added `__ATRIX_CODE_0__` tool: sets the shared working directory of the current foreground Session; path-related tools will resolve relative paths based on this directory.",
+      "updated_at": 1782958962
     },
-    "CHANGELOG.md:list:0298de911a1c00f2891bc6e3b40b94e7ed086d8987fcbf87047a2a52cb3725a4": {
+    "CHANGELOG.md:list:00b5f17cf3c36d87a064843cd1e95a2d01d590b5a1bb7042152afd31302860e1": {
       "kind": "list",
-      "source": "工具完成 Hook 支持返回包含 URL、路径或 base64 图片的 __ATRIX_CODE_0__；",
+      "source": "内联预载支持工具简写 __ATRIX_CODE_0__ 和 Skill 简写 __ATRIX_CODE_1__，并兼容中文全角冒号 __ATRIX_CODE_2__。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "0298de911a1c00f2891bc6e3b40b94e7ed086d8987fcbf87047a2a52cb3725a4",
-      "translation": "Tool completion Hook supports returning __ATRIX_CODE_0__ containing URLs, paths, or base64 images;",
-      "updated_at": 1784467084
+      "source_hash": "00b5f17cf3c36d87a064843cd1e95a2d01d590b5a1bb7042152afd31302860e1",
+      "translation": "Inline preloading supports tool shorthand __ATRIX_CODE_0__ and Skill shorthand __ATRIX_CODE_1__, and is compatible with Chinese full-width colon __ATRIX_CODE_2__.",
+      "updated_at": 1783240947
     },
-    "CHANGELOG.md:list:02e27fea67bca6075701b59206db6cfbb755a28eabbfc3afdcb03d38958bf057": {
+    "CHANGELOG.md:list:02b931564a2789a071ea9fd68e3f7d32c8350a54318f631eae09687df3dffeb3": {
       "kind": "list",
-      "source": "修复内置工具与 Go Skill 的服务级环境变量读取不一致，导致部分工具无法读取配置目录 __ATRIX_CODE_0__ 的问题。",
+      "source": "__ATRIX_CODE_0__ 不再向 LLM 暴露 __ATRIX_CODE_1__ 参数；系统会在用户确认前自动预检并生成 diff，预检失败不会进入确认或写入文件。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "02e27fea67bca6075701b59206db6cfbb755a28eabbfc3afdcb03d38958bf057",
-      "translation": "Fixed the inconsistency in reading service-level environment variables between built-in tools and Go Skills, which caused some tools to be unable to read the configuration directory __ATRIX_CODE_0__.",
-      "updated_at": 1787058751
+      "source_hash": "02b931564a2789a071ea9fd68e3f7d32c8350a54318f631eae09687df3dffeb3",
+      "translation": "__ATRIX_CODE_0__ no longer exposes the __ATRIX_CODE_1__ parameter to the LLM; the system will automatically pre-check and generate a diff before user confirmation, and if the pre-check fails, it will not proceed to confirmation or write to the file.",
+      "updated_at": 1782631048
+    },
+    "CHANGELOG.md:list:02e6eb86052d362cef243cc644105c1f7a12a1bbbd856c933b429d166b27c4f0": {
+      "kind": "list",
+      "source": "Hook 平台上下文现在填充当前平台消息 ID __ATRIX_CODE_0__ 与引用/回复目标消息 ID __ATRIX_CODE_1__，便于规则 Hook 处理引用消息，例如撤回被引用消息。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "02e6eb86052d362cef243cc644105c1f7a12a1bbbd856c933b429d166b27c4f0",
+      "translation": "Hook platform context now populates the current platform message ID __ATRIX_CODE_0__ and the referenced/reply target message ID __ATRIX_CODE_1__, facilitating the processing of referenced messages by rule Hooks, such as recalling a referenced message.",
+      "updated_at": 1782395477
     },
     "CHANGELOG.md:list:03845b94106990962e80f77f2cbbd35bc8777b044a8cf5f5a8653f9ee3139652": {
       "kind": "list",
@@ -32,14 +40,6 @@
       "translation": "The Session Meta of the system prompt now includes the local creation time of the Session, accurate to the second; this value will not change with conversation turns to maintain Prompt cache stability.",
       "updated_at": 1787799472
     },
-    "CHANGELOG.md:list:04792220a0453d2a80f396307ad2079f5a7ba1f001924b3ce14c678f7f132627": {
-      "kind": "list",
-      "source": "修复 Windows 下 __ATRIX_CODE_0__ 工具回退到 PowerShell 时中文输出可能乱码的问题。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "04792220a0453d2a80f396307ad2079f5a7ba1f001924b3ce14c678f7f132627",
-      "translation": "Fixed an issue where Chinese output might be garbled when the __ATRIX_CODE_0__ tool falls back to PowerShell on Windows.",
-      "updated_at": 1783048564
-    },
     "CHANGELOG.md:list:047f7cf9833475fc12c30cf0758713ff86c16333283727a9a94630a204a6d626": {
       "kind": "list",
       "source": "修复工具流程的最终 LLM 请求期间收到的 pending 消息会随当前 turn 结束而丢失的问题；",
@@ -48,13 +48,13 @@
       "translation": "Fixed an issue where pending messages received during the final LLM request of a tool flow were lost when the current turn ended;",
       "updated_at": 1784467084
     },
-    "CHANGELOG.md:list:05a9e4447fd45b2d4076875eef3c2a7bdf6a16a84f6e8b476b1080ff1cffd0dd": {
+    "CHANGELOG.md:list:073172807e6c3a97eacffff7b5c54807309da48775d41214eb5ad65439bc59bc": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 不再向 LLM 暴露 __ATRIX_CODE_1__ 参数；系统会在用户确认前自动预检并生成 diff，预检失败不会进入确认或写入文件。",
+      "source": "现在 JSON 数组与对象会压缩为单个 argv 参数传给对应 __ATRIX_CODE_0__ flag。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "05a9e4447fd45b2d4076875eef3c2a7bdf6a16a84f6e8b476b1080ff1cffd0dd",
-      "translation": "__ATRIX_CODE_0__ no longer exposes the __ATRIX_CODE_1__ parameter to the LLM; the system will automatically pre-check and generate a diff before user confirmation, and if the pre-check fails, it will not proceed to confirmation or write to the file.",
-      "updated_at": 1782631048
+      "source_hash": "073172807e6c3a97eacffff7b5c54807309da48775d41214eb5ad65439bc59bc",
+      "translation": "Now JSON arrays and objects will be compressed into a single argv parameter and passed to the corresponding __ATRIX_CODE_0__ flag.",
+      "updated_at": 1788869399
     },
     "CHANGELOG.md:list:074bd5829a69931af8824fb7df435a2bcd12bcb2d75a1960fbd8c089259479c1": {
       "kind": "list",
@@ -64,21 +64,21 @@
       "translation": "Superadmins are not subject to the additional 10-minute limit but still adhere to the enabled Session TTL.",
       "updated_at": 1788078727
     },
-    "CHANGELOG.md:list:08a9f4bd4b91764404716cc4408cc3a4cebdbd94393d6470bde4721425c133b3": {
+    "CHANGELOG.md:list:087e270bfbf0dc88fec6ecaee87b154827022e9765f1703756b3a657397b82fc": {
       "kind": "list",
-      "source": "现在不在启动atri-x的时候校验Atriyph语法，免得拖慢启动速度",
+      "source": "默认 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ Skill 会生成仅超管可见、低风险的 TOML。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "08a9f4bd4b91764404716cc4408cc3a4cebdbd94393d6470bde4721425c133b3",
-      "translation": "Atriyph syntax is no longer validated during ATRI-X startup to avoid slowing down the startup speed.",
-      "updated_at": 1782711341
+      "source_hash": "087e270bfbf0dc88fec6ecaee87b154827022e9765f1703756b3a657397b82fc",
+      "translation": "By default, __ATRIX_CODE_0__ and __ATRIX_CODE_1__ Skills will generate TOML that is low-risk and visible only to the superadmin.",
+      "updated_at": 1783479117
     },
-    "CHANGELOG.md:list:08f91818a013c09222e4b70f36d80805e3dd4ae218d1fb3b829338480715781c": {
+    "CHANGELOG.md:list:091425c82d44de1aa212cadfc7654b8954ae48153a004f8d99913b713f33a8e0": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 兼容 LLM 偶尔生成的整数字符串，避免有效行号因 JSON 类型偏差导致读取失败。",
+      "source": "LLM 请求超时配置改为 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__，旧 __ATRIX_CODE_3__ 已移除；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "08f91818a013c09222e4b70f36d80805e3dd4ae218d1fb3b829338480715781c",
-      "translation": "__ATRIX_CODE_0__'s __ATRIX_CODE_1__ now supports integer strings occasionally generated by the LLM to prevent read failures of valid line numbers caused by JSON type mismatches.",
-      "updated_at": 1783831156
+      "source_hash": "091425c82d44de1aa212cadfc7654b8954ae48153a004f8d99913b713f33a8e0",
+      "translation": "LLM request timeout configuration changed to __ATRIX_CODE_0__, __ATRIX_CODE_1__, and __ATRIX_CODE_2__; the old __ATRIX_CODE_3__ has been removed;",
+      "updated_at": 1782461728
     },
     "CHANGELOG.md:list:098eed1601e52d2f5aaac1609157260a66627693f8eaa52983b1d541a4007058": {
       "kind": "list",
@@ -88,22 +88,6 @@
       "translation": "QQ official bot now supports group chats",
       "updated_at": 1788168220
     },
-    "CHANGELOG.md:list:0c10c3cea8d5bbc65962ecf432d937a35a35d5cae1f7b093e29d01e14e08efba": {
-      "kind": "list",
-      "source": "修复普通用户修改自己的高风险 core 常驻记忆时绕过确认；普通用户现在只能在工具权限校验通过后确认 __ATRIX_CODE_0__/__ATRIX_CODE_1__ 风险调用。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "0c10c3cea8d5bbc65962ecf432d937a35a35d5cae1f7b093e29d01e14e08efba",
-      "translation": "Fixed an issue where regular users could bypass confirmation when modifying their own high-risk core resident memory; regular users can now only confirm __ATRIX_CODE_0__/__ATRIX_CODE_1__ risk calls after tool permission validation passes.",
-      "updated_at": 1784897153
-    },
-    "CHANGELOG.md:list:0cb9f5d55b3a2dc69256f4b4688cf35160155b719f6f9ed566a3a9cc1a4274d6": {
-      "kind": "list",
-      "source": "平台入站上下文新增统一群身份 __ATRIX_CODE_0__，QQ OneBot 和 Telegram 会映射群主/管理员/普通成员。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "0cb9f5d55b3a2dc69256f4b4688cf35160155b719f6f9ed566a3a9cc1a4274d6",
-      "translation": "Platform inbound context added a unified group identity __ATRIX_CODE_0__; QQ OneBot and Telegram will map group owner/administrator/ordinary member.",
-      "updated_at": 1782376912
-    },
     "CHANGELOG.md:list:0d01c30f53fa434e9b3c2977f56cf7cdb19a98a6f08d95edea519178713b301e": {
       "kind": "list",
       "source": "优化给agent看的meta信息，现在显示平台、群号、群id、用户昵称、用户id",
@@ -111,6 +95,30 @@
       "source_hash": "0d01c30f53fa434e9b3c2977f56cf7cdb19a98a6f08d95edea519178713b301e",
       "translation": "Optimized meta information for the Agent; it now displays the platform, group number, group ID, user nickname, and user ID.",
       "updated_at": 1789560899
+    },
+    "CHANGELOG.md:list:0dfc32f01cc5864dc6a6525e91450e9923f545cedc38b8ae2396222a0eca4bee": {
+      "kind": "list",
+      "source": "平台媒体输出支持在 __ATRIX_CODE_0__ 中识别 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__ 源；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "0dfc32f01cc5864dc6a6525e91450e9923f545cedc38b8ae2396222a0eca4bee",
+      "translation": "Platform media output now supports identifying __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, and __ATRIX_CODE_4__ sources in __ATRIX_CODE_0__;",
+      "updated_at": 1783048564
+    },
+    "CHANGELOG.md:list:1076b86369e80e71d75d50196ca3ae7b56cf73247a2cd5d6a9e5d596a0160be0": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 现在控制整轮用户请求总时长，默认 __ATRIX_CODE_1__ 表示不限时；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "1076b86369e80e71d75d50196ca3ae7b56cf73247a2cd5d6a9e5d596a0160be0",
+      "translation": "__ATRIX_CODE_0__ now controls the total duration of a full round of user requests; by default, __ATRIX_CODE_1__ indicates no time limit;",
+      "updated_at": 1782574901
+    },
+    "CHANGELOG.md:list:109defdcaaa12a80620735150768f857986430e7b8673f2a662c40ad008bb212": {
+      "kind": "list",
+      "source": "**原生与外置 Skill**：__ATRIX_CODE_0__ 元工具支持 LLM 创建原生 ATRI-X Skill（纯 Atriyph 或附带 Go 源码并编译）；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "109defdcaaa12a80620735150768f857986430e7b8673f2a662c40ad008bb212",
+      "translation": "**Native and External Skills**: The __ATRIX_CODE_0__ meta-tool supports LLMs in creating native ATRI-X Skills (pure Atriyph or accompanied by Go source code and compiled);",
+      "updated_at": 1782270601
     },
     "CHANGELOG.md:list:11621501ea8bcfaddd39ec7e55a6251b636d07bf7fbcb7f3d2438f778362bf66": {
       "kind": "list",
@@ -120,6 +128,14 @@
       "translation": "**Memory System**: Resident memory (core/normal layers) injected by platform and actor; long-term memory based on Markdown source data and SQLite FTS retrieval.",
       "updated_at": 1782270601
     },
+    "CHANGELOG.md:list:11811367ef42086bdd42e666b68312d4cf95d366f4ec3cf119c55f7f6612c1c8": {
+      "kind": "list",
+      "source": "Session 闲置过期改为 __ATRIX_CODE_0__ 四项配置，分别控制群聊/私聊下普通用户和超级管理员的当前 Session 过期时间；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "11811367ef42086bdd42e666b68312d4cf95d366f4ec3cf119c55f7f6612c1c8",
+      "translation": "Session idle expiration is now managed by four __ATRIX_CODE_0__ configurations, which separately control the current Session expiration time for ordinary users and superadmins in group chats and private chats;",
+      "updated_at": 1783074551
+    },
     "CHANGELOG.md:list:124caf0d7cc91f9b2ff6facd12a4ab06dd0cf07f8eaac37eb69f2f376660b75b": {
       "kind": "list",
       "source": "**多平台适配**：CLI（含 client/server 分离与远程连接）、QQ OneBot v11、QQ 官方机器人、Telegram Bot API。",
@@ -128,21 +144,21 @@
       "translation": "**Multi-platform adapter**: CLI (including client/server separation and remote connection), QQ OneBot v11, QQ Official Bot, Telegram Bot API.",
       "updated_at": 1782270601
     },
-    "CHANGELOG.md:list:1306f051df00fc640349a0d84e661928c55382bb10eb6763bf3c3f1865c2f524": {
+    "CHANGELOG.md:list:12a7ee9caa275f6061484e75b2e14a243cd94608aca6421e79e084d26d077f08": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 支持填字段更新 meta，并新增 __ATRIX_CODE_2__ 复用 __ATRIX_CODE_3__ 的编辑操作修改正文；",
+      "source": "现在默认在 10 分钟无有效操作后停止，若对应 Session TTL 更短则以其为上限，追加内容或 __ATRIX_CODE_0__ 会续期。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "1306f051df00fc640349a0d84e661928c55382bb10eb6763bf3c3f1865c2f524",
-      "translation": "__ATRIX_CODE_0__'s __ATRIX_CODE_1__ now supports updating meta via filled fields, and __ATRIX_CODE_2__ has been added to reuse the edit operation of __ATRIX_CODE_3__ to modify the body;",
-      "updated_at": 1782662506
+      "source_hash": "12a7ee9caa275f6061484e75b2e14a243cd94608aca6421e79e084d26d077f08",
+      "translation": "Now, it stops by default after 10 minutes of no valid operation; if the corresponding Session TTL is shorter, that will be the limit. Appended content or __ATRIX_CODE_0__ will renew the timeout.",
+      "updated_at": 1788078727
     },
-    "CHANGELOG.md:list:139cedb063eab03bcc622e4f60bd575baa06a38c3746c40859486fd2ff89eac8": {
+    "CHANGELOG.md:list:14820a39bad44aa6c973b6787bb2be83381f2b80c09c90e4db34508953e873fe": {
       "kind": "list",
-      "source": "修复 Session 闲置过期、执行 __ATRIX_CODE_0__ 或切换会话后，引用原 Session 最后一条 assistant 回复会误建新 Session 的问题；",
+      "source": "__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 兼容 LLM 偶尔生成的整数字符串，避免有效行号因 JSON 类型偏差导致读取失败。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "139cedb063eab03bcc622e4f60bd575baa06a38c3746c40859486fd2ff89eac8",
-      "translation": "Fixed an issue where referencing the last assistant reply of the original Session would incorrectly create a new Session after the Session timed out due to inactivity, __ATRIX_CODE_0__ was executed, or the Session was switched;",
-      "updated_at": 1789088930
+      "source_hash": "14820a39bad44aa6c973b6787bb2be83381f2b80c09c90e4db34508953e873fe",
+      "translation": "__ATRIX_CODE_0__'s __ATRIX_CODE_1__ now supports integer strings occasionally generated by the LLM to prevent read failures of valid line numbers caused by JSON type mismatches.",
+      "updated_at": 1783831156
     },
     "CHANGELOG.md:list:14cd896f3e686f14895d68bac5e89d2420b4109ebf71e29785677cc89a68d1a8": {
       "kind": "list",
@@ -152,6 +168,14 @@
       "translation": "Interfaces, configurations, and internal implementations may still be adjusted; it is more suitable for exploratory use as a personal Agent/bot framework.",
       "updated_at": 1782270601
     },
+    "CHANGELOG.md:list:1538ed6de4032f114d020a78d96f7e5d7c7b448c3d12c3121252275897954f86": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 的相对路径改为基于当前 workspace 解析；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "1538ed6de4032f114d020a78d96f7e5d7c7b448c3d12c3121252275897954f86",
+      "translation": "Relative paths for `__ATRIX_CODE_0__`, `__ATRIX_CODE_1__`, and `__ATRIX_CODE_2__` are now resolved based on the current workspace;",
+      "updated_at": 1782958962
+    },
     "CHANGELOG.md:list:153bb41a5c2a76cac36cdfaa46fe514ac8125026bad589fb9dd88e942a020a20": {
       "kind": "list",
       "source": "修复 OpenAI-compatible 上游返回 HTTP 200 HTML/非 SSE 页面时被 Scanner 超长 token 错误掩盖的问题；",
@@ -159,6 +183,38 @@
       "source_hash": "153bb41a5c2a76cac36cdfaa46fe514ac8125026bad589fb9dd88e942a020a20",
       "translation": "Fixed an issue where OpenAI-compatible upstreams returning HTTP 200 HTML/non-SSE pages were masked by Scanner's over-length token error;",
       "updated_at": 1789300308
+    },
+    "CHANGELOG.md:list:1592b883f870504c1c79caab38e2cc5974d69d948b7f27bf161c53a75b65ff0e": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 读取 __ATRIX_CODE_1__、__ATRIX_CODE_2__ 及常见凭据文件名时改为高风险确认；其他文件读取仍保持低风险。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "1592b883f870504c1c79caab38e2cc5974d69d948b7f27bf161c53a75b65ff0e",
+      "translation": "__ATRIX_CODE_0__ now requires high-risk confirmation when reading __ATRIX_CODE_1__, __ATRIX_CODE_2__, and common credential filenames; reading other files remains low-risk.",
+      "updated_at": 1785806029
+    },
+    "CHANGELOG.md:list:15ffc427c14bbb86011d914c9debdae8224573665f2dc6785c26b223c43c5a6f": {
+      "kind": "list",
+      "source": "未自定义时仍会把 JSON 参数格式化成更易读的多行展示，字符串里的 __ATRIX_CODE_0__ 会显示为真实换行。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "15ffc427c14bbb86011d914c9debdae8224573665f2dc6785c26b223c43c5a6f",
+      "translation": "When not customized, JSON parameters will still be formatted into a more readable multi-line display, and __ATRIX_CODE_0__ within strings will be displayed as actual line breaks.",
+      "updated_at": 1782631048
+    },
+    "CHANGELOG.md:list:1668a1cf5552085bf592238b0409ac231bfba0b93c03f8e74dbe4c3f1a81eef9": {
+      "kind": "list",
+      "source": "**Atriyph Task Notation**：结构化任务描述语言，用于 LLM Cron 与原生 Skill，减少自然语言歧义。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "1668a1cf5552085bf592238b0409ac231bfba0b93c03f8e74dbe4c3f1a81eef9",
+      "translation": "**Atriyph Task Notation**: A structured task description language used for LLM Cron and native Skills to reduce natural language ambiguity.",
+      "updated_at": 1782270601
+    },
+    "CHANGELOG.md:list:168c8c0032e31e20b655167dca19c850d53f72616372cfba49290d51e3f0519a": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__ 参数，可按需跳过缓存、重新获取网页并更新缓存内容。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "168c8c0032e31e20b655167dca19c850d53f72616372cfba49290d51e3f0519a",
+      "translation": "__ATRIX_CODE_0__ added the __ATRIX_CODE_1__ parameter, which can skip the cache, re-fetch the webpage, and update the cached content as needed.",
+      "updated_at": 1784027930
     },
     "CHANGELOG.md:list:172ce4a2b47495feea66fd71dd0d868f23fcc3fbe8c9aa01a58362342daddd52": {
       "kind": "list",
@@ -168,45 +224,45 @@
       "translation": "qq heartbeat ack and qqofficial gateway resumed are no longer logged",
       "updated_at": 1782563804
     },
-    "CHANGELOG.md:list:1764df0588f5930644e52d3390abe06c5909cf93fbb5a5bd4a7fa9150c62d2e9": {
+    "CHANGELOG.md:list:1ab2af72942e1680bd7921691330755ce00aa48206159d7c33ef310c4b4c8c17": {
       "kind": "list",
-      "source": "首次运行会生成 __ATRIX_CODE_0__，用于说明如何把 AgentSkill 注册为普通工具。",
+      "source": "新增 __ATRIX_CODE_0__ 配置，统一控制平台入站文件最大保存大小和下载超时。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "1764df0588f5930644e52d3390abe06c5909cf93fbb5a5bd4a7fa9150c62d2e9",
-      "translation": "The first run will generate __ATRIX_CODE_0__, which explains how to register an AgentSkill as a regular tool.",
-      "updated_at": 1783219356
+      "source_hash": "1ab2af72942e1680bd7921691330755ce00aa48206159d7c33ef310c4b4c8c17",
+      "translation": "Added __ATRIX_CODE_0__ configuration to uniformly control the maximum save size and download timeout for platform inbound files.",
+      "updated_at": 1783085325
     },
-    "CHANGELOG.md:list:18f8686c3e2512c85d4545e776b64d44967ba9ce78170d168c2be40eff28fa31": {
+    "CHANGELOG.md:list:1ad4e4cfef5d118b03347d68b0915a07d216a41164ede4c4c5e6786a9e6b456a": {
       "kind": "list",
-      "source": "Provider 新增 __ATRIX_CODE_0__ 字段，支持 HTTP/SOCKS5 代理。",
+      "source": "表情 Hook 从内嵌插件改为规则 Hook 示例，不再内置 emoticon 插件和 __ATRIX_CODE_0__ 资产。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "18f8686c3e2512c85d4545e776b64d44967ba9ce78170d168c2be40eff28fa31",
-      "translation": "Added __ATRIX_CODE_0__ field to Provider, supporting HTTP/SOCKS5 proxies.",
-      "updated_at": 1782312399
+      "source_hash": "1ad4e4cfef5d118b03347d68b0915a07d216a41164ede4c4c5e6786a9e6b456a",
+      "translation": "Emoticon Hook changed from an embedded plugin to a rule Hook example; the emoticon plugin and __ATRIX_CODE_0__ assets are no longer built-in.",
+      "updated_at": 1782376912
     },
-    "CHANGELOG.md:list:1945bb5d4629d8b9098d57e66a570df93853f28efd0ddb3064b15acd7b299c38": {
+    "CHANGELOG.md:list:1f563efa8dabed9a668559d2362b91ab0fd5710ca512d3e9c70f9e7769ddd508": {
       "kind": "list",
-      "source": "新增 __ATRIX_CODE_0__ 命令：从审计日志聚合 token 消耗，支持按模型/天/会话汇总，快捷参数 __ATRIX_CODE_1__ 天数、__ATRIX_CODE_2__ 模型、__ATRIX_CODE_3__ 会话。",
+      "source": "__ATRIX_CODE_0__ 审计事件从 debug 级别改为 info 级别，默认 __ATRIX_CODE_1__ 即可记录 token 消耗数据。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "1945bb5d4629d8b9098d57e66a570df93853f28efd0ddb3064b15acd7b299c38",
-      "translation": "Added __ATRIX_CODE_0__ command: aggregates token consumption from the audit log, supporting summaries by model/day/Session, with shortcut parameters __ATRIX_CODE_1__ for days, __ATRIX_CODE_2__ for model, and __ATRIX_CODE_3__ for Session.",
+      "source_hash": "1f563efa8dabed9a668559d2362b91ab0fd5710ca512d3e9c70f9e7769ddd508",
+      "translation": "__ATRIX_CODE_0__ audit events changed from debug level to info level; token consumption data can now be recorded by default with __ATRIX_CODE_1__.",
       "updated_at": 1782884148
     },
-    "CHANGELOG.md:list:1e09ce6b38276aa92e6b8263e6d5d976e802755ccd80424e2d1025e6e460f939": {
+    "CHANGELOG.md:list:1f875043469c546f93679bf4f010f71207674c03ba7be0517a02fa46c79a78e8": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__ 和 __ATRIX_CODE_2__，用于筛选并显示 __ATRIX_CODE_3__ 日志。",
+      "source": "更新 Shell 与 Hook 的环境变量继承和分级 __ATRIX_CODE_0__ 配置。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "1e09ce6b38276aa92e6b8263e6d5d976e802755ccd80424e2d1025e6e460f939",
-      "translation": "__ATRIX_CODE_0__ added __ATRIX_CODE_1__ and __ATRIX_CODE_2__ to filter and display __ATRIX_CODE_3__ logs.",
-      "updated_at": 1784127057
+      "source_hash": "1f875043469c546f93679bf4f010f71207674c03ba7be0517a02fa46c79a78e8",
+      "translation": "Update environment variable inheritance and hierarchical __ATRIX_CODE_0__ configuration for Shell and Hook.",
+      "updated_at": 1784812490
     },
-    "CHANGELOG.md:list:1f43fc3e767815a7a2bb28d62158e9fa1f233ca2e46a43db188f31936f3bb56e": {
+    "CHANGELOG.md:list:1ff54cf069f981bd4d1f6e2f98e09e34afe367454cf837de32c6705ee33f0581": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 与 Session 闲置过期改为仅清除当前会话指针，首条普通消息到来时才创建新 Session；",
+      "source": "修复 OpenAI-compatible 流式响应中途断开但缺失 __ATRIX_CODE_0__ 时被当作正常结束的问题；现在会明确通知 LLM 响应中断。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "1f43fc3e767815a7a2bb28d62158e9fa1f233ca2e46a43db188f31936f3bb56e",
-      "translation": "__ATRIX_CODE_0__ and Session idle expiration are changed to only clear the current session pointer; a new Session is created only when the first ordinary message arrives;",
-      "updated_at": 1784863205
+      "source_hash": "1ff54cf069f981bd4d1f6e2f98e09e34afe367454cf837de32c6705ee33f0581",
+      "translation": "Fixed an issue where OpenAI-compatible streaming responses that disconnected midway but were missing __ATRIX_CODE_0__ were treated as normal terminations; now it will explicitly notify that the LLM response was interrupted.",
+      "updated_at": 1782298716
     },
     "CHANGELOG.md:list:205884c043d4c2e9e93973f127b1382eef2d8f7e9adb05d5133c5559fdc974cf": {
       "kind": "list",
@@ -216,6 +272,14 @@
       "translation": "Optimize system prompt",
       "updated_at": 1784730998
     },
+    "CHANGELOG.md:list:20a1cd3e3495bc76f58f30b9d87c855f4d3f9b54e61977ea54422c3829283bde": {
+      "kind": "list",
+      "source": "QQ OneBot 私聊文件段缺少 __ATRIX_CODE_0__ 时会调用 __ATRIX_CODE_1__；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "20a1cd3e3495bc76f58f30b9d87c855f4d3f9b54e61977ea54422c3829283bde",
+      "translation": "When the file segment in a QQ OneBot private chat is missing __ATRIX_CODE_0__, __ATRIX_CODE_1__ will be called;",
+      "updated_at": 1783095128
+    },
     "CHANGELOG.md:list:21d72a77e48ea524eff4c4c1df5ca0a1108124985828b75d4370351c123487c8": {
       "kind": "list",
       "source": "修复 Session 删除、归档确认可能因列表或当前 Session 变化而作用到错误目标的问题，并让存储错误正确返回给调用方。",
@@ -223,14 +287,6 @@
       "source_hash": "21d72a77e48ea524eff4c4c1df5ca0a1108124985828b75d4370351c123487c8",
       "translation": "Fixed an issue where Session deletion or archive confirmation might affect the wrong target due to changes in the list or the current Session, and ensured that storage errors are correctly returned to the caller.",
       "updated_at": 1784276217
-    },
-    "CHANGELOG.md:list:237b91862212953b9f5d58f94631a96debe0966c77da9f9dd41e0428a5262f6b": {
-      "kind": "list",
-      "source": "CLI TUI 中不存在的 __ATRIX_CODE_0__ 引用现在按普通文本原样发送，不再阻止消息提交；同一消息中存在的文件仍会正常展开。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "237b91862212953b9f5d58f94631a96debe0966c77da9f9dd41e0428a5262f6b",
-      "translation": "Non-existent __ATRIX_CODE_0__ references in the CLI TUI are now sent as plain text as-is and no longer block message submission; files that exist within the same message will still be expanded normally.",
-      "updated_at": 1786532747
     },
     "CHANGELOG.md:list:26b222fc0d0b7e2913298c6c9031205f80eda52572d2f5f484ad632790632906": {
       "kind": "list",
@@ -240,21 +296,45 @@
       "translation": "Disconnection reconnection for QQ OneBot, QQ Official, and Telegram platforms has been changed to exponential backoff (starting at 3s, doubling, capped at 10s) with downgraded logging: consecutive failures are logged as 'warn' only on the first occurrence and 'info' upon recovery, preventing log flooding in every round.",
       "updated_at": 1782892198
     },
-    "CHANGELOG.md:list:273925de4249272e655fbfc98c5f7e446e7e47829e053f1a4ceeb005a6fa91c6": {
+    "CHANGELOG.md:list:26bb44bc90ce7fe7afbdc4d323af59f8ac8f91aa74c3bae140eaea0ec22a5715": {
       "kind": "list",
-      "source": "修复 Linux service 下进程 Hook 只能使用服务进程 PATH、无法获得配置 __ATRIX_CODE_0__，导致终端可用的 __ATRIX_CODE_1__ 等命令无法启动的问题；",
+      "source": "__ATRIX_CODE_0__ 命令现在展示每个 turn 的当前运行阶段（preparing/llm/tool/sending）和阶段耗时，可区分 LLM 慢还是平台发送卡住。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "273925de4249272e655fbfc98c5f7e446e7e47829e053f1a4ceeb005a6fa91c6",
-      "translation": "Fixed an issue where process Hooks under Linux services could only use the service process PATH and were unable to obtain the configuration __ATRIX_CODE_0__, causing commands available in the terminal, such as __ATRIX_CODE_1__, to fail to start;",
-      "updated_at": 1784611290
+      "source_hash": "26bb44bc90ce7fe7afbdc4d323af59f8ac8f91aa74c3bae140eaea0ec22a5715",
+      "translation": "The __ATRIX_CODE_0__ command now displays the current execution stage (preparing/llm/tool/sending) and the duration of each stage for every turn, allowing you to distinguish whether the LLM is slow or the platform delivery is stuck.",
+      "updated_at": 1782952540
     },
-    "CHANGELOG.md:list:280823f9e19a44bcbfe92547cc46408bbcf2b93e26cd0cfcf98c3d26afaa1c3e": {
+    "CHANGELOG.md:list:272395c428e4f4529688582e7af9667121c741a35115546d25ca00b311cb6710": {
       "kind": "list",
-      "source": "**工具发现机制**：默认只暴露 __ATRIX_CODE_0__ 与工具名，按需注入完整 schema，减少无效上下文开销。",
+      "source": "QQ OneBot 新增 __ATRIX_CODE_0__ 配置，本地图片和文件默认使用 base64 发送，也可在共享文件系统的部署中显式改用 __ATRIX_CODE_1__。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "280823f9e19a44bcbfe92547cc46408bbcf2b93e26cd0cfcf98c3d26afaa1c3e",
-      "translation": "**Tool Discovery Mechanism**: By default, only __ATRIX_CODE_0__ and the tool name are exposed, with the full schema injected on demand to reduce unnecessary context overhead.",
-      "updated_at": 1782270601
+      "source_hash": "272395c428e4f4529688582e7af9667121c741a35115546d25ca00b311cb6710",
+      "translation": "QQ OneBot added __ATRIX_CODE_0__ configuration; local images and files are sent using base64 by default, but can be explicitly changed to __ATRIX_CODE_1__ in shared file system deployments.",
+      "updated_at": 1784209683
+    },
+    "CHANGELOG.md:list:28f5e9fc59577ff58ffc0eb61290e224f6400894574388f01d93c2493a3159a2": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 支持填字段更新 meta，并新增 __ATRIX_CODE_2__ 复用 __ATRIX_CODE_3__ 的编辑操作修改正文；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "28f5e9fc59577ff58ffc0eb61290e224f6400894574388f01d93c2493a3159a2",
+      "translation": "__ATRIX_CODE_0__'s __ATRIX_CODE_1__ now supports updating meta via filled fields, and __ATRIX_CODE_2__ has been added to reuse the edit operation of __ATRIX_CODE_3__ to modify the body;",
+      "updated_at": 1782662506
+    },
+    "CHANGELOG.md:list:2928d53c498ee3eede9574206d0b05120b9861de10149ce6aedd3626a257d20d": {
+      "kind": "list",
+      "source": "平台入站上下文新增统一群身份 __ATRIX_CODE_0__，QQ OneBot 和 Telegram 会映射群主/管理员/普通成员。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "2928d53c498ee3eede9574206d0b05120b9861de10149ce6aedd3626a257d20d",
+      "translation": "Platform inbound context added a unified group identity __ATRIX_CODE_0__; QQ OneBot and Telegram will map group owner/administrator/ordinary member.",
+      "updated_at": 1782376912
+    },
+    "CHANGELOG.md:list:29819714fade7a4e0f32bf987a07af4f4f2f8d1ac2f006b1feca9453fdd55fc5": {
+      "kind": "list",
+      "source": "现在每张图片前会派生带消息内序号、名称和 HTTP(S) URL 的用户文本标签，持久化 __ATRIX_CODE_0__ 与视觉回退使用同一文本投影，__ATRIX_CODE_1__ 仍只保存原始结构且无需数据库迁移。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "29819714fade7a4e0f32bf987a07af4f4f2f8d1ac2f006b1feca9453fdd55fc5",
+      "translation": "Now, a user text label containing the sequence number within the message, name, and HTTP(S) URL will be derived before each image; persistence __ATRIX_CODE_0__ and visual fallback use the same text projection, while __ATRIX_CODE_1__ still only saves the original structure and requires no database migration.",
+      "updated_at": 1786545145
     },
     "CHANGELOG.md:list:29d199145b36b120aac3bfe22147a8a3a6da9b52677cbbd283be284ab7d983ca": {
       "kind": "list",
@@ -264,29 +344,13 @@
       "translation": "Regular local paths are still handled according to the platform's default method.",
       "updated_at": 1783048564
     },
-    "CHANGELOG.md:list:2a124153d199af5892e2e21c29055db5ce8a7cc96679b697f9e27de92a335335": {
+    "CHANGELOG.md:list:2cda45d30597709c48f2ab2f433db0efcdc3fd17dd6a1b27cbb9134fc20be82e": {
       "kind": "list",
-      "source": "Hook rules __ATRIX_CODE_0__ action 新增 __ATRIX_CODE_1__ 列表，支持多类型多段输出（text/image/file/emoticon，含 url/path/base64），格式与 Atriena segment 统一。",
+      "source": "修复 Linux service 下进程 Hook 只能使用服务进程 PATH、无法获得配置 __ATRIX_CODE_0__，导致终端可用的 __ATRIX_CODE_1__ 等命令无法启动的问题；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "2a124153d199af5892e2e21c29055db5ce8a7cc96679b697f9e27de92a335335",
-      "translation": "Hook rules __ATRIX_CODE_0__ action added __ATRIX_CODE_1__ list, supporting multi-type multi-segment output (text/image/file/emoticon, including url/path/base64), with a format unified with Atriena segments.",
-      "updated_at": 1782376912
-    },
-    "CHANGELOG.md:list:2bb909666ed4394d5372eed10836df6b41d4ccbf9cd79b0348e9bf508f07d6bd": {
-      "kind": "list",
-      "source": "未自定义时仍会把 JSON 参数格式化成更易读的多行展示，字符串里的 __ATRIX_CODE_0__ 会显示为真实换行。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "2bb909666ed4394d5372eed10836df6b41d4ccbf9cd79b0348e9bf508f07d6bd",
-      "translation": "When not customized, JSON parameters will still be formatted into a more readable multi-line display, and __ATRIX_CODE_0__ within strings will be displayed as actual line breaks.",
-      "updated_at": 1782631048
-    },
-    "CHANGELOG.md:list:2c14940f8f5aa7ab8978b0cd2dc3f461a7b7169821180297e66c8f8a73c700ea": {
-      "kind": "list",
-      "source": "Windows 下 __ATRIX_CODE_0__ 工具优先使用 __ATRIX_CODE_1__，其次 __ATRIX_CODE_2__，最后回退到 __ATRIX_CODE_3__。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "2c14940f8f5aa7ab8978b0cd2dc3f461a7b7169821180297e66c8f8a73c700ea",
-      "translation": "On Windows, the __ATRIX_CODE_0__ tool prioritizes __ATRIX_CODE_1__, followed by __ATRIX_CODE_2__, and finally falls back to __ATRIX_CODE_3__.",
-      "updated_at": 1783334583
+      "source_hash": "2cda45d30597709c48f2ab2f433db0efcdc3fd17dd6a1b27cbb9134fc20be82e",
+      "translation": "Fixed an issue where process Hooks under Linux services could only use the service process PATH and were unable to obtain the configuration __ATRIX_CODE_0__, causing commands available in the terminal, such as __ATRIX_CODE_1__, to fail to start;",
+      "updated_at": 1784611290
     },
     "CHANGELOG.md:list:2f756ea7d8087b7077089523bb17dcc90b0b684370d97617d56618e4f644439c": {
       "kind": "list",
@@ -296,13 +360,21 @@
       "translation": "Absolute paths can still be used temporarily and will return a warning.",
       "updated_at": 1782958962
     },
-    "CHANGELOG.md:list:3113c27f20b53241bc3c9f28cfe562a2fa63ad88463bbb3f33c3ef5fe21eb55f": {
+    "CHANGELOG.md:list:2f89b7fe5109decf9f15e0f498a89c983fade9e06e0a351bb6577f9431a0ea38": {
       "kind": "list",
-      "source": "CLI TUI 执行 __ATRIX_CODE_0__ 后会把当前运行状态收束为 __ATRIX_CODE_1__ 并固定耗时，不再继续累加状态栏时间。",
+      "source": "修复 Atrinis LLM 报告发送前就把事件标记为 __ATRIX_CODE_0__ 的问题；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "3113c27f20b53241bc3c9f28cfe562a2fa63ad88463bbb3f33c3ef5fe21eb55f",
-      "translation": "After executing __ATRIX_CODE_0__, the CLI TUI will converge the current running state into __ATRIX_CODE_1__ and fix the elapsed time, no longer accumulating time in the status bar.",
-      "updated_at": 1783738522
+      "source_hash": "2f89b7fe5109decf9f15e0f498a89c983fade9e06e0a351bb6577f9431a0ea38",
+      "translation": "Fixed an issue where Atrinis LLM marked events as __ATRIX_CODE_0__ before sending the report;",
+      "updated_at": 1784340385
+    },
+    "CHANGELOG.md:list:30b1b0861a05ca2fcb972ccd5d6027ba8140a17260c307a48a99c55b3786d1e5": {
+      "kind": "list",
+      "source": "AgentSkill 启动扫描不再常驻缓存 __ATRIX_CODE_0__ 正文，只保留摘要与路径；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "30b1b0861a05ca2fcb972ccd5d6027ba8140a17260c307a48a99c55b3786d1e5",
+      "translation": "AgentSkill startup scan no longer caches __ATRIX_CODE_0__ body permanently, keeping only summaries and paths;",
+      "updated_at": 1783775610
     },
     "CHANGELOG.md:list:317c7d32a5e329ea22f1b69bc2b8231d35853cf1c43e347f9d558d23b403a0ed": {
       "kind": "list",
@@ -312,21 +384,13 @@
       "translation": "Direct calls-only requests will not send additional messages.",
       "updated_at": 1782395477
     },
-    "CHANGELOG.md:list:31e1b19552361d185e88961542f7ecdbf799d5e3cc7d6a34196458c6ff69f3bc": {
+    "CHANGELOG.md:list:334b6e49e78a27c18c0e9efad1f529580cab9330f97eaf1c982ed8aa84295dc2": {
       "kind": "list",
-      "source": "Provider 配置重构：删除未使用的 __ATRIX_CODE_0__，删除 __ATRIX_CODE_1__ 全局模型窗口表；",
+      "source": "__ATRIX_CODE_0__ 工具风险等级由 high 降为 medium。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "31e1b19552361d185e88961542f7ecdbf799d5e3cc7d6a34196458c6ff69f3bc",
-      "translation": "Provider configuration refactoring: removed unused __ATRIX_CODE_0__, removed __ATRIX_CODE_1__ global model window table;",
-      "updated_at": 1782312399
-    },
-    "CHANGELOG.md:list:322925afc27ccaaa17f6692c9b9951f250d0b5e6db87c4d64a77931805186eb6": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 工具移除 __ATRIX_CODE_1__ 参数，命令默认在当前 workspace 下执行；后台任务仍限制在各自 sandbox 内。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "322925afc27ccaaa17f6692c9b9951f250d0b5e6db87c4d64a77931805186eb6",
-      "translation": "`__ATRIX_CODE_0__` tool removed the `__ATRIX_CODE_1__` parameter; commands are executed in the current workspace by default, while background tasks remain restricted to their respective sandboxes.",
-      "updated_at": 1782958962
+      "source_hash": "334b6e49e78a27c18c0e9efad1f529580cab9330f97eaf1c982ed8aa84295dc2",
+      "translation": "The risk level of the __ATRIX_CODE_0__ tool has been downgraded from high to medium.",
+      "updated_at": 1782298716
     },
     "CHANGELOG.md:list:33a2ed6142f63fac0076480da8ce2e21882df328c3016365afaea0d692d9c3b9": {
       "kind": "list",
@@ -336,21 +400,13 @@
       "translation": "A single LLM streaming request is controlled only by the first packet and idle timeout.",
       "updated_at": 1782574901
     },
-    "CHANGELOG.md:list:36326ca18c13f00375cdf8134055082ca8bcb7fac1c0539ced4864dc039700ee": {
+    "CHANGELOG.md:list:33bab7c7bc41c574963efe144eafaa5655b1b0c63ffe319e1537e0b2618fa55c": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__ 参数，默认使用 Jina Reader；传 __ATRIX_CODE_2__ 可手动改用直接爬取。",
+      "source": "修复 __ATRIX_CODE_0__ 工具设置目录时不支持 __ATRIX_CODE_1__、__ATRIX_CODE_2__、Windows __ATRIX_CODE_3__、__ATRIX_CODE_4__ 和 __ATRIX_CODE_5__ 主目录路径的问题。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "36326ca18c13f00375cdf8134055082ca8bcb7fac1c0539ced4864dc039700ee",
-      "translation": "__ATRIX_CODE_0__ added the __ATRIX_CODE_1__ parameter, which defaults to using Jina Reader; passing __ATRIX_CODE_2__ allows manually switching to direct crawling.",
-      "updated_at": 1783519200
-    },
-    "CHANGELOG.md:list:36d8eefabd86733235aa7765b21ab8353754de23bae489203434cee8a682113b": {
-      "kind": "list",
-      "source": "多处匹配时可通过 __ATRIX_CODE_0__ 选择第几处，未传 __ATRIX_CODE_1__ 报错并列出所有匹配位置。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "36d8eefabd86733235aa7765b21ab8353754de23bae489203434cee8a682113b",
-      "translation": "When there are multiple matches, the specific match can be selected via __ATRIX_CODE_0__; if __ATRIX_CODE_1__ is not provided, an error will be reported and all matching positions will be listed.",
-      "updated_at": 1782298716
+      "source_hash": "33bab7c7bc41c574963efe144eafaa5655b1b0c63ffe319e1537e0b2618fa55c",
+      "translation": "Fixed the issue where __ATRIX_CODE_0__ tools did not support __ATRIX_CODE_1__, __ATRIX_CODE_2__, Windows __ATRIX_CODE_3__, __ATRIX_CODE_4__, and __ATRIX_CODE_5__ home directory paths when setting the directory.",
+      "updated_at": 1783859074
     },
     "CHANGELOG.md:list:37d1b3ce5330e9258be430381efb3099ba1542f542eae9d94fc0586ef335848b": {
       "kind": "list",
@@ -360,13 +416,21 @@
       "translation": "Fixed an issue where OpenAI-compatible streaming requests used a single HTTP timeout, causing them to be incorrectly interrupted when the model's first token was slow or long outputs exceeded 60 seconds.",
       "updated_at": 1782461728
     },
-    "CHANGELOG.md:list:3bfc1afeffc284a26448c1c4b861effd798139382834e032c757e03c4de32170": {
+    "CHANGELOG.md:list:37d9fc4185a39c0901fbcdc7e4d29a4ca1bbe09c87742f22a385c7476c3c2e08": {
       "kind": "list",
-      "source": "**日志与审计**：运行日志、审计日志与 Atrinis 日志分离，支持结构化字段与按日期轮转。",
+      "source": "首次运行会生成 __ATRIX_CODE_0__，用于提示按需求编写 ATRI-X 规则 Hook。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "3bfc1afeffc284a26448c1c4b861effd798139382834e032c757e03c4de32170",
-      "translation": "**Logs and Audit**: Runtime logs, audit logs, and Atrinis logs are separated, supporting structured fields and date-based rotation.",
-      "updated_at": 1782270601
+      "source_hash": "37d9fc4185a39c0901fbcdc7e4d29a4ca1bbe09c87742f22a385c7476c3c2e08",
+      "translation": "The first run will generate __ATRIX_CODE_0__, which serves as a prompt to write ATRI-X rule Hooks according to your needs.",
+      "updated_at": 1783392486
+    },
+    "CHANGELOG.md:list:3b3997232bc969de211eb02d0d54797ac91def85c61b6dedffe951e53af26742": {
+      "kind": "list",
+      "source": "补全默认 __ATRIX_CODE_0__ 中缺失的 __ATRIX_CODE_1__。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "3b3997232bc969de211eb02d0d54797ac91def85c61b6dedffe951e53af26742",
+      "translation": "Completed the missing __ATRIX_CODE_1__ in the default __ATRIX_CODE_0__.",
+      "updated_at": 1784025711
     },
     "CHANGELOG.md:list:3cac303e77d78b8a38bc8c513ad9c4a32a433a641f83783336fe7338f1f9c46c": {
       "kind": "list",
@@ -376,53 +440,37 @@
       "translation": "Source files for resident memory and long-term memory are now included in general FileGuard protection; reading will suggest using memory tools, and direct writing via general file tools or shell will be rejected.",
       "updated_at": 1782722558
     },
-    "CHANGELOG.md:list:3f12d36ddeb77f5aa2c07362139ff4e2638f700877ec1fa53d908de5984c69a3": {
+    "CHANGELOG.md:list:3db9237e377d3e84284727afc51cfb8654f32ad8fc85b6e4045d750b83d2ca16": {
       "kind": "list",
-      "source": "持久 Worker 则收到 __ATRIX_CODE_0__ 并继续复用。",
+      "source": "远程 CLI 的 __ATRIX_CODE_0__ 消息同步新增可选 __ATRIX_CODE_1__ 字段。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "3f12d36ddeb77f5aa2c07362139ff4e2638f700877ec1fa53d908de5984c69a3",
-      "translation": "Persistent Workers will instead receive __ATRIX_CODE_0__ and continue to be reused.",
-      "updated_at": 1786539387
+      "source_hash": "3db9237e377d3e84284727afc51cfb8654f32ad8fc85b6e4045d750b83d2ca16",
+      "translation": "Added an optional __ATRIX_CODE_1__ field to the __ATRIX_CODE_0__ message synchronization of the remote CLI.",
+      "updated_at": 1785235309
     },
-    "CHANGELOG.md:list:3f5d0c97e8ab4cef1878e2da4229627dfe1a9c63387cf5d6f43ea6c83266d96b": {
+    "CHANGELOG.md:list:3e9dde2b50b8e83c13f0d1a2868e83a462a225a5d9b89cdd664212d795bd3ed8": {
       "kind": "list",
-      "source": "现在会压缩超过设置大小的图片；原始媒体和 Media ID 不变。S3 后端改为按需初始化，配置不可用时仅告警，不再阻止 ATRI-X 启动。",
+      "source": "**日志与审计**：运行日志、审计日志与 Atrinis 日志分离，支持结构化字段与按日期轮转。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "3f5d0c97e8ab4cef1878e2da4229627dfe1a9c63387cf5d6f43ea6c83266d96b",
-      "translation": "Now compresses images that exceed the configured size; original media and Media IDs remain unchanged. The S3 backend is now initialized on demand; it will only issue a warning if the configuration is unavailable, and will no longer prevent ATRI-X from starting.",
-      "updated_at": 1789433256
+      "source_hash": "3e9dde2b50b8e83c13f0d1a2868e83a462a225a5d9b89cdd664212d795bd3ed8",
+      "translation": "**Logs and Audit**: Runtime logs, audit logs, and Atrinis logs are separated, supporting structured fields and date-based rotation.",
+      "updated_at": 1782270601
     },
-    "CHANGELOG.md:list:4044f046a8ac2f38149d91bf251a488e181b94d64f9a8f006b4abe16dfdce2b2": {
+    "CHANGELOG.md:list:42df91022e1ed1e09a541b3eeadc9bf1dc43eea2bf9d36d2a3c65a7da5fd790d": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 工具首次被发现或注入时也会加载当前目录的 __ATRIX_CODE_1__/__ATRIX_CODE_2__；",
+      "source": "修复 __ATRIX_CODE_0__ 使用 __ATRIX_CODE_1__ 创建新文件时，目标父目录不存在会在确认写入阶段失败的问题。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "4044f046a8ac2f38149d91bf251a488e181b94d64f9a8f006b4abe16dfdce2b2",
-      "translation": "__ATRIX_CODE_0__ tools will also load the __ATRIX_CODE_1__/__ATRIX_CODE_2__ of the current directory when they are first discovered or injected;",
-      "updated_at": 1783833527
+      "source_hash": "42df91022e1ed1e09a541b3eeadc9bf1dc43eea2bf9d36d2a3c65a7da5fd790d",
+      "translation": "Fixed the issue where __ATRIX_CODE_0__ fails during the write confirmation stage when creating a new file using __ATRIX_CODE_1__ if the target parent directory does not exist.",
+      "updated_at": 1782644646
     },
-    "CHANGELOG.md:list:40c02f479f2e6b57124b75dcc7cc55618de3b111ba80eaef6af4bf49626c6d0c": {
+    "CHANGELOG.md:list:43f5688205871de89b2ad9596436e1a73093ba2c1315672e9e8253101bce955f": {
       "kind": "list",
-      "source": "AgentSkill 启动扫描不再常驻缓存 __ATRIX_CODE_0__ 正文，只保留摘要与路径；",
+      "source": "模型级 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 统一收到 __ATRIX_CODE_2__ 下，按 __ATRIX_CODE_3__ 查找，避免跨 provider 同名模型冲突。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "40c02f479f2e6b57124b75dcc7cc55618de3b111ba80eaef6af4bf49626c6d0c",
-      "translation": "AgentSkill startup scan no longer caches __ATRIX_CODE_0__ body permanently, keeping only summaries and paths;",
-      "updated_at": 1783775610
-    },
-    "CHANGELOG.md:list:423439494f92faf1b2877f3d54114488603b875cb08f29295101899fef57e0a8": {
-      "kind": "list",
-      "source": "Atriena v3 动作通道：Atrinis 支持 __ATRIX_CODE_0__，首批支持 raw 平台 API 以及 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__ capability，未支持的可以直接调用消息平台api；",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "423439494f92faf1b2877f3d54114488603b875cb08f29295101899fef57e0a8",
-      "translation": "Atriena v3 action channel: Atrinis supports __ATRIX_CODE_0__, initially supporting raw platform APIs as well as __ATRIX_CODE_1__, __ATRIX_CODE_2__, and __ATRIX_CODE_3__ capabilities; unsupported ones can directly call the messaging platform API.",
-      "updated_at": 1782395477
-    },
-    "CHANGELOG.md:list:448f57190dce3ac30b1196dd0fd5e7d7a53196fbca432d4490c1c50121dd9277": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__、请求超时或上游取消现在会终止一次性 exec Hook 的完整进程树，避免 Hook 派生的子进程残留；",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "448f57190dce3ac30b1196dd0fd5e7d7a53196fbca432d4490c1c50121dd9277",
-      "translation": "__ATRIX_CODE_0__, request timeouts, or upstream cancellations will now terminate the full process tree of one-time exec Hooks to avoid residual child processes spawned by the Hook;",
-      "updated_at": 1786539387
+      "source_hash": "43f5688205871de89b2ad9596436e1a73093ba2c1315672e9e8253101bce955f",
+      "translation": "Model-level __ATRIX_CODE_0__ and __ATRIX_CODE_1__ are now unified under __ATRIX_CODE_2__ and looked up by __ATRIX_CODE_3__, avoiding conflicts between models with the same name across providers.",
+      "updated_at": 1782312399
     },
     "CHANGELOG.md:list:44960cf8c2c2d97c3b07a6b6158788294f95befa9b8dd85dacca7ea066bfaecf": {
       "kind": "list",
@@ -432,13 +480,21 @@
       "translation": "Hook Actor now provides platform nicknames, group nicknames, and pure display names; chat history is saved and searched separately by platform user ID and name.",
       "updated_at": 1783856514
     },
-    "CHANGELOG.md:list:452192294ae296b84042bb201edbf0936231be05a01c5ff72cc9a3409d6ce4d4": {
+    "CHANGELOG.md:list:45239a5a4d96e8785199aed4a25e7c458b288e9846278d3cf90cc44509ab8f6f": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__，可对 Go 和 Shell 文件按名称进行轻量 AST 搜索；",
+      "source": "新增隐藏元工具 __ATRIX_CODE_0__，用于读取或写入 AgentSkill 的 __ATRIX_CODE_1__，写入前校验配置并在成功后 reload。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "452192294ae296b84042bb201edbf0936231be05a01c5ff72cc9a3409d6ce4d4",
-      "translation": "__ATRIX_CODE_0__ added __ATRIX_CODE_1__, enabling lightweight AST search by name for Go and Shell files;",
-      "updated_at": 1783658112
+      "source_hash": "45239a5a4d96e8785199aed4a25e7c458b288e9846278d3cf90cc44509ab8f6f",
+      "translation": "Added a hidden meta-tool __ATRIX_CODE_0__ for reading or writing the __ATRIX_CODE_1__ of AgentSkill; it validates the configuration before writing and reloads upon success.",
+      "updated_at": 1783074551
+    },
+    "CHANGELOG.md:list:4760d4c6e7519b342123f49faf9a8f0d711c7b1185da2614956384d0e1865a34": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 列表从逐条展示插件规则改为按插件名聚合；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "4760d4c6e7519b342123f49faf9a8f0d711c7b1185da2614956384d0e1865a34",
+      "translation": "__ATRIX_CODE_0__ list changed from displaying plugin rules item by item to aggregating them by plugin name;",
+      "updated_at": 1784858252
     },
     "CHANGELOG.md:list:47793fe0c09b4247d0d7fac666acbfbaa8acd5a191ebfbf22dcc67469561f434": {
       "kind": "list",
@@ -456,53 +512,53 @@
       "translation": "Soul and resident memory are now uniformly constructed by turn from the built-in System Prompt source;",
       "updated_at": 1784467084
     },
-    "CHANGELOG.md:list:48a9dbb08660f2dae754713aea25100d54b59eb98c8a3fea1d54df9cfb657b67": {
+    "CHANGELOG.md:list:4c9fce448b854190ab0d0883496d5be203ea289fe11aafaa162c9d4deac4d536": {
       "kind": "list",
-      "source": "read_atrix_skill 现在依赖modify_atrix_skill，方便执行可能的修改",
+      "source": "Provider 请求从默认继承进程环境代理改为仅使用 __ATRIX_CODE_0__ 中对应 Provider 的显式 __ATRIX_CODE_1__；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "48a9dbb08660f2dae754713aea25100d54b59eb98c8a3fea1d54df9cfb657b67",
-      "translation": "read_atrix_skill now depends on modify_atrix_skill to facilitate possible modifications",
-      "updated_at": 1782569783
+      "source_hash": "4c9fce448b854190ab0d0883496d5be203ea289fe11aafaa162c9d4deac4d536",
+      "translation": "Provider requests have been changed from defaulting to inheriting the process environment proxy to only using the explicit __ATRIX_CODE_1__ of the corresponding Provider in __ATRIX_CODE_0__;",
+      "updated_at": 1785763800
     },
-    "CHANGELOG.md:list:48f3a6dafe9014a329230839e2e9f2417612784774ec697386b20eb74c1e628b": {
+    "CHANGELOG.md:list:4fd64841555a401ee34ff31d3ef76327df088bca01b3d0eba26956525befe5ea": {
       "kind": "list",
-      "source": "若返回下载地址则保存到 ATRI-X，若只返回 OneBot 本地路径则直接提示该路径。",
+      "source": "__ATRIX_CODE_0__、详细帮助和 slash 命令补全现在按当前用户权限过滤；普通用户无法发现仅限超级管理员的命令。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "48f3a6dafe9014a329230839e2e9f2417612784774ec697386b20eb74c1e628b",
-      "translation": "If a download URL is returned, it will be saved to ATRI-X; if only a OneBot local path is returned, that path will be displayed directly.",
-      "updated_at": 1783095128
+      "source_hash": "4fd64841555a401ee34ff31d3ef76327df088bca01b3d0eba26956525befe5ea",
+      "translation": "__ATRIX_CODE_0__, detailed help, and slash command completion are now filtered by the current user's permissions; regular users cannot discover commands restricted to superadmins.",
+      "updated_at": 1786239723
     },
-    "CHANGELOG.md:list:50e8edceef9ba9f05ab3e29be70643e7d1e29373c088d70a65ef6b30249494e3": {
+    "CHANGELOG.md:list:507db990a63fc8ac845b48da59ce41d8b4a951edab874f7a9d85697884684fbd": {
       "kind": "list",
-      "source": "默认 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ Skill 会生成仅超管可见、低风险的 TOML。",
+      "source": "设 __ATRIX_CODE_0__ 时 __ATRIX_CODE_1__ 覆写对应字段，不设时不修改原文。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "50e8edceef9ba9f05ab3e29be70643e7d1e29373c088d70a65ef6b30249494e3",
-      "translation": "By default, __ATRIX_CODE_0__ and __ATRIX_CODE_1__ Skills will generate TOML that is low-risk and visible only to the superadmin.",
-      "updated_at": 1783479117
+      "source_hash": "507db990a63fc8ac845b48da59ce41d8b4a951edab874f7a9d85697884684fbd",
+      "translation": "When __ATRIX_CODE_0__ is set, __ATRIX_CODE_1__ overwrites the corresponding fields; otherwise, the original text remains unchanged.",
+      "updated_at": 1782376912
     },
-    "CHANGELOG.md:list:51ebac8be02eaf57a825f82fbed03d57a2e3bd9c821151304b70bb8dcbbb673e": {
+    "CHANGELOG.md:list:5097aad7854ba7471919a0cf78c7223d0bef95e81ed2b498638e0f317a545f02": {
       "kind": "list",
-      "source": "修复atriwisp发往qqonebot，文件太大导致全部阻塞的bug",
+      "source": "CLI TUI 中不存在的 __ATRIX_CODE_0__ 引用现在按普通文本原样发送，不再阻止消息提交；同一消息中存在的文件仍会正常展开。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "51ebac8be02eaf57a825f82fbed03d57a2e3bd9c821151304b70bb8dcbbb673e",
-      "translation": "Fixed a bug where large files sent from Atriwisp to qqonebot caused total blockage.",
-      "updated_at": 1788876182
+      "source_hash": "5097aad7854ba7471919a0cf78c7223d0bef95e81ed2b498638e0f317a545f02",
+      "translation": "Non-existent __ATRIX_CODE_0__ references in the CLI TUI are now sent as plain text as-is and no longer block message submission; files that exist within the same message will still be expanded normally.",
+      "updated_at": 1786532747
     },
-    "CHANGELOG.md:list:544848e58ddf58eb94be259c382c90eb3999f62714ca2674072b8102baa6631a": {
+    "CHANGELOG.md:list:517f053bc3c503dbc0d4b850fa9d96d6b996e80cefce24f3ec7b278a058aeb04": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 修改 __ATRIX_CODE_1__ 后不再自动 reload；修改完成后需调用 __ATRIX_CODE_2__ 生效。",
+      "source": "用户输入和工具 pending 的前置 Hook 支持用 __ATRIX_CODE_0__ 同时改写文字和附加图片，最终多模态内容会在请求前写入会话历史。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "544848e58ddf58eb94be259c382c90eb3999f62714ca2674072b8102baa6631a",
-      "translation": "__ATRIX_CODE_0__ no longer automatically reloads after modifying __ATRIX_CODE_1__; __ATRIX_CODE_2__ must be called after modification to take effect.",
-      "updated_at": 1782722558
+      "source_hash": "517f053bc3c503dbc0d4b850fa9d96d6b996e80cefce24f3ec7b278a058aeb04",
+      "translation": "Pre-hooks for user input and tool pending support using __ATRIX_CODE_0__ to simultaneously rewrite text and attach images; the final multimodal content will be written to the Session history before the request.",
+      "updated_at": 1784467084
     },
-    "CHANGELOG.md:list:55588c10892a80f8b20bb9511361dfb0fd9904db00b20534f96cb5989862a0df": {
+    "CHANGELOG.md:list:51c6b812eef0100e7429e155ca8c342fb292089b4d07140f7e3bbee78848f714": {
       "kind": "list",
-      "source": "AgentSkill 不再通过 __ATRIX_CODE_0__ 固定包装执行 Python 脚本；",
+      "source": "修复 OpenAI-compatible 接口返回非 200 状态时，响应上下文在读取错误 body 前被提前取消，导致真实上游错误丢失并只显示 __ATRIX_CODE_0__ 的问题。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "55588c10892a80f8b20bb9511361dfb0fd9904db00b20534f96cb5989862a0df",
-      "translation": "AgentSkill no longer uses __ATRIX_CODE_0__ for fixed wrapping to execute Python scripts;",
-      "updated_at": 1783074551
+      "source_hash": "51c6b812eef0100e7429e155ca8c342fb292089b4d07140f7e3bbee78848f714",
+      "translation": "Fixed an issue where the response context was cancelled prematurely before reading the error body when the OpenAI-compatible interface returned a non-200 status, causing the actual upstream error to be lost and only __ATRIX_CODE_0__ to be displayed.",
+      "updated_at": 1786546221
     },
     "CHANGELOG.md:list:56627bbe550c1cd55685d53c98d96f9daf509a689e4532b1444bac71bff9760f": {
       "kind": "list",
@@ -512,21 +568,13 @@
       "translation": "Fixed issues where Cron re-delivery used old job snapshots to overwrite disable status, scheduling, and task content, as well as duplicate generation, duplicate sending, and delivery statuses overwriting each other when multiple platforms were connected simultaneously;",
       "updated_at": 1784437461
     },
-    "CHANGELOG.md:list:572872f4348e759b46f65964708d6035ffe736d5c7f16bbeca3641f8458acd29": {
+    "CHANGELOG.md:list:59244b09f06be1e133f54a0a4ad01e8d435ea5c5c1cd59e8be10060d2dfa6e55": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 现在控制整轮用户请求总时长，默认 __ATRIX_CODE_1__ 表示不限时；",
+      "source": "__ATRIX_CODE_0__ 按名称发现或 __ATRIX_CODE_1__ 预载时会读取当前正文，带 __ATRIX_CODE_2__ 的工具化 Skill 同样如此。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "572872f4348e759b46f65964708d6035ffe736d5c7f16bbeca3641f8458acd29",
-      "translation": "__ATRIX_CODE_0__ now controls the total duration of a full round of user requests; by default, __ATRIX_CODE_1__ indicates no time limit;",
-      "updated_at": 1782574901
-    },
-    "CHANGELOG.md:list:57c02c13c5ed82c755fc0eeb729dc126624508a010829430deda85b6046bb549": {
-      "kind": "list",
-      "source": "新增 __ATRIX_CODE_0__ 配置，统一控制平台入站文件最大保存大小和下载超时。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "57c02c13c5ed82c755fc0eeb729dc126624508a010829430deda85b6046bb549",
-      "translation": "Added __ATRIX_CODE_0__ configuration to uniformly control the maximum save size and download timeout for platform inbound files.",
-      "updated_at": 1783085325
+      "source_hash": "59244b09f06be1e133f54a0a4ad01e8d435ea5c5c1cd59e8be10060d2dfa6e55",
+      "translation": "The current body will be read when __ATRIX_CODE_0__ is discovered by name or __ATRIX_CODE_1__ is preloaded; the same applies to tool-based Skills with __ATRIX_CODE_2__.",
+      "updated_at": 1783775610
     },
     "CHANGELOG.md:list:596d47758ef03bb54d3851c1b678f8eb5459a7effda0ffd3212b24fe71d2804c": {
       "kind": "list",
@@ -536,13 +584,13 @@
       "translation": "QQ official now uses URLs instead of base64 when receiving images",
       "updated_at": 1783165245
     },
-    "CHANGELOG.md:list:59aef5f6af2a0610f829cfbdab62ee2b1c7298f9546374f556496c5b31f1f2e1": {
+    "CHANGELOG.md:list:59b27643a1d436f5f331c285623f572f6614aefc42c0a6f19d4b74c2d16aecb4": {
       "kind": "list",
-      "source": "LLM 请求超时配置改为 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__，旧 __ATRIX_CODE_3__ 已移除；",
+      "source": "__ATRIX_CODE_0__、请求超时或上游取消现在会终止一次性 exec Hook 的完整进程树，避免 Hook 派生的子进程残留；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "59aef5f6af2a0610f829cfbdab62ee2b1c7298f9546374f556496c5b31f1f2e1",
-      "translation": "LLM request timeout configuration changed to __ATRIX_CODE_0__, __ATRIX_CODE_1__, and __ATRIX_CODE_2__; the old __ATRIX_CODE_3__ has been removed;",
-      "updated_at": 1782461728
+      "source_hash": "59b27643a1d436f5f331c285623f572f6614aefc42c0a6f19d4b74c2d16aecb4",
+      "translation": "__ATRIX_CODE_0__, request timeouts, or upstream cancellations will now terminate the full process tree of one-time exec Hooks to avoid residual child processes spawned by the Hook;",
+      "updated_at": 1786539387
     },
     "CHANGELOG.md:list:5b017e55b17383861bd993aad6190054f3317280f9908c4eeee3c45dae46b41a": {
       "kind": "list",
@@ -552,13 +600,37 @@
       "translation": "By default, all users in group chats expire, while superadmins in private chats do not expire.",
       "updated_at": 1783074551
     },
-    "CHANGELOG.md:list:5d5e1194ba0f4f1a5761b21d2e7cab957cb0e85df459dbd6188d6fa5d017f74b": {
+    "CHANGELOG.md:list:5ba42e94d8e0a4b9ca90e4822f78c7350d82e18c7db923cde550b269dd903399": {
       "kind": "list",
-      "source": "修复调用者没有当前 Session 时，__ATRIX_CODE_0__ 会显示进程内其他用户或 Session 活跃请求的问题；",
+      "source": "__ATRIX_CODE_0__ 命令：列出所有已注册 Hook、查看某个 Hook 详细配置、热重载全部 Hook（修改 __ATRIX_CODE_1__ 后无需重启即可生效）。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "5d5e1194ba0f4f1a5761b21d2e7cab957cb0e85df459dbd6188d6fa5d017f74b",
-      "translation": "Fixed the issue where __ATRIX_CODE_0__ would display active requests from other users or Sessions within the process when the caller has no current Session;",
-      "updated_at": 1784987067
+      "source_hash": "5ba42e94d8e0a4b9ca90e4822f78c7350d82e18c7db923cde550b269dd903399",
+      "translation": "__ATRIX_CODE_0__ command: list all registered Hooks, view detailed configuration of a specific Hook, and hot-reload all Hooks (takes effect after modifying __ATRIX_CODE_1__ without requiring a restart).",
+      "updated_at": 1782444302
+    },
+    "CHANGELOG.md:list:5ce6aa2d4b6c556a02e9ec82eda688743df2959106a6ab2b1798c803efe4bd19": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 现在复用 __ATRIX_CODE_1__ 的 __ATRIX_CODE_2__ 编辑说明与执行能力，并在确认前预检编辑、Atriyph 语法和 no-op 修改，在高风险确认详情中展示预检 diff。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "5ce6aa2d4b6c556a02e9ec82eda688743df2959106a6ab2b1798c803efe4bd19",
+      "translation": "__ATRIX_CODE_0__ now reuses the __ATRIX_CODE_2__ editing instructions and execution capabilities of __ATRIX_CODE_1__, and pre-checks edits, Atriyph syntax, and no-op modifications before confirmation, displaying the pre-check diff in the high-risk confirmation details.",
+      "updated_at": 1782699038
+    },
+    "CHANGELOG.md:list:5eac6ac6dd13061834d3d505ac14be61e5de718f53b763eef0a87118b9e0b91c": {
+      "kind": "list",
+      "source": "Atriena v3 动作通道：Atrinis 支持 __ATRIX_CODE_0__，首批支持 raw 平台 API 以及 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__ capability，未支持的可以直接调用消息平台api；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "5eac6ac6dd13061834d3d505ac14be61e5de718f53b763eef0a87118b9e0b91c",
+      "translation": "Atriena v3 action channel: Atrinis supports __ATRIX_CODE_0__, initially supporting raw platform APIs as well as __ATRIX_CODE_1__, __ATRIX_CODE_2__, and __ATRIX_CODE_3__ capabilities; unsupported ones can directly call the messaging platform API.",
+      "updated_at": 1782395477
+    },
+    "CHANGELOG.md:list:600a5d7e2fd3a78b1f04b46d268810c96a667f953853d3a050822db9f56aeada": {
+      "kind": "list",
+      "source": "执行中的 Hook 会显示在 __ATRIX_CODE_0__，当前 Session 的 Hook 也会显示在 __ATRIX_CODE_1__；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "600a5d7e2fd3a78b1f04b46d268810c96a667f953853d3a050822db9f56aeada",
+      "translation": "Executing Hooks will be displayed in __ATRIX_CODE_0__, and Hooks for the current Session will also be displayed in __ATRIX_CODE_1__;",
+      "updated_at": 1783571675
     },
     "CHANGELOG.md:list:60bd0875b57fac1eddc9b627c674bf06f753c9de9008945cdcfd9f6dee17d8f4": {
       "kind": "list",
@@ -576,20 +648,36 @@
       "translation": "CLI TUI notifications now support log levels and are displayed in White for Debug, Green for Info, Yellow for Warn, and Red for Error;",
       "updated_at": 1785235309
     },
-    "CHANGELOG.md:list:611aafc7e8d828767ae2b38b0e5c3d0fead2cde039834d37560cbe5b03c27491": {
+    "CHANGELOG.md:list:63be6421fc9009dbe9a0bb0e2656a20beab1dfaffd42fc4864241c5e91cb6809": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 审计事件从 debug 级别改为 info 级别，默认 __ATRIX_CODE_1__ 即可记录 token 消耗数据。",
+      "source": "AgentSkill 的 __ATRIX_CODE_0__ 支持只写 __ATRIX_CODE_1__ / __ATRIX_CODE_2__ 做文档可见性限制，不写工具化字段时不会注册为普通工具；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "611aafc7e8d828767ae2b38b0e5c3d0fead2cde039834d37560cbe5b03c27491",
-      "translation": "__ATRIX_CODE_0__ audit events changed from debug level to info level; token consumption data can now be recorded by default with __ATRIX_CODE_1__.",
-      "updated_at": 1782884148
+      "source_hash": "63be6421fc9009dbe9a0bb0e2656a20beab1dfaffd42fc4864241c5e91cb6809",
+      "translation": "__ATRIX_CODE_0__ of AgentSkill supports writing only __ATRIX_CODE_1__ / __ATRIX_CODE_2__ for document visibility restrictions; it will not be registered as a normal tool when tool-related fields are not provided.",
+      "updated_at": 1783479117
     },
-    "CHANGELOG.md:list:6591817f82efe0b2c5e6a0f20415974f7b06b4e8cd819ab6c957df0b3a56c245": {
+    "CHANGELOG.md:list:65dde45ff4bcb9cb8316619035891d29595da570fb1957621c6081afbfcebffe": {
       "kind": "list",
-      "source": "修复发现或内联预载多个 Atriyph Skill 时规则卡会重复注入上下文的问题；",
+      "source": "CLI TUI 执行 __ATRIX_CODE_0__ 后会把当前运行状态收束为 __ATRIX_CODE_1__ 并固定耗时，不再继续累加状态栏时间。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "6591817f82efe0b2c5e6a0f20415974f7b06b4e8cd819ab6c957df0b3a56c245",
-      "translation": "Fixed the issue where rule cards were repeatedly injected into the context when performing tool discovery or inline preloading of multiple Atriyph Skills;",
+      "source_hash": "65dde45ff4bcb9cb8316619035891d29595da570fb1957621c6081afbfcebffe",
+      "translation": "After executing __ATRIX_CODE_0__, the CLI TUI will converge the current running state into __ATRIX_CODE_1__ and fix the elapsed time, no longer accumulating time in the status bar.",
+      "updated_at": 1783738522
+    },
+    "CHANGELOG.md:list:66517ad7d01233af791426bb5ca6dcd3547da5cb27c721e36b9667193483dada": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__ 和 __ATRIX_CODE_2__，用于筛选并显示 __ATRIX_CODE_3__ 日志。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "66517ad7d01233af791426bb5ca6dcd3547da5cb27c721e36b9667193483dada",
+      "translation": "__ATRIX_CODE_0__ added __ATRIX_CODE_1__ and __ATRIX_CODE_2__ to filter and display __ATRIX_CODE_3__ logs.",
+      "updated_at": 1784127057
+    },
+    "CHANGELOG.md:list:672bdd3f4b3678d692f19e27638cde3e1a8b29fec68d3ce4066821f396e6c9af": {
+      "kind": "list",
+      "source": "Windows 下 __ATRIX_CODE_0__ 工具优先使用 __ATRIX_CODE_1__，其次 __ATRIX_CODE_2__，最后回退到 __ATRIX_CODE_3__。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "672bdd3f4b3678d692f19e27638cde3e1a8b29fec68d3ce4066821f396e6c9af",
+      "translation": "On Windows, the __ATRIX_CODE_0__ tool prioritizes __ATRIX_CODE_1__, followed by __ATRIX_CODE_2__, and finally falls back to __ATRIX_CODE_3__.",
       "updated_at": 1783334583
     },
     "CHANGELOG.md:list:67ae63dbf2f51393cb281ef7f0bc542b6cc115feb6a128fbe07c9bcaf6691b42": {
@@ -608,13 +696,13 @@
       "translation": "A prompt to shorten will be displayed when the file exceeds 64 KiB.",
       "updated_at": 1783178864
     },
-    "CHANGELOG.md:list:683c236912cbac92700e9378c6475d962de3778446c670e5f7665bed5a8839be": {
+    "CHANGELOG.md:list:68492a0b765a57b8c9e52ddd2c91f3253f97f39498486857e59e30eda7bc297c": {
       "kind": "list",
-      "source": "现在该状态只展示 __ATRIX_CODE_0__。",
+      "source": "多模态图片此前只以 __ATRIX_CODE_0__ 内容段发送，模型能看图却不知道可复用地址；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "683c236912cbac92700e9378c6475d962de3778446c670e5f7665bed5a8839be",
-      "translation": "Now this status only displays __ATRIX_CODE_0__.",
-      "updated_at": 1784987067
+      "source_hash": "68492a0b765a57b8c9e52ddd2c91f3253f97f39498486857e59e30eda7bc297c",
+      "translation": "Multimodal images were previously only sent as __ATRIX_CODE_0__ content segments; the model could see the images but did not know the reusable addresses;",
+      "updated_at": 1786545145
     },
     "CHANGELOG.md:list:6970168418b00124c98288e227a6831f798c18ed573c05cb7a6f07fd850812c6": {
       "kind": "list",
@@ -624,77 +712,37 @@
       "translation": "Compatible with agentskills.io style external AgentSkills (accompanied by Python scripts).",
       "updated_at": 1782270601
     },
-    "CHANGELOG.md:list:6a952eb1ca1e4416c1ffcbff62e707f82ef5f2b2aeff3b2b640b82bce7417fde": {
+    "CHANGELOG.md:list:6b8fcd1ca4cfb67ee8cb4965f450edb4f7fc1e1065b78f6db79b54fe3471c76c": {
       "kind": "list",
-      "source": "说明型 AgentSkill 不读取 __ATRIX_CODE_0__ 风险，工具化后以 __ATRIX_CODE_1__ 的 __ATRIX_CODE_2__ 为准。",
+      "source": "修复普通用户修改自己的高风险 core 常驻记忆时绕过确认；普通用户现在只能在工具权限校验通过后确认 __ATRIX_CODE_0__/__ATRIX_CODE_1__ 风险调用。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "6a952eb1ca1e4416c1ffcbff62e707f82ef5f2b2aeff3b2b640b82bce7417fde",
-      "translation": "Descriptive AgentSkills do not read __ATRIX_CODE_0__, avoiding risk; after toolization, __ATRIX_CODE_2__ of __ATRIX_CODE_1__ shall prevail.",
-      "updated_at": 1783219356
+      "source_hash": "6b8fcd1ca4cfb67ee8cb4965f450edb4f7fc1e1065b78f6db79b54fe3471c76c",
+      "translation": "Fixed an issue where regular users could bypass confirmation when modifying their own high-risk core resident memory; regular users can now only confirm __ATRIX_CODE_0__/__ATRIX_CODE_1__ risk calls after tool permission validation passes.",
+      "updated_at": 1784897153
     },
-    "CHANGELOG.md:list:6d478a5dfd779970629f0cfd46fe4d8231a05246961a162a024ed3172b1cfa56": {
+    "CHANGELOG.md:list:6c97bc23a7f3d51b5572f50d496c8b98501f0f41510a7afddbf1c219ccc70f87": {
       "kind": "list",
-      "source": "首次运行会生成 __ATRIX_CODE_0__，用于提示按需求编写 ATRI-X 规则 Hook。",
+      "source": "__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 操作新增 __ATRIX_CODE_2__ 与 __ATRIX_CODE_3__ 参数：__ATRIX_CODE_4__ 时按单行前缀匹配整行（容忍行首缩进，规避换行符匹配出错），__ATRIX_CODE_5__（默认）保持精确子串语义；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "6d478a5dfd779970629f0cfd46fe4d8231a05246961a162a024ed3172b1cfa56",
-      "translation": "The first run will generate __ATRIX_CODE_0__, which serves as a prompt to write ATRI-X rule Hooks according to your needs.",
-      "updated_at": 1783392486
-    },
-    "CHANGELOG.md:list:6d55b14b054668feb279ff23dfbe0cdc6e09e77000873c9339ddd76d82190b4e": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 按名称发现或 __ATRIX_CODE_1__ 预载时会读取当前正文，带 __ATRIX_CODE_2__ 的工具化 Skill 同样如此。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "6d55b14b054668feb279ff23dfbe0cdc6e09e77000873c9339ddd76d82190b4e",
-      "translation": "The current body will be read when __ATRIX_CODE_0__ is discovered by name or __ATRIX_CODE_1__ is preloaded; the same applies to tool-based Skills with __ATRIX_CODE_2__.",
-      "updated_at": 1783775610
-    },
-    "CHANGELOG.md:list:6d6331b02474cad308cfd2bebfb6083f119ddf49787f83639f01fa37b66e5d71": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 改为直接按最近更新时间恢复非当前 Session，__ATRIX_CODE_1__ 表示最近一项，不再要求先执行裸 __ATRIX_CODE_2__ 建立编号。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "6d6331b02474cad308cfd2bebfb6083f119ddf49787f83639f01fa37b66e5d71",
-      "translation": "__ATRIX_CODE_0__ now restores non-current Sessions directly based on the most recent update time; __ATRIX_CODE_1__ represents the most recent item, and it is no longer required to first execute a bare __ATRIX_CODE_2__ to establish numbering.",
-      "updated_at": 1784276217
-    },
-    "CHANGELOG.md:list:6e825de7a3fb0a65300d30be0edd7d8051380fa20be7239c89d4c991c8928362": {
-      "kind": "list",
-      "source": "QQ OneBot 新增 __ATRIX_CODE_0__ 配置，本地图片和文件默认使用 base64 发送，也可在共享文件系统的部署中显式改用 __ATRIX_CODE_1__。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "6e825de7a3fb0a65300d30be0edd7d8051380fa20be7239c89d4c991c8928362",
-      "translation": "QQ OneBot added __ATRIX_CODE_0__ configuration; local images and files are sent using base64 by default, but can be explicitly changed to __ATRIX_CODE_1__ in shared file system deployments.",
-      "updated_at": 1784209683
-    },
-    "CHANGELOG.md:list:70f1550f6bf2f281c0cb0927e41c0bb07572e4e28e171b808ba30dfe69f1597f": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 同时统一为 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__ 三种读取模式。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "70f1550f6bf2f281c0cb0927e41c0bb07572e4e28e171b808ba30dfe69f1597f",
-      "translation": "__ATRIX_CODE_0__ is also unified into three reading modes: __ATRIX_CODE_1__, __ATRIX_CODE_2__, and __ATRIX_CODE_3__.",
-      "updated_at": 1783658112
-    },
-    "CHANGELOG.md:list:714c6568883b5a6b6d519ae10020e60c5d54a73ae7f39b8f6636810137a32aeb": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 工具风险等级由 high 降为 medium。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "714c6568883b5a6b6d519ae10020e60c5d54a73ae7f39b8f6636810137a32aeb",
-      "translation": "The risk level of the __ATRIX_CODE_0__ tool has been downgraded from high to medium.",
+      "source_hash": "6c97bc23a7f3d51b5572f50d496c8b98501f0f41510a7afddbf1c219ccc70f87",
+      "translation": "Added __ATRIX_CODE_2__ and __ATRIX_CODE_3__ parameters to the __ATRIX_CODE_1__ operation of __ATRIX_CODE_0__: when __ATRIX_CODE_4__, it matches the entire line by single-line prefix (tolerating leading indentation to avoid newline character matching errors); __ATRIX_CODE_5__ (default) maintains exact substring semantics.",
       "updated_at": 1782298716
     },
-    "CHANGELOG.md:list:724d7413284e7fd78ea7267adc35cf07734d88c82a66dd3a6bd95024ad16c090": {
+    "CHANGELOG.md:list:7290e3a9cb2c564f09fd8fbb569482bc05f10427cd602efa75ccb5b0e28b2373": {
       "kind": "list",
-      "source": "LLM 返回 __ATRIX_CODE_0__ 的失败或阻塞报告现在也会冻结并完成补发。",
+      "source": "现在该状态只展示 __ATRIX_CODE_0__。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "724d7413284e7fd78ea7267adc35cf07734d88c82a66dd3a6bd95024ad16c090",
-      "translation": "Failure or blocking reports from LLM returning __ATRIX_CODE_0__ will now also be frozen and complete the re-delivery.",
-      "updated_at": 1784437461
+      "source_hash": "7290e3a9cb2c564f09fd8fbb569482bc05f10427cd602efa75ccb5b0e28b2373",
+      "translation": "Now this status only displays __ATRIX_CODE_0__.",
+      "updated_at": 1784987067
     },
-    "CHANGELOG.md:list:7451bbf5a68e98a284488175db4e8df8fae0a4cc7c3d7b20b8c10878e7390e09": {
+    "CHANGELOG.md:list:7322e366ef7a775e7fdcb483d7b32aa08fa8c2e80b8c7b27573202d986a42af4": {
       "kind": "list",
-      "source": "设 __ATRIX_CODE_0__ 时 __ATRIX_CODE_1__ 覆写对应字段，不设时不修改原文。",
+      "source": "__ATRIX_CODE_0__ 修改 __ATRIX_CODE_1__ 后不再自动 reload；修改完成后需调用 __ATRIX_CODE_2__ 生效。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "7451bbf5a68e98a284488175db4e8df8fae0a4cc7c3d7b20b8c10878e7390e09",
-      "translation": "When __ATRIX_CODE_0__ is set, __ATRIX_CODE_1__ overwrites the corresponding fields; otherwise, the original text remains unchanged.",
-      "updated_at": 1782376912
+      "source_hash": "7322e366ef7a775e7fdcb483d7b32aa08fa8c2e80b8c7b27573202d986a42af4",
+      "translation": "__ATRIX_CODE_0__ no longer automatically reloads after modifying __ATRIX_CODE_1__; __ATRIX_CODE_2__ must be called after modification to take effect.",
+      "updated_at": 1782722558
     },
     "CHANGELOG.md:list:74cc70f1fc05110e376f89105915e000dd86f27ff35078ec828df758295d929e": {
       "kind": "list",
@@ -704,13 +752,13 @@
       "translation": "MCP tools, sub-Agents, and full multimodality (actual model input for voice, video, and files) are not yet implemented.",
       "updated_at": 1782270601
     },
-    "CHANGELOG.md:list:7500a6bebabf390101368282085b77b23e0a803832db24807d92874bbcf13f04": {
+    "CHANGELOG.md:list:752e229a31b9083aabc6f6a534ef79a9881b95dff213918cfbb32836c2696095": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 操作新增 __ATRIX_CODE_2__ 与 __ATRIX_CODE_3__ 参数：__ATRIX_CODE_4__ 时按单行前缀匹配整行（容忍行首缩进，规避换行符匹配出错），__ATRIX_CODE_5__（默认）保持精确子串语义；",
+      "source": "首次切换到含 __ATRIX_CODE_0__ 或 __ATRIX_CODE_1__ 的目录时，会自动附带说明文件内容；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "7500a6bebabf390101368282085b77b23e0a803832db24807d92874bbcf13f04",
-      "translation": "Added __ATRIX_CODE_2__ and __ATRIX_CODE_3__ parameters to the __ATRIX_CODE_1__ operation of __ATRIX_CODE_0__: when __ATRIX_CODE_4__, it matches the entire line by single-line prefix (tolerating leading indentation to avoid newline character matching errors); __ATRIX_CODE_5__ (default) maintains exact substring semantics.",
-      "updated_at": 1782298716
+      "source_hash": "752e229a31b9083aabc6f6a534ef79a9881b95dff213918cfbb32836c2696095",
+      "translation": "When switching to a directory containing __ATRIX_CODE_0__ or __ATRIX_CODE_1__ for the first time, the contents of the documentation file will be automatically attached;",
+      "updated_at": 1783178864
     },
     "CHANGELOG.md:list:754ce0b1d37971727b96391f1b6da613a4c9541db3d18159066ee1bf0a085415": {
       "kind": "list",
@@ -720,21 +768,29 @@
       "translation": "Now, files between 2–100 MiB can still be read line-by-line, grepped, and edited; AST, full diffs, and overly long confirmation content are disabled based on file size only during actual calls, while revision verification, pre-checks, and atomic writes are preserved.",
       "updated_at": 1788138091
     },
-    "CHANGELOG.md:list:77ae9951fcdb074ce3197606d3bcda43ebb29a1e7431e3226b28b8c30d008ce8": {
+    "CHANGELOG.md:list:77e6451c4e857e57ff5d0006d5eb92173fbc4dffb135bdc6833202b672c0c53f": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 此前会完全拒绝超过 2 MiB 的文本文件；",
+      "source": "__ATRIX_CODE_0__ 或 shell 直接修改 ATRI-X Skill 文件会在确认或执行前被拒绝，需改用 __ATRIX_CODE_1__。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "77ae9951fcdb074ce3197606d3bcda43ebb29a1e7431e3226b28b8c30d008ce8",
-      "translation": "__ATRIX_CODE_0__ and __ATRIX_CODE_1__ previously completely rejected text files exceeding 2 MiB;",
-      "updated_at": 1788138091
+      "source_hash": "77e6451c4e857e57ff5d0006d5eb92173fbc4dffb135bdc6833202b672c0c53f",
+      "translation": "Direct modification of ATRI-X Skill files by __ATRIX_CODE_0__ or shell will be rejected before confirmation or execution; __ATRIX_CODE_1__ should be used instead.",
+      "updated_at": 1782722558
     },
-    "CHANGELOG.md:list:79e13956de2275bf7954e4071d4c7b43e177af53dfe03d7cdaac4cbd1cab4431": {
+    "CHANGELOG.md:list:78b45dbc5d7d41e0915e099270b2c2f22eeed318297b813b11f09a5c469b377d": {
       "kind": "list",
-      "source": "修复 __ATRIX_CODE_0__ 可以临时改写本 turn 初始输入或历史消息、pending 图片在排队时丢失且 Hook 修改未持久化的问题；",
+      "source": "工具结果支持统一 __ATRIX_CODE_0__ 输出，用于提示 LLM 后续优先使用更合适的工具。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "79e13956de2275bf7954e4071d4c7b43e177af53dfe03d7cdaac4cbd1cab4431",
-      "translation": "Fixed an issue where __ATRIX_CODE_0__ could temporarily rewrite the initial input or historical messages of the current turn, and pending images were lost during queuing while Hook modifications were not persisted;",
-      "updated_at": 1784467084
+      "source_hash": "78b45dbc5d7d41e0915e099270b2c2f22eeed318297b813b11f09a5c469b377d",
+      "translation": "Tool results now support unified __ATRIX_CODE_0__ output, used to prompt the LLM to prioritize more appropriate tools in the future.",
+      "updated_at": 1782722558
+    },
+    "CHANGELOG.md:list:7bd2b6f3341f483b9d7474631cbdb6951bca99f93dc196a59166d8fb2dbd5d2c": {
+      "kind": "list",
+      "source": "Hook rules __ATRIX_CODE_0__ action 新增 __ATRIX_CODE_1__ stdout 模式，脚本 stdout 解析为 JSON 并提取 __ATRIX_CODE_2__ 数组和可选 __ATRIX_CODE_3__；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "7bd2b6f3341f483b9d7474631cbdb6951bca99f93dc196a59166d8fb2dbd5d2c",
+      "translation": "Hook rules __ATRIX_CODE_0__ action added __ATRIX_CODE_1__ stdout mode; script stdout is parsed as JSON to extract the __ATRIX_CODE_2__ array and optional __ATRIX_CODE_3__;",
+      "updated_at": 1782376912
     },
     "CHANGELOG.md:list:7d4eb6c7f9421281249ea4260a8e00117bc3dc92316a27b354181c10219e5e5d": {
       "kind": "list",
@@ -752,29 +808,13 @@
       "translation": "**Security Policy**: Tool risk grading, role permission verification, high-risk confirmation workflows, and a lightweight background shell sandbox.",
       "updated_at": 1782270601
     },
-    "CHANGELOG.md:list:7e1a21df16a8f78ec1bf9eb23adaceac9e7d12a1dc54ec2b8b8ed0e94c1c887c": {
+    "CHANGELOG.md:list:7e2da71e19b90c5b1cb379768cdb7b7d0625abb984a8349bab6514e5cc18dba2": {
       "kind": "list",
-      "source": "Hook rules 新增角色分区与平铺控制字段：__ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__；",
+      "source": "Skill 扫描改为启动后延迟执行，并在 __ATRIX_CODE_0__ 首次使用时兜底确保扫描，减少启动阻塞。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "7e1a21df16a8f78ec1bf9eb23adaceac9e7d12a1dc54ec2b8b8ed0e94c1c887c",
-      "translation": "Hook rules added role partitioning and tiling control fields: __ATRIX_CODE_0__, __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, __ATRIX_CODE_4__.",
-      "updated_at": 1782395477
-    },
-    "CHANGELOG.md:list:7efdca0726c1f3e11a9edd7c8226f6565a4f8de048ed6ca513259bf85f964e18": {
-      "kind": "list",
-      "source": "**Atriyph Task Notation**：结构化任务描述语言，用于 LLM Cron 与原生 Skill，减少自然语言歧义。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "7efdca0726c1f3e11a9edd7c8226f6565a4f8de048ed6ca513259bf85f964e18",
-      "translation": "**Atriyph Task Notation**: A structured task description language used for LLM Cron and native Skills to reduce natural language ambiguity.",
-      "updated_at": 1782270601
-    },
-    "CHANGELOG.md:list:7f811e2659fa131805affccbb016c1e0ea38f38f089e07295791622572bc69c1": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__ 参数，可按需跳过缓存、重新获取网页并更新缓存内容。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "7f811e2659fa131805affccbb016c1e0ea38f38f089e07295791622572bc69c1",
-      "translation": "__ATRIX_CODE_0__ added the __ATRIX_CODE_1__ parameter, which can skip the cache, re-fetch the webpage, and update the cached content as needed.",
-      "updated_at": 1784027930
+      "source_hash": "7e2da71e19b90c5b1cb379768cdb7b7d0625abb984a8349bab6514e5cc18dba2",
+      "translation": "Skill scanning has been changed to delayed execution after startup, with a fallback to ensure scanning upon the first use of __ATRIX_CODE_0__, reducing startup blocking.",
+      "updated_at": 1783074551
     },
     "CHANGELOG.md:list:7fd433831a9af6deb1b74bac56866140ab955919d1548bfc07d96e3d59a7dd51": {
       "kind": "list",
@@ -800,6 +840,14 @@
       "translation": "Now, the Session will be automatically restored; referencing an earlier reply will still result in a Fork.",
       "updated_at": 1789088930
     },
+    "CHANGELOG.md:list:803f90b5dee9f37e1b96b17ae431a5b365e0d9fe53c0ba5cda21f4365939fa4c": {
+      "kind": "list",
+      "source": "若返回下载地址则保存到 ATRI-X，若只返回 OneBot 本地路径则直接提示该路径。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "803f90b5dee9f37e1b96b17ae431a5b365e0d9fe53c0ba5cda21f4365939fa4c",
+      "translation": "If a download URL is returned, it will be saved to ATRI-X; if only a OneBot local path is returned, that path will be displayed directly.",
+      "updated_at": 1783095128
+    },
     "CHANGELOG.md:list:804a20b9431dfd46cceb9e146447ae9d772bc44fb8be93b5eefe7498ef357e15": {
       "kind": "list",
       "source": "修复 QQ OneBot 发图片/表情/文件时 API 超时可能取消 WebSocket 写入并触发断线重连的问题；媒体发送失败时会尝试发送同目标文字提示。",
@@ -808,37 +856,29 @@
       "translation": "Fixed an issue where API timeouts when sending images/emojis/files via QQ OneBot might cancel WebSocket writes and trigger disconnection and reconnection; a text notification will now be attempted to the same target when media sending fails.",
       "updated_at": 1782399367
     },
-    "CHANGELOG.md:list:821e087b489e1d99289c0a600c70df68d05142dd278f1e890080d9faf2539329": {
+    "CHANGELOG.md:list:81982f97a25c1406f03ab95783dbf97ebb7ccfb50ab528efda912cf50a1bed4a": {
       "kind": "list",
-      "source": "现在默认在 10 分钟无有效操作后停止，若对应 Session TTL 更短则以其为上限，追加内容或 __ATRIX_CODE_0__ 会续期。",
+      "source": "没有 __ATRIX_CODE_0__ 时保持说明型 Skill，可按文档使用 shell 等通用工具；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "821e087b489e1d99289c0a600c70df68d05142dd278f1e890080d9faf2539329",
-      "translation": "Now, it stops by default after 10 minutes of no valid operation; if the corresponding Session TTL is shorter, that will be the limit. Appended content or __ATRIX_CODE_0__ will renew the timeout.",
-      "updated_at": 1788078727
+      "source_hash": "81982f97a25c1406f03ab95783dbf97ebb7ccfb50ab528efda912cf50a1bed4a",
+      "translation": "When __ATRIX_CODE_0__ is absent, it remains a descriptive Skill, and general-purpose tools such as shell can be used according to the documentation;",
+      "updated_at": 1783219356
     },
-    "CHANGELOG.md:list:83aa655090903e728d1214292cfd1dd5bdd99b5ae467bc2329b6108a14d1a622": {
+    "CHANGELOG.md:list:8438b3f10940208ba159058be42aea7faba610b2b141626aaff8307782391534": {
       "kind": "list",
-      "source": "**原生与外置 Skill**：__ATRIX_CODE_0__ 元工具支持 LLM 创建原生 ATRI-X Skill（纯 Atriyph 或附带 Go 源码并编译）；",
+      "source": "read_atrix_skill 现在依赖modify_atrix_skill，方便执行可能的修改",
       "source_file": "CHANGELOG.md",
-      "source_hash": "83aa655090903e728d1214292cfd1dd5bdd99b5ae467bc2329b6108a14d1a622",
-      "translation": "**Native and External Skills**: The __ATRIX_CODE_0__ meta-tool supports LLMs in creating native ATRI-X Skills (pure Atriyph or accompanied by Go source code and compiled);",
-      "updated_at": 1782270601
+      "source_hash": "8438b3f10940208ba159058be42aea7faba610b2b141626aaff8307782391534",
+      "translation": "read_atrix_skill now depends on modify_atrix_skill to facilitate possible modifications",
+      "updated_at": 1782569783
     },
-    "CHANGELOG.md:list:853ae2250ec20c31453a70311204d8cc2a35abbca73df01d69a3e53005c936bb": {
+    "CHANGELOG.md:list:8638ee2ae007a9ff02585db0a05e2f7ab3856b208176b2da4d603dd0a0666f76": {
       "kind": "list",
-      "source": "新增 __ATRIX_CODE_0__ 工具：设置当前前台 Session 的共享工作目录，路径类工具会基于该目录解析相对路径。",
+      "source": "Atriena LLM 事件和 LLM Cron 支持 __ATRIX_CODE_0__ 选择后台 Session 模式，默认仍为 __ATRIX_CODE_1__。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "853ae2250ec20c31453a70311204d8cc2a35abbca73df01d69a3e53005c936bb",
-      "translation": "Added `__ATRIX_CODE_0__` tool: sets the shared working directory of the current foreground Session; path-related tools will resolve relative paths based on this directory.",
-      "updated_at": 1782958962
-    },
-    "CHANGELOG.md:list:8722a2d934648665f30becf49386a69bc05302e1048ceea9349dbb4cb96b26ac": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 工具的代理参数从 __ATRIX_CODE_1__ 改为 __ATRIX_CODE_2__：不填时使用 __ATRIX_CODE_3__ 或系统代理环境，填 __ATRIX_CODE_4__ 禁用代理，填 URL 使用指定代理。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "8722a2d934648665f30becf49386a69bc05302e1048ceea9349dbb4cb96b26ac",
-      "translation": "The proxy parameter of the __ATRIX_CODE_0__ tool has been changed from __ATRIX_CODE_1__ to __ATRIX_CODE_2__: use __ATRIX_CODE_3__ or the system proxy environment when left blank, fill in __ATRIX_CODE_4__ to disable the proxy, or fill in a URL to use a specified proxy.",
-      "updated_at": 1783236675
+      "source_hash": "8638ee2ae007a9ff02585db0a05e2f7ab3856b208176b2da4d603dd0a0666f76",
+      "translation": "Atriena LLM events and LLM Cron now support __ATRIX_CODE_0__ selecting background Session mode, with the default remaining __ATRIX_CODE_1__.",
+      "updated_at": 1782699038
     },
     "CHANGELOG.md:list:87270312f6d9656623532edb7ac4d5c4a6b1edbd41ffe1f907efdcf6328dc335": {
       "kind": "list",
@@ -848,21 +888,13 @@
       "translation": "In PowerShell environments, AST parsing is skipped, and risk classification directly returns high-risk, requiring user confirmation.",
       "updated_at": 1783128855
     },
-    "CHANGELOG.md:list:87527ab31c72c104c890630d2aa17f528f1c3c53f01c292b2e14000fa29c16f3": {
+    "CHANGELOG.md:list:89b7014a4e21f6d21ffda5b82e9cc4fceb23b599f12297ee1f57c49063e6ffa9": {
       "kind": "list",
-      "source": "更新 Shell 与 Hook 的环境变量继承和分级 __ATRIX_CODE_0__ 配置。",
+      "source": "优化 __ATRIX_CODE_0__ 工具，支持目录搜索、搜索结果编号选择，以及按 AST 函数名精确返回完整函数内容及其起止行号。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "87527ab31c72c104c890630d2aa17f528f1c3c53f01c292b2e14000fa29c16f3",
-      "translation": "Update environment variable inheritance and hierarchical __ATRIX_CODE_0__ configuration for Shell and Hook.",
-      "updated_at": 1784812490
-    },
-    "CHANGELOG.md:list:885dcf54920f2bb1bcc4e6f6bd68c3b92db9074b55c972d4778a3e42fbf62e7e": {
-      "kind": "list",
-      "source": "使用 __ATRIX_CODE_0__ 时再展开 Worker 状态、全部规则和详情，根规则与内置 Hook 仍单独显示。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "885dcf54920f2bb1bcc4e6f6bd68c3b92db9074b55c972d4778a3e42fbf62e7e",
-      "translation": "Worker status, all rules, and details are now expanded only when using __ATRIX_CODE_0__; root rules and built-in Hooks are still displayed separately.",
-      "updated_at": 1784858252
+      "source_hash": "89b7014a4e21f6d21ffda5b82e9cc4fceb23b599f12297ee1f57c49063e6ffa9",
+      "translation": "Optimized the __ATRIX_CODE_0__ tool, supporting directory search, selection of search results by index, and precise return of complete function content and its start and end line numbers based on AST function names.",
+      "updated_at": 1784167898
     },
     "CHANGELOG.md:list:8a6b94368cf2dede5354c5ff825af2af6857a380c6456fdb37a5cae19284d736": {
       "kind": "list",
@@ -880,38 +912,6 @@
       "translation": "Reports now use a recoverable outbox, completing only after all target acknowledgments are persisted; failed items will be retried periodically and after restart.",
       "updated_at": 1784340385
     },
-    "CHANGELOG.md:list:8c6db0749fc23bd2ae134ad376b9197d0f3c34d7c93e7d70e3767ccd889a12bc": {
-      "kind": "list",
-      "source": "Atriyph __ATRIX_CODE_0__/__ATRIX_CODE_1__ 文本末尾冒号现在作为 warning 返回给 __ATRIX_CODE_2__/__ATRIX_CODE_3__，不再阻断创建或 finalize。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "8c6db0749fc23bd2ae134ad376b9197d0f3c34d7c93e7d70e3767ccd889a12bc",
-      "translation": "Colons at the end of Atriyph __ATRIX_CODE_0__/__ATRIX_CODE_1__ text are now returned as warnings to __ATRIX_CODE_2__/__ATRIX_CODE_3__, and no longer block creation or finalization.",
-      "updated_at": 1782722558
-    },
-    "CHANGELOG.md:list:8d6665e1f8baef0f66221d9e8c96d04b826c0e292fbc65f9956b6159f7fe0d0c": {
-      "kind": "list",
-      "source": "Hook rules __ATRIX_CODE_0__ action 新增 __ATRIX_CODE_1__ stdout 模式，脚本 stdout 解析为 JSON 并提取 __ATRIX_CODE_2__ 数组和可选 __ATRIX_CODE_3__；",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "8d6665e1f8baef0f66221d9e8c96d04b826c0e292fbc65f9956b6159f7fe0d0c",
-      "translation": "Hook rules __ATRIX_CODE_0__ action added __ATRIX_CODE_1__ stdout mode; script stdout is parsed as JSON to extract the __ATRIX_CODE_2__ array and optional __ATRIX_CODE_3__;",
-      "updated_at": 1782376912
-    },
-    "CHANGELOG.md:list:8e0ab49157feae455fcf1b6163cbac244a2681fe864dc1693b85069ef7615ff3": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 的相对路径改为基于当前 workspace 解析；",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "8e0ab49157feae455fcf1b6163cbac244a2681fe864dc1693b85069ef7615ff3",
-      "translation": "Relative paths for `__ATRIX_CODE_0__`, `__ATRIX_CODE_1__`, and `__ATRIX_CODE_2__` are now resolved based on the current workspace;",
-      "updated_at": 1782958962
-    },
-    "CHANGELOG.md:list:8e240be846787f791774d6c36787606f8337042e10aac541f8b36ece490e981d": {
-      "kind": "list",
-      "source": "模型级 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 统一收到 __ATRIX_CODE_2__ 下，按 __ATRIX_CODE_3__ 查找，避免跨 provider 同名模型冲突。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "8e240be846787f791774d6c36787606f8337042e10aac541f8b36ece490e981d",
-      "translation": "Model-level __ATRIX_CODE_0__ and __ATRIX_CODE_1__ are now unified under __ATRIX_CODE_2__ and looked up by __ATRIX_CODE_3__, avoiding conflicts between models with the same name across providers.",
-      "updated_at": 1782312399
-    },
     "CHANGELOG.md:list:8e3bcd113d1bbd118c00b2e9428d2922ec780b8c24994c889cefe954022f7288": {
       "kind": "list",
       "source": "QQ OneBot 支持自动保存私聊超级管理员入站文件；纯文件消息只回复保存路径或过大提示，不唤起 LLM，群文件不自动保存。",
@@ -919,6 +919,22 @@
       "source_hash": "8e3bcd113d1bbd118c00b2e9428d2922ec780b8c24994c889cefe954022f7288",
       "translation": "QQ OneBot now supports automatically saving inbound files from superadmins in private chats; messages containing only files will only reply with the save path or a \"too large\" prompt without invoking the LLM; group files are not automatically saved.",
       "updated_at": 1783095128
+    },
+    "CHANGELOG.md:list:8e5394429289558d8f07adb4374839feb4ebfc1a6fd55c0084a5ac70b0ab9a62": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 工具移除 __ATRIX_CODE_1__ 参数，命令默认在当前 workspace 下执行；后台任务仍限制在各自 sandbox 内。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "8e5394429289558d8f07adb4374839feb4ebfc1a6fd55c0084a5ac70b0ab9a62",
+      "translation": "`__ATRIX_CODE_0__` tool removed the `__ATRIX_CODE_1__` parameter; commands are executed in the current workspace by default, while background tasks remain restricted to their respective sandboxes.",
+      "updated_at": 1782958962
+    },
+    "CHANGELOG.md:list:8f0991f63df6a336ab48eca6bee8e21be9a6d81c54921af61caa31e65c4ba0f7": {
+      "kind": "list",
+      "source": "**工具发现机制**：默认只暴露 __ATRIX_CODE_0__ 与工具名，按需注入完整 schema，减少无效上下文开销。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "8f0991f63df6a336ab48eca6bee8e21be9a6d81c54921af61caa31e65c4ba0f7",
+      "translation": "**Tool Discovery Mechanism**: By default, only __ATRIX_CODE_0__ and the tool name are exposed, with the full schema injected on demand to reduce unnecessary context overhead.",
+      "updated_at": 1782270601
     },
     "CHANGELOG.md:list:8f644b4d62f870ef3dfe3516897d00d013099f137e00fcbcab03ddcfea8f969e": {
       "kind": "list",
@@ -928,22 +944,6 @@
       "translation": "Fixed an issue where bash AST parsing failure for shell commands on Windows (when bash is missing) caused risk classification, sandbox validation, directory change interception, and warning analysis to all fail;",
       "updated_at": 1783128855
     },
-    "CHANGELOG.md:list:8fc3b487771ec2c9c4e83ed27ac28b3001082d3c2a4fb9780af37df1f1c67e58": {
-      "kind": "list",
-      "source": "修复当前会话仍在请求模型、执行工具或等待确认时仍可切换 Session 的问题；Session 切换命令现在会提示先使用 __ATRIX_CODE_0__ 结束当前处理。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "8fc3b487771ec2c9c4e83ed27ac28b3001082d3c2a4fb9780af37df1f1c67e58",
-      "translation": "Fixed the issue where the Session could still be switched while the current Session was requesting the model, executing a tool, or waiting for confirmation; the Session switching command now prompts to first use __ATRIX_CODE_0__ to end the current process.",
-      "updated_at": 1784637931
-    },
-    "CHANGELOG.md:list:8ffa77eae1271a9d65560102a519441480c611c59382b37fe40218bdc1078f80": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 的高风险确认详情现在会按文件、模式和编辑步骤展示替换、新增、删除、匹配等操作。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "8ffa77eae1271a9d65560102a519441480c611c59382b37fe40218bdc1078f80",
-      "translation": "High-risk confirmation details for __ATRIX_CODE_0__ now display operations such as replace, add, delete, and match by file, mode, and editing step.",
-      "updated_at": 1782631048
-    },
     "CHANGELOG.md:list:922424784303fc3c45ac616053b3dfec7cfba11452ddf91c54812e855710eb0c": {
       "kind": "list",
       "source": "普通用户的追加重发与高风险工具确认此前会无限等待并长期占用当前 Turn；",
@@ -951,6 +951,14 @@
       "source_hash": "922424784303fc3c45ac616053b3dfec7cfba11452ddf91c54812e855710eb0c",
       "translation": "Previously, append-and-resend for regular users and high-risk tool confirmations would wait indefinitely and occupy the current Turn for a long time;",
       "updated_at": 1788078727
+    },
+    "CHANGELOG.md:list:9230480b1698c775e139e969e88018dd282a848a8e5b7a099f37045872419afc": {
+      "kind": "list",
+      "source": "工具完成 Hook 支持返回包含 URL、路径或 base64 图片的 __ATRIX_CODE_0__；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "9230480b1698c775e139e969e88018dd282a848a8e5b7a099f37045872419afc",
+      "translation": "Tool completion Hook supports returning __ATRIX_CODE_0__ containing URLs, paths, or base64 images;",
+      "updated_at": 1784467084
     },
     "CHANGELOG.md:list:92385f55b6d2a02dc7846f955909efbbdcebe6cd99af4be8ab209faab39b449b": {
       "kind": "list",
@@ -960,6 +968,30 @@
       "translation": "**Chat/Work Dual Mode**: chat mode disables tools, suitable for daily chatting and low-cost conversations; work mode enables tool discovery and invocation; models can be configured independently for both modes.",
       "updated_at": 1782270601
     },
+    "CHANGELOG.md:list:9258fb516095754bffcc00835c6877e92ec30b91158b59166f77c1226b2e86c5": {
+      "kind": "list",
+      "source": "同一轮多个工具调用的 __ATRIX_CODE_0__ 预览会合并为一条消息发送，减少平台刷屏。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "9258fb516095754bffcc00835c6877e92ec30b91158b59166f77c1226b2e86c5",
+      "translation": "__ATRIX_CODE_0__ previews for multiple tool calls in the same round will be merged into a single message to reduce platform spam.",
+      "updated_at": 1782699038
+    },
+    "CHANGELOG.md:list:92bd4dc0c0015ab1bab3d249971bea6575bed477cad5a8f1cae85fa3b3f2cd81": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 工具改为使用 __ATRIX_CODE_1__ 参数发送文件，支持本地路径、__ATRIX_CODE_2__ URI 和 HTTP(S) URL，并会按 MIME/扩展名自动将图片作为图片消息发送。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "92bd4dc0c0015ab1bab3d249971bea6575bed477cad5a8f1cae85fa3b3f2cd81",
+      "translation": "The __ATRIX_CODE_0__ tool now uses the __ATRIX_CODE_1__ parameter to send files, supporting local paths, __ATRIX_CODE_2__ URIs, and HTTP(S) URLs, and will automatically send images as image messages based on MIME type/extension.",
+      "updated_at": 1783081840
+    },
+    "CHANGELOG.md:list:93ffa3420e743650dc223f0e259e62410529e0f878f89baa70286e92960fe60a": {
+      "kind": "list",
+      "source": "CLI TUI 输入框支持用 __ATRIX_CODE_0__ 模糊补全本地文件；发送时会把引用替换为文件名和文件内容，含空格路径可写作 __ATRIX_CODE_1__。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "93ffa3420e743650dc223f0e259e62410529e0f878f89baa70286e92960fe60a",
+      "translation": "The CLI TUI input box now supports fuzzy completion of local files using __ATRIX_CODE_0__; references are replaced with the filename and file content upon sending, and paths containing spaces can be written as __ATRIX_CODE_1__.",
+      "updated_at": 1783392554
+    },
     "CHANGELOG.md:list:94517b0f2275ae4197728d971ccfb2f1a1a20c60f53243383ab713f3cbd12b8b": {
       "kind": "list",
       "source": "**Hook Layer**：在 Agent 输入、LLM 请求/响应、平台发送等关键点插入扩展逻辑；内置规则 Hook 与常驻记忆 Hook。",
@@ -967,30 +999,6 @@
       "source_hash": "94517b0f2275ae4197728d971ccfb2f1a1a20c60f53243383ab713f3cbd12b8b",
       "translation": "**Hook Layer**: Inserts extension logic at key points such as Agent input, LLM request/response, and platform sending; includes built-in rule Hooks and resident memory Hooks.",
       "updated_at": 1782376912
-    },
-    "CHANGELOG.md:list:96773e2d260f3f80747946fd551439f8b2b94b07a20d94084ab7f1cc1d68a2e3": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 支持直接携带消息，在切换 Session 模式后立即发送；Session 命令状态改为按平台 Scope 隔离。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "96773e2d260f3f80747946fd551439f8b2b94b07a20d94084ab7f1cc1d68a2e3",
-      "translation": "__ATRIX_CODE_0__ and __ATRIX_CODE_1__ now support carrying messages directly, which are sent immediately after switching the Session mode; Session command status is now isolated by platform Scope.",
-      "updated_at": 1784276217
-    },
-    "CHANGELOG.md:list:982e715f6a8e303465255744e60589d5a93f784f31e748fbdb313c57f07a56e8": {
-      "kind": "list",
-      "source": "Atriena LLM 事件和 LLM Cron 支持 __ATRIX_CODE_0__ 选择后台 Session 模式，默认仍为 __ATRIX_CODE_1__。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "982e715f6a8e303465255744e60589d5a93f784f31e748fbdb313c57f07a56e8",
-      "translation": "Atriena LLM events and LLM Cron now support __ATRIX_CODE_0__ selecting background Session mode, with the default remaining __ATRIX_CODE_1__.",
-      "updated_at": 1782699038
-    },
-    "CHANGELOG.md:list:99004b88c42dd7cb7dfaa0613f43eeb48749d28e47b53e94c9e1ec6c8997abb1": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 列表从逐条展示插件规则改为按插件名聚合；",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "99004b88c42dd7cb7dfaa0613f43eeb48749d28e47b53e94c9e1ec6c8997abb1",
-      "translation": "__ATRIX_CODE_0__ list changed from displaying plugin rules item by item to aggregating them by plugin name;",
-      "updated_at": 1784858252
     },
     "CHANGELOG.md:list:9d5bd31f0053c4ae0a75ef9edef00162aa8c3f86f473d7a5b5a15df30dd4b93e": {
       "kind": "list",
@@ -1000,45 +1008,37 @@
       "translation": "Refactored hooks, see docs for details.",
       "updated_at": 1783334583
     },
-    "CHANGELOG.md:list:9ffa53ad5a88b16b4d40df38dffc95ed3c9714db43a39a7176b2fd6dbaed6dd6": {
+    "CHANGELOG.md:list:9d5c1920574715877a557897643ed138dd095e370f980c333736c75a25df8880": {
       "kind": "list",
-      "source": "CLI TUI 输入框支持用 __ATRIX_CODE_0__ 模糊补全本地文件；发送时会把引用替换为文件名和文件内容，含空格路径可写作 __ATRIX_CODE_1__。",
+      "source": "上下文压缩改为保留历史用户原话、过滤工具结果，成功后切换到 __ATRIX_CODE_0__ 独立 Session，并将压缩内容与新输入固定物化为首条用户消息；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "9ffa53ad5a88b16b4d40df38dffc95ed3c9714db43a39a7176b2fd6dbaed6dd6",
-      "translation": "The CLI TUI input box now supports fuzzy completion of local files using __ATRIX_CODE_0__; references are replaced with the filename and file content upon sending, and paths containing spaces can be written as __ATRIX_CODE_1__.",
-      "updated_at": 1783392554
-    },
-    "CHANGELOG.md:list:a00ce6a14a49ad47de898b2bcf6e66396bbff7e68d046017ace4ec5ab76bab70": {
-      "kind": "list",
-      "source": "新增隐藏元工具 __ATRIX_CODE_0__，用于读取或写入 AgentSkill 的 __ATRIX_CODE_1__，写入前校验配置并在成功后 reload。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "a00ce6a14a49ad47de898b2bcf6e66396bbff7e68d046017ace4ec5ab76bab70",
-      "translation": "Added a hidden meta-tool __ATRIX_CODE_0__ for reading or writing the __ATRIX_CODE_1__ of AgentSkill; it validates the configuration before writing and reloads upon success.",
-      "updated_at": 1783074551
-    },
-    "CHANGELOG.md:list:a10c0798ae5944712b9b350660e63cb74245c95cafaccf39c5e8ade3f7857edc": {
-      "kind": "list",
-      "source": "QQ OneBot 入站 @ 消息现在会优先显示群名片，其次普通昵称，格式为 __ATRIX_CODE_0__，无法获取时才回退 QQ 号。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "a10c0798ae5944712b9b350660e63cb74245c95cafaccf39c5e8ade3f7857edc",
-      "translation": "Inbound @ messages in QQ OneBot will now prioritize displaying the group business card, followed by the regular nickname, in the format __ATRIX_CODE_0__, and will fall back to the QQ number if neither can be retrieved.",
-      "updated_at": 1783095128
-    },
-    "CHANGELOG.md:list:a271e909035b0a70b1fa7088d1024a133655b05e8878e62ccfad3f0f6f18ccaa": {
-      "kind": "list",
-      "source": "同时修复模型切换、__ATRIX_CODE_0__ 与 Session 变更命令的并发问题。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "a271e909035b0a70b1fa7088d1024a133655b05e8878e62ccfad3f0f6f18ccaa",
-      "translation": "Simultaneously fixed concurrency issues related to model switching, __ATRIX_CODE_0__, and Session change commands.",
+      "source_hash": "9d5c1920574715877a557897643ed138dd095e370f980c333736c75a25df8880",
+      "translation": "Context compaction is changed to retain original user utterances from history and filter tool results; upon success, it switches to an independent __ATRIX_CODE_0__ Session, and the compacted content along with the new input is fixedly materialized as the first user message;",
       "updated_at": 1784109405
     },
-    "CHANGELOG.md:list:a2c765ee4f5aa3de25461f0adededcdc8817f1c57cdd832af2ba145019abbccb": {
+    "CHANGELOG.md:list:9ea4ef00f9e0a92f7b1723317c27a78482b67c04ffa771d0cecf2d5b63fb2796": {
       "kind": "list",
-      "source": "优化 __ATRIX_CODE_0__ 工具，支持目录搜索、搜索结果编号选择，以及按 AST 函数名精确返回完整函数内容及其起止行号。",
+      "source": "修复调用者没有当前 Session 时，__ATRIX_CODE_0__ 会显示进程内其他用户或 Session 活跃请求的问题；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "a2c765ee4f5aa3de25461f0adededcdc8817f1c57cdd832af2ba145019abbccb",
-      "translation": "Optimized the __ATRIX_CODE_0__ tool, supporting directory search, selection of search results by index, and precise return of complete function content and its start and end line numbers based on AST function names.",
-      "updated_at": 1784167898
+      "source_hash": "9ea4ef00f9e0a92f7b1723317c27a78482b67c04ffa771d0cecf2d5b63fb2796",
+      "translation": "Fixed the issue where __ATRIX_CODE_0__ would display active requests from other users or Sessions within the process when the caller has no current Session;",
+      "updated_at": 1784987067
+    },
+    "CHANGELOG.md:list:9f1039561e447479f132896e8aacd275f1405fba2100f18da08517a0faab0cf6": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 改为直接按最近更新时间恢复非当前 Session，__ATRIX_CODE_1__ 表示最近一项，不再要求先执行裸 __ATRIX_CODE_2__ 建立编号。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "9f1039561e447479f132896e8aacd275f1405fba2100f18da08517a0faab0cf6",
+      "translation": "__ATRIX_CODE_0__ now restores non-current Sessions directly based on the most recent update time; __ATRIX_CODE_1__ represents the most recent item, and it is no longer required to first execute a bare __ATRIX_CODE_2__ to establish numbering.",
+      "updated_at": 1784276217
+    },
+    "CHANGELOG.md:list:a468628bb0f9e1ec5543b8974997bde1f703272b2d576b76b7d8b097afa9448f": {
+      "kind": "list",
+      "source": "修复 __ATRIX_CODE_0__ 可以临时改写本 turn 初始输入或历史消息、pending 图片在排队时丢失且 Hook 修改未持久化的问题；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "a468628bb0f9e1ec5543b8974997bde1f703272b2d576b76b7d8b097afa9448f",
+      "translation": "Fixed an issue where __ATRIX_CODE_0__ could temporarily rewrite the initial input or historical messages of the current turn, and pending images were lost during queuing while Hook modifications were not persisted;",
+      "updated_at": 1784467084
     },
     "CHANGELOG.md:list:a48c52ce6cc4da6f8dc182e99b2249390cd7cc2a842a32616a9b9ee9e98a3a6f": {
       "kind": "list",
@@ -1047,6 +1047,14 @@
       "source_hash": "a48c52ce6cc4da6f8dc182e99b2249390cd7cc2a842a32616a9b9ee9e98a3a6f",
       "translation": "Fixed a bug where logs might be saved as base64",
       "updated_at": 1789313626
+    },
+    "CHANGELOG.md:list:a4942f4e01a634d4fe6e2d3a81796c69c712ddbdfdb43d555c97d8de67d7a5c7": {
+      "kind": "list",
+      "source": "多处匹配时可通过 __ATRIX_CODE_0__ 选择第几处，未传 __ATRIX_CODE_1__ 报错并列出所有匹配位置。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "a4942f4e01a634d4fe6e2d3a81796c69c712ddbdfdb43d555c97d8de67d7a5c7",
+      "translation": "When there are multiple matches, the specific match can be selected via __ATRIX_CODE_0__; if __ATRIX_CODE_1__ is not provided, an error will be reported and all matching positions will be listed.",
+      "updated_at": 1782298716
     },
     "CHANGELOG.md:list:a4d9db282b34bc855fb836df1e6af9afcc930d531a253435487b572420d5a595": {
       "kind": "list",
@@ -1064,21 +1072,13 @@
       "translation": "The same path within the same Session shares a one-time record with the switch and reset entries, so it will not be injected repeatedly.",
       "updated_at": 1783833527
     },
-    "CHANGELOG.md:list:a702b552baa7d522668a76b859a98b2272294fa7c56518f23019ef1e2e4ee45e": {
+    "CHANGELOG.md:list:a713a32442c60f3e2b1b1f1a029428ac7738b70988f88183ce1d2d902c9e1ebb": {
       "kind": "list",
-      "source": "QQ OneBot 私聊文件段缺少 __ATRIX_CODE_0__ 时会调用 __ATRIX_CODE_1__；",
+      "source": "**SQLite 持久化**：Session、消息、上下文摘要、工具调用记录、Cron job、Atrinis 事件统一存储。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "a702b552baa7d522668a76b859a98b2272294fa7c56518f23019ef1e2e4ee45e",
-      "translation": "When the file segment in a QQ OneBot private chat is missing __ATRIX_CODE_0__, __ATRIX_CODE_1__ will be called;",
-      "updated_at": 1783095128
-    },
-    "CHANGELOG.md:list:a715989207d0188f53e9782c5f36d84e7a82900f4cb280d284f5ae84c96c215b": {
-      "kind": "list",
-      "source": "多模态图片此前只以 __ATRIX_CODE_0__ 内容段发送，模型能看图却不知道可复用地址；",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "a715989207d0188f53e9782c5f36d84e7a82900f4cb280d284f5ae84c96c215b",
-      "translation": "Multimodal images were previously only sent as __ATRIX_CODE_0__ content segments; the model could see the images but did not know the reusable addresses;",
-      "updated_at": 1786545145
+      "source_hash": "a713a32442c60f3e2b1b1f1a029428ac7738b70988f88183ce1d2d902c9e1ebb",
+      "translation": "**SQLite Persistence**: Unified storage for Sessions, messages, context summaries, tool call records, Cron jobs, and Atrinis events.",
+      "updated_at": 1782270601
     },
     "CHANGELOG.md:list:a71cbc0c9f36ac911e0b5692c0166f7e157090086356a299746ba3b3ff1db19b": {
       "kind": "list",
@@ -1088,13 +1088,13 @@
       "translation": "Hook logs are no longer duplicated",
       "updated_at": 1782804444
     },
-    "CHANGELOG.md:list:a724226f267f5e72c8b1410dacff8844636ef381b46198c619c9c5003b3bf59a": {
+    "CHANGELOG.md:list:a77b3fc25464123749686df836b12ffabb1002867bdac9e9d9a81ee011f4ca77": {
       "kind": "list",
-      "source": "Hook 平台上下文现在填充当前平台消息 ID __ATRIX_CODE_0__ 与引用/回复目标消息 ID __ATRIX_CODE_1__，便于规则 Hook 处理引用消息，例如撤回被引用消息。",
+      "source": "LLM 返回 __ATRIX_CODE_0__ 的失败或阻塞报告现在也会冻结并完成补发。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "a724226f267f5e72c8b1410dacff8844636ef381b46198c619c9c5003b3bf59a",
-      "translation": "Hook platform context now populates the current platform message ID __ATRIX_CODE_0__ and the referenced/reply target message ID __ATRIX_CODE_1__, facilitating the processing of referenced messages by rule Hooks, such as recalling a referenced message.",
-      "updated_at": 1782395477
+      "source_hash": "a77b3fc25464123749686df836b12ffabb1002867bdac9e9d9a81ee011f4ca77",
+      "translation": "Failure or blocking reports from LLM returning __ATRIX_CODE_0__ will now also be frozen and complete the re-delivery.",
+      "updated_at": 1784437461
     },
     "CHANGELOG.md:list:a7e52b1d5e396c5785811e30fc84657b301e3fff959027918e68c882c5499953": {
       "kind": "list",
@@ -1104,21 +1104,13 @@
       "translation": "Added Media Center for unified management of all media files",
       "updated_at": 1789010466
     },
-    "CHANGELOG.md:list:a9132ec799ad162e44f3624974b7fd5075c636df96835cdb8c1aec9d01061bbe": {
+    "CHANGELOG.md:list:a8974b28deb64dcf4c0700366747561ce3caa0ce16d7ac568525905e8495fb72": {
       "kind": "list",
-      "source": "更新 __ATRIX_CODE_0__ 版本至 v3",
+      "source": "AgentSkill 不再通过 __ATRIX_CODE_0__ 固定包装执行 Python 脚本；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "a9132ec799ad162e44f3624974b7fd5075c636df96835cdb8c1aec9d01061bbe",
-      "translation": "Update __ATRIX_CODE_0__ version to v3",
-      "updated_at": 1782704139
-    },
-    "CHANGELOG.md:list:a9d6da892e7e5b7ce145d29cb24cfd5cf97b4af2fdc44bdd550062d95d5ffbb6": {
-      "kind": "list",
-      "source": "常驻记忆不再注册为 Hook，普通 Hook 的 __ATRIX_CODE_0__ 明确为只读上下文。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "a9d6da892e7e5b7ce145d29cb24cfd5cf97b4af2fdc44bdd550062d95d5ffbb6",
-      "translation": "Resident memory is no longer registered as a Hook; the __ATRIX_CODE_0__ of ordinary Hooks is explicitly defined as read-only context.",
-      "updated_at": 1784467084
+      "source_hash": "a8974b28deb64dcf4c0700366747561ce3caa0ce16d7ac568525905e8495fb72",
+      "translation": "AgentSkill no longer uses __ATRIX_CODE_0__ for fixed wrapping to execute Python scripts;",
+      "updated_at": 1783074551
     },
     "CHANGELOG.md:list:aad5c8df94eeb1f80e25162d64492b3386d626e486461b5cff2001c143cc7fbc": {
       "kind": "list",
@@ -1128,21 +1120,13 @@
       "translation": "When OneBot fails to send an image, a visible fallback will no longer appear, but it will still be logged.",
       "updated_at": 1783048564
     },
-    "CHANGELOG.md:list:ab58d9dcd816b9be7a67a5dda1fe70b790eeb3652be980bac9d344e0fa067f37": {
+    "CHANGELOG.md:list:ac67ad409ac4f4e83d9fe6b273df499c34d8bca9cc2c6cc7b98c7031a0fabea6": {
       "kind": "list",
-      "source": "Skill 扫描改为启动后延迟执行，并在 __ATRIX_CODE_0__ 首次使用时兜底确保扫描，减少启动阻塞。",
+      "source": "**Atrinis 监听枢纽**：接收 Atriwisp 通过 Atriena HTTP 协议投递的外部事件，支持 record/direct/llm 三种模式与多目标投递。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "ab58d9dcd816b9be7a67a5dda1fe70b790eeb3652be980bac9d344e0fa067f37",
-      "translation": "Skill scanning has been changed to delayed execution after startup, with a fallback to ensure scanning upon the first use of __ATRIX_CODE_0__, reducing startup blocking.",
-      "updated_at": 1783074551
-    },
-    "CHANGELOG.md:list:ac3afc51b6a800e97966f71f733c8b5c6a8ed82d2528465a388929465e7a17c6": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 现在复用 __ATRIX_CODE_1__ 的 __ATRIX_CODE_2__ 编辑说明与执行能力，并在确认前预检编辑、Atriyph 语法和 no-op 修改，在高风险确认详情中展示预检 diff。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "ac3afc51b6a800e97966f71f733c8b5c6a8ed82d2528465a388929465e7a17c6",
-      "translation": "__ATRIX_CODE_0__ now reuses the __ATRIX_CODE_2__ editing instructions and execution capabilities of __ATRIX_CODE_1__, and pre-checks edits, Atriyph syntax, and no-op modifications before confirmation, displaying the pre-check diff in the high-risk confirmation details.",
-      "updated_at": 1782699038
+      "source_hash": "ac67ad409ac4f4e83d9fe6b273df499c34d8bca9cc2c6cc7b98c7031a0fabea6",
+      "translation": "**Atrinis listening hub**: Receives external events delivered by Atriwisp via the Atriena HTTP protocol, supporting three modes (record/direct/llm) and multi-target delivery.",
+      "updated_at": 1782270601
     },
     "CHANGELOG.md:list:ac8feca5e8bd2d6bf810555d7b339671c93bf8b03e518f9cabab44e2af7bf9aa": {
       "kind": "list",
@@ -1160,69 +1144,37 @@
       "translation": "Display the current retry count via Notice when LLM connection/HTTP retriable requests fail.",
       "updated_at": 1782298716
     },
-    "CHANGELOG.md:list:afe2553606064d39abf0bf40a33a71cc6655ec21a19299326f5f05165c02bbab": {
+    "CHANGELOG.md:list:b003ab32deb5afe11429acd39cdb594a2f40a98c26fc1320110fdcaffbe3b4ac": {
       "kind": "list",
-      "source": "现在 JSON 数组与对象会压缩为单个 argv 参数传给对应 __ATRIX_CODE_0__ flag。",
+      "source": "__ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 支持直接携带消息，在切换 Session 模式后立即发送；Session 命令状态改为按平台 Scope 隔离。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "afe2553606064d39abf0bf40a33a71cc6655ec21a19299326f5f05165c02bbab",
-      "translation": "Now JSON arrays and objects will be compressed into a single argv parameter and passed to the corresponding __ATRIX_CODE_0__ flag.",
-      "updated_at": 1788869399
+      "source_hash": "b003ab32deb5afe11429acd39cdb594a2f40a98c26fc1320110fdcaffbe3b4ac",
+      "translation": "__ATRIX_CODE_0__ and __ATRIX_CODE_1__ now support carrying messages directly, which are sent immediately after switching the Session mode; Session command status is now isolated by platform Scope.",
+      "updated_at": 1784276217
     },
-    "CHANGELOG.md:list:b25d3a78ad76a7e9f568addf9e30d0ac344415f9c084e850f2997f4c02617cad": {
+    "CHANGELOG.md:list:b52cca9d8927b33c6d28d80917c563459d9157ecb439e7e9b535e959bb2edcda": {
       "kind": "list",
-      "source": "平台消息 Hook 输出现在会发送，__ATRIX_CODE_0__ 可阻止后续命令/LLM 处理。",
+      "source": "Hook rules __ATRIX_CODE_0__ action 新增 __ATRIX_CODE_1__ 列表，支持多类型多段输出（text/image/file/emoticon，含 url/path/base64），格式与 Atriena segment 统一。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "b25d3a78ad76a7e9f568addf9e30d0ac344415f9c084e850f2997f4c02617cad",
-      "translation": "Platform message Hook output will now be sent; __ATRIX_CODE_0__ can block subsequent command/LLM processing.",
+      "source_hash": "b52cca9d8927b33c6d28d80917c563459d9157ecb439e7e9b535e959bb2edcda",
+      "translation": "Hook rules __ATRIX_CODE_0__ action added __ATRIX_CODE_1__ list, supporting multi-type multi-segment output (text/image/file/emoticon, including url/path/base64), with a format unified with Atriena segments.",
       "updated_at": 1782376912
     },
-    "CHANGELOG.md:list:b29b7ec1f638060654625e733558f4030029e4f707216bb07123dbea0573d190": {
+    "CHANGELOG.md:list:b60c096ab89115d354b9d844a6f6aac96cc4cb7b23dcf8bcd2927ca6b29f20cb": {
       "kind": "list",
-      "source": "远程 CLI 的 __ATRIX_CODE_0__ 消息同步新增可选 __ATRIX_CODE_1__ 字段。",
+      "source": "同时修复模型切换、__ATRIX_CODE_0__ 与 Session 变更命令的并发问题。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "b29b7ec1f638060654625e733558f4030029e4f707216bb07123dbea0573d190",
-      "translation": "Added an optional __ATRIX_CODE_1__ field to the __ATRIX_CODE_0__ message synchronization of the remote CLI.",
-      "updated_at": 1785235309
+      "source_hash": "b60c096ab89115d354b9d844a6f6aac96cc4cb7b23dcf8bcd2927ca6b29f20cb",
+      "translation": "Simultaneously fixed concurrency issues related to model switching, __ATRIX_CODE_0__, and Session change commands.",
+      "updated_at": 1784109405
     },
-    "CHANGELOG.md:list:b3437ec56a0380e39408a1e249d70dd1aa1ceb8b073ecf965ae300d13d3297d2": {
+    "CHANGELOG.md:list:b6bfe500f37a3afe4074aa6e89fc22f61a169365e995747356c75537aae9c4f7": {
       "kind": "list",
-      "source": "工具结果支持统一 __ATRIX_CODE_0__ 输出，用于提示 LLM 后续优先使用更合适的工具。",
+      "source": "__ATRIX_CODE_0__ 工具首次被发现或注入时也会加载当前目录的 __ATRIX_CODE_1__/__ATRIX_CODE_2__；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "b3437ec56a0380e39408a1e249d70dd1aa1ceb8b073ecf965ae300d13d3297d2",
-      "translation": "Tool results now support unified __ATRIX_CODE_0__ output, used to prompt the LLM to prioritize more appropriate tools in the future.",
-      "updated_at": 1782722558
-    },
-    "CHANGELOG.md:list:b38bc9c4a4c1c59fabd0af61273ce28f1bda9c70b72de6986bc430d0e30f60aa": {
-      "kind": "list",
-      "source": "LLM Cron 用 Atriyph 任务描述驱动模型执行，支持一次性与周期任务、missed 补跑与广播。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "b38bc9c4a4c1c59fabd0af61273ce28f1bda9c70b72de6986bc430d0e30f60aa",
-      "translation": "LLM Cron uses Atriyph task descriptions to drive model execution, supporting one-time and periodic tasks, missed run recovery, and broadcasting.",
-      "updated_at": 1782270601
-    },
-    "CHANGELOG.md:list:b58a4c6fcf1311375ac37e6a46c324d9359b9852d8c8fdb03ca177e72f0451a8": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 读取 __ATRIX_CODE_1__、__ATRIX_CODE_2__ 及常见凭据文件名时改为高风险确认；其他文件读取仍保持低风险。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "b58a4c6fcf1311375ac37e6a46c324d9359b9852d8c8fdb03ca177e72f0451a8",
-      "translation": "__ATRIX_CODE_0__ now requires high-risk confirmation when reading __ATRIX_CODE_1__, __ATRIX_CODE_2__, and common credential filenames; reading other files remains low-risk.",
-      "updated_at": 1785806029
-    },
-    "CHANGELOG.md:list:b6c52e63dbdbc933d90f2fc0f1cfdd60ebce756de4f7acdf8ad3fbff5bceb9b7": {
-      "kind": "list",
-      "source": "修复 OpenAI-compatible 流式响应中途断开但缺失 __ATRIX_CODE_0__ 时被当作正常结束的问题；现在会明确通知 LLM 响应中断。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "b6c52e63dbdbc933d90f2fc0f1cfdd60ebce756de4f7acdf8ad3fbff5bceb9b7",
-      "translation": "Fixed an issue where OpenAI-compatible streaming responses that disconnected midway but were missing __ATRIX_CODE_0__ were treated as normal terminations; now it will explicitly notify that the LLM response was interrupted.",
-      "updated_at": 1782298716
-    },
-    "CHANGELOG.md:list:b924b7752c84535d4998c9c20dc147c773538278dda701551f6a589b2ca6892c": {
-      "kind": "list",
-      "source": "修复群聊使用前缀唤起 LLM 后，后续输出 Hook 将已剥离前缀的消息误判为未唤起，导致 __ATRIX_CODE_0__ 等默认规则不执行的问题。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "b924b7752c84535d4998c9c20dc147c773538278dda701551f6a589b2ca6892c",
-      "translation": "Fixed an issue where in group chats, after triggering the LLM with a prefix, the subsequent output Hook misidentified messages with the stripped prefix as not triggered, preventing default rules such as __ATRIX_CODE_0__ from executing.",
-      "updated_at": 1785845869
+      "source_hash": "b6bfe500f37a3afe4074aa6e89fc22f61a169365e995747356c75537aae9c4f7",
+      "translation": "__ATRIX_CODE_0__ tools will also load the __ATRIX_CODE_1__/__ATRIX_CODE_2__ of the current directory when they are first discovered or injected;",
+      "updated_at": 1783833527
     },
     "CHANGELOG.md:list:b96424f249f0fdeffb218eef737cc2ae780a59117df74c8d8b07646b53fd43b4": {
       "kind": "list",
@@ -1232,13 +1184,29 @@
       "translation": "One-off execs and Workers now share the merged environment and PATH lookup rules.",
       "updated_at": 1784611290
     },
-    "CHANGELOG.md:list:bbe69649fedf66fe55c50171fda1e0bafc56ed2f3759250fbef518fdf34acccf": {
+    "CHANGELOG.md:list:b974b2a93b01a539f9fd58122e0a574edb1f48008d2cc7b40052b6cceccc77f2": {
       "kind": "list",
-      "source": "没有 __ATRIX_CODE_0__ 时保持说明型 Skill，可按文档使用 shell 等通用工具；",
+      "source": "Atriyph __ATRIX_CODE_0__/__ATRIX_CODE_1__ 文本末尾冒号现在作为 warning 返回给 __ATRIX_CODE_2__/__ATRIX_CODE_3__，不再阻断创建或 finalize。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "bbe69649fedf66fe55c50171fda1e0bafc56ed2f3759250fbef518fdf34acccf",
-      "translation": "When __ATRIX_CODE_0__ is absent, it remains a descriptive Skill, and general-purpose tools such as shell can be used according to the documentation;",
-      "updated_at": 1783219356
+      "source_hash": "b974b2a93b01a539f9fd58122e0a574edb1f48008d2cc7b40052b6cceccc77f2",
+      "translation": "Colons at the end of Atriyph __ATRIX_CODE_0__/__ATRIX_CODE_1__ text are now returned as warnings to __ATRIX_CODE_2__/__ATRIX_CODE_3__, and no longer block creation or finalization.",
+      "updated_at": 1782722558
+    },
+    "CHANGELOG.md:list:b9d550b02a17dbd9e5c1f24a2c05d6bf6af3c99d2b1afbfe4c3442d9b6992cb2": {
+      "kind": "list",
+      "source": "现在会压缩超过设置大小的图片；原始媒体和 Media ID 不变。S3 后端改为按需初始化，配置不可用时仅告警，不再阻止 ATRI-X 启动。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "b9d550b02a17dbd9e5c1f24a2c05d6bf6af3c99d2b1afbfe4c3442d9b6992cb2",
+      "translation": "Now compresses images that exceed the configured size; original media and Media IDs remain unchanged. The S3 backend is now initialized on demand; it will only issue a warning if the configuration is unavailable, and will no longer prevent ATRI-X from starting.",
+      "updated_at": 1789433256
+    },
+    "CHANGELOG.md:list:ba35f47904a8ffa48ff03a174f1b84b3946b99fe72612865276523c2f9d29d8d": {
+      "kind": "list",
+      "source": "平台消息 Hook 输出现在会发送，__ATRIX_CODE_0__ 可阻止后续命令/LLM 处理。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "ba35f47904a8ffa48ff03a174f1b84b3946b99fe72612865276523c2f9d29d8d",
+      "translation": "Platform message Hook output will now be sent; __ATRIX_CODE_0__ can block subsequent command/LLM processing.",
+      "updated_at": 1782376912
     },
     "CHANGELOG.md:list:bc86c8fa9b9050ebddacdf8f7fba5d266f228b0295246e5feb509bfaa5533795": {
       "kind": "list",
@@ -1248,6 +1216,14 @@
       "translation": "**Refactor hook system**",
       "updated_at": 1783775610
     },
+    "CHANGELOG.md:list:bd71bf2b0696ca2e18f1e54f2bab84c2a973a6ef8d6bc3a41941e167b1429a01": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__/__ATRIX_CODE_1__ 读取 ATRI-X Skill 文件时会提示使用 __ATRIX_CODE_2__；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "bd71bf2b0696ca2e18f1e54f2bab84c2a973a6ef8d6bc3a41941e167b1429a01",
+      "translation": "__ATRIX_CODE_0__/__ATRIX_CODE_1__ will suggest using __ATRIX_CODE_2__ when reading ATRI-X Skill files;",
+      "updated_at": 1782722558
+    },
     "CHANGELOG.md:list:bd93eae9bd1763e2908b379364b1f9d9b2057b8941646314b5cf7d0e454e8ac8": {
       "kind": "list",
       "source": "**标准 Cron 与 LLM Cron**：标准 Cron 按计划直发固定内容；",
@@ -1255,14 +1231,6 @@
       "source_hash": "bd93eae9bd1763e2908b379364b1f9d9b2057b8941646314b5cf7d0e454e8ac8",
       "translation": "**Standard Cron and LLM Cron**: Standard Cron sends fixed content directly according to a schedule;",
       "updated_at": 1782270601
-    },
-    "CHANGELOG.md:list:bd94f6e99860eeead24ecf3dbebbea42b0a11237404c1a8c4bef8673584fd60b": {
-      "kind": "list",
-      "source": "修复 Atrinis LLM 报告发送前就把事件标记为 __ATRIX_CODE_0__ 的问题；",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "bd94f6e99860eeead24ecf3dbebbea42b0a11237404c1a8c4bef8673584fd60b",
-      "translation": "Fixed an issue where Atrinis LLM marked events as __ATRIX_CODE_0__ before sending the report;",
-      "updated_at": 1784340385
     },
     "CHANGELOG.md:list:bfcdea1f22fc104c87792b36230a1333c05c0c6ab4336e69e47203197c32a7b2": {
       "kind": "list",
@@ -1272,21 +1240,21 @@
       "translation": "When the context window cannot be identified from model metadata or configuration, the default window is adjusted to 256k.",
       "updated_at": 1784109405
     },
-    "CHANGELOG.md:list:c1f3b644091065de80d300d76b09ba465097fb8b0f28ef5f7ce2c3d3a7051ce7": {
+    "CHANGELOG.md:list:c26f5e389d64047fed4be0141ac15a482529f24ad482825402abdd91bcdf5b15": {
       "kind": "list",
-      "source": "AgentSkill 的 __ATRIX_CODE_0__ 支持只写 __ATRIX_CODE_1__ / __ATRIX_CODE_2__ 做文档可见性限制，不写工具化字段时不会注册为普通工具；",
+      "source": "新增 __ATRIX_CODE_0__ 命令：从审计日志聚合 token 消耗，支持按模型/天/会话汇总，快捷参数 __ATRIX_CODE_1__ 天数、__ATRIX_CODE_2__ 模型、__ATRIX_CODE_3__ 会话。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "c1f3b644091065de80d300d76b09ba465097fb8b0f28ef5f7ce2c3d3a7051ce7",
-      "translation": "__ATRIX_CODE_0__ of AgentSkill supports writing only __ATRIX_CODE_1__ / __ATRIX_CODE_2__ for document visibility restrictions; it will not be registered as a normal tool when tool-related fields are not provided.",
-      "updated_at": 1783479117
+      "source_hash": "c26f5e389d64047fed4be0141ac15a482529f24ad482825402abdd91bcdf5b15",
+      "translation": "Added __ATRIX_CODE_0__ command: aggregates token consumption from the audit log, supporting summaries by model/day/Session, with shortcut parameters __ATRIX_CODE_1__ for days, __ATRIX_CODE_2__ for model, and __ATRIX_CODE_3__ for Session.",
+      "updated_at": 1782884148
     },
-    "CHANGELOG.md:list:c5677ef83020b6879bc81ba0896f3ae4a390a95cc8329831e1008ad10406bf25": {
+    "CHANGELOG.md:list:c51c65cf787f500b0f788acc5e8eda2b2c1efe0d3e0b311646f4d77ab2722640": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__/__ATRIX_CODE_1__ 读取 ATRI-X Skill 文件时会提示使用 __ATRIX_CODE_2__；",
+      "source": "修复atriwisp发往qqonebot，文件太大导致全部阻塞的bug",
       "source_file": "CHANGELOG.md",
-      "source_hash": "c5677ef83020b6879bc81ba0896f3ae4a390a95cc8329831e1008ad10406bf25",
-      "translation": "__ATRIX_CODE_0__/__ATRIX_CODE_1__ will suggest using __ATRIX_CODE_2__ when reading ATRI-X Skill files;",
-      "updated_at": 1782722558
+      "source_hash": "c51c65cf787f500b0f788acc5e8eda2b2c1efe0d3e0b311646f4d77ab2722640",
+      "translation": "Fixed a bug where large files sent from Atriwisp to qqonebot caused total blockage.",
+      "updated_at": 1788876182
     },
     "CHANGELOG.md:list:c932df58ae0d60e638b7627a8d565a0131d7b67cb4fac5a817cf933dafeb8a36": {
       "kind": "list",
@@ -1304,14 +1272,6 @@
       "translation": "Fixed an issue where a completed one-time LLM Cron would directly reuse the old report and fail to create a new background Session after being re-enabled or rescheduled; notification failures and platform reconnections still resend the same round of persisted results.",
       "updated_at": 1784340385
     },
-    "CHANGELOG.md:list:cad7699784210eb94d03a9c5d03500978edac0870f59b3c4be7afbea516f4838": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__、详细帮助和 slash 命令补全现在按当前用户权限过滤；普通用户无法发现仅限超级管理员的命令。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "cad7699784210eb94d03a9c5d03500978edac0870f59b3c4be7afbea516f4838",
-      "translation": "__ATRIX_CODE_0__, detailed help, and slash command completion are now filtered by the current user's permissions; regular users cannot discover commands restricted to superadmins.",
-      "updated_at": 1786239723
-    },
     "CHANGELOG.md:list:cb3bacc90377107c6869a20393bbc05e6b6b0db583a983da3c0940cec92cb8aa": {
       "kind": "list",
       "source": "修复读文件工具错误将部分非 UTF-8 文本编码识别为二进制文件的问题。",
@@ -1320,21 +1280,13 @@
       "translation": "Fixed an issue where the read file tool incorrectly identified some non-UTF-8 text encodings as binary files.",
       "updated_at": 1788672976
     },
-    "CHANGELOG.md:list:cb42950d3097afb350e0270a9241489518a607d30bcc8c00f788f103348b188a": {
+    "CHANGELOG.md:list:ccca84652615f5ec39e921ee2be75130da1ee3478efe1aeb2453e07be159efb4": {
       "kind": "list",
-      "source": "**SQLite 持久化**：Session、消息、上下文摘要、工具调用记录、Cron job、Atrinis 事件统一存储。",
+      "source": "Provider 新增 __ATRIX_CODE_0__ 字段，支持 HTTP/SOCKS5 代理。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "cb42950d3097afb350e0270a9241489518a607d30bcc8c00f788f103348b188a",
-      "translation": "**SQLite Persistence**: Unified storage for Sessions, messages, context summaries, tool call records, Cron jobs, and Atrinis events.",
-      "updated_at": 1782270601
-    },
-    "CHANGELOG.md:list:cba69058ca8cc2d51996903e3ce8d32a0c942a3d2965de242f0ef30bc780a151": {
-      "kind": "list",
-      "source": "过期历史会话不再立即删除，可直接通过 __ATRIX_CODE_0__ 恢复。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "cba69058ca8cc2d51996903e3ce8d32a0c942a3d2965de242f0ef30bc780a151",
-      "translation": "Expired historical Sessions are no longer deleted immediately and can be restored directly via __ATRIX_CODE_0__.",
-      "updated_at": 1784863205
+      "source_hash": "ccca84652615f5ec39e921ee2be75130da1ee3478efe1aeb2453e07be159efb4",
+      "translation": "Added __ATRIX_CODE_0__ field to Provider, supporting HTTP/SOCKS5 proxies.",
+      "updated_at": 1782312399
     },
     "CHANGELOG.md:list:cd8d247a2da615761263d4d1c775cd8b4f3bcb8dce6a38e69a1325d2c885c46b": {
       "kind": "list",
@@ -1344,14 +1296,6 @@
       "translation": "Actual execution, subsequent requests, and transcripts now uniformly use the final arguments.",
       "updated_at": 1784467084
     },
-    "CHANGELOG.md:list:ce3e9cc6dd15510c9cfe7dbcae094bd1f1cb641bc8875c00f0d3c95d4642854d": {
-      "kind": "list",
-      "source": "**Atrinis 监听枢纽**：接收 Atriwisp 通过 Atriena HTTP 协议投递的外部事件，支持 record/direct/llm 三种模式与多目标投递。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "ce3e9cc6dd15510c9cfe7dbcae094bd1f1cb641bc8875c00f0d3c95d4642854d",
-      "translation": "**Atrinis listening hub**: Receives external events delivered by Atriwisp via the Atriena HTTP protocol, supporting three modes (record/direct/llm) and multi-target delivery.",
-      "updated_at": 1782270601
-    },
     "CHANGELOG.md:list:ced53b80d8d32780dd503a271ab2356b596837b1e3bbd2362c5684014fb827d2": {
       "kind": "list",
       "source": "工具化 AgentSkill 的命令参数此前只支持字符串、数字和布尔值；",
@@ -1360,21 +1304,37 @@
       "translation": "Command parameters for toolized AgentSkill previously only supported strings, numbers, and booleans;",
       "updated_at": 1788869399
     },
-    "CHANGELOG.md:list:d0175f70fdf81c63c972bdf310a17e8f41d2292f524be381fd252b494bcce468": {
+    "CHANGELOG.md:list:d0938fef72826d707a6f4acb36a7a9f18b24f7e0aa362bcb13f54238c92e1af7": {
       "kind": "list",
-      "source": "用户输入和工具 pending 的前置 Hook 支持用 __ATRIX_CODE_0__ 同时改写文字和附加图片，最终多模态内容会在请求前写入会话历史。",
+      "source": "修复群聊使用前缀唤起 LLM 后，后续输出 Hook 将已剥离前缀的消息误判为未唤起，导致 __ATRIX_CODE_0__ 等默认规则不执行的问题。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "d0175f70fdf81c63c972bdf310a17e8f41d2292f524be381fd252b494bcce468",
-      "translation": "Pre-hooks for user input and tool pending support using __ATRIX_CODE_0__ to simultaneously rewrite text and attach images; the final multimodal content will be written to the Session history before the request.",
-      "updated_at": 1784467084
+      "source_hash": "d0938fef72826d707a6f4acb36a7a9f18b24f7e0aa362bcb13f54238c92e1af7",
+      "translation": "Fixed an issue where in group chats, after triggering the LLM with a prefix, the subsequent output Hook misidentified messages with the stripped prefix as not triggered, preventing default rules such as __ATRIX_CODE_0__ from executing.",
+      "updated_at": 1785845869
     },
-    "CHANGELOG.md:list:d3908641b559bc54ede96c20cd1c652257d818385b70144f4cdcd75c3cfecf17": {
+    "CHANGELOG.md:list:d175535ec61f5f9c7a75b5a6c0a4dad5124438b26079490382e0079af56e9bfc": {
       "kind": "list",
-      "source": "可用 __ATRIX_CODE_0__ 取消长时间运行的 Hook，手动取消按正常取消记录。",
+      "source": "Hook rules 可通过 __ATRIX_CODE_0__ action 执行脚本，并用 __ATRIX_CODE_1__ 经内部 Atriena Bus 触发 Atrinis direct/LLM/calls；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "d3908641b559bc54ede96c20cd1c652257d818385b70144f4cdcd75c3cfecf17",
-      "translation": "Use __ATRIX_CODE_0__ to cancel long-running Hooks; manual cancellations are recorded as normal cancellations.",
-      "updated_at": 1783571675
+      "source_hash": "d175535ec61f5f9c7a75b5a6c0a4dad5124438b26079490382e0079af56e9bfc",
+      "translation": "Hook rules can execute scripts via the __ATRIX_CODE_0__ action and use __ATRIX_CODE_1__ to trigger Atrinis direct/LLM/calls via the internal Atriena Bus.",
+      "updated_at": 1782395477
+    },
+    "CHANGELOG.md:list:d1ccc3e58f6c73d5272b28354af8056b0f7a3858cef836dd007aed17f8b40710": {
+      "kind": "list",
+      "source": "持久 Worker 则收到 __ATRIX_CODE_0__ 并继续复用。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "d1ccc3e58f6c73d5272b28354af8056b0f7a3858cef836dd007aed17f8b40710",
+      "translation": "Persistent Workers will instead receive __ATRIX_CODE_0__ and continue to be reused.",
+      "updated_at": 1786539387
+    },
+    "CHANGELOG.md:list:d22b2b496ed5558b71ab3da6a01659bf4c6dbf93cec19dc9febc2d02e6b75760": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__，可对 Go 和 Shell 文件按名称进行轻量 AST 搜索；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "d22b2b496ed5558b71ab3da6a01659bf4c6dbf93cec19dc9febc2d02e6b75760",
+      "translation": "__ATRIX_CODE_0__ added __ATRIX_CODE_1__, enabling lightweight AST search by name for Go and Shell files;",
+      "updated_at": 1783658112
     },
     "CHANGELOG.md:list:d3c42bf81c2eaeda9ad085d96e8894b1378a6516cc98a9c6ca556d9e4f084183": {
       "kind": "list",
@@ -1392,29 +1352,29 @@
       "translation": "Fixed an issue where parameters rewritten by the tool prepared Hook were not synchronized to the current LLM context, and in-process Hooks could rewrite tool IDs/names;",
       "updated_at": 1784467084
     },
-    "CHANGELOG.md:list:d645cf77c4ee588c46e1393622a3b1673b35ad938b425f17eba22044d2bdc5a7": {
+    "CHANGELOG.md:list:d44a2f65c67e3b22653b8efe26261b3af655eafe2b94fd675e94615c7e8421f9": {
       "kind": "list",
-      "source": "Hook rules 可通过 __ATRIX_CODE_0__ action 执行脚本，并用 __ATRIX_CODE_1__ 经内部 Atriena Bus 触发 Atrinis direct/LLM/calls；",
+      "source": "可用 __ATRIX_CODE_0__ 取消长时间运行的 Hook，手动取消按正常取消记录。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "d645cf77c4ee588c46e1393622a3b1673b35ad938b425f17eba22044d2bdc5a7",
-      "translation": "Hook rules can execute scripts via the __ATRIX_CODE_0__ action and use __ATRIX_CODE_1__ to trigger Atrinis direct/LLM/calls via the internal Atriena Bus.",
-      "updated_at": 1782395477
+      "source_hash": "d44a2f65c67e3b22653b8efe26261b3af655eafe2b94fd675e94615c7e8421f9",
+      "translation": "Use __ATRIX_CODE_0__ to cancel long-running Hooks; manual cancellations are recorded as normal cancellations.",
+      "updated_at": 1783571675
     },
-    "CHANGELOG.md:list:d868e5b43fdd4b220f5103b4c130865608bd216aa604f67b556dc8d92822ecad": {
+    "CHANGELOG.md:list:d9d65397d614d56fcec2e19898ede97c96fbf31e1f7124bcf02f86aac3a99d1a": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 命令：列出所有已注册 Hook、查看某个 Hook 详细配置、热重载全部 Hook（修改 __ATRIX_CODE_1__ 后无需重启即可生效）。",
+      "source": "__ATRIX_CODE_0__ 同时统一为 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__ 三种读取模式。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "d868e5b43fdd4b220f5103b4c130865608bd216aa604f67b556dc8d92822ecad",
-      "translation": "__ATRIX_CODE_0__ command: list all registered Hooks, view detailed configuration of a specific Hook, and hot-reload all Hooks (takes effect after modifying __ATRIX_CODE_1__ without requiring a restart).",
-      "updated_at": 1782444302
+      "source_hash": "d9d65397d614d56fcec2e19898ede97c96fbf31e1f7124bcf02f86aac3a99d1a",
+      "translation": "__ATRIX_CODE_0__ is also unified into three reading modes: __ATRIX_CODE_1__, __ATRIX_CODE_2__, and __ATRIX_CODE_3__.",
+      "updated_at": 1783658112
     },
-    "CHANGELOG.md:list:d971b1e15ca6ef3c526118949d459573c00208fcbd27337c54e1e83eecf01106": {
+    "CHANGELOG.md:list:dae21a7336b506040db7aa6affa842193e896ff364f2d74fa06f92eb67743129": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 高风险工具调用详情支持工具自定义纯文本展示；",
+      "source": "__ATRIX_CODE_0__ 新增 __ATRIX_CODE_1__ 参数，默认使用 Jina Reader；传 __ATRIX_CODE_2__ 可手动改用直接爬取。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "d971b1e15ca6ef3c526118949d459573c00208fcbd27337c54e1e83eecf01106",
-      "translation": "__ATRIX_CODE_0__ high-risk tool call details now support custom plain text display for tools;",
-      "updated_at": 1782631048
+      "source_hash": "dae21a7336b506040db7aa6affa842193e896ff364f2d74fa06f92eb67743129",
+      "translation": "__ATRIX_CODE_0__ added the __ATRIX_CODE_1__ parameter, which defaults to using Jina Reader; passing __ATRIX_CODE_2__ allows manually switching to direct crawling.",
+      "updated_at": 1783519200
     },
     "CHANGELOG.md:list:dc2cf953d3d9353592ba0c3cfdc1f5bd7eff01a1b55aac0fda1fabea161858db": {
       "kind": "list",
@@ -1432,53 +1392,37 @@
       "translation": "By default, the wait time for the first streaming event is 180 seconds, streaming idle is 60 seconds, and there is no total duration limit for the entire response.",
       "updated_at": 1782461728
     },
-    "CHANGELOG.md:list:dce3acb92361980914c413865ff9af806d501fdd807684850e8b1aa5d27376a7": {
+    "CHANGELOG.md:list:dcdd4e47469a0cc74eb9d2d7c7b8e6323e9c5e825b47c4cc32319b262f9b987b": {
       "kind": "list",
-      "source": "修复 __ATRIX_CODE_0__ 工具设置目录时不支持 __ATRIX_CODE_1__、__ATRIX_CODE_2__、Windows __ATRIX_CODE_3__、__ATRIX_CODE_4__ 和 __ATRIX_CODE_5__ 主目录路径的问题。",
+      "source": "修复发现或内联预载多个 Atriyph Skill 时规则卡会重复注入上下文的问题；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "dce3acb92361980914c413865ff9af806d501fdd807684850e8b1aa5d27376a7",
-      "translation": "Fixed the issue where __ATRIX_CODE_0__ tools did not support __ATRIX_CODE_1__, __ATRIX_CODE_2__, Windows __ATRIX_CODE_3__, __ATRIX_CODE_4__, and __ATRIX_CODE_5__ home directory paths when setting the directory.",
-      "updated_at": 1783859074
+      "source_hash": "dcdd4e47469a0cc74eb9d2d7c7b8e6323e9c5e825b47c4cc32319b262f9b987b",
+      "translation": "Fixed the issue where rule cards were repeatedly injected into the context when performing tool discovery or inline preloading of multiple Atriyph Skills;",
+      "updated_at": 1783334583
     },
-    "CHANGELOG.md:list:dd95926df3a6e0e7ff20bafd8926f476218ede01e566243f30897cf14688ae78": {
+    "CHANGELOG.md:list:dd2e057ab73ec090f36aca9a1f2319ac8fcf5c66b4a50abceaa67bc9859bce8a": {
       "kind": "list",
       "source": "补齐 Atrinis HTTP 请求头、请求读取、响应写入和空闲连接超时，并拒绝请求体中的尾随第二个 JSON 值；未知字段继续作为无语义字段忽略。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "dd95926df3a6e0e7ff20bafd8926f476218ede01e566243f30897cf14688ae78",
+      "source_hash": "dd2e057ab73ec090f36aca9a1f2319ac8fcf5c66b4a50abceaa67bc9859bce8a",
       "translation": "Completed Atrinis HTTP request headers, request reading, response writing, and idle connection timeouts, and now rejects a trailing second JSON value in the request body; unknown fields continue to be ignored as non-semantic fields.",
       "updated_at": 1784340385
     },
-    "CHANGELOG.md:list:dda9f80d869b591edf7f9696577d405bb57a881c2e08f7cee08483abdd6db5a7": {
+    "CHANGELOG.md:list:e114fb107c78e4f2e16b13eb26187007a5a14758271523e384a2bbc52ae707d6": {
       "kind": "list",
-      "source": "执行中的 Hook 会显示在 __ATRIX_CODE_0__，当前 Session 的 Hook 也会显示在 __ATRIX_CODE_1__；",
+      "source": "首次运行会生成 __ATRIX_CODE_0__，用于说明如何把 AgentSkill 注册为普通工具。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "dda9f80d869b591edf7f9696577d405bb57a881c2e08f7cee08483abdd6db5a7",
-      "translation": "Executing Hooks will be displayed in __ATRIX_CODE_0__, and Hooks for the current Session will also be displayed in __ATRIX_CODE_1__;",
-      "updated_at": 1783571675
+      "source_hash": "e114fb107c78e4f2e16b13eb26187007a5a14758271523e384a2bbc52ae707d6",
+      "translation": "The first run will generate __ATRIX_CODE_0__, which explains how to register an AgentSkill as a regular tool.",
+      "updated_at": 1783219356
     },
-    "CHANGELOG.md:list:e03c11cbeaa6e58ce0ad4ee4ead359f83057de19807ef8393bca9bd67954a45c": {
+    "CHANGELOG.md:list:e14db14f6513ea892a01cfa9d6d87b7dbc57c1d7d7c289b5b5cd8a4167d6e66c": {
       "kind": "list",
-      "source": "重构AgentSkill：去掉py wrapper，直接使用shell执行对应sklll，同时支持在Agentkill根目录添加 __ATRIX_CODE_0__ 注册为普通工具，方便 LLM 直接调用结构化参数。",
+      "source": "__ATRIX_CODE_0__ 的高风险确认详情现在会按文件、模式和编辑步骤展示替换、新增、删除、匹配等操作。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "e03c11cbeaa6e58ce0ad4ee4ead359f83057de19807ef8393bca9bd67954a45c",
-      "translation": "Refactor AgentSkill: remove the py wrapper and execute the corresponding skill directly via shell; also support adding __ATRIX_CODE_0__ in the AgentSkill root directory to register it as a normal tool, facilitating the LLM's direct call of structured parameters.",
-      "updated_at": 1783148277
-    },
-    "CHANGELOG.md:list:e0c0fad68a12ce290b23ee8b605343887e494815742088a454977ceb93b7379c": {
-      "kind": "list",
-      "source": "内联预载支持工具简写 __ATRIX_CODE_0__ 和 Skill 简写 __ATRIX_CODE_1__，并兼容中文全角冒号 __ATRIX_CODE_2__。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "e0c0fad68a12ce290b23ee8b605343887e494815742088a454977ceb93b7379c",
-      "translation": "Inline preloading supports tool shorthand __ATRIX_CODE_0__ and Skill shorthand __ATRIX_CODE_1__, and is compatible with Chinese full-width colon __ATRIX_CODE_2__.",
-      "updated_at": 1783240947
-    },
-    "CHANGELOG.md:list:e165546c948bdf490fc215f58e25acceb7984ceaf0f31ee3e8d974b08e43db4f": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 或 shell 直接修改 ATRI-X Skill 文件会在确认或执行前被拒绝，需改用 __ATRIX_CODE_1__。",
-      "source_file": "CHANGELOG.md",
-      "source_hash": "e165546c948bdf490fc215f58e25acceb7984ceaf0f31ee3e8d974b08e43db4f",
-      "translation": "Direct modification of ATRI-X Skill files by __ATRIX_CODE_0__ or shell will be rejected before confirmation or execution; __ATRIX_CODE_1__ should be used instead.",
-      "updated_at": 1782722558
+      "source_hash": "e14db14f6513ea892a01cfa9d6d87b7dbc57c1d7d7c289b5b5cd8a4167d6e66c",
+      "translation": "High-risk confirmation details for __ATRIX_CODE_0__ now display operations such as replace, add, delete, and match by file, mode, and editing step.",
+      "updated_at": 1782631048
     },
     "CHANGELOG.md:list:e19bfc0d2b899ea39f9fda53db0f8730f44bc366d9c2e816a1c0d6da48017f01": {
       "kind": "list",
@@ -1496,21 +1440,29 @@
       "translation": "Fixed an issue where a reload failure after writing AgentSkill configuration would leave an inconsistency between the disk and the runtime registry;",
       "updated_at": 1784340385
     },
-    "CHANGELOG.md:list:e2bba3f2fbf67c598073f06e0fb772f830654cf2b0ceca05bbb54f0354aa94bd": {
+    "CHANGELOG.md:list:e24abe72b603060f1e8517f1730b104d016383fbfa5649a8a7699f7aca37a9af": {
       "kind": "list",
-      "source": "平台媒体输出支持在 __ATRIX_CODE_0__ 中识别 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__ 源；",
+      "source": "__ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 此前会完全拒绝超过 2 MiB 的文本文件；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "e2bba3f2fbf67c598073f06e0fb772f830654cf2b0ceca05bbb54f0354aa94bd",
-      "translation": "Platform media output now supports identifying __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, and __ATRIX_CODE_4__ sources in __ATRIX_CODE_0__;",
-      "updated_at": 1783048564
+      "source_hash": "e24abe72b603060f1e8517f1730b104d016383fbfa5649a8a7699f7aca37a9af",
+      "translation": "__ATRIX_CODE_0__ and __ATRIX_CODE_1__ previously completely rejected text files exceeding 2 MiB;",
+      "updated_at": 1788138091
     },
-    "CHANGELOG.md:list:e4dc91ed6c636f0a5b482e7bae6d84b4d43e9b9965dbaa3d3e8d12a62d85cfa0": {
+    "CHANGELOG.md:list:e2974a377a38515395cfdabc41f57508c7fbf47136e850de39a59f9e7426fb72": {
       "kind": "list",
-      "source": "Provider 请求从默认继承进程环境代理改为仅使用 __ATRIX_CODE_0__ 中对应 Provider 的显式 __ATRIX_CODE_1__；",
+      "source": "修复当前会话仍在请求模型、执行工具或等待确认时仍可切换 Session 的问题；Session 切换命令现在会提示先使用 __ATRIX_CODE_0__ 结束当前处理。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "e4dc91ed6c636f0a5b482e7bae6d84b4d43e9b9965dbaa3d3e8d12a62d85cfa0",
-      "translation": "Provider requests have been changed from defaulting to inheriting the process environment proxy to only using the explicit __ATRIX_CODE_1__ of the corresponding Provider in __ATRIX_CODE_0__;",
-      "updated_at": 1785763800
+      "source_hash": "e2974a377a38515395cfdabc41f57508c7fbf47136e850de39a59f9e7426fb72",
+      "translation": "Fixed the issue where the Session could still be switched while the current Session was requesting the model, executing a tool, or waiting for confirmation; the Session switching command now prompts to first use __ATRIX_CODE_0__ to end the current process.",
+      "updated_at": 1784637931
+    },
+    "CHANGELOG.md:list:e2ab9dbae2457a42a29fa68046897df971780adcd5ff1e1d16154b4a45304ce2": {
+      "kind": "list",
+      "source": "QQ OneBot 入站 @ 消息现在会优先显示群名片，其次普通昵称，格式为 __ATRIX_CODE_0__，无法获取时才回退 QQ 号。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "e2ab9dbae2457a42a29fa68046897df971780adcd5ff1e1d16154b4a45304ce2",
+      "translation": "Inbound @ messages in QQ OneBot will now prioritize displaying the group business card, followed by the regular nickname, in the format __ATRIX_CODE_0__, and will fall back to the QQ number if neither can be retrieved.",
+      "updated_at": 1783095128
     },
     "CHANGELOG.md:list:e61e924ffeaf3af76674496454c2f62693c27ea3b0aa3815d172dae151b1521b": {
       "kind": "list",
@@ -1520,6 +1472,14 @@
       "translation": "Multimodal tool results can be persisted and provided to the model as subsequent image messages according to the OpenAI Chat Completions protocol.",
       "updated_at": 1784467084
     },
+    "CHANGELOG.md:list:e6724ba64901206d6bb0ffc043a4ce3e858e98aa76f3b77e2a6f85465d3bef73": {
+      "kind": "list",
+      "source": "Hook rules 新增角色分区与平铺控制字段：__ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "e6724ba64901206d6bb0ffc043a4ce3e858e98aa76f3b77e2a6f85465d3bef73",
+      "translation": "Hook rules added role partitioning and tiling control fields: __ATRIX_CODE_0__, __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, __ATRIX_CODE_4__.",
+      "updated_at": 1782395477
+    },
     "CHANGELOG.md:list:e674fa7fc18af87b45660da3fff098ff0a482256ae0cdc7d64932ce221ad779c": {
       "kind": "list",
       "source": "**Session 服务**：持久化会话，支持恢复、归档、置顶、Fork、删除、分页与平台隔离；长对话自动上下文压缩。",
@@ -1528,13 +1488,13 @@
       "translation": "**Session Service**: Persistent sessions supporting recovery, archiving, pinning, Forking, deletion, pagination, and platform isolation; automatic context compaction for long conversations.",
       "updated_at": 1782270601
     },
-    "CHANGELOG.md:list:e7510a5df400801c446ff0dd93100e5a836baef132edb73440540d3f81862d5c": {
+    "CHANGELOG.md:list:e75066a47315b36dca9e10d5466644ab27d2ceca2c2adb6fc7604d414bcb997c": {
       "kind": "list",
-      "source": "表情 Hook 从内嵌插件改为规则 Hook 示例，不再内置 emoticon 插件和 __ATRIX_CODE_0__ 资产。",
+      "source": "__ATRIX_CODE_0__ 高风险工具调用详情支持工具自定义纯文本展示；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "e7510a5df400801c446ff0dd93100e5a836baef132edb73440540d3f81862d5c",
-      "translation": "Emoticon Hook changed from an embedded plugin to a rule Hook example; the emoticon plugin and __ATRIX_CODE_0__ assets are no longer built-in.",
-      "updated_at": 1782376912
+      "source_hash": "e75066a47315b36dca9e10d5466644ab27d2ceca2c2adb6fc7604d414bcb997c",
+      "translation": "__ATRIX_CODE_0__ high-risk tool call details now support custom plain text display for tools;",
+      "updated_at": 1782631048
     },
     "CHANGELOG.md:list:e7a12fa2b8a4d1ae4b390ff2377dc8d286be5ad3d7ab85257d5fdede2622a942": {
       "kind": "list",
@@ -1544,53 +1504,53 @@
       "translation": "CLI TUI wide-screen mode now supports using the mouse to drag the divider between the chat area and the notification area, allowing the widths of both sides to be freely adjusted during runtime.",
       "updated_at": 1784085278
     },
-    "CHANGELOG.md:list:ea9324e8d2b186f384e727405908a402edd258407ff1c17a7fcc25913da73458": {
+    "CHANGELOG.md:list:e7e1aa82e252c2627b219a6cfa0eff4abff9fba4c0375fd33e400a47dca2a975": {
       "kind": "list",
-      "source": "首次切换到含 __ATRIX_CODE_0__ 或 __ATRIX_CODE_1__ 的目录时，会自动附带说明文件内容；",
+      "source": "修复内置工具与 Go Skill 的服务级环境变量读取不一致，导致部分工具无法读取配置目录 __ATRIX_CODE_0__ 的问题。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "ea9324e8d2b186f384e727405908a402edd258407ff1c17a7fcc25913da73458",
-      "translation": "When switching to a directory containing __ATRIX_CODE_0__ or __ATRIX_CODE_1__ for the first time, the contents of the documentation file will be automatically attached;",
-      "updated_at": 1783178864
+      "source_hash": "e7e1aa82e252c2627b219a6cfa0eff4abff9fba4c0375fd33e400a47dca2a975",
+      "translation": "Fixed the inconsistency in reading service-level environment variables between built-in tools and Go Skills, which caused some tools to be unable to read the configuration directory __ATRIX_CODE_0__.",
+      "updated_at": 1787058751
     },
-    "CHANGELOG.md:list:eaed67d51f700cdbcfbd66b43f3ab3d535edf10fa0a2eef475af820bb64b5e87": {
+    "CHANGELOG.md:list:e8bbb1ba39f637495e374d2c9dc6e8232ec2833508dee00b47dcd87ebee8d20c": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 工具改为使用 __ATRIX_CODE_1__ 参数发送文件，支持本地路径、__ATRIX_CODE_2__ URI 和 HTTP(S) URL，并会按 MIME/扩展名自动将图片作为图片消息发送。",
+      "source": "常驻记忆不再注册为 Hook，普通 Hook 的 __ATRIX_CODE_0__ 明确为只读上下文。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "eaed67d51f700cdbcfbd66b43f3ab3d535edf10fa0a2eef475af820bb64b5e87",
-      "translation": "The __ATRIX_CODE_0__ tool now uses the __ATRIX_CODE_1__ parameter to send files, supporting local paths, __ATRIX_CODE_2__ URIs, and HTTP(S) URLs, and will automatically send images as image messages based on MIME type/extension.",
-      "updated_at": 1783081840
+      "source_hash": "e8bbb1ba39f637495e374d2c9dc6e8232ec2833508dee00b47dcd87ebee8d20c",
+      "translation": "Resident memory is no longer registered as a Hook; the __ATRIX_CODE_0__ of ordinary Hooks is explicitly defined as read-only context.",
+      "updated_at": 1784467084
     },
-    "CHANGELOG.md:list:ebd59afa26abc933235b7719f83e6f5cb5bf71188d19d25afd81a6c7ba514874": {
+    "CHANGELOG.md:list:e90b154efcc4c2bc07313594f280bf6f6c3643fb5cfda3bd8de45ae741f82149": {
       "kind": "list",
-      "source": "修复 OpenAI-compatible 接口返回非 200 状态时，响应上下文在读取错误 body 前被提前取消，导致真实上游错误丢失并只显示 __ATRIX_CODE_0__ 的问题。",
+      "source": "现在不在启动atri-x的时候校验Atriyph语法，免得拖慢启动速度",
       "source_file": "CHANGELOG.md",
-      "source_hash": "ebd59afa26abc933235b7719f83e6f5cb5bf71188d19d25afd81a6c7ba514874",
-      "translation": "Fixed an issue where the response context was cancelled prematurely before reading the error body when the OpenAI-compatible interface returned a non-200 status, causing the actual upstream error to be lost and only __ATRIX_CODE_0__ to be displayed.",
-      "updated_at": 1786546221
+      "source_hash": "e90b154efcc4c2bc07313594f280bf6f6c3643fb5cfda3bd8de45ae741f82149",
+      "translation": "Atriyph syntax is no longer validated during ATRI-X startup to avoid slowing down the startup speed.",
+      "updated_at": 1782711341
     },
-    "CHANGELOG.md:list:ed3c6eabf99307e9b550f72edf9f95006bb9602d68c39639d54b35889096a8ff": {
+    "CHANGELOG.md:list:e9abf3a7530dd94e3ba0e3e7b1b5fb681a0b01306e7516c9af8151939cd0736d": {
       "kind": "list",
-      "source": "Session 闲置过期改为 __ATRIX_CODE_0__ 四项配置，分别控制群聊/私聊下普通用户和超级管理员的当前 Session 过期时间；",
+      "source": "__ATRIX_CODE_0__ 工具的代理参数从 __ATRIX_CODE_1__ 改为 __ATRIX_CODE_2__：不填时使用 __ATRIX_CODE_3__ 或系统代理环境，填 __ATRIX_CODE_4__ 禁用代理，填 URL 使用指定代理。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "ed3c6eabf99307e9b550f72edf9f95006bb9602d68c39639d54b35889096a8ff",
-      "translation": "Session idle expiration is now managed by four __ATRIX_CODE_0__ configurations, which separately control the current Session expiration time for ordinary users and superadmins in group chats and private chats;",
-      "updated_at": 1783074551
+      "source_hash": "e9abf3a7530dd94e3ba0e3e7b1b5fb681a0b01306e7516c9af8151939cd0736d",
+      "translation": "The proxy parameter of the __ATRIX_CODE_0__ tool has been changed from __ATRIX_CODE_1__ to __ATRIX_CODE_2__: use __ATRIX_CODE_3__ or the system proxy environment when left blank, fill in __ATRIX_CODE_4__ to disable the proxy, or fill in a URL to use a specified proxy.",
+      "updated_at": 1783236675
     },
-    "CHANGELOG.md:list:ef6588782632f866ab4b19fd530b98068c98b122ae747795f4ea20470edff7e6": {
+    "CHANGELOG.md:list:ebeec447a4009081edbcaed9997bff3445f70057ef22db8f6372ba848ac4f148": {
       "kind": "list",
-      "source": "上下文压缩改为保留历史用户原话、过滤工具结果，成功后切换到 __ATRIX_CODE_0__ 独立 Session，并将压缩内容与新输入固定物化为首条用户消息；",
+      "source": "Provider 配置重构：删除未使用的 __ATRIX_CODE_0__，删除 __ATRIX_CODE_1__ 全局模型窗口表；",
       "source_file": "CHANGELOG.md",
-      "source_hash": "ef6588782632f866ab4b19fd530b98068c98b122ae747795f4ea20470edff7e6",
-      "translation": "Context compaction is changed to retain original user utterances from history and filter tool results; upon success, it switches to an independent __ATRIX_CODE_0__ Session, and the compacted content along with the new input is fixedly materialized as the first user message;",
-      "updated_at": 1784109405
+      "source_hash": "ebeec447a4009081edbcaed9997bff3445f70057ef22db8f6372ba848ac4f148",
+      "translation": "Provider configuration refactoring: removed unused __ATRIX_CODE_0__, removed __ATRIX_CODE_1__ global model window table;",
+      "updated_at": 1782312399
     },
-    "CHANGELOG.md:list:f191a10fa95a661a532ab05af86e47b4652486eaaadeac994e312f48821af516": {
+    "CHANGELOG.md:list:f5c79daccb87cd6db3b6ab92da14697ae9388ecbd21599a302a30e8d6b732e38": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 命令现在展示每个 turn 的当前运行阶段（preparing/llm/tool/sending）和阶段耗时，可区分 LLM 慢还是平台发送卡住。",
+      "source": "修复 Windows 下 __ATRIX_CODE_0__ 工具回退到 PowerShell 时中文输出可能乱码的问题。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "f191a10fa95a661a532ab05af86e47b4652486eaaadeac994e312f48821af516",
-      "translation": "The __ATRIX_CODE_0__ command now displays the current execution stage (preparing/llm/tool/sending) and the duration of each stage for every turn, allowing you to distinguish whether the LLM is slow or the platform delivery is stuck.",
-      "updated_at": 1782952540
+      "source_hash": "f5c79daccb87cd6db3b6ab92da14697ae9388ecbd21599a302a30e8d6b732e38",
+      "translation": "Fixed an issue where Chinese output might be garbled when the __ATRIX_CODE_0__ tool falls back to PowerShell on Windows.",
+      "updated_at": 1783048564
     },
     "CHANGELOG.md:list:f6c1cb497ae4f2ad103aff727d2c39baae1e5a5217229da9cedaecc67ef9c4ce": {
       "kind": "list",
@@ -1600,29 +1560,69 @@
       "translation": "Fixed the issue where Session messages under the same timestamp might be loaded out of order by UUID, leading to unstable historical context order.",
       "updated_at": 1783334583
     },
-    "CHANGELOG.md:list:faa151eb2284bda7e4e6995ad15597fdaec9d9c2d87d2a98a3ab4a418ee37890": {
+    "CHANGELOG.md:list:f7dba307d46968ca91cbe93d2451cb4d343b5d531b8a88d3a7564319a6489cba": {
       "kind": "list",
-      "source": "修复 __ATRIX_CODE_0__ 使用 __ATRIX_CODE_1__ 创建新文件时，目标父目录不存在会在确认写入阶段失败的问题。",
+      "source": "更新 __ATRIX_CODE_0__ 版本至 v3",
       "source_file": "CHANGELOG.md",
-      "source_hash": "faa151eb2284bda7e4e6995ad15597fdaec9d9c2d87d2a98a3ab4a418ee37890",
-      "translation": "Fixed the issue where __ATRIX_CODE_0__ fails during the write confirmation stage when creating a new file using __ATRIX_CODE_1__ if the target parent directory does not exist.",
-      "updated_at": 1782644646
+      "source_hash": "f7dba307d46968ca91cbe93d2451cb4d343b5d531b8a88d3a7564319a6489cba",
+      "translation": "Update __ATRIX_CODE_0__ version to v3",
+      "updated_at": 1782704139
     },
-    "CHANGELOG.md:list:fdcc1bb80493caf955c15fb8fb062f834010b24265bf816c6bd42884904fb10a": {
+    "CHANGELOG.md:list:f87987b4b67d2183cc652cece3d03ce04f6dad27e4491ce00ac402b58e9b5f11": {
       "kind": "list",
-      "source": "补全默认 __ATRIX_CODE_0__ 中缺失的 __ATRIX_CODE_1__。",
+      "source": "LLM Cron 用 Atriyph 任务描述驱动模型执行，支持一次性与周期任务、missed 补跑与广播。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "fdcc1bb80493caf955c15fb8fb062f834010b24265bf816c6bd42884904fb10a",
-      "translation": "Completed the missing __ATRIX_CODE_1__ in the default __ATRIX_CODE_0__.",
-      "updated_at": 1784025711
+      "source_hash": "f87987b4b67d2183cc652cece3d03ce04f6dad27e4491ce00ac402b58e9b5f11",
+      "translation": "LLM Cron uses Atriyph task descriptions to drive model execution, supporting one-time and periodic tasks, missed run recovery, and broadcasting.",
+      "updated_at": 1782270601
     },
-    "CHANGELOG.md:list:fdd6686cda1a225c052b824ff627131111736279d200d7df4e709a722bcf70b0": {
+    "CHANGELOG.md:list:f964edd0f3ad7d41967d56d250018244ee7c04646d0069d57a622b457288b52c": {
       "kind": "list",
-      "source": "现在每张图片前会派生带消息内序号、名称和 HTTP(S) URL 的用户文本标签，持久化 __ATRIX_CODE_0__ 与视觉回退使用同一文本投影，__ATRIX_CODE_1__ 仍只保存原始结构且无需数据库迁移。",
+      "source": "使用 __ATRIX_CODE_0__ 时再展开 Worker 状态、全部规则和详情，根规则与内置 Hook 仍单独显示。",
       "source_file": "CHANGELOG.md",
-      "source_hash": "fdd6686cda1a225c052b824ff627131111736279d200d7df4e709a722bcf70b0",
-      "translation": "Now, a user text label containing the sequence number within the message, name, and HTTP(S) URL will be derived before each image; persistence __ATRIX_CODE_0__ and visual fallback use the same text projection, while __ATRIX_CODE_1__ still only saves the original structure and requires no database migration.",
-      "updated_at": 1786545145
+      "source_hash": "f964edd0f3ad7d41967d56d250018244ee7c04646d0069d57a622b457288b52c",
+      "translation": "Worker status, all rules, and details are now expanded only when using __ATRIX_CODE_0__; root rules and built-in Hooks are still displayed separately.",
+      "updated_at": 1784858252
+    },
+    "CHANGELOG.md:list:fb7d2d52ec4c6974598f2e592ba1dc360e4e9f3be97e4ad42d7fd5e70a39cf29": {
+      "kind": "list",
+      "source": "重构AgentSkill：去掉py wrapper，直接使用shell执行对应sklll，同时支持在Agentkill根目录添加 __ATRIX_CODE_0__ 注册为普通工具，方便 LLM 直接调用结构化参数。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "fb7d2d52ec4c6974598f2e592ba1dc360e4e9f3be97e4ad42d7fd5e70a39cf29",
+      "translation": "Refactor AgentSkill: remove the py wrapper and execute the corresponding skill directly via shell; also support adding __ATRIX_CODE_0__ in the AgentSkill root directory to register it as a normal tool, facilitating the LLM's direct call of structured parameters.",
+      "updated_at": 1783148277
+    },
+    "CHANGELOG.md:list:fc41699b996dea3ed32d416a3aae97db25abdac1fb726754319525d40b881750": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 与 Session 闲置过期改为仅清除当前会话指针，首条普通消息到来时才创建新 Session；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "fc41699b996dea3ed32d416a3aae97db25abdac1fb726754319525d40b881750",
+      "translation": "__ATRIX_CODE_0__ and Session idle expiration are changed to only clear the current session pointer; a new Session is created only when the first ordinary message arrives;",
+      "updated_at": 1784863205
+    },
+    "CHANGELOG.md:list:fd4da8b3bad262023de3b61fb28f0603c40a447e6154de090df7945bd57b1cf6": {
+      "kind": "list",
+      "source": "过期历史会话不再立即删除，可直接通过 __ATRIX_CODE_0__ 恢复。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "fd4da8b3bad262023de3b61fb28f0603c40a447e6154de090df7945bd57b1cf6",
+      "translation": "Expired historical Sessions are no longer deleted immediately and can be restored directly via __ATRIX_CODE_0__.",
+      "updated_at": 1784863205
+    },
+    "CHANGELOG.md:list:feaa8d254e29727393d0d75ef1a1535e53310b15e63e7833ca5277248035ba0b": {
+      "kind": "list",
+      "source": "修复 Session 闲置过期、执行 __ATRIX_CODE_0__ 或切换会话后，引用原 Session 最后一条 assistant 回复会误建新 Session 的问题；",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "feaa8d254e29727393d0d75ef1a1535e53310b15e63e7833ca5277248035ba0b",
+      "translation": "Fixed an issue where referencing the last assistant reply of the original Session would incorrectly create a new Session after the Session timed out due to inactivity, __ATRIX_CODE_0__ was executed, or the Session was switched;",
+      "updated_at": 1789088930
+    },
+    "CHANGELOG.md:list:fecc385cacde78fa739815c75571e4dd2b367c310f9d4fa8352bf6b77dff74e9": {
+      "kind": "list",
+      "source": "说明型 AgentSkill 不读取 __ATRIX_CODE_0__ 风险，工具化后以 __ATRIX_CODE_1__ 的 __ATRIX_CODE_2__ 为准。",
+      "source_file": "CHANGELOG.md",
+      "source_hash": "fecc385cacde78fa739815c75571e4dd2b367c310f9d4fa8352bf6b77dff74e9",
+      "translation": "Descriptive AgentSkills do not read __ATRIX_CODE_0__, avoiding risk; after toolization, __ATRIX_CODE_2__ of __ATRIX_CODE_1__ shall prevail.",
+      "updated_at": 1783219356
     },
     "CHANGELOG.md:list:ffea405479ecdf42f2de02ac5df8d702b35876490677884584d95b31ed5e348c": {
       "kind": "list",
@@ -1632,17 +1632,17 @@
       "translation": "Optimized .env, platform secret, and token parsing logic",
       "updated_at": 1785810751
     },
-    "CHANGELOG.md:paragraph:f4fdd49cee5a8975381d265d52b666a936b8a0b8d696502ff7ac1ebdda67c23c": {
+    "CHANGELOG.md:paragraph:8bc899ce721a54d0bc67b205ac42b622830f71bfb4649ba7101fb8ff262b535a": {
       "kind": "paragraph",
       "source": "ATRI-X 的首个预发布版本。轻量 Agent/Chatbot 框架，目标是个人助手、平台机器人与可编排的自动化助手。\n",
       "source_file": "CHANGELOG.md",
-      "source_hash": "f4fdd49cee5a8975381d265d52b666a936b8a0b8d696502ff7ac1ebdda67c23c",
+      "source_hash": "8bc899ce721a54d0bc67b205ac42b622830f71bfb4649ba7101fb8ff262b535a",
       "translation": "The first pre-release version of ATRI-X. A lightweight Agent/Chatbot framework aimed at personal assistants, platform bots, and orchestratable automation assistants.\n",
       "updated_at": 1782270601
     }
   },
   "source": "CHANGELOG.md",
-  "source_hash": "04e1088566b7ff0430424003676c34efd5f6460214d9a10883691bf2825ec265",
+  "source_hash": "74e3a3ae47be9531f3297efa97c59a34c2fa5757d26f0c61f70e2005a771f1f9",
   "target": "CHANGELOG.en.md",
   "updated_at": 1790569266,
   "version": 2

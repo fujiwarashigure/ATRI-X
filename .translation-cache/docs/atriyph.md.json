@@ -1,27 +1,59 @@
 {
   "segments": {
-    "docs/atriyph.md:heading:17f6772604d9ee52459db6289740cdf1e875d31327c96623a7941caa349b137e": {
+    "docs/atriyph.md:heading:0ac9b10d8af6f1f99821d3c7ae5fe8064c62fead959a2402f7892b91d86813cc": {
       "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 输入",
+      "source": "__ATRIX_CODE_0__ 注释",
       "source_file": "docs/atriyph.md",
-      "source_hash": "17f6772604d9ee52459db6289740cdf1e875d31327c96623a7941caa349b137e",
-      "translation": "__ATRIX_CODE_0__ Input",
+      "source_hash": "0ac9b10d8af6f1f99821d3c7ae5fe8064c62fead959a2402f7892b91d86813cc",
+      "translation": "__ATRIX_CODE_0__ comment",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:30121593ceb0ef2e3c96acd89474f7961a5e855830117e3db61e74469cdfe066": {
+    "docs/atriyph.md:heading:0eeca0584c12b342f43866f27c2ca42ddeaa545afb6f6d81ce8cc849896ef4a3": {
       "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 限次循环",
+      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ 工具调用",
       "source_file": "docs/atriyph.md",
-      "source_hash": "30121593ceb0ef2e3c96acd89474f7961a5e855830117e3db61e74469cdfe066",
-      "translation": "__ATRIX_CODE_0__ Limited Loop",
+      "source_hash": "0eeca0584c12b342f43866f27c2ca42ddeaa545afb6f6d81ce8cc849896ef4a3",
+      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ tool call",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:48ac167cdd64c75ae9a17ef590746de4b321def772ca713688642032e2bdf292": {
+    "docs/atriyph.md:heading:0fd2e7b1214789d360c28ec04bd231956164bd4e894c2972b6ebb762845bc76d": {
       "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 闭块",
+      "source": "__ATRIX_CODE_0__ 直接赋值",
       "source_file": "docs/atriyph.md",
-      "source_hash": "48ac167cdd64c75ae9a17ef590746de4b321def772ca713688642032e2bdf292",
-      "translation": "__ATRIX_CODE_0__ closing block",
+      "source_hash": "0fd2e7b1214789d360c28ec04bd231956164bd4e894c2972b6ebb762845bc76d",
+      "translation": "__ATRIX_CODE_0__ Direct Assignment",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:11ab46bb3e8f43e67fca860dcf06501f05bc3a98620d9afc1b8531b42ad9b882": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ 输出",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "11ab46bb3e8f43e67fca860dcf06501f05bc3a98620d9afc1b8531b42ad9b882",
+      "translation": "__ATRIX_CODE_0__ Output",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:22e1dbe9c52914aba0853780a8c775ac86a51f4ad7df3dc15dd87daa4da30fcf": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ 条件分支",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "22e1dbe9c52914aba0853780a8c775ac86a51f4ad7df3dc15dd87daa4da30fcf",
+      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ Conditional Branching",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:3961dd4412e0ca7fe833d3ccfe076dbe9418521fc8cc2f314a5c9e91357d696b": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ 输出文本",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "3961dd4412e0ca7fe833d3ccfe076dbe9418521fc8cc2f314a5c9e91357d696b",
+      "translation": "__ATRIX_CODE_0__ Output Text",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:4790d593bf41f16cd7b3f52c915192ec706ce4ba368cea0e13fb4c545d184848": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ 约束",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "4790d593bf41f16cd7b3f52c915192ec706ce4ba368cea0e13fb4c545d184848",
+      "translation": "__ATRIX_CODE_0__ Constraint",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:heading:4cedb5f8be31f9b493b19f1e5b69d382d20183a110834d6bd3ade92eac5e4673": {
@@ -32,12 +64,28 @@
       "translation": "Basic Rules",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:57c24a54f9a654f3e0f2b3f90a1d47d1c30f4b4c17bc1ea6d564b10561242986": {
+    "docs/atriyph.md:heading:5db241441632ad2204aa4e231f6b765b2b6e934e2faef9a8062ba53f13fbd00f": {
       "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 约束",
+      "source": "Atriyph 用在哪",
       "source_file": "docs/atriyph.md",
-      "source_hash": "57c24a54f9a654f3e0f2b3f90a1d47d1c30f4b4c17bc1ea6d564b10561242986",
-      "translation": "__ATRIX_CODE_0__ Constraint",
+      "source_hash": "5db241441632ad2204aa4e231f6b765b2b6e934e2faef9a8062ba53f13fbd00f",
+      "translation": "Where to use Atriyph",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:5ea7ea556350070c66e68ca07611d180de546f27a025a738eb9a08fa57af26be": {
+      "kind": "heading",
+      "source": "为什么需要 Atriyph",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "5ea7ea556350070c66e68ca07611d180de546f27a025a738eb9a08fa57af26be",
+      "translation": "Why Atriyph is Needed",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:64cec9f1ffa21ffb0b553d20b26b00041e0db96d999623ded1a017b9b4fbba69": {
+      "kind": "heading",
+      "source": "Atriyph 任务表示法",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "64cec9f1ffa21ffb0b553d20b26b00041e0db96d999623ded1a017b9b4fbba69",
+      "translation": "Atriyph Task Notation",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:heading:6e60ef5fd4ba8ce4f39a6320f8fadfcc19a867f9f0b400c79d07e9c483ff58ed": {
@@ -46,38 +94,6 @@
       "source_file": "docs/atriyph.md",
       "source_hash": "6e60ef5fd4ba8ce4f39a6320f8fadfcc19a867f9f0b400c79d07e9c483ff58ed",
       "translation": "Example 1: Weather Query Skill",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:heading:71c88d6f868aaafd75f82822c8265dfd8346ee3bd6c6f6001d51bd96ea24b9f2": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ 条件分支",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "71c88d6f868aaafd75f82822c8265dfd8346ee3bd6c6f6001d51bd96ea24b9f2",
-      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ Conditional Branching",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:heading:72b41bc956cf52e4d90b57ace8f9100bd031b00a14abf57b6bc84334347207e2": {
-      "kind": "heading",
-      "source": "Atriyph 任务表示法",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "72b41bc956cf52e4d90b57ace8f9100bd031b00a14abf57b6bc84334347207e2",
-      "translation": "Atriyph Task Notation",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:heading:7759d004bc26bd36a620dc630f76b56038cb3cc9f1fc180c20bcb0b3b48fe69b": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 禁止",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "7759d004bc26bd36a620dc630f76b56038cb3cc9f1fc180c20bcb0b3b48fe69b",
-      "translation": "__ATRIX_CODE_0__ Prohibition",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:heading:82fe3df9727866c0c848f8e1450128a510eb68a31fed341221a547b686d59001": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ 工具调用",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "82fe3df9727866c0c848f8e1450128a510eb68a31fed341221a547b686d59001",
-      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ tool call",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:heading:83d651b3a7dda6cf0e4ed8374f8d2737c9e8a630c231ed0f7def0bd651794536": {
@@ -104,14 +120,6 @@
       "translation": "Complete Examples",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:92cbf1404831d9a0fbce648f36e5bc87cdb566901f0c37031a31c08b1c4d9b64": {
-      "kind": "heading",
-      "source": "Atriyph 用在哪",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "92cbf1404831d9a0fbce648f36e5bc87cdb566901f0c37031a31c08b1c4d9b64",
-      "translation": "Where to use Atriyph",
-      "updated_at": 1781786413
-    },
     "docs/atriyph.md:heading:97d39f2bc0fcdd76168f314bcf3ab0e8c7a9a737a79c8fb4d683713666d6705e": {
       "kind": "heading",
       "source": "语法演进",
@@ -119,22 +127,6 @@
       "source_hash": "97d39f2bc0fcdd76168f314bcf3ab0e8c7a9a737a79c8fb4d683713666d6705e",
       "translation": "Syntax Evolution",
       "updated_at": 1781786413
-    },
-    "docs/atriyph.md:heading:bb70bdb98e0ed590a6bf875d6aa02829660204c603e9aefb3977058a62d4cc20": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 注释",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "bb70bdb98e0ed590a6bf875d6aa02829660204c603e9aefb3977058a62d4cc20",
-      "translation": "__ATRIX_CODE_0__ comment",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:heading:c243f4a0c6dbd20237e530cf4d06c97a87cb848b781ab1c67040b47bc05828f3": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 命名阶段",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "c243f4a0c6dbd20237e530cf4d06c97a87cb848b781ab1c67040b47bc05828f3",
-      "translation": "__ATRIX_CODE_0__ Named Stages",
-      "updated_at": 1782710448
     },
     "docs/atriyph.md:heading:c41b9f207b51a532bdd41bd812420b1c829dd7c5b04429bdc089d620509ee8ad": {
       "kind": "heading",
@@ -144,20 +136,28 @@
       "translation": "Header",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:d40dfb069cc3ee09ea82279cd8431aae75302efbc4d3c6d56dc64c3c17730481": {
+    "docs/atriyph.md:heading:c49d58780b014ae2c0614b84875614502633685c0d222986bb84615c3c574a6e": {
       "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 输出文本",
+      "source": "__ATRIX_CODE_0__ 命名阶段块",
       "source_file": "docs/atriyph.md",
-      "source_hash": "d40dfb069cc3ee09ea82279cd8431aae75302efbc4d3c6d56dc64c3c17730481",
-      "translation": "__ATRIX_CODE_0__ Output Text",
+      "source_hash": "c49d58780b014ae2c0614b84875614502633685c0d222986bb84615c3c574a6e",
+      "translation": "__ATRIX_CODE_0__ Named Stage Block",
+      "updated_at": 1782704123
+    },
+    "docs/atriyph.md:heading:c79fcbfb5f59479935f85f1bc99222956b6368847703ec818cdc8319ea45520d": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ 限次循环",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "c79fcbfb5f59479935f85f1bc99222956b6368847703ec818cdc8319ea45520d",
+      "translation": "__ATRIX_CODE_0__ Limited Loop",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:d8d555a6d708f882a9ea8aeee8c1477efd75f4e9a7e19f8687bc18211e98e724": {
+    "docs/atriyph.md:heading:ce56258a89c3aa3bd30c53ff9bff921e8eeed90c5659868e83bf8be231ad35d0": {
       "kind": "heading",
-      "source": "为什么需要 Atriyph",
+      "source": "__ATRIX_CODE_0__ 输入",
       "source_file": "docs/atriyph.md",
-      "source_hash": "d8d555a6d708f882a9ea8aeee8c1477efd75f4e9a7e19f8687bc18211e98e724",
-      "translation": "Why Atriyph is Needed",
+      "source_hash": "ce56258a89c3aa3bd30c53ff9bff921e8eeed90c5659868e83bf8be231ad35d0",
+      "translation": "__ATRIX_CODE_0__ Input",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:heading:df6f58273bc97f8907df87be3b5d7d7c4ef285f86692f2d1d479b540e9b0eba4": {
@@ -168,21 +168,37 @@
       "translation": "Example 2: Multi-city Weather Query",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:ea6f48402215e8346075ef21dccbdba659ece5b1cbbd943d5cec7588e835a512": {
+    "docs/atriyph.md:heading:e19fb060a35b7b3cf057853e1b7db610ac7bb65cf46de7b0aa375e92a821a315": {
       "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 命名阶段块",
+      "source": "__ATRIX_CODE_0__ 推导赋值",
       "source_file": "docs/atriyph.md",
-      "source_hash": "ea6f48402215e8346075ef21dccbdba659ece5b1cbbd943d5cec7588e835a512",
-      "translation": "__ATRIX_CODE_0__ Named Stage Block",
-      "updated_at": 1782704123
-    },
-    "docs/atriyph.md:heading:ea819854ec104eba140854147733aa16dd6424cc442becfa6b62a742180996e2": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 输出",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "ea819854ec104eba140854147733aa16dd6424cc442becfa6b62a742180996e2",
-      "translation": "__ATRIX_CODE_0__ Output",
+      "source_hash": "e19fb060a35b7b3cf057853e1b7db610ac7bb65cf46de7b0aa375e92a821a315",
+      "translation": "__ATRIX_CODE_0__ Derived Assignment",
       "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:e1f2f214a264db8c028bea7cdcd88bdf844d54d412ddc157303c6c03583f9fad": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ 闭块",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "e1f2f214a264db8c028bea7cdcd88bdf844d54d412ddc157303c6c03583f9fad",
+      "translation": "__ATRIX_CODE_0__ closing block",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:ea133a2a91346516a303ce2ccf3f04d75c31226759038b24713b6b9c9079ffba": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ 禁止",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "ea133a2a91346516a303ce2ccf3f04d75c31226759038b24713b6b9c9079ffba",
+      "translation": "__ATRIX_CODE_0__ Prohibition",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:heading:ee744718214298ef2ae6bbd7831e63e7e698a23965cd57a656c8abf15193c73d": {
+      "kind": "heading",
+      "source": "__ATRIX_CODE_0__ 命名阶段",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "ee744718214298ef2ae6bbd7831e63e7e698a23965cd57a656c8abf15193c73d",
+      "translation": "__ATRIX_CODE_0__ Named Stages",
+      "updated_at": 1782710448
     },
     "docs/atriyph.md:heading:f10ddf3a2aeafc76c9f6128341ae40a856a12fd968490554b9f2b66bcf8bab7d": {
       "kind": "heading",
@@ -192,52 +208,68 @@
       "translation": "Relationship with Skill",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:heading:f75076bc343f27ae0d2cd7fb9bd785d751d1ae788aee6f318d4cbf9ee5cdaa86": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 推导赋值",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "f75076bc343f27ae0d2cd7fb9bd785d751d1ae788aee6f318d4cbf9ee5cdaa86",
-      "translation": "__ATRIX_CODE_0__ Derived Assignment",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:heading:ff2a6b86ec4d94b1a82a8a3422f87930c587db0d6709ae191a18a9df8431d58c": {
-      "kind": "heading",
-      "source": "__ATRIX_CODE_0__ 直接赋值",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "ff2a6b86ec4d94b1a82a8a3422f87930c587db0d6709ae191a18a9df8431d58c",
-      "translation": "__ATRIX_CODE_0__ Direct Assignment",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:list:0e9c6896d79124f74c08709cd6ac5abb05ce39e587a0384d5f7cce7f50cf68bd": {
+    "docs/atriyph.md:list:00f3f5d7c00979962a55aa8dc60a238566884c9bfa2c15f1936ea8d121d383cf": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ **不能为空**。",
+      "source": "__ATRIX_CODE_0__：首字符是小写字母或数字，其余可含小写字母、数字、__ATRIX_CODE_1__、__ATRIX_CODE_2__，最长 64。可为纯数字（如 __ATRIX_CODE_3__）。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "0e9c6896d79124f74c08709cd6ac5abb05ce39e587a0384d5f7cce7f50cf68bd",
-      "translation": "__ATRIX_CODE_0__ **cannot be empty**.",
-      "updated_at": 1782710448
+      "source_hash": "00f3f5d7c00979962a55aa8dc60a238566884c9bfa2c15f1936ea8d121d383cf",
+      "translation": "__ATRIX_CODE_0__: The first character must be a lowercase letter or a digit, and the rest can contain lowercase letters, digits, __ATRIX_CODE_1__, and __ATRIX_CODE_2__, with a maximum length of 64. It can be purely numeric (e.g., __ATRIX_CODE_3__).",
+      "updated_at": 1782704123
     },
-    "docs/atriyph.md:list:108a956fe41286ddb4c7280c008c955a9cba9fa5db95316f3048ad57b51da6ba": {
+    "docs/atriyph.md:list:039aa3bac86f43d94d651b2bb483d0896135b828675051e829bd24596aed128a": {
+      "kind": "list",
+      "source": "块内可使用 __ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__/__ATRIX_CODE_9__ 等任意语句。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "039aa3bac86f43d94d651b2bb483d0896135b828675051e829bd24596aed128a",
+      "translation": "Any statements such as __ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__/__ATRIX_CODE_9__ can be used within the block.",
+      "updated_at": 1782704123
+    },
+    "docs/atriyph.md:list:0659e1bb5f364eaed651c678433b5a53782790e1ceaea582fa40664a4b30455d": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__ 块**不能为空**，至少含一条有效语句。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "108a956fe41286ddb4c7280c008c955a9cba9fa5db95316f3048ad57b51da6ba",
+      "source_hash": "0659e1bb5f364eaed651c678433b5a53782790e1ceaea582fa40664a4b30455d",
       "translation": "__ATRIX_CODE_0__ blocks **cannot be empty** and must contain at least one valid statement.",
       "updated_at": 1782704123
     },
-    "docs/atriyph.md:list:1ebc5d1035cad30fba0bc097300b8cc672cd959cdedef5ae610d24e5d2d5120d": {
+    "docs/atriyph.md:list:0e0c46c695ee4da85d91bdb210fc1856d5d2b3639be14335701e13cf548a7329": {
       "kind": "list",
-      "source": "空行和 __ATRIX_CODE_0__ 开头的注释行会被忽略。",
+      "source": "__ATRIX_CODE_0__ 必须紧跟 __ATRIX_CODE_1__ 块的 __ATRIX_CODE_2__ 之后。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "1ebc5d1035cad30fba0bc097300b8cc672cd959cdedef5ae610d24e5d2d5120d",
-      "translation": "Empty lines and comment lines starting with __ATRIX_CODE_0__ will be ignored.",
+      "source_hash": "0e0c46c695ee4da85d91bdb210fc1856d5d2b3639be14335701e13cf548a7329",
+      "translation": "__ATRIX_CODE_0__ must immediately follow the __ATRIX_CODE_2__ of the __ATRIX_CODE_1__ block.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:1fc205852ac12938a9f951ed8c711e58169f0904be674efb184318789b9c2ba9": {
+    "docs/atriyph.md:list:1a4cf2a37e811e0156a98a9acb7fc2643a04cef551541f0df1d832552cf6a546": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 表示该输入必填。",
+      "source": "变量以 __ATRIX_CODE_0__ 开头，后跟字母、数字或下划线。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "1fc205852ac12938a9f951ed8c711e58169f0904be674efb184318789b9c2ba9",
-      "translation": "__ATRIX_CODE_0__ indicates that this input is required.",
+      "source_hash": "1a4cf2a37e811e0156a98a9acb7fc2643a04cef551541f0df1d832552cf6a546",
+      "translation": "Variables start with __ATRIX_CODE_0__, followed by letters, numbers, or underscores.",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:list:1bf44e128ecb5b8dda539e792fe297af340cbe71d9066eed4cec6bccbf3e9241": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 块只能出现在顶层，**不能嵌套** __ATRIX_CODE_1__。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "1bf44e128ecb5b8dda539e792fe297af340cbe71d9066eed4cec6bccbf3e9241",
+      "translation": "__ATRIX_CODE_0__ blocks can only appear at the top level and **cannot be nested** __ATRIX_CODE_1__.",
+      "updated_at": 1782704123
+    },
+    "docs/atriyph.md:list:2555abc7a473813435451312d413c800b059cb3fa4a73c0ee635a804502572a1": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 必须是正整数。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "2555abc7a473813435451312d413c800b059cb3fa4a73c0ee635a804502572a1",
+      "translation": "__ATRIX_CODE_0__ must be a positive integer.",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:list:29835dbd77bd05626e11c065df6c77873b3d1f8efc1a78be23ca94d742e4c55f": {
+      "kind": "list",
+      "source": "类型标注用 __ATRIX_CODE_0__，类型名同变量命名规则。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "29835dbd77bd05626e11c065df6c77873b3d1f8efc1a78be23ca94d742e4c55f",
+      "translation": "Type annotations use __ATRIX_CODE_0__, and type names follow the same naming rules as variables.",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:list:2c92935a5ec82d1b95a5a44380c100528cf2de97b5643f23accd6c4abc29cd5a": {
@@ -248,60 +280,36 @@
       "translation": "No marker indicates a regular input.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:2f951aa30a493be98b7388ef86903259087a84f0c0d2d8b6c331926f0e16f8b2": {
+    "docs/atriyph.md:list:2fafea62180ac7cc3bc3285f10f347bbbb5cf11a386d0a84298499e090d6a245": {
       "kind": "list",
-      "source": "如果同一 AgentSkill 同时存在 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__，Atriyph 文件的描述会优先被 Agent 使用。",
+      "source": "Skill 的 __ATRIX_CODE_0__ 文件使用 __ATRIX_CODE_1__ header。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "2f951aa30a493be98b7388ef86903259087a84f0c0d2d8b6c331926f0e16f8b2",
-      "translation": "If the same AgentSkill has both __ATRIX_CODE_0__ and __ATRIX_CODE_1__, the description in the Atriyph file will be prioritized for use by the Agent.",
+      "source_hash": "2fafea62180ac7cc3bc3285f10f347bbbb5cf11a386d0a84298499e090d6a245",
+      "translation": "The __ATRIX_CODE_0__ file of a Skill uses the __ATRIX_CODE_1__ header.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:3896c7be36b7112991c9b8a6e4e084aa94fd39b10434df5906f81bd3b50c1983": {
+    "docs/atriyph.md:list:43b12f8033dcaf9b5797320cc947537ad5be1c719ceb9ae97fe4dc3988a438c8": {
       "kind": "list",
-      "source": "单行形式的语句必须是简单单行语句（__ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__），不能是 __ATRIX_CODE_9__/__ATRIX_CODE_10__/__ATRIX_CODE_11__/__ATRIX_CODE_12__/__ATRIX_CODE_13__。",
+      "source": "同一文档内 __ATRIX_CODE_0__ 名**不能重复**。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "3896c7be36b7112991c9b8a6e4e084aa94fd39b10434df5906f81bd3b50c1983",
-      "translation": "Statements in single-line form must be simple single-line statements (__ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__) and cannot be __ATRIX_CODE_9__/__ATRIX_CODE_10__/__ATRIX_CODE_11__/__ATRIX_CODE_12__/__ATRIX_CODE_13__.",
-      "updated_at": 1782710448
+      "source_hash": "43b12f8033dcaf9b5797320cc947537ad5be1c719ceb9ae97fe4dc3988a438c8",
+      "translation": "__ATRIX_CODE_0__ names **cannot be duplicated** within the same document.",
+      "updated_at": 1782704123
     },
-    "docs/atriyph.md:list:3e7a9b86d568729eea4efb461cce45d71f448e7bfba64c33c4bcdafe8f177e07": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 表示该输入可选。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "3e7a9b86d568729eea4efb461cce45d71f448e7bfba64c33c4bcdafe8f177e07",
-      "translation": "__ATRIX_CODE_0__ indicates that this input is optional.",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:list:41b81e5f8305e4ce753bd6bd0157624fc1123cddb58a74eb03f120fc09803f23": {
-      "kind": "list",
-      "source": "Go Skill 放在 __ATRIX_CODE_0__，必须使用 __ATRIX_CODE_1__，可选 Go 二进制用于执行。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "41b81e5f8305e4ce753bd6bd0157624fc1123cddb58a74eb03f120fc09803f23",
-      "translation": "Go Skill is placed in __ATRIX_CODE_0__, must use __ATRIX_CODE_1__, and an optional Go binary can be used for execution.",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:list:4589028e0f75527c8a0e6caa653151cff261bf397a59a111ad4fba91fba377b4": {
-      "kind": "list",
-      "source": "变量以 __ATRIX_CODE_0__ 开头，后跟字母、数字或下划线。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "4589028e0f75527c8a0e6caa653151cff261bf397a59a111ad4fba91fba377b4",
-      "translation": "Variables start with __ATRIX_CODE_0__, followed by letters, numbers, or underscores.",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:list:5ac1ceb3f06e794becb141f059c4d653c19b13c8441bf54b2d1667b92f71f8e7": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__：简短的自然语言描述，可选。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "5ac1ceb3f06e794becb141f059c4d653c19b13c8441bf54b2d1667b92f71f8e7",
-      "translation": "__ATRIX_CODE_0__: A short natural language description, optional.",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:list:5d8ca3035260b3ed3a7fcd6d046c861bff81381c8d4e67220e7bc3c5ea612592": {
+    "docs/atriyph.md:list:47c4a835509636792cdba9cf2b3b6c551b650f6e34c14d10795ba606931e730b": {
       "kind": "list",
       "source": "循环内可以调用 __ATRIX_CODE_0__ 或 __ATRIX_CODE_1__。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "5d8ca3035260b3ed3a7fcd6d046c861bff81381c8d4e67220e7bc3c5ea612592",
+      "source_hash": "47c4a835509636792cdba9cf2b3b6c551b650f6e34c14d10795ba606931e730b",
       "translation": "__ATRIX_CODE_0__ or __ATRIX_CODE_1__ can be called within the loop.",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:list:58cd8af2c0cd376713fee7ca8afef47f5480329ee7f876e527587d1e0bff4aef": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__：简短的自然语言描述，可选。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "58cd8af2c0cd376713fee7ca8afef47f5480329ee7f876e527587d1e0bff4aef",
+      "translation": "__ATRIX_CODE_0__: A short natural language description, optional.",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:list:687c4a569b138cd248804c8f0217ecad17177a714fce34255f4747b5da8bfaf2": {
@@ -328,77 +336,93 @@
       "translation": "**High ambiguity**: The same sentence may be interpreted as different steps.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:72179fd69b6f8d1d81f3ec61015875f2f8423ec675e6370d7c0542da93b0eb5f": {
-      "kind": "list",
-      "source": "Skill 的 __ATRIX_CODE_0__ 文件使用 __ATRIX_CODE_1__ header。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "72179fd69b6f8d1d81f3ec61015875f2f8423ec675e6370d7c0542da93b0eb5f",
-      "translation": "The __ATRIX_CODE_0__ file of a Skill uses the __ATRIX_CODE_1__ header.",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:list:7664f2501282f96284ad9a87f1d1db958c74c4a74ce70be3aed6ba3a74475458": {
+    "docs/atriyph.md:list:715097438eb75d5f4921625f78009b0f548bc12e5d97178e9492c0cbd5fae523": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__：小写字母开头，只能包含小写字母、数字、__ATRIX_CODE_1__ 和 __ATRIX_CODE_2__，最长 64 字符。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "7664f2501282f96284ad9a87f1d1db958c74c4a74ce70be3aed6ba3a74475458",
+      "source_hash": "715097438eb75d5f4921625f78009b0f548bc12e5d97178e9492c0cbd5fae523",
       "translation": "__ATRIX_CODE_0__: Starts with a lowercase letter and can only contain lowercase letters, numbers, __ATRIX_CODE_1__, and __ATRIX_CODE_2__, with a maximum length of 64 characters.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:77d827aff2bf1c8ea61b177d9456d04499193c071a01b4f8699b8204f6a1e360": {
+    "docs/atriyph.md:list:73e01281f2450da5c8da01d041fc68cf98f33dd2910f4e76b64d6ed7f29dac11": {
       "kind": "list",
-      "source": "AgentSkill 放在 __ATRIX_CODE_0__，可用 __ATRIX_CODE_1__ 覆写 __ATRIX_CODE_2__ 的 Agent 可读说明。",
+      "source": "如果同一 AgentSkill 同时存在 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__，Atriyph 文件的描述会优先被 Agent 使用。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "77d827aff2bf1c8ea61b177d9456d04499193c071a01b4f8699b8204f6a1e360",
-      "translation": "AgentSkill is placed in __ATRIX_CODE_0__, and __ATRIX_CODE_1__ can be used to override the Agent-readable description of __ATRIX_CODE_2__.",
+      "source_hash": "73e01281f2450da5c8da01d041fc68cf98f33dd2910f4e76b64d6ed7f29dac11",
+      "translation": "If the same AgentSkill has both __ATRIX_CODE_0__ and __ATRIX_CODE_1__, the description in the Atriyph file will be prioritized for use by the Agent.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:7cdb25feb242840c837ab79919be998d175f0955c3297f32bf021dd67f19422f": {
+    "docs/atriyph.md:list:80db42dc641fd637832007e5f1d026d128451a31aaaa86c48719b291b4a21268": {
       "kind": "list",
-      "source": "**块内至少 2 句**；只有 1 句时必须用单行形式 __ATRIX_CODE_0__。",
+      "source": "__ATRIX_CODE_0__ **不能为空**。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "7cdb25feb242840c837ab79919be998d175f0955c3297f32bf021dd67f19422f",
-      "translation": "**At least 2 statements within a block**; if there is only 1 statement, the single-line form __ATRIX_CODE_0__ must be used.",
+      "source_hash": "80db42dc641fd637832007e5f1d026d128451a31aaaa86c48719b291b4a21268",
+      "translation": "__ATRIX_CODE_0__ **cannot be empty**.",
       "updated_at": 1782710448
     },
-    "docs/atriyph.md:list:90a4417aaa7065b42aaa1b958fad43be3367e1ad7311c2f98a635f190352d0bd": {
+    "docs/atriyph.md:list:8a0d0a4dcf90b66aca6501f3a66e40e0a7c667b8fd577ee77745a8fcd2ef07ae": {
+      "kind": "list",
+      "source": "空行和 __ATRIX_CODE_0__ 开头的注释行会被忽略。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "8a0d0a4dcf90b66aca6501f3a66e40e0a7c667b8fd577ee77745a8fcd2ef07ae",
+      "translation": "Empty lines and comment lines starting with __ATRIX_CODE_0__ will be ignored.",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:list:9eb0369437123a5e08eea2f59c951a7799b9dad5a2b011e7b085ce2d8545af9a": {
       "kind": "list",
       "source": "非空行必须以合法的 Atriyph token 开头。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "90a4417aaa7065b42aaa1b958fad43be3367e1ad7311c2f98a635f190352d0bd",
+      "source_hash": "9eb0369437123a5e08eea2f59c951a7799b9dad5a2b011e7b085ce2d8545af9a",
       "translation": "Non-empty lines must start with a valid Atriyph token.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:9871d602368a8a49574df22640d61f887d0b5967403287f80d312f1e5734d8ed": {
+    "docs/atriyph.md:list:a3c913e67413284264408b962b697473634ab1c571f67307e65e7dc6c6744234": {
       "kind": "list",
-      "source": "类型标注用 __ATRIX_CODE_0__，类型名同变量命名规则。",
+      "source": "__ATRIX_CODE_0__ 表示该输入必填。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "9871d602368a8a49574df22640d61f887d0b5967403287f80d312f1e5734d8ed",
-      "translation": "Type annotations use __ATRIX_CODE_0__, and type names follow the same naming rules as variables.",
+      "source_hash": "a3c913e67413284264408b962b697473634ab1c571f67307e65e7dc6c6744234",
+      "translation": "__ATRIX_CODE_0__ indicates that this input is required.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:b4560835d0cb8f5c9e45df2b9d8a40dbe44f84e7836fb8cf6928931bced09a39": {
+    "docs/atriyph.md:list:aeeb011ad92d6013a59b71909bc9b5238721908df7d542ab95a66526ac59d8ba": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__：首字符是小写字母或数字，其余可含小写字母、数字、__ATRIX_CODE_1__、__ATRIX_CODE_2__，最长 64。可为纯数字（如 __ATRIX_CODE_3__）。",
+      "source": "Go Skill 放在 __ATRIX_CODE_0__，必须使用 __ATRIX_CODE_1__，可选 Go 二进制用于执行。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "b4560835d0cb8f5c9e45df2b9d8a40dbe44f84e7836fb8cf6928931bced09a39",
-      "translation": "__ATRIX_CODE_0__: The first character must be a lowercase letter or a digit, and the rest can contain lowercase letters, digits, __ATRIX_CODE_1__, and __ATRIX_CODE_2__, with a maximum length of 64. It can be purely numeric (e.g., __ATRIX_CODE_3__).",
-      "updated_at": 1782704123
-    },
-    "docs/atriyph.md:list:ba478d6543ff18f0c29d7c1d76020e2a46955ed0d7070a0e89882bd87e83c427": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 必须是正整数。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "ba478d6543ff18f0c29d7c1d76020e2a46955ed0d7070a0e89882bd87e83c427",
-      "translation": "__ATRIX_CODE_0__ must be a positive integer.",
+      "source_hash": "aeeb011ad92d6013a59b71909bc9b5238721908df7d542ab95a66526ac59d8ba",
+      "translation": "Go Skill is placed in __ATRIX_CODE_0__, must use __ATRIX_CODE_1__, and an optional Go binary can be used for execution.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:bedb46a901046f0c51ea914c538dbd1e708678b40f41a7aaf472da9b35ace4d2": {
+    "docs/atriyph.md:list:b11b706193da93c814c41cadff8720270d02ddbe70438ffd67c4f7782368bf1e": {
       "kind": "list",
       "source": "代码块用 __ATRIX_CODE_0__ 开始，__ATRIX_CODE_1__ 独占一行结束。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "bedb46a901046f0c51ea914c538dbd1e708678b40f41a7aaf472da9b35ace4d2",
+      "source_hash": "b11b706193da93c814c41cadff8720270d02ddbe70438ffd67c4f7782368bf1e",
       "translation": "Code blocks start with __ATRIX_CODE_0__ and end with __ATRIX_CODE_1__ on a line by itself.",
       "updated_at": 1781786413
+    },
+    "docs/atriyph.md:list:babb72223740662514beca0fbbe08dbaf4f1f3f71ee58a17b7144d90addea065": {
+      "kind": "list",
+      "source": "单行形式的语句必须是简单单行语句（__ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__），不能是 __ATRIX_CODE_9__/__ATRIX_CODE_10__/__ATRIX_CODE_11__/__ATRIX_CODE_12__/__ATRIX_CODE_13__。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "babb72223740662514beca0fbbe08dbaf4f1f3f71ee58a17b7144d90addea065",
+      "translation": "Statements in single-line form must be simple single-line statements (__ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__) and cannot be __ATRIX_CODE_9__/__ATRIX_CODE_10__/__ATRIX_CODE_11__/__ATRIX_CODE_12__/__ATRIX_CODE_13__.",
+      "updated_at": 1782710448
+    },
+    "docs/atriyph.md:list:d9a4f37d7281b416e036ca19d9e83d8e928739dc815a138cd75ef5eb55b67b8b": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 只能出现在顶层，**不能嵌套** __ATRIX_CODE_1__。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "d9a4f37d7281b416e036ca19d9e83d8e928739dc815a138cd75ef5eb55b67b8b",
+      "translation": "__ATRIX_CODE_0__ can only appear at the top level and **cannot be nested** within __ATRIX_CODE_1__.",
+      "updated_at": 1782710448
+    },
+    "docs/atriyph.md:list:e5f1f10dcfe2281b28ff3bbd1d7cfbfbfed12f218d2fc5766b65c5e85885da0a": {
+      "kind": "list",
+      "source": "**块内至少 2 句**；只有 1 句时必须用单行形式 __ATRIX_CODE_0__。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "e5f1f10dcfe2281b28ff3bbd1d7cfbfbfed12f218d2fc5766b65c5e85885da0a",
+      "translation": "**At least 2 statements within a block**; if there is only 1 statement, the single-line form __ATRIX_CODE_0__ must be used.",
+      "updated_at": 1782710448
     },
     "docs/atriyph.md:list:eec5fc5aa3a7673f0e55384df4a8477d30859b373450ce21e81e443556bdbd0c": {
       "kind": "list",
@@ -408,53 +432,21 @@
       "translation": "**Long context**: Using natural language to clearly describe steps, branches, and constraints requires a large amount of text.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:list:ef448f3ea300eb1013593784793b567a2be879a093844d00fed1e78ad28107e6": {
+    "docs/atriyph.md:list:f9fc041a09d0f4a4559f87d8d9d45294efed0444a6b51965a2aec9066804f14e": {
       "kind": "list",
-      "source": "块内可使用 __ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__/__ATRIX_CODE_9__ 等任意语句。",
+      "source": "AgentSkill 放在 __ATRIX_CODE_0__，可用 __ATRIX_CODE_1__ 覆写 __ATRIX_CODE_2__ 的 Agent 可读说明。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "ef448f3ea300eb1013593784793b567a2be879a093844d00fed1e78ad28107e6",
-      "translation": "Any statements such as __ATRIX_CODE_0__/__ATRIX_CODE_1__/__ATRIX_CODE_2__/__ATRIX_CODE_3__/__ATRIX_CODE_4__/__ATRIX_CODE_5__/__ATRIX_CODE_6__/__ATRIX_CODE_7__/__ATRIX_CODE_8__/__ATRIX_CODE_9__ can be used within the block.",
-      "updated_at": 1782704123
-    },
-    "docs/atriyph.md:list:ef45cbb1178da9620c8baf1c2196bf42baccd53b25b4076bac385e747d6934bf": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 只能出现在顶层，**不能嵌套** __ATRIX_CODE_1__。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "ef45cbb1178da9620c8baf1c2196bf42baccd53b25b4076bac385e747d6934bf",
-      "translation": "__ATRIX_CODE_0__ can only appear at the top level and **cannot be nested** within __ATRIX_CODE_1__.",
-      "updated_at": 1782710448
-    },
-    "docs/atriyph.md:list:f2abf33420ab1288eb89d4d6df419eb4b3af689a0ca9eb54d1a71a6d593a46f1": {
-      "kind": "list",
-      "source": "同一文档内 __ATRIX_CODE_0__ 名**不能重复**。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "f2abf33420ab1288eb89d4d6df419eb4b3af689a0ca9eb54d1a71a6d593a46f1",
-      "translation": "__ATRIX_CODE_0__ names **cannot be duplicated** within the same document.",
-      "updated_at": 1782704123
-    },
-    "docs/atriyph.md:list:f5e6678183d42670fd2b4ca9450cfed733e5b2177cb38b2682dc658890a220c3": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 块只能出现在顶层，**不能嵌套** __ATRIX_CODE_1__。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "f5e6678183d42670fd2b4ca9450cfed733e5b2177cb38b2682dc658890a220c3",
-      "translation": "__ATRIX_CODE_0__ blocks can only appear at the top level and **cannot be nested** __ATRIX_CODE_1__.",
-      "updated_at": 1782704123
-    },
-    "docs/atriyph.md:list:fd64bf549fea3a76e0ea8df19195474b5d7c34ab2ce5f2e2440bac5f42c1bf8d": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 必须紧跟 __ATRIX_CODE_1__ 块的 __ATRIX_CODE_2__ 之后。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "fd64bf549fea3a76e0ea8df19195474b5d7c34ab2ce5f2e2440bac5f42c1bf8d",
-      "translation": "__ATRIX_CODE_0__ must immediately follow the __ATRIX_CODE_2__ of the __ATRIX_CODE_1__ block.",
+      "source_hash": "f9fc041a09d0f4a4559f87d8d9d45294efed0444a6b51965a2aec9066804f14e",
+      "translation": "AgentSkill is placed in __ATRIX_CODE_0__, and __ATRIX_CODE_1__ can be used to override the Agent-readable description of __ATRIX_CODE_2__.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:01fdedc212cfc93ab30dd51224dbd93c5462d70929e62a0cf933ef546e3d273a": {
-      "kind": "paragraph",
-      "source": "把流程拆成命名阶段，块内仍是普通语句。可选使用，不强制全包；顶层允许裸语句与 __ATRIX_CODE_0__ 块混用。\n",
+    "docs/atriyph.md:list:fa7ebb0c4638f4a65a565bbd0aa254df9f06da22a308f91452043ea47c9197a7": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 表示该输入可选。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "01fdedc212cfc93ab30dd51224dbd93c5462d70929e62a0cf933ef546e3d273a",
-      "translation": "Split the process into named stages; the contents of the block remain ordinary statements. This is optional and not mandatory for all content; top-level bare statements can be mixed with __ATRIX_CODE_0__ blocks.\n",
-      "updated_at": 1782704123
+      "source_hash": "fa7ebb0c4638f4a65a565bbd0aa254df9f06da22a308f91452043ea47c9197a7",
+      "translation": "__ATRIX_CODE_0__ indicates that this input is optional.",
+      "updated_at": 1781786413
     },
     "docs/atriyph.md:paragraph:0e0beef4888302321e65724497611f77ae19e3dab861a259d4614bf136d91e32": {
       "kind": "paragraph",
@@ -472,13 +464,13 @@
       "translation": "Assign a value to a variable.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:117ce9d7a497a57a753d7b48f28c2949a4743f1f6e90bffe28327061c6569b22": {
+    "docs/atriyph.md:paragraph:1715830df8f0546fde44a065d09dc542c04d6b9be57a0b3e6c327b718b994871": {
       "kind": "paragraph",
-      "source": "参数使用 __ATRIX_CODE_0__ 格式，多个参数用 __ATRIX_CODE_1__ 分隔。\n",
+      "source": "Atriyph 当前是 v0.3，语法可能在未来版本中扩展。写 __ATRIX_CODE_0__ 或任务条时，建议保持结构简洁，避免依赖未在本文档中列出的实验性写法。\n",
       "source_file": "docs/atriyph.md",
-      "source_hash": "117ce9d7a497a57a753d7b48f28c2949a4743f1f6e90bffe28327061c6569b22",
-      "translation": "Parameters use the __ATRIX_CODE_0__ format, and multiple parameters are separated by __ATRIX_CODE_1__.\n",
-      "updated_at": 1781786413
+      "source_hash": "1715830df8f0546fde44a065d09dc542c04d6b9be57a0b3e6c327b718b994871",
+      "translation": "Atriyph is currently v0.3, and the syntax may be expanded in future versions. When writing __ATRIX_CODE_0__ or task entries, it is recommended to keep the structure concise and avoid relying on experimental notations not listed in this document.\n",
+      "updated_at": 1782704123
     },
     "docs/atriyph.md:paragraph:28c7f01a7d1db0df7a75fee1afa1a5859f481e229055d04d4d6d456b3800bc49": {
       "kind": "paragraph",
@@ -488,29 +480,29 @@
       "translation": "Declare the input that the task needs to receive.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:2d60fe68e4deddebcbbc0a4ad949941c9723776399adda025720dec8ec9e2f2b": {
+    "docs/atriyph.md:paragraph:28cbb037f814cd84f3d45078498d8e17c5c8da452e8257df42a3bf96286b5ee0": {
       "kind": "paragraph",
-      "source": "Atriyph 用固定的语法替代冗长的自然语言说明，让任务描述更短、更稳定、更可预测。\n",
+      "source": "更多 skill 管理操作见 [命令速查](commands.md) 的 __ATRIX_CODE_0__ 部分。\n",
       "source_file": "docs/atriyph.md",
-      "source_hash": "2d60fe68e4deddebcbbc0a4ad949941c9723776399adda025720dec8ec9e2f2b",
-      "translation": "Atriyph replaces verbose natural language descriptions with a fixed syntax, making task descriptions shorter, more stable, and more predictable.\n",
+      "source_hash": "28cbb037f814cd84f3d45078498d8e17c5c8da452e8257df42a3bf96286b5ee0",
+      "translation": "For more Skill management operations, see the __ATRIX_CODE_0__ section of [Command Quick Reference](commands.md).\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:2fb30a097fd4e3dfc89f3ca7b08eaf3d84a8a8b77b55c3bc12f5971cb3235af2": {
+    "docs/atriyph.md:paragraph:30a0aeec2e2298e15e45861e329fb9f1c4c220e55e7663844647d2509e5ee865": {
       "kind": "paragraph",
-      "source": "Atriyph 当前是 v0.3，语法可能在未来版本中扩展。写 __ATRIX_CODE_0__ 或任务条时，建议保持结构简洁，避免依赖未在本文档中列出的实验性写法。\n",
+      "source": "LLM Cron 任务可以用 __ATRIX_CODE_0__ header 写任务条，语法与 __ATRIX_CODE_1__ 完全相同。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "2fb30a097fd4e3dfc89f3ca7b08eaf3d84a8a8b77b55c3bc12f5971cb3235af2",
-      "translation": "Atriyph is currently v0.3, and the syntax may be expanded in future versions. When writing __ATRIX_CODE_0__ or task entries, it is recommended to keep the structure concise and avoid relying on experimental notations not listed in this document.\n",
-      "updated_at": 1782704123
+      "source_hash": "30a0aeec2e2298e15e45861e329fb9f1c4c220e55e7663844647d2509e5ee865",
+      "translation": "LLM Cron tasks can use the __ATRIX_CODE_0__ header to write task entries, and the syntax is identical to __ATRIX_CODE_1__.",
+      "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:32f008fc631e0f21ca0266bdc1c7d4352dee9c858893b89ccf96f2a8fb40933a": {
+    "docs/atriyph.md:paragraph:370f223e6b8f558765ea11c8f4a0d40fd821ca2e88f4c5d339a9bb61f53fd277": {
       "kind": "paragraph",
-      "source": "Atriyph 当前是 v0.3，语法可能在未来版本中扩展。写 __ATRIX_CODE_0__ 或任务条时，建议保持结构简洁。\n",
+      "source": "调用 ATRI-X 工具或子 skill。\n",
       "source_file": "docs/atriyph.md",
-      "source_hash": "32f008fc631e0f21ca0266bdc1c7d4352dee9c858893b89ccf96f2a8fb40933a",
-      "translation": "Atriyph is currently v0.3, and the syntax may be expanded in future versions. When writing __ATRIX_CODE_0__ or task entries, it is recommended to keep the structure concise.\n",
-      "updated_at": 1782722511
+      "source_hash": "370f223e6b8f558765ea11c8f4a0d40fd821ca2e88f4c5d339a9bb61f53fd277",
+      "translation": "Call an ATRI-X tool or sub-skill.\n",
+      "updated_at": 1781786413
     },
     "docs/atriyph.md:paragraph:3ef359032b5033766055df8ae9b7831bd6192b5d15d863c89c7122ee8e15e964": {
       "kind": "paragraph",
@@ -518,14 +510,6 @@
       "source_file": "docs/atriyph.md",
       "source_hash": "3ef359032b5033766055df8ae9b7831bd6192b5d15d863c89c7122ee8e15e964",
       "translation": "The first valid statement of the document must be a header, and it can only appear once.\n",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:paragraph:3f0998a646208c7915cfbe92c070bf5d6b5bb124b22a760108f84a7beea4de3b": {
-      "kind": "paragraph",
-      "source": "**保留变量**：__ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 不能被重新赋值。\n",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "3f0998a646208c7915cfbe92c070bf5d6b5bb124b22a760108f84a7beea4de3b",
-      "translation": "**Reserved Variables**: __ATRIX_CODE_0__ and __ATRIX_CODE_1__ cannot be reassigned.\n",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:paragraph:432e1f471712f13bf6514c7765bc8786bd9e0c2d3a72c3aada3ba1d937ad4534": {
@@ -536,21 +520,21 @@
       "translation": "Specify the constraints that must be followed during task execution. Content should be written in affirmative form.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:454b2684213f283ce0eaf2c5a599e75303c151486bcee941a916fd4c7b45d4f6": {
+    "docs/atriyph.md:paragraph:489160ccf7408a1de6a62f861fc6f8b9b3e32473af6fb50a3fbb640c0693b9a1": {
       "kind": "paragraph",
       "source": "__ATRIX_CODE_0__ 运算符按左侧类型决定行为：__ATRIX_CODE_1__/__ATRIX_CODE_2__ 类型做数值相加，__ATRIX_CODE_3__ 类型做字符串拼接。\n",
       "source_file": "docs/atriyph.md",
-      "source_hash": "454b2684213f283ce0eaf2c5a599e75303c151486bcee941a916fd4c7b45d4f6",
+      "source_hash": "489160ccf7408a1de6a62f861fc6f8b9b3e32473af6fb50a3fbb640c0693b9a1",
       "translation": "The __ATRIX_CODE_0__ operator determines its behavior based on the type of the left operand: __ATRIX_CODE_1__/__ATRIX_CODE_2__ types perform numeric addition, while __ATRIX_CODE_3__ types perform string concatenation.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:5139f7eebd95bfb9c23ac71175f4e77f1ee40d915efa78a2c08464efea3b3d3e": {
+    "docs/atriyph.md:paragraph:5a5a225086fd535b1a23d9812bfa16c8db9541545558655e719f5ce410302689": {
       "kind": "paragraph",
-      "source": "把流程拆成命名阶段，可选使用，不强制全包；顶层允许裸语句与 __ATRIX_CODE_0__ 混用。\n",
+      "source": "Atriyph（Atriyph Task Notation）是 ATRI-X 的轻量任务表示法。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "5139f7eebd95bfb9c23ac71175f4e77f1ee40d915efa78a2c08464efea3b3d3e",
-      "translation": "Split the process into named stages; this is optional and not required to wrap everything. Bare statements and __ATRIX_CODE_0__ can be mixed at the top level.\n",
-      "updated_at": 1782710448
+      "source_hash": "5a5a225086fd535b1a23d9812bfa16c8db9541545558655e719f5ce410302689",
+      "translation": "Atriyph (Atriyph Task Notation) is ATRI-X's lightweight task notation.",
+      "updated_at": 1781786413
     },
     "docs/atriyph.md:paragraph:5af9e00efdd2c020e00ff9f920757f9564060914df95a11bef2032e1ea0491f8": {
       "kind": "paragraph",
@@ -566,14 +550,6 @@
       "source_file": "docs/atriyph.md",
       "source_hash": "607f367f664f78027db92c790bff5cfa84f91e32d040c8fa0ed738d6681c69b2",
       "translation": "Declare the output produced by the task.\n",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:paragraph:62eca756c22d3e4e2dc88e32283ea87b174478713fd2f378f60dfcd95b87f68a": {
-      "kind": "paragraph",
-      "source": "Atriyph（Atriyph Task Notation）是 ATRI-X 的轻量任务表示法。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "62eca756c22d3e4e2dc88e32283ea87b174478713fd2f378f60dfcd95b87f68a",
-      "translation": "Atriyph (Atriyph Task Notation) is ATRI-X's lightweight task notation.",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:paragraph:6c02a9131d407c509db5c629f4e6f97ba39bc2d80dd12f8d077dfa69fcb91275": {
@@ -592,14 +568,6 @@
       "translation": "Specify things that must not be done during task execution. Do not use negative forms; describe the forbidden behavior directly.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:7319979ebc38588835411af9349c660f726b24fd35a567c549b9bf6fb32600ea": {
-      "kind": "paragraph",
-      "source": "Atriyph 当前是 v0.2，语法可能在未来版本中扩展。写 __ATRIX_CODE_0__ 或任务条时，建议保持结构简洁，避免依赖未在本文档中列出的实验性写法。\n",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "7319979ebc38588835411af9349c660f726b24fd35a567c549b9bf6fb32600ea",
-      "translation": "Atriyph is currently v0.2, and the syntax may be expanded in future versions. When writing __ATRIX_CODE_0__ or task entries, it is recommended to keep the structure concise and avoid relying on experimental notations not listed in this document.\n",
-      "updated_at": 1781786413
-    },
     "docs/atriyph.md:paragraph:8d3985916c346e1c5fdeca63ba761ccbf9112bba44250e3d7467f69b0474eebf": {
       "kind": "paragraph",
       "source": "当前版本：**v0.3**。\n",
@@ -616,21 +584,53 @@
       "translation": "Its goal is to describe the input, output, steps, conditions, and constraints of a task using a short, stable, and structured syntax, reducing the ambiguity of natural language task descriptions while remaining human-readable.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:97162150f9e815fa148760ccc61e7870f70ad56350f4de3791858127b303fa81": {
+    "docs/atriyph.md:paragraph:9520679272884cb791233826815e66671fbf3dd7c20ad1d632d85286827adfbd": {
       "kind": "paragraph",
-      "source": "更多 skill 管理操作见 [命令速查](commands.md) 的 __ATRIX_CODE_0__ 部分。\n",
+      "source": "把流程拆成命名阶段，块内仍是普通语句。可选使用，不强制全包；顶层允许裸语句与 __ATRIX_CODE_0__ 块混用。\n",
       "source_file": "docs/atriyph.md",
-      "source_hash": "97162150f9e815fa148760ccc61e7870f70ad56350f4de3791858127b303fa81",
-      "translation": "For more Skill management operations, see the __ATRIX_CODE_0__ section of [Command Quick Reference](commands.md).\n",
+      "source_hash": "9520679272884cb791233826815e66671fbf3dd7c20ad1d632d85286827adfbd",
+      "translation": "Split the process into named stages; the contents of the block remain ordinary statements. This is optional and not mandatory for all content; top-level bare statements can be mixed with __ATRIX_CODE_0__ blocks.\n",
+      "updated_at": 1782704123
+    },
+    "docs/atriyph.md:paragraph:a4007d36ff784a8b84772ca965aeabb5dd011a2d6e0351e8f59e981ab35a2380": {
+      "kind": "paragraph",
+      "source": "Atriyph 当前是 v0.2，语法可能在未来版本中扩展。写 __ATRIX_CODE_0__ 或任务条时，建议保持结构简洁，避免依赖未在本文档中列出的实验性写法。\n",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "a4007d36ff784a8b84772ca965aeabb5dd011a2d6e0351e8f59e981ab35a2380",
+      "translation": "Atriyph is currently v0.2, and the syntax may be expanded in future versions. When writing __ATRIX_CODE_0__ or task entries, it is recommended to keep the structure concise and avoid relying on experimental notations not listed in this document.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:c7ad2d1f9f6ba7f528495b40f4f028edddc72e90dabffb7c7103a09f77971c3e": {
+    "docs/atriyph.md:paragraph:b1242c8f9e70d79cadb048ad595db6606acea704c1a8d17f0b06ee79bf21397a": {
       "kind": "paragraph",
-      "source": "LLM Cron 任务可以用 __ATRIX_CODE_0__ header 写任务条，语法与 __ATRIX_CODE_1__ 完全相同。",
+      "source": "参数使用 __ATRIX_CODE_0__ 格式，多个参数用 __ATRIX_CODE_1__ 分隔。\n",
       "source_file": "docs/atriyph.md",
-      "source_hash": "c7ad2d1f9f6ba7f528495b40f4f028edddc72e90dabffb7c7103a09f77971c3e",
-      "translation": "LLM Cron tasks can use the __ATRIX_CODE_0__ header to write task entries, and the syntax is identical to __ATRIX_CODE_1__.",
+      "source_hash": "b1242c8f9e70d79cadb048ad595db6606acea704c1a8d17f0b06ee79bf21397a",
+      "translation": "Parameters use the __ATRIX_CODE_0__ format, and multiple parameters are separated by __ATRIX_CODE_1__.\n",
       "updated_at": 1781786413
+    },
+    "docs/atriyph.md:paragraph:b54834f36272c6c94efa4ec523682e6b9d16d72baab42ada77e4c65c72b43cf8": {
+      "kind": "paragraph",
+      "source": "把流程拆成命名阶段，可选使用，不强制全包；顶层允许裸语句与 __ATRIX_CODE_0__ 混用。\n",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "b54834f36272c6c94efa4ec523682e6b9d16d72baab42ada77e4c65c72b43cf8",
+      "translation": "Split the process into named stages; this is optional and not required to wrap everything. Bare statements and __ATRIX_CODE_0__ can be mixed at the top level.\n",
+      "updated_at": 1782710448
+    },
+    "docs/atriyph.md:paragraph:b9346b630cc1cc375e70d1ed78feea055da4c34b8ba1b44dca6e2d98ba144ae0": {
+      "kind": "paragraph",
+      "source": "**保留变量**：__ATRIX_CODE_0__ 和 __ATRIX_CODE_1__ 不能被重新赋值。\n",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "b9346b630cc1cc375e70d1ed78feea055da4c34b8ba1b44dca6e2d98ba144ae0",
+      "translation": "**Reserved Variables**: __ATRIX_CODE_0__ and __ATRIX_CODE_1__ cannot be reassigned.\n",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:paragraph:c3b3b040d22412574317a7973af54840c20a93114e8017d48324b81da8cb198c": {
+      "kind": "paragraph",
+      "source": "Atriyph 当前是 v0.3，语法可能在未来版本中扩展。写 __ATRIX_CODE_0__ 或任务条时，建议保持结构简洁。\n",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "c3b3b040d22412574317a7973af54840c20a93114e8017d48324b81da8cb198c",
+      "translation": "Atriyph is currently v0.3, and the syntax may be expanded in future versions. When writing __ATRIX_CODE_0__ or task entries, it is recommended to keep the structure concise.\n",
+      "updated_at": 1782722511
     },
     "docs/atriyph.md:paragraph:caeb3aaaee55207b213412d77368085ab91475c0825a2015a95e7bd1f60e4339": {
       "kind": "paragraph",
@@ -638,6 +638,14 @@
       "source_file": "docs/atriyph.md",
       "source_hash": "caeb3aaaee55207b213412d77368085ab91475c0825a2015a95e7bd1f60e4339",
       "translation": "Current version: **v0.2**.\n",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:paragraph:db3a7b96537e8c988dfedbde750c4bd89db370dedc5fcc06ac21aae38c8870a4": {
+      "kind": "paragraph",
+      "source": "Atriyph 用固定的语法替代冗长的自然语言说明，让任务描述更短、更稳定、更可预测。\n",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "db3a7b96537e8c988dfedbde750c4bd89db370dedc5fcc06ac21aae38c8870a4",
+      "translation": "Atriyph replaces verbose natural language descriptions with a fixed syntax, making task descriptions shorter, more stable, and more predictable.\n",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:paragraph:dbf982d246ad7277bec0c58d7fd94cc340769faaee850e90c6284016108212fb": {
@@ -672,14 +680,6 @@
       "translation": "Full-line comment, which will be ignored.\n",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:paragraph:e866f8f5c766ee2106ca5249f0f52f07e6b54d8c057aadd638c7bc2b7c5cf4ec": {
-      "kind": "paragraph",
-      "source": "调用 ATRI-X 工具或子 skill。\n",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "e866f8f5c766ee2106ca5249f0f52f07e6b54d8c057aadd638c7bc2b7c5cf4ec",
-      "translation": "Call an ATRI-X tool or sub-skill.\n",
-      "updated_at": 1781786413
-    },
     "docs/atriyph.md:paragraph:eea315ab512eeab676a4e57686bda4a3d76f1ea6d70d640a745f0b0671be66a0": {
       "kind": "paragraph",
       "source": "结束一个代码块，独占一行。\n",
@@ -704,6 +704,14 @@
       "translation": "Cron drives the LLM to execute the steps in the task entry according to a schedule, using the specified tools.\n",
       "updated_at": 1781786413
     },
+    "docs/atriyph.md:table:138df10edcad060150c1177be94d75594c03dba59ccf30628f1ee95fa0034551": {
+      "kind": "table",
+      "source": "外置文档型 Skill；__ATRIX_CODE_0__ 会覆写 Agent 可读说明，__ATRIX_CODE_1__ 兼容 agentskills.io 风格说明。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "138df10edcad060150c1177be94d75594c03dba59ccf30628f1ee95fa0034551",
+      "translation": "External documentation-based Skill; __ATRIX_CODE_0__ overwrites the Agent-readable description, and __ATRIX_CODE_1__ is compatible with agentskills.io style descriptions.",
+      "updated_at": 1781786413
+    },
     "docs/atriyph.md:table:39932f24fe11a6baf55145a8ea05e1abd8f773d4a98a0785ca27183f2ececedb": {
       "kind": "table",
       "source": "文件",
@@ -720,20 +728,20 @@
       "translation": "Description",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:table:63926cf21c9d281bf3c113a750bae852c691d7e09dcf087cd965ffbab0ef0f49": {
-      "kind": "table",
-      "source": "外置文档型 Skill；__ATRIX_CODE_0__ 会覆写 Agent 可读说明，__ATRIX_CODE_1__ 兼容 agentskills.io 风格说明。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "63926cf21c9d281bf3c113a750bae852c691d7e09dcf087cd965ffbab0ef0f49",
-      "translation": "External documentation-based Skill; __ATRIX_CODE_0__ overwrites the Agent-readable description, and __ATRIX_CODE_1__ is compatible with agentskills.io style descriptions.",
-      "updated_at": 1781786413
-    },
     "docs/atriyph.md:table:6e108c84309d4fbd8782d01c48034b836b7cae109bb2f21617691109a2b5a851": {
       "kind": "table",
       "source": "任务条",
       "source_file": "docs/atriyph.md",
       "source_hash": "6e108c84309d4fbd8782d01c48034b836b7cae109bb2f21617691109a2b5a851",
       "translation": "Task entry",
+      "updated_at": 1781786413
+    },
+    "docs/atriyph.md:table:7d3beae2ebc01f7b617dfd081fe214a09a93a3314f26b4956535a6aa8bdd48af": {
+      "kind": "table",
+      "source": "ATRI-X 原生 Skill；可选 Go 二进制用于执行。",
+      "source_file": "docs/atriyph.md",
+      "source_hash": "7d3beae2ebc01f7b617dfd081fe214a09a93a3314f26b4956535a6aa8bdd48af",
+      "translation": "ATRI-X native skill; optional Go binary for execution.",
       "updated_at": 1781786413
     },
     "docs/atriyph.md:table:7f1843088bb710dcd853583a6d2799c2831d1965db48f7dd5521aa4765e26fdf": {
@@ -752,33 +760,25 @@
       "translation": "Scenario",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:table:85efd7dae19bc910cc88f90f69d84fdf6404b50027d41b708727d188c5105a71": {
+    "docs/atriyph.md:table:d9e95011a5c65cf80b49ba731b59e3328cf5b7853b5c4023fcdb91ea27e7c7f0": {
       "kind": "table",
       "source": "在 __ATRIX_CODE_0__ 中用 __ATRIX_CODE_1__ 头描述后台任务。",
       "source_file": "docs/atriyph.md",
-      "source_hash": "85efd7dae19bc910cc88f90f69d84fdf6404b50027d41b708727d188c5105a71",
+      "source_hash": "d9e95011a5c65cf80b49ba731b59e3328cf5b7853b5c4023fcdb91ea27e7c7f0",
       "translation": "Describe background tasks in __ATRIX_CODE_0__ using the __ATRIX_CODE_1__ header.",
       "updated_at": 1781786413
     },
-    "docs/atriyph.md:table:cd080a6bf2eae38dc7053224321e2f995fb1f02f11293b6e327a08acf1842747": {
+    "docs/atriyph.md:table:e3d0a77e1369c349113bad0627fd4c88f808d552cbcf31924928d9fafdf65a4c": {
       "kind": "table",
       "source": "__ATRIX_CODE_0__ 或 __ATRIX_CODE_1__",
       "source_file": "docs/atriyph.md",
-      "source_hash": "cd080a6bf2eae38dc7053224321e2f995fb1f02f11293b6e327a08acf1842747",
+      "source_hash": "e3d0a77e1369c349113bad0627fd4c88f808d552cbcf31924928d9fafdf65a4c",
       "translation": "__ATRIX_CODE_0__ or __ATRIX_CODE_1__",
-      "updated_at": 1781786413
-    },
-    "docs/atriyph.md:table:e36e9fb9e73a692a4260edccffa5cf88d3b2abdd3ea4f8bcb7f4ace69a8de940": {
-      "kind": "table",
-      "source": "ATRI-X 原生 Skill；可选 Go 二进制用于执行。",
-      "source_file": "docs/atriyph.md",
-      "source_hash": "e36e9fb9e73a692a4260edccffa5cf88d3b2abdd3ea4f8bcb7f4ace69a8de940",
-      "translation": "ATRI-X native skill; optional Go binary for execution.",
       "updated_at": 1781786413
     }
   },
   "source": "docs/atriyph.md",
-  "source_hash": "e38da277e0be51c104f94090b00368bf6b08a36c53cb8e5e127ae02005fa7e24",
+  "source_hash": "dfa3370643a23519c3bdbf055e3684b2297e2837f1108ce1b5e17323b4bb55e4",
   "target": "docs.en/atriyph.md",
   "updated_at": 1782901153,
   "version": 2

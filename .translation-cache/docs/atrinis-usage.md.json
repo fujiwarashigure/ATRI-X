@@ -1,13 +1,5 @@
 {
   "segments": {
-    "docs/atrinis-usage.md:code-comment:toml:175e7d57456d5f083fa73a59c78034edb15dc79ceeb54a38b1096c1566c5e47e": {
-      "kind": "code-comment:toml",
-      "source": "只有显式 enabled=false 才禁用该 Atriwisp。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "175e7d57456d5f083fa73a59c78034edb15dc79ceeb54a38b1096c1566c5e47e",
-      "translation": "This Atriwisp is disabled only when enabled=false is explicitly set.",
-      "updated_at": 1781709646
-    },
     "docs/atrinis-usage.md:code-comment:toml:1bdf13d861b4ab1b8197152af36c17c484156f6abd5425c38efcd16b7f9be1e9": {
       "kind": "code-comment:toml",
       "source": "handler 执行及响应写出期限；direct 模式可能包含外部 I/O，因此默认较宽松。",
@@ -16,28 +8,12 @@
       "translation": "Timeout for handler execution and response writing; direct mode may involve external I/O, so the default is more lenient.",
       "updated_at": 1784340335
     },
-    "docs/atrinis-usage.md:code-comment:toml:3c23ea131d1df5e2d5318b9317ca57d0b1fa269169d01dcb7591bc050def97ff": {
-      "kind": "code-comment:toml",
-      "source": "Atrinis 总开关；false 时不启动 HTTP runtime。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "3c23ea131d1df5e2d5318b9317ca57d0b1fa269169d01dcb7591bc050def97ff",
-      "translation": "Atrinis master switch; if false, the HTTP runtime will not start.",
-      "updated_at": 1781709646
-    },
     "docs/atrinis-usage.md:code-comment:toml:3e85ed311e762904b9e1c040649b9d0f0c7194d74116cd63d202bf4e8b4ae33e": {
       "kind": "code-comment:toml",
       "source": "llm 模式后台 worker 数。",
       "source_file": "docs/atrinis-usage.md",
       "source_hash": "3e85ed311e762904b9e1c040649b9d0f0c7194d74116cd63d202bf4e8b4ae33e",
       "translation": "Number of background workers in LLM mode.",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:code-comment:toml:46491d92cfd2daf8c7a4696375d9d797d3b774d9de71ac80985bec46a445d29d": {
-      "kind": "code-comment:toml",
-      "source": "Atriwisp 默认启用；只有需要限制 token、覆盖投递策略或禁用时才配置。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "46491d92cfd2daf8c7a4696375d9d797d3b774d9de71ac80985bec46a445d29d",
-      "translation": "Atriwisp is enabled by default; configure it only when you need to limit tokens, override delivery policies, or disable it.",
       "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:code-comment:toml:5186e4e27e78f5786ba0338c6b75b83603a60654661e12df15a04669744918f7": {
@@ -48,11 +24,11 @@
       "translation": "It is recommended to bind to a local address first, and use a reverse proxy or intranet forwarding when exposure is needed.",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:code-comment:toml:7f541d3e77ddb085d91bc83bfe18d8c3c82368754296162eb9600aab54ff54bd": {
+    "docs/atrinis-usage.md:code-comment:toml:6c6b884e667448b47c2a46bbfed253f44dc9094f5126d54b28915fba2f561d3e": {
       "kind": "code-comment:toml",
       "source": "单个 Atriena 请求 body 上限。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "7f541d3e77ddb085d91bc83bfe18d8c3c82368754296162eb9600aab54ff54bd",
+      "source_hash": "6c6b884e667448b47c2a46bbfed253f44dc9094f5126d54b28915fba2f561d3e",
       "translation": "Request body limit for a single Atriena request.",
       "updated_at": 1781709646
     },
@@ -62,14 +38,6 @@
       "source_file": "docs/atrinis-usage.md",
       "source_hash": "906797bec5011c94fcbe67b99f49ad48e6b6e32ab8891d42e90fd72d71b22c03",
       "translation": "External tools are allowed by default; only specified tools are disabled here.",
-      "updated_at": 1781749660
-    },
-    "docs/atrinis-usage.md:code-comment:toml:92fb121c89858e8c4f62a7eedc662ab0f638b89135b19c23d26333a000460cd2": {
-      "kind": "code-comment:toml",
-      "source": "默认允许 Atriwisp 预加载的 ATRI-X 内部工具。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "92fb121c89858e8c4f62a7eedc662ab0f638b89135b19c23d26333a000460cd2",
-      "translation": "By default, ATRI-X internal tools preloaded by Atriwisp are allowed.",
       "updated_at": 1781749660
     },
     "docs/atrinis-usage.md:code-comment:toml:a2d205d02911e79cd86af53c1ae1fb5c8ed7bf6168aebe9d054159b205da22cb": {
@@ -104,6 +72,14 @@
       "translation": "Read from system environment variables or the .env file in the configuration directory.",
       "updated_at": 1781709646
     },
+    "docs/atrinis-usage.md:code-comment:toml:ca7c5aa06a82356159c7702bc315190989d18e8d60501255acbd54074c1ca964": {
+      "kind": "code-comment:toml",
+      "source": "默认允许 Atriwisp 预加载的 ATRI-X 内部工具。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "ca7c5aa06a82356159c7702bc315190989d18e8d60501255acbd54074c1ca964",
+      "translation": "By default, ATRI-X internal tools preloaded by Atriwisp are allowed.",
+      "updated_at": 1781749660
+    },
     "docs/atrinis-usage.md:code-comment:toml:e2387e326cb33176309e98026e53ed52661a0a08046d9dd7e698d5a009128dcb": {
       "kind": "code-comment:toml",
       "source": "存在时覆盖顶层 allowed_tools。",
@@ -111,6 +87,14 @@
       "source_hash": "e2387e326cb33176309e98026e53ed52661a0a08046d9dd7e698d5a009128dcb",
       "translation": "Overrides the top-level allowed_tools when present.",
       "updated_at": 1781749660
+    },
+    "docs/atrinis-usage.md:code-comment:toml:e64ae80642c56bf01ac0e019e0243384f857536b3dec3dc9d517908ca26d8fe4": {
+      "kind": "code-comment:toml",
+      "source": "Atriwisp 默认启用；只有需要限制 token、覆盖投递策略或禁用时才配置。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "e64ae80642c56bf01ac0e019e0243384f857536b3dec3dc9d517908ca26d8fe4",
+      "translation": "Atriwisp is enabled by default; configure it only when you need to limit tokens, override delivery policies, or disable it.",
+      "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:code-comment:toml:eca27e7517e41340c57a493660ff153f024466f073c3122fa47271f169ea7970": {
       "kind": "code-comment:toml",
@@ -120,6 +104,14 @@
       "translation": "Keep-alive idle connection timeout.",
       "updated_at": 1784340335
     },
+    "docs/atrinis-usage.md:code-comment:toml:ef2f0fcb840e023cb2195f13ac3c56de1747abfb0501e27a2c11074bf05a2e8f": {
+      "kind": "code-comment:toml",
+      "source": "只有显式 enabled=false 才禁用该 Atriwisp。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "ef2f0fcb840e023cb2195f13ac3c56de1747abfb0501e27a2c11074bf05a2e8f",
+      "translation": "This Atriwisp is disabled only when enabled=false is explicitly set.",
+      "updated_at": 1781709646
+    },
     "docs/atrinis-usage.md:code-comment:toml:f47db574560a79c1f3a76ce25c334e03b46b00fadb19621e8ae0cd011f224ccf": {
       "kind": "code-comment:toml",
       "source": "请求头读取期限。",
@@ -127,6 +119,14 @@
       "source_hash": "f47db574560a79c1f3a76ce25c334e03b46b00fadb19621e8ae0cd011f224ccf",
       "translation": "Request header read timeout.",
       "updated_at": 1784340335
+    },
+    "docs/atrinis-usage.md:code-comment:toml:f4dc248f0f1b8dd1958200c01552ffc482bae5190ede59143fae1dbd96b5b4a9": {
+      "kind": "code-comment:toml",
+      "source": "Atrinis 总开关；false 时不启动 HTTP runtime。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "f4dc248f0f1b8dd1958200c01552ffc482bae5190ede59143fae1dbd96b5b4a9",
+      "translation": "Atrinis master switch; if false, the HTTP runtime will not start.",
+      "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:heading:0d53f08678d8101b0c7e5053b30224fc671c55051770ba18207435ead7ad37bd": {
       "kind": "heading",
@@ -152,14 +152,6 @@
       "translation": "Segments (Multimodal Message Segments)",
       "updated_at": 1781929269
     },
-    "docs/atrinis-usage.md:heading:2f7603758467fcaf2efd9765d55509df69a9386873489f36b2160fdf3eb99d7c": {
-      "kind": "heading",
-      "source": "Atriena 请求示例",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "2f7603758467fcaf2efd9765d55509df69a9386873489f36b2160fdf3eb99d7c",
-      "translation": "Atriena Request Example",
-      "updated_at": 1781709646
-    },
     "docs/atrinis-usage.md:heading:334c20e1a48091b99e3c1293f15034a77d5cc639f1fe02da93ecab0ce0e9440d": {
       "kind": "heading",
       "source": "快速开始",
@@ -184,6 +176,14 @@
       "translation": "Segment Fields",
       "updated_at": 1781929269
     },
+    "docs/atrinis-usage.md:heading:5c7a6a41da1d83c5b0c568b3efc88ac5dc1222890c090c1e98934d53e42c4fe3": {
+      "kind": "heading",
+      "source": "Atrinis 配置与使用",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "5c7a6a41da1d83c5b0c568b3efc88ac5dc1222890c090c1e98934d53e42c4fe3",
+      "translation": "Atrinis Configuration and Usage",
+      "updated_at": 1781709646
+    },
     "docs/atrinis-usage.md:heading:75accd2f4a72fccf4b7446fe60c71b821fc66f31d48d1e10265c2d86397bb006": {
       "kind": "heading",
       "source": "下载与存储",
@@ -191,14 +191,6 @@
       "source_hash": "75accd2f4a72fccf4b7446fe60c71b821fc66f31d48d1e10265c2d86397bb006",
       "translation": "Download and Storage",
       "updated_at": 1781929269
-    },
-    "docs/atrinis-usage.md:heading:91a5a8f0d3e32a60d2bba181cb8e8bba4413dbc08a2c20d26b0e4ac0eb0bad0d": {
-      "kind": "heading",
-      "source": "Atrinis 配置与使用",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "91a5a8f0d3e32a60d2bba181cb8e8bba4413dbc08a2c20d26b0e4ac0eb0bad0d",
-      "translation": "Atrinis Configuration and Usage",
-      "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:heading:96ba736fa90a961c21dd4a4ac928eac11531ad3bc3c6904db83abb113e5d134f": {
       "kind": "heading",
@@ -216,13 +208,37 @@
       "translation": "Delivery Target and Security Boundary",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:list:003001043952716bc303b80bfd3876bb1876f20cf3575a96f0764ded0dd581f6": {
-      "kind": "list",
-      "source": "Atriwisp 不能绕过 Tool Runtime 和 Security Policy 调用 ATRI-X 内部工具；",
+    "docs/atrinis-usage.md:heading:e7dcf221881dbae9b184b26b19f135c440b630aeaa7b38b8a8e45a3135d40a9c": {
+      "kind": "heading",
+      "source": "Atriena 请求示例",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "003001043952716bc303b80bfd3876bb1876f20cf3575a96f0764ded0dd581f6",
-      "translation": "Atriwisp cannot bypass Tool Runtime and Security Policy to call ATRI-X internal tools;",
-      "updated_at": 1781749660
+      "source_hash": "e7dcf221881dbae9b184b26b19f135c440b630aeaa7b38b8a8e45a3135d40a9c",
+      "translation": "Atriena Request Example",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:list:01e038a9a96a7ca206f8ecd8bd51332c820cd88e12f0c83d0fa1e572617798b0": {
+      "kind": "list",
+      "source": "token 原文不写入配置，推荐放在系统环境变量或配置目录 __ATRIX_CODE_0__。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "01e038a9a96a7ca206f8ecd8bd51332c820cd88e12f0c83d0fa1e572617798b0",
+      "translation": "Do not write the token plaintext into the configuration; it is recommended to place it in system environment variables or the configuration directory __ATRIX_CODE_0__.",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:list:06162ed371667551aefb5410e0ffbcc82f5d8c421b3d1fd22167232234f57dce": {
+      "kind": "list",
+      "source": "需要接收 Atriena 事件时请使用 __ATRIX_CODE_0__ 或 __ATRIX_CODE_1__。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "06162ed371667551aefb5410e0ffbcc82f5d8c421b3d1fd22167232234f57dce",
+      "translation": "Please use __ATRIX_CODE_0__ or __ATRIX_CODE_1__ when you need to receive Atriena events.",
+      "updated_at": 1781962160
+    },
+    "docs/atrinis-usage.md:list:18d7c946fe2614e01fbd9efbb984d3d773249b9f8facf82ab6aad255806e5250": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 是 CLI-only 模式，即使 __ATRIX_CODE_1__ 也不会启动 Atrinis HTTP runtime；",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "18d7c946fe2614e01fbd9efbb984d3d773249b9f8facf82ab6aad255806e5250",
+      "translation": "__ATRIX_CODE_0__ is CLI-only mode; even with __ATRIX_CODE_1__, the Atrinis HTTP runtime will not start;",
+      "updated_at": 1781962160
     },
     "docs/atrinis-usage.md:list:1cd550c5433eab93b1dbcf6f69b2470f93dab7f746b21fccbd73e7fc287adf76": {
       "kind": "list",
@@ -240,13 +256,21 @@
       "translation": "When HTTP timeout configurations are less than or equal to 0, the aforementioned safe default values are used; timeouts cannot be disabled by using 0.",
       "updated_at": 1784340335
     },
-    "docs/atrinis-usage.md:list:23d7e90f17bfd92e6de6c2b8cbea9d971fb1926714fcaeb7936a4380f155fdea": {
+    "docs/atrinis-usage.md:list:201013c9bde86bc8e70e48f59a6793bf0ef935c8c77a9f9e8e74c2f753d47e76": {
       "kind": "list",
-      "source": "direct 有实际投递目标时，导入或复用 Media Center 媒体，不保留 Atrinis sandbox 下载副本。",
+      "source": "文件大小受 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 限制（默认 100MB）。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "23d7e90f17bfd92e6de6c2b8cbea9d971fb1926714fcaeb7936a4380f155fdea",
-      "translation": "When 'direct' has an actual delivery target, Media Center media is imported or reused, and no download copy is kept in the Atrinis sandbox.",
-      "updated_at": 1789010099
+      "source_hash": "201013c9bde86bc8e70e48f59a6793bf0ef935c8c77a9f9e8e74c2f753d47e76",
+      "translation": "File size is limited by __ATRIX_CODE_1__ of __ATRIX_CODE_0__ (default 100MB).",
+      "updated_at": 1781929269
+    },
+    "docs/atrinis-usage.md:list:21653b7be14b6764c447d686c05f6594efc9571ef2684b4cc434546b552ceef2": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__：投递到所有已启用平台超级管理员，不能同时写 __ATRIX_CODE_1__ 或 __ATRIX_CODE_2__。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "21653b7be14b6764c447d686c05f6594efc9571ef2684b4cc434546b552ceef2",
+      "translation": "__ATRIX_CODE_0__: deliver to the superadmins of all enabled platforms; __ATRIX_CODE_1__ or __ATRIX_CODE_2__ cannot be written at the same time.",
+      "updated_at": 1782033114
     },
     "docs/atrinis-usage.md:list:2c6e314197913dc6a5531bee11394eb27b074241e1e5f9eb1fabcbf9acb50693": {
       "kind": "list",
@@ -256,29 +280,61 @@
       "translation": "Ordinary workspace files continue to be managed by the sandbox; report attachments are imported into the center when persistent delivery is determined to be necessary.",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:list:39d59267ebaab21e07dc512b5809024eda04a12d8a8151c63be19fe6532a4450": {
+    "docs/atrinis-usage.md:list:3ed2ee6f0aa6e18fe2115ae0dd7cda5378d65cc3c2b8ac73c2cfb7dae365118a": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__：投递到指定平台群聊。",
+      "source": "__ATRIX_CODE_0__ 等本地协议禁止。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "39d59267ebaab21e07dc512b5809024eda04a12d8a8151c63be19fe6532a4450",
-      "translation": "__ATRIX_CODE_0__: deliver to a specified platform group chat.",
-      "updated_at": 1782033114
+      "source_hash": "3ed2ee6f0aa6e18fe2115ae0dd7cda5378d65cc3c2b8ac73c2cfb7dae365118a",
+      "translation": "Local protocols such as __ATRIX_CODE_0__ are prohibited.",
+      "updated_at": 1781929269
     },
-    "docs/atrinis-usage.md:list:4d0d28105262232a2583176de44f8d40bcdeb869488bc9a8e358a35df93cf9b2": {
+    "docs/atrinis-usage.md:list:4271d0606e500072a4d171dcb1abf2bd6bf7d354104afaeedbf64f01d089505d": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 限制哪些 token 可以代表该 Atriwisp 投递事件；不写则允许任意已认证 token。",
+      "source": "__ATRIX_CODE_0__ 中的工具名或 Skill 名都会经过 Atrinis __ATRIX_CODE_1__ 裁决。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "4d0d28105262232a2583176de44f8d40bcdeb869488bc9a8e358a35df93cf9b2",
-      "translation": "__ATRIX_CODE_0__ restricts which tokens can represent the Atriwisp to deliver events; if not specified, any authenticated token is allowed.",
-      "updated_at": 1781709646
+      "source_hash": "4271d0606e500072a4d171dcb1abf2bd6bf7d354104afaeedbf64f01d089505d",
+      "translation": "Tool names or Skill names in __ATRIX_CODE_0__ will all undergo Atrinis __ATRIX_CODE_1__ adjudication.",
+      "updated_at": 1781786110
     },
-    "docs/atrinis-usage.md:list:4df54398bc8b1532dafee25af6fb8c9f087ee72898883833b90a74e1de092cca": {
+    "docs/atrinis-usage.md:list:4a57bd5c30952af754576227499aa2901887f62ea41e171cace8593930b6dccf": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__ 只允许 __ATRIX_CODE_1__ 或 __ATRIX_CODE_2__，不影响模型槽位。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "4df54398bc8b1532dafee25af6fb8c9f087ee72898883833b90a74e1de092cca",
+      "source_hash": "4a57bd5c30952af754576227499aa2901887f62ea41e171cace8593930b6dccf",
       "translation": "__ATRIX_CODE_0__ only allows __ATRIX_CODE_1__ or __ATRIX_CODE_2__, and does not affect model slots.",
       "updated_at": 1782699001
+    },
+    "docs/atrinis-usage.md:list:4d925a6409fa78521ae4a2b46ce2477086ede99f025d284350ab8aa4a14ff739": {
+      "kind": "list",
+      "source": "Atriwisp 默认启用；没写 __ATRIX_CODE_0__、写了但没写 __ATRIX_CODE_1__、或写了 __ATRIX_CODE_2__ 都会接收。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "4d925a6409fa78521ae4a2b46ce2477086ede99f025d284350ab8aa4a14ff739",
+      "translation": "Atriwisp is enabled by default; it will receive events if __ATRIX_CODE_0__ is not specified, if it is specified but __ATRIX_CODE_1__ is not, or if __ATRIX_CODE_2__ is specified.",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:list:4f900faf8d273d87349143a398572bd254a62fdd18279d9269c0059bbfaa2dab": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ URI 仅支持 base64 编码，解码后同样受限。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "4f900faf8d273d87349143a398572bd254a62fdd18279d9269c0059bbfaa2dab",
+      "translation": "__ATRIX_CODE_0__ URIs only support base64 encoding and are similarly restricted after decoding.",
+      "updated_at": 1781929269
+    },
+    "docs/atrinis-usage.md:list:50b261bcb4ea64df2920d397c7a0b76a08a88fa954edbb85bdbf163905aa3fa8": {
+      "kind": "list",
+      "source": "只有显式 __ATRIX_CODE_0__ 才会禁用对应 Atriwisp。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "50b261bcb4ea64df2920d397c7a0b76a08a88fa954edbb85bdbf163905aa3fa8",
+      "translation": "Only explicit __ATRIX_CODE_0__ will disable the corresponding Atriwisp.",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:list:569d6f49331468d3b3033e400954d4300f0ec4e34a115bb32002a0b37922d739": {
+      "kind": "list",
+      "source": "外部工具默认允许；单个 Atriwisp 可以用 __ATRIX_CODE_0__ 禁用指定外部工具。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "569d6f49331468d3b3033e400954d4300f0ec4e34a115bb32002a0b37922d739",
+      "translation": "External tools are allowed by default; an individual Atriwisp can use __ATRIX_CODE_0__ to disable specific external tools.",
+      "updated_at": 1781749660
     },
     "docs/atrinis-usage.md:list:5aa752857d96b5f52c36cbb528333af31ba8f223a2014a279fcd3b40e8c6af35": {
       "kind": "list",
@@ -288,36 +344,28 @@
       "translation": "Non-loopback addresses should be placed behind a reverse proxy, with the proxy handling TLS, connection limits, and request rate limiting; application-layer timeouts cannot replace these boundaries.",
       "updated_at": 1784340335
     },
-    "docs/atrinis-usage.md:list:5c6d736596b8e683ecb7c0de019d1bd69420c0838b38ad750c5ac86bcc5a8451": {
+    "docs/atrinis-usage.md:list:60681e52a2995714f6104753eef6215ed07bb5d6d6239dd574888e543cee83aa": {
       "kind": "list",
       "source": "外部工具调用由 Atrinis 对声明的 endpoint 发起 HTTP JSON POST；外部工具自身负责实际风险边界，Atrinis 侧按 low 风险处理。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "5c6d736596b8e683ecb7c0de019d1bd69420c0838b38ad750c5ac86bcc5a8451",
+      "source_hash": "60681e52a2995714f6104753eef6215ed07bb5d6d6239dd574888e543cee83aa",
       "translation": "External tool calls are initiated by Atrinis as HTTP JSON POST requests to the declared endpoint; the external tool itself is responsible for the actual risk boundary, and Atrinis handles it as low-risk.",
       "updated_at": 1781749660
     },
-    "docs/atrinis-usage.md:list:62a744b0b6e7b92d8dbbcd8e90e9629cc7b9559928dd5a174d5230161839816b": {
+    "docs/atrinis-usage.md:list:6bcdd32305a97bdf3f150ff15d7fdb6df8d8bea0e491ffdaa2fd69b68aab1b7e": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 等本地协议禁止。",
+      "source": "direct 有实际投递目标时，导入或复用 Media Center 媒体，不保留 Atrinis sandbox 下载副本。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "62a744b0b6e7b92d8dbbcd8e90e9629cc7b9559928dd5a174d5230161839816b",
-      "translation": "Local protocols such as __ATRIX_CODE_0__ are prohibited.",
-      "updated_at": 1781929269
+      "source_hash": "6bcdd32305a97bdf3f150ff15d7fdb6df8d8bea0e491ffdaa2fd69b68aab1b7e",
+      "translation": "When 'direct' has an actual delivery target, Media Center media is imported or reused, and no download copy is kept in the Atrinis sandbox.",
+      "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:list:72f74d2a2cdd5caf8ef124febb51d2ce5a60e9564d67a1cd7ec35871ca7661a1": {
+    "docs/atrinis-usage.md:list:7ea28945c2c43d0af5789ddb2a224f20f44d2e0f7bea0abed1d8d1ac1b4d6c02": {
       "kind": "list",
-      "source": "Atriwisp 默认启用；没写 __ATRIX_CODE_0__、写了但没写 __ATRIX_CODE_1__、或写了 __ATRIX_CODE_2__ 都会接收。",
+      "source": "Atrinis 默认允许投递；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "72f74d2a2cdd5caf8ef124febb51d2ce5a60e9564d67a1cd7ec35871ca7661a1",
-      "translation": "Atriwisp is enabled by default; it will receive events if __ATRIX_CODE_0__ is not specified, if it is specified but __ATRIX_CODE_1__ is not, or if __ATRIX_CODE_2__ is specified.",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:list:807392aba7b653e590780106329588417c79b084974f2aeba3f6b3f6c3e4e534": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__：投递到所有已启用平台超级管理员，不能同时写 __ATRIX_CODE_1__ 或 __ATRIX_CODE_2__。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "807392aba7b653e590780106329588417c79b084974f2aeba3f6b3f6c3e4e534",
-      "translation": "__ATRIX_CODE_0__: deliver to the superadmins of all enabled platforms; __ATRIX_CODE_1__ or __ATRIX_CODE_2__ cannot be written at the same time.",
+      "source_hash": "7ea28945c2c43d0af5789ddb2a224f20f44d2e0f7bea0abed1d8d1ac1b4d6c02",
+      "translation": "Atrinis allows delivery by default;",
       "updated_at": 1782033114
     },
     "docs/atrinis-usage.md:list:841c4faf6c423b401421ac8b7a45865bbbf28e77833276fc8582e83bf6b1b578": {
@@ -328,29 +376,13 @@
       "translation": "Events that are recorded, rejected, duplicated, or only queued do not download source media. References will be established for existing media IDs of queued tasks.",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:list:8ae9e28aae0d922c05e2318b6bef3dc28c9ae1ac81151aa3bed6a8c15bc16bc5": {
+    "docs/atrinis-usage.md:list:89e3b78058a61b54997afccb67798e1c9939c3a8b4cfb224f6707edf47a3ed8d": {
       "kind": "list",
-      "source": "单个 Atriwisp 可用 __ATRIX_CODE_0__ 禁用指定工具。",
+      "source": "__ATRIX_CODE_0__ 可以写多个环境变量名，按顺序尝试。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "8ae9e28aae0d922c05e2318b6bef3dc28c9ae1ac81151aa3bed6a8c15bc16bc5",
-      "translation": "A single Atriwisp can use __ATRIX_CODE_0__ to disable specific tools.",
-      "updated_at": 1781749660
-    },
-    "docs/atrinis-usage.md:list:8e10903c1c241907a109ea2991f0ecee90e4156346762acc425a4a89f389fe9b": {
-      "kind": "list",
-      "source": "Atrinis 默认允许投递；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "8e10903c1c241907a109ea2991f0ecee90e4156346762acc425a4a89f389fe9b",
-      "translation": "Atrinis allows delivery by default;",
-      "updated_at": 1782033114
-    },
-    "docs/atrinis-usage.md:list:8eb172baff6cb1bb82bd64459b2ec69b086133de62fadd4749234e7458a26eb0": {
-      "kind": "list",
-      "source": "Atriwisp 声明的外部 __ATRIX_CODE_0__ 默认允许，并通过 ToolRun 以 __ATRIX_CODE_1__ 形式注入为模型可调用函数名；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "8eb172baff6cb1bb82bd64459b2ec69b086133de62fadd4749234e7458a26eb0",
-      "translation": "External __ATRIX_CODE_0__ declared by Atriwisp are allowed by default and are injected as model-callable function names in the form of __ATRIX_CODE_1__ via ToolRun;",
-      "updated_at": 1781749660
+      "source_hash": "89e3b78058a61b54997afccb67798e1c9939c3a8b4cfb224f6707edf47a3ed8d",
+      "translation": "__ATRIX_CODE_0__ can contain multiple environment variable names, which will be tried in order.",
+      "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:list:941b47c124f28568676f917e8c5888ee172fb075178020544dcd7b6cd4b9cfc2": {
       "kind": "list",
@@ -360,69 +392,53 @@
       "translation": "Direct mode also supports image/file output; it automatically degrades to a text description if the platform does not support it.",
       "updated_at": 1781929269
     },
-    "docs/atrinis-usage.md:list:962954418322bb5fe296423201c91aed6119c7c461caeb8235924a42019716a3": {
+    "docs/atrinis-usage.md:list:97fe78e825ecc4d050471f6f9cf9633e87ef41a87c96de3e07cfb3e4ecd08c50": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 只能选择 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__，不能指定任意内部模式名；",
+      "source": "Atriwisp 不能绕过 Tool Runtime 和 Security Policy 调用 ATRI-X 内部工具；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "962954418322bb5fe296423201c91aed6119c7c461caeb8235924a42019716a3",
-      "translation": "__ATRIX_CODE_0__ can only choose __ATRIX_CODE_1__, __ATRIX_CODE_2__, or __ATRIX_CODE_3__, and cannot specify an arbitrary internal mode name;",
-      "updated_at": 1782699001
+      "source_hash": "97fe78e825ecc4d050471f6f9cf9633e87ef41a87c96de3e07cfb3e4ecd08c50",
+      "translation": "Atriwisp cannot bypass Tool Runtime and Security Policy to call ATRI-X internal tools;",
+      "updated_at": 1781749660
     },
-    "docs/atrinis-usage.md:list:99267342faabbf97989dd67144b49b108747bb74c3bb997c45ee2cbe8cdc8d7f": {
+    "docs/atrinis-usage.md:list:9a52ca54fe0c5581cb47856b0d88e07029c8dd4afcbbc640be9bb43822216a4e": {
       "kind": "list",
-      "source": "需要接收 Atriena 事件时请使用 __ATRIX_CODE_0__ 或 __ATRIX_CODE_1__。",
+      "source": "只有 __ATRIX_CODE_0__ 或单 Atriwisp __ATRIX_CODE_1__ 显式列出的目标会被禁止。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "99267342faabbf97989dd67144b49b108747bb74c3bb997c45ee2cbe8cdc8d7f",
-      "translation": "Please use __ATRIX_CODE_0__ or __ATRIX_CODE_1__ when you need to receive Atriena events.",
-      "updated_at": 1781962160
-    },
-    "docs/atrinis-usage.md:list:9e77000334927a8e945950daf4b18a4aa82e44af4538c00aba364926ae4b7f88": {
-      "kind": "list",
-      "source": "只有显式 __ATRIX_CODE_0__ 才会禁用对应 Atriwisp。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "9e77000334927a8e945950daf4b18a4aa82e44af4538c00aba364926ae4b7f88",
-      "translation": "Only explicit __ATRIX_CODE_0__ will disable the corresponding Atriwisp.",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:list:a02dcfcfc7aeb5a6e833513344f30b45c5887e51cadfc5db7277eb9799148354": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__：投递到指定平台私聊。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "a02dcfcfc7aeb5a6e833513344f30b45c5887e51cadfc5db7277eb9799148354",
-      "translation": "__ATRIX_CODE_0__: deliver to a specified platform private chat.",
+      "source_hash": "9a52ca54fe0c5581cb47856b0d88e07029c8dd4afcbbc640be9bb43822216a4e",
+      "translation": "Only targets explicitly listed in __ATRIX_CODE_0__ or a single Atriwisp __ATRIX_CODE_1__ will be prohibited.",
       "updated_at": 1782033114
     },
-    "docs/atrinis-usage.md:list:af47283fd76be050a545cda7087ca9242c13b79f076f52db918a16278d532267": {
+    "docs/atrinis-usage.md:list:a13f06a0f6ad9065d2fd37c8167e343badc161ba6feb82054656976680c66838": {
+      "kind": "list",
+      "source": "顶层 __ATRIX_CODE_0__ 是 ATRI-X 内部工具默认白名单，单个 Atriwisp 的 __ATRIX_CODE_1__ 存在时覆盖它。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "a13f06a0f6ad9065d2fd37c8167e343badc161ba6feb82054656976680c66838",
+      "translation": "The top-level __ATRIX_CODE_0__ is the default whitelist for ATRI-X internal tools; it is overridden when __ATRIX_CODE_1__ of an individual Atriwisp exists.",
+      "updated_at": 1781749660
+    },
+    "docs/atrinis-usage.md:list:a81726beb6809872e68d3970b8715f346a1fda0bc9f764b0c634dde8fc833e5c": {
       "kind": "list",
       "source": "当前 __ATRIX_CODE_0__ 只适用于 Atrinis 与 CLI 同处一个 __ATRIX_CODE_1__ 前台进程，或 service 模式启用 CLI 远程服务端的场景；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "af47283fd76be050a545cda7087ca9242c13b79f076f52db918a16278d532267",
+      "source_hash": "a81726beb6809872e68d3970b8715f346a1fda0bc9f764b0c634dde8fc833e5c",
       "translation": "Currently, __ATRIX_CODE_0__ only applies to scenarios where Atrinis and the CLI are in the same __ATRIX_CODE_1__ foreground process, or when the CLI remote server is enabled in service mode;",
       "updated_at": 1782033114
     },
-    "docs/atrinis-usage.md:list:b402ea8c3ed8917b33f57e8cd9f2f161481b5029d5fdc46fff2ba6e4b877ad8a": {
+    "docs/atrinis-usage.md:list:a95a163cabdfafe829a5faaafb7299477c7eb352493a40f62a38c76ffb4d235c": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 时不启动 Atrinis HTTP runtime。",
+      "source": "__ATRIX_CODE_0__：投递到指定平台私聊。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "b402ea8c3ed8917b33f57e8cd9f2f161481b5029d5fdc46fff2ba6e4b877ad8a",
-      "translation": "__ATRIX_CODE_0__ will not start the Atrinis HTTP runtime.",
-      "updated_at": 1781709646
+      "source_hash": "a95a163cabdfafe829a5faaafb7299477c7eb352493a40f62a38c76ffb4d235c",
+      "translation": "__ATRIX_CODE_0__: deliver to a specified platform private chat.",
+      "updated_at": 1782033114
     },
-    "docs/atrinis-usage.md:list:bc6075397e81dcaebc13a3b8fa3e1afd108f7e511562a3a6909d8a4c28de3257": {
+    "docs/atrinis-usage.md:list:b23870a2c38afd5adaba9b546f91eeb1ba74083859c24edd5510fde5a6e0f2b9": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 可以写多个环境变量名，按顺序尝试。",
+      "source": "只写 __ATRIX_CODE_0__：投递到该平台超级管理员。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "bc6075397e81dcaebc13a3b8fa3e1afd108f7e511562a3a6909d8a4c28de3257",
-      "translation": "__ATRIX_CODE_0__ can contain multiple environment variable names, which will be tried in order.",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:list:bd5b468cb508b1356236a784293a4c05381d89d17c737aed87ef39ecc34ed448": {
-      "kind": "list",
-      "source": "文件名已有扩展名（包括 __ATRIX_CODE_0__）时保留原名，仅无扩展名时补全。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "bd5b468cb508b1356236a784293a4c05381d89d17c737aed87ef39ecc34ed448",
-      "translation": "The original name is preserved if the filename already has an extension (including __ATRIX_CODE_0__); it is only completed when no extension exists.",
-      "updated_at": 1789010099
+      "source_hash": "b23870a2c38afd5adaba9b546f91eeb1ba74083859c24edd5510fde5a6e0f2b9",
+      "translation": "Only write __ATRIX_CODE_0__: deliver to the superadmin of that platform.",
+      "updated_at": 1782033114
     },
     "docs/atrinis-usage.md:list:bf6db6e8c643c084ea17d551c10f717b36c80f4834f5241f7093e96192edfe83": {
       "kind": "list",
@@ -432,93 +448,77 @@
       "translation": "LLM input is materialized into a stable media ID during actual execution; the Session saves the ID, which is then resolved before the request is sent.",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:list:c29df2c57475853231da13768368ce4696ea745b6bf979e548e40969b7289e27": {
+    "docs/atrinis-usage.md:list:c0aaa41908dd766a66b8297971f7dc72b264e71589dc9592a2ba6d5a9c6a1688": {
       "kind": "list",
-      "source": "顶层 __ATRIX_CODE_0__ 是 ATRI-X 内部工具默认白名单，单个 Atriwisp 的 __ATRIX_CODE_1__ 存在时覆盖它。",
+      "source": "__ATRIX_CODE_0__ 时不启动 Atrinis HTTP runtime。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "c29df2c57475853231da13768368ce4696ea745b6bf979e548e40969b7289e27",
-      "translation": "The top-level __ATRIX_CODE_0__ is the default whitelist for ATRI-X internal tools; it is overridden when __ATRIX_CODE_1__ of an individual Atriwisp exists.",
+      "source_hash": "c0aaa41908dd766a66b8297971f7dc72b264e71589dc9592a2ba6d5a9c6a1688",
+      "translation": "__ATRIX_CODE_0__ will not start the Atrinis HTTP runtime.",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:list:c600d1d2a30c6857a82459949bd62429562e0bdbeefe23037e63170f26b8f51d": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__：投递到指定平台群聊。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "c600d1d2a30c6857a82459949bd62429562e0bdbeefe23037e63170f26b8f51d",
+      "translation": "__ATRIX_CODE_0__: deliver to a specified platform group chat.",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:list:cbd41ddc5f8519d7d2900f246127ca8e050c09ad0c72826a03b949567e967e8b": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 限制哪些 token 可以代表该 Atriwisp 投递事件；不写则允许任意已认证 token。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "cbd41ddc5f8519d7d2900f246127ca8e050c09ad0c72826a03b949567e967e8b",
+      "translation": "__ATRIX_CODE_0__ restricts which tokens can represent the Atriwisp to deliver events; if not specified, any authenticated token is allowed.",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:list:cd5380cecd060901949681be0d5df669ffcb2c8d796abc9a95d2d6f89a7bc904": {
+      "kind": "list",
+      "source": "单个 Atriwisp 可用 __ATRIX_CODE_0__ 禁用指定工具。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "cd5380cecd060901949681be0d5df669ffcb2c8d796abc9a95d2d6f89a7bc904",
+      "translation": "A single Atriwisp can use __ATRIX_CODE_0__ to disable specific tools.",
       "updated_at": 1781749660
     },
-    "docs/atrinis-usage.md:list:ca55d61a6160292c9353d353d50f67c47d4b7b9386e07b1724c9cba2335e5889": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 中的工具名或 Skill 名都会经过 Atrinis __ATRIX_CODE_1__ 裁决。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "ca55d61a6160292c9353d353d50f67c47d4b7b9386e07b1724c9cba2335e5889",
-      "translation": "Tool names or Skill names in __ATRIX_CODE_0__ will all undergo Atrinis __ATRIX_CODE_1__ adjudication.",
-      "updated_at": 1781786110
-    },
-    "docs/atrinis-usage.md:list:ce044b9ed5ef1d04dbc189f7ba2766c17143936cc94b757331e828a255cd56a2": {
-      "kind": "list",
-      "source": "独立 __ATRIX_CODE_0__ 进程需连接服务端后才能收到通知。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "ce044b9ed5ef1d04dbc189f7ba2766c17143936cc94b757331e828a255cd56a2",
-      "translation": "Independent __ATRIX_CODE_0__ processes must connect to the server before they can receive notifications.",
-      "updated_at": 1782033114
-    },
-    "docs/atrinis-usage.md:list:d705c8398c10672228f9d969285389749b29e3c26b7ef4e70f9ea0e09cbac170": {
-      "kind": "list",
-      "source": "只有 __ATRIX_CODE_0__ 或单 Atriwisp __ATRIX_CODE_1__ 显式列出的目标会被禁止。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "d705c8398c10672228f9d969285389749b29e3c26b7ef4e70f9ea0e09cbac170",
-      "translation": "Only targets explicitly listed in __ATRIX_CODE_0__ or a single Atriwisp __ATRIX_CODE_1__ will be prohibited.",
-      "updated_at": 1782033114
-    },
-    "docs/atrinis-usage.md:list:ec3ddb6e6198fb83988d8b2321b34657d5388640d5b1502ba486bc5d442d7056": {
+    "docs/atrinis-usage.md:list:d3ddd39ed6afd1a8679e4f529ac7a3ab32b186addb647c37229a0dca16c4b5c1": {
       "kind": "list",
       "source": "token 名只用于日志和审计，不等同于 Atriwisp 身份。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "ec3ddb6e6198fb83988d8b2321b34657d5388640d5b1502ba486bc5d442d7056",
+      "source_hash": "d3ddd39ed6afd1a8679e4f529ac7a3ab32b186addb647c37229a0dca16c4b5c1",
       "translation": "The token name is used only for logs and audit logs, and is not equivalent to the Atriwisp identity.",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:list:ed2ead06ed2b4af7accb26d94cedea99fde3455135bf3866b3b69a0fd2f2de4b": {
+    "docs/atrinis-usage.md:list:e13fc650e0ccc4a7e0fb14ed4b8d1759ae37ae9171eff417d89738998c3a4c68": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ URI 仅支持 base64 编码，解码后同样受限。",
+      "source": "Atriwisp 声明的外部 __ATRIX_CODE_0__ 默认允许，并通过 ToolRun 以 __ATRIX_CODE_1__ 形式注入为模型可调用函数名；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "ed2ead06ed2b4af7accb26d94cedea99fde3455135bf3866b3b69a0fd2f2de4b",
-      "translation": "__ATRIX_CODE_0__ URIs only support base64 encoding and are similarly restricted after decoding.",
-      "updated_at": 1781929269
-    },
-    "docs/atrinis-usage.md:list:f05de9594a7ea188ef802e22bb502f897346bf330b88ce6c87f1beb1ad71184a": {
-      "kind": "list",
-      "source": "只写 __ATRIX_CODE_0__：投递到该平台超级管理员。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "f05de9594a7ea188ef802e22bb502f897346bf330b88ce6c87f1beb1ad71184a",
-      "translation": "Only write __ATRIX_CODE_0__: deliver to the superadmin of that platform.",
-      "updated_at": 1782033114
-    },
-    "docs/atrinis-usage.md:list:f37c91ec3dffafe934f5bce843a93dc68030d8aacf7bc7f31680545522c164c8": {
-      "kind": "list",
-      "source": "token 原文不写入配置，推荐放在系统环境变量或配置目录 __ATRIX_CODE_0__。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "f37c91ec3dffafe934f5bce843a93dc68030d8aacf7bc7f31680545522c164c8",
-      "translation": "Do not write the token plaintext into the configuration; it is recommended to place it in system environment variables or the configuration directory __ATRIX_CODE_0__.",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:list:f5a5eaccc2efc4c25367a39660d97dd2324e67b011c21aa0f6cbef9a3bc5ddf5": {
-      "kind": "list",
-      "source": "外部工具默认允许；单个 Atriwisp 可以用 __ATRIX_CODE_0__ 禁用指定外部工具。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "f5a5eaccc2efc4c25367a39660d97dd2324e67b011c21aa0f6cbef9a3bc5ddf5",
-      "translation": "External tools are allowed by default; an individual Atriwisp can use __ATRIX_CODE_0__ to disable specific external tools.",
+      "source_hash": "e13fc650e0ccc4a7e0fb14ed4b8d1759ae37ae9171eff417d89738998c3a4c68",
+      "translation": "External __ATRIX_CODE_0__ declared by Atriwisp are allowed by default and are injected as model-callable function names in the form of __ATRIX_CODE_1__ via ToolRun;",
       "updated_at": 1781749660
     },
-    "docs/atrinis-usage.md:list:fc0f75611e8b81fa9006003c7882ff4ace26509acabd98b92bead6e2864ffe66": {
+    "docs/atrinis-usage.md:list:e2c9dd0d5972d4e76c5c9f2f11a2fa1484d84b1b7f4eac9da1a8fcbbd5f202a6": {
       "kind": "list",
-      "source": "文件大小受 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 限制（默认 100MB）。",
+      "source": "__ATRIX_CODE_0__ 只能选择 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__，不能指定任意内部模式名；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "fc0f75611e8b81fa9006003c7882ff4ace26509acabd98b92bead6e2864ffe66",
-      "translation": "File size is limited by __ATRIX_CODE_1__ of __ATRIX_CODE_0__ (default 100MB).",
-      "updated_at": 1781929269
+      "source_hash": "e2c9dd0d5972d4e76c5c9f2f11a2fa1484d84b1b7f4eac9da1a8fcbbd5f202a6",
+      "translation": "__ATRIX_CODE_0__ can only choose __ATRIX_CODE_1__, __ATRIX_CODE_2__, or __ATRIX_CODE_3__, and cannot specify an arbitrary internal mode name;",
+      "updated_at": 1782699001
     },
-    "docs/atrinis-usage.md:list:fc9a2a279e2ae3e5754cfcd2df0c9082730e4a684e2f707447b7b24379253645": {
+    "docs/atrinis-usage.md:list:edeedbe6cdd7422e3e8455381464c08114114c6c7bf777abf904c498c622d1cc": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 是 CLI-only 模式，即使 __ATRIX_CODE_1__ 也不会启动 Atrinis HTTP runtime；",
+      "source": "独立 __ATRIX_CODE_0__ 进程需连接服务端后才能收到通知。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "fc9a2a279e2ae3e5754cfcd2df0c9082730e4a684e2f707447b7b24379253645",
-      "translation": "__ATRIX_CODE_0__ is CLI-only mode; even with __ATRIX_CODE_1__, the Atrinis HTTP runtime will not start;",
-      "updated_at": 1781962160
+      "source_hash": "edeedbe6cdd7422e3e8455381464c08114114c6c7bf777abf904c498c622d1cc",
+      "translation": "Independent __ATRIX_CODE_0__ processes must connect to the server before they can receive notifications.",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:list:f1d286751dd1ecd479c3a427b599ac1039dae05e3cfd0aa2092e160768cd82a3": {
+      "kind": "list",
+      "source": "文件名已有扩展名（包括 __ATRIX_CODE_0__）时保留原名，仅无扩展名时补全。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "f1d286751dd1ecd479c3a427b599ac1039dae05e3cfd0aa2092e160768cd82a3",
+      "translation": "The original name is preserved if the filename already has an extension (including __ATRIX_CODE_0__); it is only completed when no extension exists.",
+      "updated_at": 1789010099
     },
     "docs/atrinis-usage.md:paragraph:042c6caa02c34d029eec91e364dac5bc3c3e29ab2d63490a03f1db7d5ca6bcf4": {
       "kind": "paragraph",
@@ -536,21 +536,13 @@
       "translation": "QQ OneBot, QQ Official, and Telegram support restoring associated media in quoted replies;",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:paragraph:164dc12a20c5f77e4831ecc3dc9452ef0b001cc78cd2abb73983e4398560321f": {
+    "docs/atrinis-usage.md:paragraph:1ef8745be419e98b45608f67192ac4802fc6811b1497e0e63e9363c66e2697bf": {
       "kind": "paragraph",
-      "source": "HTTP 响应只表示 Atrinis 已接收或拒绝请求，不等待 LLM 完成。\n",
+      "source": "__ATRIX_CODE_0__ 会提供协议说明、配置片段、事件模板、代码脚手架和测试命令；真正写文件或运行命令仍会继续使用对应工具。\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "164dc12a20c5f77e4831ecc3dc9452ef0b001cc78cd2abb73983e4398560321f",
-      "translation": "The HTTP response only indicates that Atrinis has received or rejected the request, and does not wait for the LLM to complete.\n",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:paragraph:18c08da2b6baf753b30f261fb716130b6c2d1a1c1ad6b6b256e3ccb16a0f5ea9": {
-      "kind": "paragraph",
-      "source": "使用 __ATRIX_CODE_0__ 时填写当前任务工作目录内的相对路径，不能使用绝对路径、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 或逃逸目录的 symlink/junction；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "18c08da2b6baf753b30f261fb716130b6c2d1a1c1ad6b6b256e3ccb16a0f5ea9",
-      "translation": "When using __ATRIX_CODE_0__, fill in the relative path within the current task working directory; absolute paths, __ATRIX_CODE_1__, __ATRIX_CODE_2__, or symlinks/junctions that escape the directory cannot be used;",
-      "updated_at": 1789010099
+      "source_hash": "1ef8745be419e98b45608f67192ac4802fc6811b1497e0e63e9363c66e2697bf",
+      "translation": "__ATRIX_CODE_0__ will provide protocol descriptions, configuration snippets, event templates, code scaffolding, and test commands; actually writing files or running commands will still continue to use the corresponding tools.\n",
+      "updated_at": 1781779450
     },
     "docs/atrinis-usage.md:paragraph:1f02ccdbf482890fc7f09db180f014dc116b6a887caab19fded466f4ac01c306": {
       "kind": "paragraph",
@@ -560,14 +552,6 @@
       "translation": "Failures retain the deletion status for retries.",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:paragraph:1f7cad2a0b32403b701ce5e2db1e52b154887906b79080818cf2965a01b2605a": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 为空时行为不变，非空时优先 segments 渲染，content 作为附加文本。\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "1f7cad2a0b32403b701ce5e2db1e52b154887906b79080818cf2965a01b2605a",
-      "translation": "Behavior remains unchanged when __ATRIX_CODE_0__ is empty; when not empty, segments are rendered preferentially, and content serves as additional text.\n",
-      "updated_at": 1781929269
-    },
     "docs/atrinis-usage.md:paragraph:214479bce0e6417da9688a361829c75add8b76252824cd27bd42b28631dc4843": {
       "kind": "paragraph",
       "source": "达到宽限期后在下一次媒体维护任务执行时清理，并非一小时整立即删除。",
@@ -576,61 +560,61 @@
       "translation": "Once the grace period is reached, cleanup occurs during the next execution of the media maintenance task, rather than being deleted immediately at exactly one hour.",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:paragraph:2f680df32fbf2b2743f7d08fab4e969892527cec7dfadca2a32ee2e084ec7532": {
+    "docs/atrinis-usage.md:paragraph:24149d39ceb4a4c6f16b91a617d47ba8185f87b44f91eb7b69801aa2ac109ef6": {
       "kind": "paragraph",
-      "source": "后台 LLM 处理事件后，__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 可附带图片/文件。",
+      "source": "__ATRIX_CODE_0__ 示例：\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "2f680df32fbf2b2743f7d08fab4e969892527cec7dfadca2a32ee2e084ec7532",
-      "translation": "After the background LLM processes the event, the __ATRIX_CODE_1__ of __ATRIX_CODE_0__ can include images/files.",
-      "updated_at": 1789010099
+      "source_hash": "24149d39ceb4a4c6f16b91a617d47ba8185f87b44f91eb7b69801aa2ac109ef6",
+      "translation": "__ATRIX_CODE_0__ example:\n",
+      "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:paragraph:2fe0efe6808e0e94fa09d078323e9dceee6d39f7ecb6c96fdcd155e2f49b8ab5": {
+    "docs/atrinis-usage.md:paragraph:24bcbbf6bcabddf1f88caede44c88b6b1a698ceaff32f3ece0d5bd63983ed0f8": {
       "kind": "paragraph",
-      "source": "direct/record 请求中 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 至少提供一个，LLM 模式仍必须提供 __ATRIX_CODE_3__。\n",
+      "source": "未知字段会被忽略，不参与协议语义、规范化、事件 __ATRIX_CODE_0__ 或审计；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "2fe0efe6808e0e94fa09d078323e9dceee6d39f7ecb6c96fdcd155e2f49b8ab5",
-      "translation": "In direct/record requests, at least one of __ATRIX_CODE_0__, __ATRIX_CODE_1__, or __ATRIX_CODE_2__ must be provided; LLM mode still requires __ATRIX_CODE_3__.\n",
-      "updated_at": 1782395349
+      "source_hash": "24bcbbf6bcabddf1f88caede44c88b6b1a698ceaff32f3ece0d5bd63983ed0f8",
+      "translation": "Unknown fields will be ignored and will not participate in protocol semantics, normalization, event __ATRIX_CODE_0__, or auditing;",
+      "updated_at": 1784340335
     },
-    "docs/atrinis-usage.md:paragraph:3992a8029e30f39041102d37033acf1f8f97cc62e58323fc3fd801ddc6f4ab09": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 会提供协议说明、配置片段、事件模板、代码脚手架和测试命令；真正写文件或运行命令仍会继续使用对应工具。\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "3992a8029e30f39041102d37033acf1f8f97cc62e58323fc3fd801ddc6f4ab09",
-      "translation": "__ATRIX_CODE_0__ will provide protocol descriptions, configuration snippets, event templates, code scaffolding, and test commands; actually writing files or running commands will still continue to use the corresponding tools.\n",
-      "updated_at": 1781779450
-    },
-    "docs/atrinis-usage.md:paragraph:3b1511c0edd535e3768b0a7d61f5000101faa79e542fa624ebd9969acc78668b": {
-      "kind": "paragraph",
-      "source": "命中 __ATRIX_CODE_0__ 或单 Atriwisp __ATRIX_CODE_1__ 时才禁止。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "3b1511c0edd535e3768b0a7d61f5000101faa79e542fa624ebd9969acc78668b",
-      "translation": "It is only prohibited when __ATRIX_CODE_0__ or a single Atriwisp __ATRIX_CODE_1__ is hit.",
-      "updated_at": 1782033114
-    },
-    "docs/atrinis-usage.md:paragraph:3d3b1d1dc773f2101d9a89af07f7f426bb8961ede2af061019faf51b50e95caa": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 必须是数组：\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "3d3b1d1dc773f2101d9a89af07f7f426bb8961ede2af061019faf51b50e95caa",
-      "translation": "__ATRIX_CODE_0__ must be an array:\n",
-      "updated_at": 1782033114
-    },
-    "docs/atrinis-usage.md:paragraph:4bf90b5417558aae2406941f208517a0bfd1d806a442885bb7502d4e09c665a9": {
+    "docs/atrinis-usage.md:paragraph:24c7b2e6fca567c654a92177cabe88889f61525abcc5ddbde3f08e614989bbf2": {
       "kind": "paragraph",
       "source": "Atrinis 默认关闭。启用时先在 __ATRIX_CODE_0__ 中声明配置文件入口：\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "4bf90b5417558aae2406941f208517a0bfd1d806a442885bb7502d4e09c665a9",
+      "source_hash": "24c7b2e6fca567c654a92177cabe88889f61525abcc5ddbde3f08e614989bbf2",
       "translation": "Atrinis is disabled by default. When enabling it, first declare the configuration file entry in __ATRIX_CODE_0__:\n",
       "updated_at": 1781749660
     },
-    "docs/atrinis-usage.md:paragraph:4d75e46a7114d667ac3d1deb2bbe41d2026307c2607a4491cefa692a012e76e9": {
+    "docs/atrinis-usage.md:paragraph:26f090645019e46b377572c906eb768d1422fe98e77e4a47523c1a95fe8409d7": {
       "kind": "paragraph",
-      "source": "已发送缓存保留期复用 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__，非正值不保留发送后的缓存。",
+      "source": "如果同一个 __ATRIX_CODE_0__ 再次发送，Atrinis 会返回 duplicate，不重复分发。\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "4d75e46a7114d667ac3d1deb2bbe41d2026307c2607a4491cefa692a012e76e9",
-      "translation": "The retention period for sent cache reuses __ATRIX_CODE_1__ of __ATRIX_CODE_0__; cache after sending is not retained if the value is not positive.",
-      "updated_at": 1789010099
+      "source_hash": "26f090645019e46b377572c906eb768d1422fe98e77e4a47523c1a95fe8409d7",
+      "translation": "If the same __ATRIX_CODE_0__ is sent again, Atrinis will return duplicate and will not redistribute it.\n",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:paragraph:290c231046db04578822ad1b67bfaea4fd3a57274fd9ecf67040a1f117368af6": {
+      "kind": "paragraph",
+      "source": "__ATRIX_CODE_0__ 必须是数组：\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "290c231046db04578822ad1b67bfaea4fd3a57274fd9ecf67040a1f117368af6",
+      "translation": "__ATRIX_CODE_0__ must be an array:\n",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:paragraph:429ab2ad9d89498572dcd26e27ee97ba301d676668a242a1e9af39f83d18ea1b": {
+      "kind": "paragraph",
+      "source": "Atriwisp 可以在 __ATRIX_CODE_0__ 中声明期望目标，但最终目标由 Atrinis 裁决。\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "429ab2ad9d89498572dcd26e27ee97ba301d676668a242a1e9af39f83d18ea1b",
+      "translation": "Atriwisp can declare the expected target in __ATRIX_CODE_0__, but the final target is decided by Atrinis.\n",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:paragraph:50c34e0526e3a59e5222c75133c214ece6a40aa84a8ab32bb289645b1595750b": {
+      "kind": "paragraph",
+      "source": "__ATRIX_CODE_0__ 保留为纯文本 fallback；",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "50c34e0526e3a59e5222c75133c214ece6a40aa84a8ab32bb289645b1595750b",
+      "translation": "__ATRIX_CODE_0__ is reserved as a plain text fallback;",
+      "updated_at": 1782395349
     },
     "docs/atrinis-usage.md:paragraph:515207d38c35cf9ff2a06be56e52c81117b9ccb1cde3b5ab88bf3301d820f5cb": {
       "kind": "paragraph",
@@ -640,20 +624,28 @@
       "translation": "Common fields:\n",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:paragraph:5a9b0b92870dff0d3baafc1289ce15699f51e7c4b592c4cf901add78963c5153": {
+    "docs/atrinis-usage.md:paragraph:549c7c18f3d0d39e515751048be2c115f1b8cd0a71e46bac4a1868d0468ea929": {
+      "kind": "paragraph",
+      "source": "禁用配置中的 __ATRIX_CODE_0__ 表示禁用该平台所有投递。\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "549c7c18f3d0d39e515751048be2c115f1b8cd0a71e46bac4a1868d0468ea929",
+      "translation": "Setting __ATRIX_CODE_0__ in the disable configuration means disabling all deliveries for this platform.\n",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:paragraph:5987c86871d7143c7a88db4c1710cd19ac9667f70eb775facbd4e8d0853e3eea": {
+      "kind": "paragraph",
+      "source": "Atriena v3 支持通过 __ATRIX_CODE_0__ 字段发送图片和文件。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "5987c86871d7143c7a88db4c1710cd19ac9667f70eb775facbd4e8d0853e3eea",
+      "translation": "Atriena v3 supports sending images and files via the __ATRIX_CODE_0__ field.",
+      "updated_at": 1782395349
+    },
+    "docs/atrinis-usage.md:paragraph:5b41b05960f6d26d338812b5568372cd0830850a95abb6a4773d8ecb581fe916": {
       "kind": "paragraph",
       "source": "本文承接 [Atrinis 监听枢纽](atrinis.md)，讲如何启用 Atrinis、配置 Atriwisp 策略，并用 Atriena 投递事件。\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "5a9b0b92870dff0d3baafc1289ce15699f51e7c4b592c4cf901add78963c5153",
+      "source_hash": "5b41b05960f6d26d338812b5568372cd0830850a95abb6a4773d8ecb581fe916",
       "translation": "This article follows [Atrinis listening hub](atrinis.md) and explains how to enable Atrinis, configure Atriwisp policies, and use Atriena to deliver events.\n",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:paragraph:5b139ef7730d98138a9e853bebe3587b213e71a09b9e8db43c1d9ed1f6d5249e": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 示例：\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "5b139ef7730d98138a9e853bebe3587b213e71a09b9e8db43c1d9ed1f6d5249e",
-      "translation": "__ATRIX_CODE_0__ example:\n",
       "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:paragraph:5e9b28fae1fb49d0e0f86a328adec9ac6abbe282309c18bdfb5557029c0417c6": {
@@ -664,29 +656,21 @@
       "translation": "The host imports attachments when preparing the report, and the outbox saves stable media IDs, so retries are still possible after the original workspace files are deleted.\n",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:paragraph:5f0e212a0788c567e7e2e15396416064cf73d76af625359adfef45f1812f79ab": {
+    "docs/atrinis-usage.md:paragraph:5ec9d499f03cd36a59bac5bc82d7beca912b79835413e974232c783d748b258d": {
       "kind": "paragraph",
-      "source": "也可在 __ATRIX_CODE_0__ 中填写 __ATRIX_CODE_1__ 引用中心资源。",
+      "source": "后台 LLM 处理事件后，__ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 可附带图片/文件。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "5f0e212a0788c567e7e2e15396416064cf73d76af625359adfef45f1812f79ab",
-      "translation": "You can also fill in __ATRIX_CODE_1__ in __ATRIX_CODE_0__ to reference central resources.",
+      "source_hash": "5ec9d499f03cd36a59bac5bc82d7beca912b79835413e974232c783d748b258d",
+      "translation": "After the background LLM processes the event, the __ATRIX_CODE_1__ of __ATRIX_CODE_0__ can include images/files.",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:paragraph:6bedfd1be38f4429ef585d0cc5ca46ae9a4ec68731e48cedc6e0ef4e50fc3d08": {
+    "docs/atrinis-usage.md:paragraph:67c632fe44d3d2216812e647af8fcd31be5da467d96bb593ed5642cbb5c4ab93": {
       "kind": "paragraph",
-      "source": "如果想让 ATRI-X 帮你生成 Atriwisp 监听器，可以在 work 模式下向超级管理员会话提出需求，例如：\n",
+      "source": "direct/record 请求中 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 至少提供一个，LLM 模式仍必须提供 __ATRIX_CODE_3__。\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "6bedfd1be38f4429ef585d0cc5ca46ae9a4ec68731e48cedc6e0ef4e50fc3d08",
-      "translation": "If you want ATRI-X to help you generate an Atriwisp listener, you can submit a request to the superadmin Session in work mode, for example:\n",
-      "updated_at": 1781779450
-    },
-    "docs/atrinis-usage.md:paragraph:74d9bfb1c1843b09c07c3521eb60ae7ad1d9ff7cc263f9e9782db377598fd539": {
-      "kind": "paragraph",
-      "source": "禁用配置中的 __ATRIX_CODE_0__ 表示禁用该平台所有投递。\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "74d9bfb1c1843b09c07c3521eb60ae7ad1d9ff7cc263f9e9782db377598fd539",
-      "translation": "Setting __ATRIX_CODE_0__ in the disable configuration means disabling all deliveries for this platform.\n",
-      "updated_at": 1782033114
+      "source_hash": "67c632fe44d3d2216812e647af8fcd31be5da467d96bb593ed5642cbb5c4ab93",
+      "translation": "In direct/record requests, at least one of __ATRIX_CODE_0__, __ATRIX_CODE_1__, or __ATRIX_CODE_2__ must be provided; LLM mode still requires __ATRIX_CODE_3__.\n",
+      "updated_at": 1782395349
     },
     "docs/atrinis-usage.md:paragraph:757023806f8f4634f3586496895e19133d9f93073f66cee9fccc4ac3ccbea778": {
       "kind": "paragraph",
@@ -696,20 +680,36 @@
       "translation": "Existing HTTP(S) sources remain compatible.",
       "updated_at": 1789010099
     },
+    "docs/atrinis-usage.md:paragraph:7995c2483d8991b5f7564f0d266821ae8122d758f856a8ff500e63efc8055869": {
+      "kind": "paragraph",
+      "source": "Atriwisp 远端工具仅操作自己的文件，不获得宿主媒体导出路径、RPC 或存储凭据。\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "7995c2483d8991b5f7564f0d266821ae8122d758f856a8ff500e63efc8055869",
+      "translation": "Atriwisp remote tools only operate on their own files and do not obtain host media export paths, RPC, or storage credentials.\n",
+      "updated_at": 1789010099
+    },
+    "docs/atrinis-usage.md:paragraph:7ea28945c2c43d0af5789ddb2a224f20f44d2e0f7bea0abed1d8d1ac1b4d6c02": {
+      "kind": "paragraph",
+      "source": "Atrinis 默认允许投递；",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "7ea28945c2c43d0af5789ddb2a224f20f44d2e0f7bea0abed1d8d1ac1b4d6c02",
+      "translation": "Atrinis allows delivery by default;",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:paragraph:7f70f8e9ceb1f445f7a7e6dd43f93785daaa53192b3e7151e02ec2d905025078": {
+      "kind": "paragraph",
+      "source": "然后在 __ATRIX_CODE_0__ 中配置：\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "7f70f8e9ceb1f445f7a7e6dd43f93785daaa53192b3e7151e02ec2d905025078",
+      "translation": "Then configure it in __ATRIX_CODE_0__:\n",
+      "updated_at": 1781749660
+    },
     "docs/atrinis-usage.md:paragraph:809190ab2b04c89614fb42910b16043ea039551e19638b16ce1a4ad43b0d8b2a": {
       "kind": "paragraph",
       "source": "该任务复用 sandbox 的清理时间表，但不按目录文件年龄删除 Media Center 内容。\n",
       "source_file": "docs/atrinis-usage.md",
       "source_hash": "809190ab2b04c89614fb42910b16043ea039551e19638b16ce1a4ad43b0d8b2a",
       "translation": "This task reuses the sandbox cleanup schedule but does not delete Media Center content based on the age of directory files.\n",
-      "updated_at": 1789010099
-    },
-    "docs/atrinis-usage.md:paragraph:83d95a3d2f8a916303f9af3f82c07f4e400a608afac44780ae94275ca20a0f95": {
-      "kind": "paragraph",
-      "source": "宽限期起点保存在数据库，关闭 ATRI-X 的时间也计入，重启不重置；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "83d95a3d2f8a916303f9af3f82c07f4e400a608afac44780ae94275ca20a0f95",
-      "translation": "The start of the grace period is saved in the database; time spent with ATRI-X shut down is also counted, and restarting does not reset it;",
       "updated_at": 1789010099
     },
     "docs/atrinis-usage.md:paragraph:84933dd8ebcf55a7fa93ae16c39fec00c0dbd3246a55d28bf682f4dccfc94e40": {
@@ -720,61 +720,45 @@
       "translation": "During sending and while pending retry in the outbox, media retains valid references. Successfully sent media will be associated with the corresponding platform message for subsequent reference and replies; no speculative associations are created when the correspondence cannot be determined.\n",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:paragraph:887cee93ce128c97c968309c6c38be8a5626e37ebe2e23944a36cc6213096140": {
+    "docs/atrinis-usage.md:paragraph:8ffc9801f2367078d5bc1cd710d4b16670ae88ebe7905cddb10a35e925975b4b": {
       "kind": "paragraph",
-      "source": "Atriena v3 支持通过 __ATRIX_CODE_0__ 字段发送图片和文件。",
+      "source": "HTTP 响应只表示 Atrinis 已接收或拒绝请求，不等待 LLM 完成。\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "887cee93ce128c97c968309c6c38be8a5626e37ebe2e23944a36cc6213096140",
-      "translation": "Atriena v3 supports sending images and files via the __ATRIX_CODE_0__ field.",
-      "updated_at": 1782395349
+      "source_hash": "8ffc9801f2367078d5bc1cd710d4b16670ae88ebe7905cddb10a35e925975b4b",
+      "translation": "The HTTP response only indicates that Atrinis has received or rejected the request, and does not wait for the LLM to complete.\n",
+      "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:paragraph:8db3fb03241ed80dbb5c546ec35efe3175b8c4c2dea8fb37737becc905156875": {
+    "docs/atrinis-usage.md:paragraph:929743a798fed12bf7f0c7e98aaeba0958f0473d4d4e0aeabb2e4732bfcb1db6": {
+      "kind": "paragraph",
+      "source": "需要正式语义的字段应加入对应 Atriena 协议版本。\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "929743a798fed12bf7f0c7e98aaeba0958f0473d4d4e0aeabb2e4732bfcb1db6",
+      "translation": "Fields requiring formal semantics should be added to the corresponding Atriena protocol version.\n",
+      "updated_at": 1784340335
+    },
+    "docs/atrinis-usage.md:paragraph:a0af80aba833ef41f98663e4b11cfac9c72fe99df7102c8e8bab271820a6e9d7": {
+      "kind": "paragraph",
+      "source": "命中 __ATRIX_CODE_0__ 或单 Atriwisp __ATRIX_CODE_1__ 时才禁止。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "a0af80aba833ef41f98663e4b11cfac9c72fe99df7102c8e8bab271820a6e9d7",
+      "translation": "It is only prohibited when __ATRIX_CODE_0__ or a single Atriwisp __ATRIX_CODE_1__ is hit.",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:paragraph:abe0f9c9595ca1fa3c307f08722a620470846a0861a81fee03bfe810bd5bfe6e": {
+      "kind": "paragraph",
+      "source": "也可在 __ATRIX_CODE_0__ 中填写 __ATRIX_CODE_1__ 引用中心资源。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "abe0f9c9595ca1fa3c307f08722a620470846a0861a81fee03bfe810bd5bfe6e",
+      "translation": "You can also fill in __ATRIX_CODE_1__ in __ATRIX_CODE_0__ to reference central resources.",
+      "updated_at": 1789010099
+    },
+    "docs/atrinis-usage.md:paragraph:b08b584895990b81540136e422065684b777aa458fb345e7becc5852e5fb56fa": {
       "kind": "paragraph",
       "source": "每个 HTTP 请求体必须且只能包含一个 JSON 值，尾随空白允许，尾随第二个 JSON 值或非法内容会返回 __ATRIX_CODE_0__。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "8db3fb03241ed80dbb5c546ec35efe3175b8c4c2dea8fb37737becc905156875",
+      "source_hash": "b08b584895990b81540136e422065684b777aa458fb345e7becc5852e5fb56fa",
       "translation": "Each HTTP request body must contain exactly one JSON value. Trailing whitespace is allowed, but a trailing second JSON value or illegal content will return __ATRIX_CODE_0__.",
       "updated_at": 1784340335
-    },
-    "docs/atrinis-usage.md:paragraph:8e10903c1c241907a109ea2991f0ecee90e4156346762acc425a4a89f389fe9b": {
-      "kind": "paragraph",
-      "source": "Atrinis 默认允许投递；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "8e10903c1c241907a109ea2991f0ecee90e4156346762acc425a4a89f389fe9b",
-      "translation": "Atrinis allows delivery by default;",
-      "updated_at": 1782033114
-    },
-    "docs/atrinis-usage.md:paragraph:8f55f102370a6410dfe950545197422fe2c67de39001cd1035c1b5f6864d9726": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 保留为纯文本 fallback；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "8f55f102370a6410dfe950545197422fe2c67de39001cd1035c1b5f6864d9726",
-      "translation": "__ATRIX_CODE_0__ is reserved as a plain text fallback;",
-      "updated_at": 1782395349
-    },
-    "docs/atrinis-usage.md:paragraph:a2dca25f17e2b2eef59e03722a30cc45068c8a43cd0217058c50a1e0ba6e78b0": {
-      "kind": "paragraph",
-      "source": "然后在 __ATRIX_CODE_0__ 中配置：\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "a2dca25f17e2b2eef59e03722a30cc45068c8a43cd0217058c50a1e0ba6e78b0",
-      "translation": "Then configure it in __ATRIX_CODE_0__:\n",
-      "updated_at": 1781749660
-    },
-    "docs/atrinis-usage.md:paragraph:a8dc9343283716b3826795b35c2c6108372daa8ec4a48d786007f07ffe37139a": {
-      "kind": "paragraph",
-      "source": "Atriwisp 可以在 __ATRIX_CODE_0__ 中声明期望目标，但最终目标由 Atrinis 裁决。\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "a8dc9343283716b3826795b35c2c6108372daa8ec4a48d786007f07ffe37139a",
-      "translation": "Atriwisp can declare the expected target in __ATRIX_CODE_0__, but the final target is decided by Atrinis.\n",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:paragraph:c27cc1f6d3025a62def12020ac133eb90c50017434a5b3536f308348f0dafe1b": {
-      "kind": "paragraph",
-      "source": "如果同一个 __ATRIX_CODE_0__ 再次发送，Atrinis 会返回 duplicate，不重复分发。\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "c27cc1f6d3025a62def12020ac133eb90c50017434a5b3536f308348f0dafe1b",
-      "translation": "If the same __ATRIX_CODE_0__ is sent again, Atrinis will return duplicate and will not redistribute it.\n",
-      "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:paragraph:c3e71f7573943e14226f45ffd59896921e75528e331666c76325596d457d84e0": {
       "kind": "paragraph",
@@ -784,14 +768,6 @@
       "translation": "Security Conventions:\n",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:paragraph:c4402f94918807a518f6b164f2a244567d04ce9486135926cc1da4fe356abe30": {
-      "kind": "paragraph",
-      "source": "需要正式语义的字段应加入对应 Atriena 协议版本。\n",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "c4402f94918807a518f6b164f2a244567d04ce9486135926cc1da4fe356abe30",
-      "translation": "Fields requiring formal semantics should be added to the corresponding Atriena protocol version.\n",
-      "updated_at": 1784340335
-    },
     "docs/atrinis-usage.md:paragraph:c4d8b65b953274a6f55a14e458f1692b0c1a4c266202db3f4cb38edcb2f173c2": {
       "kind": "paragraph",
       "source": "语义：\n",
@@ -800,12 +776,20 @@
       "translation": "Semantics:\n",
       "updated_at": 1782033114
     },
-    "docs/atrinis-usage.md:paragraph:d123f0b37756a85fe6bca4c81305c3339d55bd851d8835bcea9dbfc114b0ee43": {
+    "docs/atrinis-usage.md:paragraph:c7509ff3cf2280eee945fb50dd9b23356c3824585f82417870d6dc9ae4d7ce8f": {
       "kind": "paragraph",
-      "source": "Atriwisp 远端工具仅操作自己的文件，不获得宿主媒体导出路径、RPC 或存储凭据。\n",
+      "source": "已发送缓存保留期复用 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__，非正值不保留发送后的缓存。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "d123f0b37756a85fe6bca4c81305c3339d55bd851d8835bcea9dbfc114b0ee43",
-      "translation": "Atriwisp remote tools only operate on their own files and do not obtain host media export paths, RPC, or storage credentials.\n",
+      "source_hash": "c7509ff3cf2280eee945fb50dd9b23356c3824585f82417870d6dc9ae4d7ce8f",
+      "translation": "The retention period for sent cache reuses __ATRIX_CODE_1__ of __ATRIX_CODE_0__; cache after sending is not retained if the value is not positive.",
+      "updated_at": 1789010099
+    },
+    "docs/atrinis-usage.md:paragraph:d1120dc45ad8deb9b1a314d7f93ed1740bb37b482b2d8032fc066c064c10c2a5": {
+      "kind": "paragraph",
+      "source": "宽限期起点保存在数据库，关闭 ATRI-X 的时间也计入，重启不重置；",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "d1120dc45ad8deb9b1a314d7f93ed1740bb37b482b2d8032fc066c064c10c2a5",
+      "translation": "The start of the grace period is saved in the database; time spent with ATRI-X shut down is also counted, and restarting does not reset it;",
       "updated_at": 1789010099
     },
     "docs/atrinis-usage.md:paragraph:d5da1793a9cfa622c3f621735b3bcef053496f405b9dae6b31c470f071207a00": {
@@ -816,6 +800,14 @@
       "translation": "After all references disappear and a 1-hour orphan grace period passes, the media maintenance task will clean up the entity and its records;",
       "updated_at": 1789010099
     },
+    "docs/atrinis-usage.md:paragraph:d9671aecd6b5be5d9f0902e433c37883491cea47b18df95e4ee000cf17606391": {
+      "kind": "paragraph",
+      "source": "__ATRIX_CODE_0__ 为空时行为不变，非空时优先 segments 渲染，content 作为附加文本。\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "d9671aecd6b5be5d9f0902e433c37883491cea47b18df95e4ee000cf17606391",
+      "translation": "Behavior remains unchanged when __ATRIX_CODE_0__ is empty; when not empty, segments are rendered preferentially, and content serves as additional text.\n",
+      "updated_at": 1781929269
+    },
     "docs/atrinis-usage.md:paragraph:da82a931fcb4f637a43683540bbf40bfb470a5d771fcf7461fea6150fc2f65a8": {
       "kind": "paragraph",
       "source": "Session、Transcript、fork 和待重试报告的独立引用仍保留。",
@@ -824,21 +816,13 @@
       "translation": "Independent references to Sessions, Transcripts, forks, and reports pending retry are still retained.",
       "updated_at": 1789010099
     },
-    "docs/atrinis-usage.md:paragraph:ddac502e5a9bf6effe2c663d9791e9d17620364e413cc20355177083ec692c93": {
+    "docs/atrinis-usage.md:paragraph:e26628f9dd65fb63d0f90e6a0ec4db328680811bec12148b7b88776bfe5aa8ad": {
       "kind": "paragraph",
-      "source": "启动 ATRI-X 后，可以用 curl 测试一个 __ATRIX_CODE_0__ 事件：\n",
+      "source": "使用 __ATRIX_CODE_0__ 时填写当前任务工作目录内的相对路径，不能使用绝对路径、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 或逃逸目录的 symlink/junction；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "ddac502e5a9bf6effe2c663d9791e9d17620364e413cc20355177083ec692c93",
-      "translation": "After starting ATRI-X, you can use curl to test a __ATRIX_CODE_0__ event:\n",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:paragraph:e2c1b9710c551dd0140829237aaf3de5d4d60159f0c15b8a901d0d0be399d3ac": {
-      "kind": "paragraph",
-      "source": "未知字段会被忽略，不参与协议语义、规范化、事件 __ATRIX_CODE_0__ 或审计；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "e2c1b9710c551dd0140829237aaf3de5d4d60159f0c15b8a901d0d0be399d3ac",
-      "translation": "Unknown fields will be ignored and will not participate in protocol semantics, normalization, event __ATRIX_CODE_0__, or auditing;",
-      "updated_at": 1784340335
+      "source_hash": "e26628f9dd65fb63d0f90e6a0ec4db328680811bec12148b7b88776bfe5aa8ad",
+      "translation": "When using __ATRIX_CODE_0__, fill in the relative path within the current task working directory; absolute paths, __ATRIX_CODE_1__, __ATRIX_CODE_2__, or symlinks/junctions that escape the directory cannot be used;",
+      "updated_at": 1789010099
     },
     "docs/atrinis-usage.md:paragraph:e9b088a20b3196f9c15eb69e11284b94638f0c0538ada2b9e49a0112519d875e": {
       "kind": "paragraph",
@@ -846,6 +830,14 @@
       "source_file": "docs/atrinis-usage.md",
       "source_hash": "e9b088a20b3196f9c15eb69e11284b94638f0c0538ada2b9e49a0112519d875e",
       "translation": "Configuration description:\n",
+      "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:paragraph:f79a2362034f44c150748f00aea971b3b4c7e3f48b7b60fb2f79fe3917c04218": {
+      "kind": "paragraph",
+      "source": "启动 ATRI-X 后，可以用 curl 测试一个 __ATRIX_CODE_0__ 事件：\n",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "f79a2362034f44c150748f00aea971b3b4c7e3f48b7b60fb2f79fe3917c04218",
+      "translation": "After starting ATRI-X, you can use curl to test a __ATRIX_CODE_0__ event:\n",
       "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:paragraph:f8d5e10f52d438dc999d549dd109b20134f583ef685d43a6ec4c238d11c89e9a": {
@@ -856,29 +848,13 @@
       "translation": "Replying to the last assistant message of your own Session will automatically restore that Session, while replying to an earlier assistant message will Fork from that position.",
       "updated_at": 1789088877
     },
-    "docs/atrinis-usage.md:table:01645b79e16b3beaf68b98d444ca557a81b6a51ca10c0e86a85d1c55ff233347": {
-      "kind": "table",
-      "source": "direct/record 模式可为空，但 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 至少提供一个。",
+    "docs/atrinis-usage.md:paragraph:fdaa0be9b9b985da1c534d68123d85cc1dd93ace2855648b8ed0a25e37c4c77a": {
+      "kind": "paragraph",
+      "source": "如果想让 ATRI-X 帮你生成 Atriwisp 监听器，可以在 work 模式下向超级管理员会话提出需求，例如：\n",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "01645b79e16b3beaf68b98d444ca557a81b6a51ca10c0e86a85d1c55ff233347",
-      "translation": "Can be empty in direct/record mode, but at least one of __ATRIX_CODE_0__, __ATRIX_CODE_1__, or __ATRIX_CODE_2__ must be provided.",
-      "updated_at": 1782395349
-    },
-    "docs/atrinis-usage.md:table:0250510547f02dc95c376267491814c698dc8f9b58256d5afe9f10609b16ddb4": {
-      "kind": "table",
-      "source": "Atrinis LLM 模型槽位，仅支持 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__；未填写或对应槽位未配置时回退到 __ATRIX_CODE_3__。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "0250510547f02dc95c376267491814c698dc8f9b58256d5afe9f10609b16ddb4",
-      "translation": "Atrinis LLM model slot, only supporting __ATRIX_CODE_0__, __ATRIX_CODE_1__, and __ATRIX_CODE_2__; if left blank or the corresponding slot is not configured, it will fall back to __ATRIX_CODE_3__.",
+      "source_hash": "fdaa0be9b9b985da1c534d68123d85cc1dd93ace2855648b8ed0a25e37c4c77a",
+      "translation": "If you want ATRI-X to help you generate an Atriwisp listener, you can submit a request to the superadmin Session in work mode, for example:\n",
       "updated_at": 1781779450
-    },
-    "docs/atrinis-usage.md:table:045a16d4324315f2e9ec137640e1107a761785bccf49bfc96839d95ea75661ad": {
-      "kind": "table",
-      "source": "最终仍由 Atrinis 裁决。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "045a16d4324315f2e9ec137640e1107a761785bccf49bfc96839d95ea75661ad",
-      "translation": "The final decision is still made by Atrinis.",
-      "updated_at": 1782033114
     },
     "docs/atrinis-usage.md:table:05a363aa4f244abaff4fcea17940f12ab23dc582a574ba43df7b47246ad7d47a": {
       "kind": "table",
@@ -888,14 +864,6 @@
       "translation": "Specific event source, such as service name, script name, or RSS name.",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:table:0748071790b55dd6b123f52b44f9540c9cc83eade6f63f1f0228d0accd080ff9": {
-      "kind": "table",
-      "source": "Atriena v3 动作调用数组。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "0748071790b55dd6b123f52b44f9540c9cc83eade6f63f1f0228d0accd080ff9",
-      "translation": "Atriena v3 action call array.",
-      "updated_at": 1782376360
-    },
     "docs/atrinis-usage.md:table:0c70665b6eb65f1aebf3b59f684ce52ed3473b2443ed4b4e0b815e2e9d66b8c2": {
       "kind": "table",
       "source": "否",
@@ -903,14 +871,6 @@
       "source_hash": "0c70665b6eb65f1aebf3b59f684ce52ed3473b2443ed4b4e0b815e2e9d66b8c2",
       "translation": "No",
       "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:table:0e88874c152f1e1e17c22df0682e08c33246f3d18a6633594dbd7cbfa437de81": {
-      "kind": "table",
-      "source": "Atriwisp 名称，也是来源身份之一；仅允许英文字母、数字、__ATRIX_CODE_0__、__ATRIX_CODE_1__，不允许点号。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "0e88874c152f1e1e17c22df0682e08c33246f3d18a6633594dbd7cbfa437de81",
-      "translation": "Atriwisp name, which is also one of the source identities; only English letters, numbers, __ATRIX_CODE_0__, and __ATRIX_CODE_1__ are allowed; dots are not allowed.",
-      "updated_at": 1781949084
     },
     "docs/atrinis-usage.md:table:11da9dc4428537c43ec205e68dcd8e12c23e84fda2f14d84b5bf16f54d3ed3a8": {
       "kind": "table",
@@ -928,37 +888,13 @@
       "translation": "Event body.",
       "updated_at": 1782395349
     },
-    "docs/atrinis-usage.md:table:1b1efc4c8947139785108253c00ade50f0a742410448ca28aad89a809dc99cb4": {
+    "docs/atrinis-usage.md:table:291d3860bd344420fe06be6d1eb527ad1098437384a81105792bbe9d7e1312bb": {
       "kind": "table",
-      "source": "协议版本，当前为 __ATRIX_CODE_0__。",
+      "source": "必须在 Atrinis __ATRIX_CODE_0__ 裁决范围内，__ATRIX_CODE_1__ 会被忽略。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "1b1efc4c8947139785108253c00ade50f0a742410448ca28aad89a809dc99cb4",
-      "translation": "Protocol version, currently __ATRIX_CODE_0__.",
-      "updated_at": 1781709646
-    },
-    "docs/atrinis-usage.md:table:226a892571e4cbccbec33c7b0227dfb8014edc9948d9964da3cdae886ab1b2ab": {
-      "kind": "table",
-      "source": "LLM 后台 Session 模式：__ATRIX_CODE_0__ 或 __ATRIX_CODE_1__，默认 __ATRIX_CODE_2__；__ATRIX_CODE_3__ 不注入工具 schema，适合不需要工具的低成本后台处理。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "226a892571e4cbccbec33c7b0227dfb8014edc9948d9964da3cdae886ab1b2ab",
-      "translation": "LLM background Session mode: __ATRIX_CODE_0__ or __ATRIX_CODE_1__, default __ATRIX_CODE_2__; __ATRIX_CODE_3__ does not inject tool schema, suitable for low-cost background processing that does not require tools.",
-      "updated_at": 1782699001
-    },
-    "docs/atrinis-usage.md:table:2cb9d988869c02ef5c567ce28e299b343d67b138d4f8d22d515bb8302ff9c409": {
-      "kind": "table",
-      "source": "Atriwisp 随事件声明的外部工具；默认允许，命中该 Atriwisp 的 __ATRIX_CODE_0__ 时拒绝。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "2cb9d988869c02ef5c567ce28e299b343d67b138d4f8d22d515bb8302ff9c409",
-      "translation": "External tools declared by Atriwisp with events; allowed by default, rejected when hitting the __ATRIX_CODE_0__ of that Atriwisp.",
-      "updated_at": 1781749660
-    },
-    "docs/atrinis-usage.md:table:2da44f750570a91eb5b2500cacfcba892fd2ebc9c31d77f3fd4ccf67f5ee966c": {
-      "kind": "table",
-      "source": "Atriwisp 标签，用于日志和统计。",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "2da44f750570a91eb5b2500cacfcba892fd2ebc9c31d77f3fd4ccf67f5ee966c",
-      "translation": "Atriwisp tag, used for logs and statistics.",
-      "updated_at": 1781709646
+      "source_hash": "291d3860bd344420fe06be6d1eb527ad1098437384a81105792bbe9d7e1312bb",
+      "translation": "Must be within the Atrinis __ATRIX_CODE_0__ adjudication range; __ATRIX_CODE_1__ will be ignored.",
+      "updated_at": 1781786110
     },
     "docs/atrinis-usage.md:table:2fb33550734c99013b73f7cc5dd42888366478c1f52d7bb1dcac10748eda6899": {
       "kind": "table",
@@ -968,12 +904,20 @@
       "translation": "Unique event ID within the source.",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:table:40e396c8617fd43421871634487b47f815e6432202dac6a47fb80244375b2654": {
+    "docs/atrinis-usage.md:table:35aea2af433e397818ccdba1204c2154b27d7dc0c6a6537070cb010f6de99995": {
       "kind": "table",
-      "source": "direct 请求只有 __ATRIX_CODE_0__ 且没有 __ATRIX_CODE_1__/__ATRIX_CODE_2__ 时只执行 API，不发送消息。",
+      "source": "不会向外部 Atriwisp 返回媒体内容。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "40e396c8617fd43421871634487b47f815e6432202dac6a47fb80244375b2654",
-      "translation": "When a direct request only has __ATRIX_CODE_0__ and lacks __ATRIX_CODE_1__/__ATRIX_CODE_2__, it only executes the API and does not send a message.",
+      "source_hash": "35aea2af433e397818ccdba1204c2154b27d7dc0c6a6537070cb010f6de99995",
+      "translation": "Media content will not be returned to external Atriwisp.",
+      "updated_at": 1789010099
+    },
+    "docs/atrinis-usage.md:table:35d701c0d6439fd4d79f077d7a250f95f24cb0fbc52d555b1dcd8eb4442af394": {
+      "kind": "table",
+      "source": "LLM 模式必填，推荐使用 Atriyph Task Notation（任务表示法）__ATRIX_CODE_0__；",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "35d701c0d6439fd4d79f077d7a250f95f24cb0fbc52d555b1dcd8eb4442af394",
+      "translation": "Required for LLM mode; it is recommended to use Atriyph Task Notation __ATRIX_CODE_0__;",
       "updated_at": 1782395349
     },
     "docs/atrinis-usage.md:table:4262c45dc797bb0cd5008331ef25b684413859f55b73c71fb4e2c01b645dbbb7": {
@@ -984,14 +928,6 @@
       "translation": "Description",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:table:46bff1a1c1be1121c2ccf85556b8c74b154ae0f286953c2a9bdad0fcc2af8c83": {
-      "kind": "table",
-      "source": "__ATRIX_CODE_0__ 透传平台原始 API，__ATRIX_CODE_1__ 使用统一能力名；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "46bff1a1c1be1121c2ccf85556b8c74b154ae0f286953c2a9bdad0fcc2af8c83",
-      "translation": "__ATRIX_CODE_0__ passes through the platform's original API, while __ATRIX_CODE_1__ uses a unified capability name;",
-      "updated_at": 1782376360
-    },
     "docs/atrinis-usage.md:table:49ecd0e342d6d23bd00d67094e2ad0e9859dd17d7337b809300a7c912ccea764": {
       "kind": "table",
       "source": "字段",
@@ -999,6 +935,22 @@
       "source_hash": "49ecd0e342d6d23bd00d67094e2ad0e9859dd17d7337b809300a7c912ccea764",
       "translation": "Field",
       "updated_at": 1781709646
+    },
+    "docs/atrinis-usage.md:table:56ab1abb142fa3f9e4531bc26e6e978fa044bcce813cf0660d655a2ebf1e60d3": {
+      "kind": "table",
+      "source": "最终仍由 Atrinis 裁决。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "56ab1abb142fa3f9e4531bc26e6e978fa044bcce813cf0660d655a2ebf1e60d3",
+      "translation": "The final decision is still made by Atrinis.",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:table:581a44bec01109976020985ad3c3eb8b4d816a075df34e410421295da54ed448": {
+      "kind": "table",
+      "source": "Atrinis LLM 模型槽位，仅支持 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__；未填写或对应槽位未配置时回退到 __ATRIX_CODE_3__。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "581a44bec01109976020985ad3c3eb8b4d816a075df34e410421295da54ed448",
+      "translation": "Atrinis LLM model slot, only supporting __ATRIX_CODE_0__, __ATRIX_CODE_1__, and __ATRIX_CODE_2__; if left blank or the corresponding slot is not configured, it will fall back to __ATRIX_CODE_3__.",
+      "updated_at": 1781779450
     },
     "docs/atrinis-usage.md:table:5a0d2ee77780227fe3aab9508c5d7420f14a799fca34d6a4353bab44f48775fd": {
       "kind": "table",
@@ -1008,21 +960,13 @@
       "translation": "text (Required)",
       "updated_at": 1781929269
     },
-    "docs/atrinis-usage.md:table:5df1524716e01f35b94ffd9aa6099dc1a002b1b6dd451113c702b81a296e641f": {
+    "docs/atrinis-usage.md:table:6e096a14c24807fff97523e9eb70e8763ea12b3c5436c359bb7094e29818a4f5": {
       "kind": "table",
-      "source": "首批 capability 包含 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__。",
+      "source": "__ATRIX_CODE_0__ 透传平台原始 API，__ATRIX_CODE_1__ 使用统一能力名；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "5df1524716e01f35b94ffd9aa6099dc1a002b1b6dd451113c702b81a296e641f",
-      "translation": "The first batch of capabilities includes __ATRIX_CODE_0__, __ATRIX_CODE_1__, and __ATRIX_CODE_2__.",
+      "source_hash": "6e096a14c24807fff97523e9eb70e8763ea12b3c5436c359bb7094e29818a4f5",
+      "translation": "__ATRIX_CODE_0__ passes through the platform's original API, while __ATRIX_CODE_1__ uses a unified capability name;",
       "updated_at": 1782376360
-    },
-    "docs/atrinis-usage.md:table:6a72a3285b0a6bdd0068edaba9381b50a6dc3ab780a5f5119c35ca1e9964e753": {
-      "kind": "table",
-      "source": "后台任务预加载的 ATRI-X 内部工具名或 Skill 名；",
-      "source_file": "docs/atrinis-usage.md",
-      "source_hash": "6a72a3285b0a6bdd0068edaba9381b50a6dc3ab780a5f5119c35ca1e9964e753",
-      "translation": "The ATRI-X internal tool name or Skill name preloaded for background tasks;",
-      "updated_at": 1781786110
     },
     "docs/atrinis-usage.md:table:7089fc7221c896c86d69abfdcb07634f8effef765c40882d6360ee222a06f478": {
       "kind": "table",
@@ -1032,6 +976,14 @@
       "translation": "Ordinary tools inject the schema, while Skills inject task descriptions and automatically inject the corresponding runner;",
       "updated_at": 1781786110
     },
+    "docs/atrinis-usage.md:table:7160885468bf0253814ce161ddf9f26ce9247f745a2ed55b037852fc63691bd0": {
+      "kind": "table",
+      "source": "direct/record 模式可为空，但 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ 至少提供一个。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "7160885468bf0253814ce161ddf9f26ce9247f745a2ed55b037852fc63691bd0",
+      "translation": "Can be empty in direct/record mode, but at least one of __ATRIX_CODE_0__, __ATRIX_CODE_1__, or __ATRIX_CODE_2__ must be provided.",
+      "updated_at": 1782395349
+    },
     "docs/atrinis-usage.md:table:79bb2ed09cd5e0bb308aa3ff41a29c03f39352b9d6fa2fdab17a617e4e02534a": {
       "kind": "table",
       "source": "文件名，用于下载保存和展示。",
@@ -1039,6 +991,14 @@
       "source_hash": "79bb2ed09cd5e0bb308aa3ff41a29c03f39352b9d6fa2fdab17a617e4e02534a",
       "translation": "File name, used for downloading, saving, and displaying.",
       "updated_at": 1781929269
+    },
+    "docs/atrinis-usage.md:table:81222644427bb0e1f734442d79cba7e3580875e2be65fe480d20e608ac57c33e": {
+      "kind": "table",
+      "source": "Atriwisp 名称，也是来源身份之一；仅允许英文字母、数字、__ATRIX_CODE_0__、__ATRIX_CODE_1__，不允许点号。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "81222644427bb0e1f734442d79cba7e3580875e2be65fe480d20e608ac57c33e",
+      "translation": "Atriwisp name, which is also one of the source identities; only English letters, numbers, __ATRIX_CODE_0__, and __ATRIX_CODE_1__ are allowed; dots are not allowed.",
+      "updated_at": 1781949084
     },
     "docs/atrinis-usage.md:table:83a2d7711543602d30459aca1b3d3ebd1d64e741b347dce3be1d85f8966baf36": {
       "kind": "table",
@@ -1056,20 +1016,28 @@
       "translation": "Original supplementary data, used only for recording and prompt attachment.",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:table:acc72006426637ac2646a5b62adf4ab0cde7b909e968ff3cdf8453c89e08951b": {
+    "docs/atrinis-usage.md:table:ad37db85afc7f5dc91ab8541238434de50870b1cf324e60a2eb4c6bfac17dee1": {
+      "kind": "table",
+      "source": "Atriwisp 随事件声明的外部工具；默认允许，命中该 Atriwisp 的 __ATRIX_CODE_0__ 时拒绝。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "ad37db85afc7f5dc91ab8541238434de50870b1cf324e60a2eb4c6bfac17dee1",
+      "translation": "External tools declared by Atriwisp with events; allowed by default, rejected when hitting the __ATRIX_CODE_0__ of that Atriwisp.",
+      "updated_at": 1781749660
+    },
+    "docs/atrinis-usage.md:table:b0f8f314e03678aab8b07bce11f4f72e12b6c6dfca7147625d2822bf40a42932": {
       "kind": "table",
       "source": "__ATRIX_CODE_0__、__ATRIX_CODE_1__ 或 __ATRIX_CODE_2__。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "acc72006426637ac2646a5b62adf4ab0cde7b909e968ff3cdf8453c89e08951b",
+      "source_hash": "b0f8f314e03678aab8b07bce11f4f72e12b6c6dfca7147625d2822bf40a42932",
       "translation": "__ATRIX_CODE_0__, __ATRIX_CODE_1__, or __ATRIX_CODE_2__.",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:table:ae029a42570f0f779e7561240c5c4927c5e3d9df0df99c9ee087a969c225861b": {
+    "docs/atrinis-usage.md:table:b140f11c99fe7e6f2282b54f0ae94f1606be2abc4928b1b46a16886366a8acfb": {
       "kind": "table",
-      "source": "不会向外部 Atriwisp 返回媒体内容。",
+      "source": "__ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ base64 URI，或已有媒体的完整 __ATRIX_CODE_3__。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "ae029a42570f0f779e7561240c5c4927c5e3d9df0df99c9ee087a969c225861b",
-      "translation": "Media content will not be returned to external Atriwisp.",
+      "source_hash": "b140f11c99fe7e6f2282b54f0ae94f1606be2abc4928b1b46a16886366a8acfb",
+      "translation": "__ATRIX_CODE_0__, __ATRIX_CODE_1__, __ATRIX_CODE_2__ base64 URI, or a complete __ATRIX_CODE_3__ of existing media.",
       "updated_at": 1789010099
     },
     "docs/atrinis-usage.md:table:b5141d3d19e9a04855acdb2dd5218b0924254b73d3cb663557ed0f9f73403750": {
@@ -1080,13 +1048,13 @@
       "translation": "Yes",
       "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:table:b922f0b63fb50ff74eceb89a763feaf5548df499e4930827576e94fa46b425f3": {
+    "docs/atrinis-usage.md:table:b84548fade949087a643a5e570e9e3eef8a2ba00cec36e8dbacf42d9c5aa62a1": {
       "kind": "table",
-      "source": "__ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__ base64 URI，或已有媒体的完整 __ATRIX_CODE_3__。",
+      "source": "首批 capability 包含 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "b922f0b63fb50ff74eceb89a763feaf5548df499e4930827576e94fa46b425f3",
-      "translation": "__ATRIX_CODE_0__, __ATRIX_CODE_1__, __ATRIX_CODE_2__ base64 URI, or a complete __ATRIX_CODE_3__ of existing media.",
-      "updated_at": 1789010099
+      "source_hash": "b84548fade949087a643a5e570e9e3eef8a2ba00cec36e8dbacf42d9c5aa62a1",
+      "translation": "The first batch of capabilities includes __ATRIX_CODE_0__, __ATRIX_CODE_1__, and __ATRIX_CODE_2__.",
+      "updated_at": 1782376360
     },
     "docs/atrinis-usage.md:table:b9b16d252007ede4f448bbca8f6da0ec9071652d73c770c6c5974e505d7aecee": {
       "kind": "table",
@@ -1112,12 +1080,28 @@
       "translation": "image/file (Required)",
       "updated_at": 1781929269
     },
-    "docs/atrinis-usage.md:table:be9fdd2903da258dff0e542337882cc8ec983f46cca39e608ac944b9ab3d2c47": {
+    "docs/atrinis-usage.md:table:c1f6f11d6b8cb36f2e321666637297fe8e89122c20c64d3f9a111b01410025b9": {
       "kind": "table",
-      "source": "__ATRIX_CODE_0__ 或 __ATRIX_CODE_1__，默认 __ATRIX_CODE_2__。",
+      "source": "direct 请求只有 __ATRIX_CODE_0__ 且没有 __ATRIX_CODE_1__/__ATRIX_CODE_2__ 时只执行 API，不发送消息。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "be9fdd2903da258dff0e542337882cc8ec983f46cca39e608ac944b9ab3d2c47",
-      "translation": "__ATRIX_CODE_0__ or __ATRIX_CODE_1__, default __ATRIX_CODE_2__.",
+      "source_hash": "c1f6f11d6b8cb36f2e321666637297fe8e89122c20c64d3f9a111b01410025b9",
+      "translation": "When a direct request only has __ATRIX_CODE_0__ and lacks __ATRIX_CODE_1__/__ATRIX_CODE_2__, it only executes the API and does not send a message.",
+      "updated_at": 1782395349
+    },
+    "docs/atrinis-usage.md:table:c71f7bb7bb257e040149dffe1f7fd82fb9b2faf7cdabc902b7e6c6f60fc19d78": {
+      "kind": "table",
+      "source": "Atriwisp 期望投递目标数组，__ATRIX_CODE_0__ 表示发给平台超级管理员，__ATRIX_CODE_1__ 且带 __ATRIX_CODE_2__ 时发指定私聊/群聊，__ATRIX_CODE_3__ 表示所有已启用平台超级管理员。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "c71f7bb7bb257e040149dffe1f7fd82fb9b2faf7cdabc902b7e6c6f60fc19d78",
+      "translation": "Atriwisp expects a delivery target array: __ATRIX_CODE_0__ indicates sending to the platform superadmin, __ATRIX_CODE_1__ with __ATRIX_CODE_2__ indicates sending to a specified private chat/group chat, and __ATRIX_CODE_3__ indicates all enabled platform superadmins.",
+      "updated_at": 1782033114
+    },
+    "docs/atrinis-usage.md:table:ce610112b781a3a0d0fb74bcb90e8f66f171eccc3bce27b5ed0ef1edd6fd8be8": {
+      "kind": "table",
+      "source": "Atriwisp 标签，用于日志和统计。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "ce610112b781a3a0d0fb74bcb90e8f66f171eccc3bce27b5ed0ef1edd6fd8be8",
+      "translation": "Atriwisp tag, used for logs and statistics.",
       "updated_at": 1781709646
     },
     "docs/atrinis-usage.md:table:d00344dac4eeef600985b6a509ba222c1d43c81c145dcc319b189730a57bf2ac": {
@@ -1128,13 +1112,21 @@
       "translation": "MIME type hint.",
       "updated_at": 1781929269
     },
-    "docs/atrinis-usage.md:table:d1eef39ef655cc35d1c7fe72085075f944615b0421c377b885b63e1dc720b88c": {
+    "docs/atrinis-usage.md:table:e2b4484c39b483323530569c46e1e2436f323582579900ca1d3790e6448bac3b": {
       "kind": "table",
-      "source": "LLM 模式必填，推荐使用 Atriyph Task Notation（任务表示法）__ATRIX_CODE_0__；",
+      "source": "后台任务预加载的 ATRI-X 内部工具名或 Skill 名；",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "d1eef39ef655cc35d1c7fe72085075f944615b0421c377b885b63e1dc720b88c",
-      "translation": "Required for LLM mode; it is recommended to use Atriyph Task Notation __ATRIX_CODE_0__;",
-      "updated_at": 1782395349
+      "source_hash": "e2b4484c39b483323530569c46e1e2436f323582579900ca1d3790e6448bac3b",
+      "translation": "The ATRI-X internal tool name or Skill name preloaded for background tasks;",
+      "updated_at": 1781786110
+    },
+    "docs/atrinis-usage.md:table:e35fcc72efb3737f165a4f59813ecc52064ebd5e8a1eeefe1a447b62dea9663d": {
+      "kind": "table",
+      "source": "LLM 后台 Session 模式：__ATRIX_CODE_0__ 或 __ATRIX_CODE_1__，默认 __ATRIX_CODE_2__；__ATRIX_CODE_3__ 不注入工具 schema，适合不需要工具的低成本后台处理。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "e35fcc72efb3737f165a4f59813ecc52064ebd5e8a1eeefe1a447b62dea9663d",
+      "translation": "LLM background Session mode: __ATRIX_CODE_0__ or __ATRIX_CODE_1__, default __ATRIX_CODE_2__; __ATRIX_CODE_3__ does not inject tool schema, suitable for low-cost background processing that does not require tools.",
+      "updated_at": 1782699001
     },
     "docs/atrinis-usage.md:table:e3b263ee01e2d8e405062e5af39f642d31bf63d459a6481f15b74b15d53ec7d3": {
       "kind": "table",
@@ -1144,25 +1136,33 @@
       "translation": "Plain text content, not persisted to disk.",
       "updated_at": 1781929269
     },
-    "docs/atrinis-usage.md:table:e45776f2e59354db4b227cd1b2ffd48797ec268a40d1353b5dcbe20797bb74dc": {
+    "docs/atrinis-usage.md:table:eaf72c948bbefe6f624a7fdf6e3df5853f2bf4e53ccbb3f5893c27dc35f1024c": {
       "kind": "table",
-      "source": "Atriwisp 期望投递目标数组，__ATRIX_CODE_0__ 表示发给平台超级管理员，__ATRIX_CODE_1__ 且带 __ATRIX_CODE_2__ 时发指定私聊/群聊，__ATRIX_CODE_3__ 表示所有已启用平台超级管理员。",
+      "source": "协议版本，当前为 __ATRIX_CODE_0__。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "e45776f2e59354db4b227cd1b2ffd48797ec268a40d1353b5dcbe20797bb74dc",
-      "translation": "Atriwisp expects a delivery target array: __ATRIX_CODE_0__ indicates sending to the platform superadmin, __ATRIX_CODE_1__ with __ATRIX_CODE_2__ indicates sending to a specified private chat/group chat, and __ATRIX_CODE_3__ indicates all enabled platform superadmins.",
-      "updated_at": 1782033114
+      "source_hash": "eaf72c948bbefe6f624a7fdf6e3df5853f2bf4e53ccbb3f5893c27dc35f1024c",
+      "translation": "Protocol version, currently __ATRIX_CODE_0__.",
+      "updated_at": 1781709646
     },
-    "docs/atrinis-usage.md:table:f094dbde8ffe18ca235d3232a572599a2c843f7f457b8892cf5bb6b2cdcf39fd": {
+    "docs/atrinis-usage.md:table:f12e2b41e623c6ade9749e6ac37ed0cc9dd0f3e47ecd585c1dafaca0c5f60b87": {
       "kind": "table",
-      "source": "必须在 Atrinis __ATRIX_CODE_0__ 裁决范围内，__ATRIX_CODE_1__ 会被忽略。",
+      "source": "Atriena v3 动作调用数组。",
       "source_file": "docs/atrinis-usage.md",
-      "source_hash": "f094dbde8ffe18ca235d3232a572599a2c843f7f457b8892cf5bb6b2cdcf39fd",
-      "translation": "Must be within the Atrinis __ATRIX_CODE_0__ adjudication range; __ATRIX_CODE_1__ will be ignored.",
-      "updated_at": 1781786110
+      "source_hash": "f12e2b41e623c6ade9749e6ac37ed0cc9dd0f3e47ecd585c1dafaca0c5f60b87",
+      "translation": "Atriena v3 action call array.",
+      "updated_at": 1782376360
+    },
+    "docs/atrinis-usage.md:table:f1cb5d72bed9c52815e09295efe29b8bb873762cc140a9916f00a935ee4b7114": {
+      "kind": "table",
+      "source": "__ATRIX_CODE_0__ 或 __ATRIX_CODE_1__，默认 __ATRIX_CODE_2__。",
+      "source_file": "docs/atrinis-usage.md",
+      "source_hash": "f1cb5d72bed9c52815e09295efe29b8bb873762cc140a9916f00a935ee4b7114",
+      "translation": "__ATRIX_CODE_0__ or __ATRIX_CODE_1__, default __ATRIX_CODE_2__.",
+      "updated_at": 1781709646
     }
   },
   "source": "docs/atrinis-usage.md",
-  "source_hash": "fd153333f4e33f50f4fa055a6ba70e2753ff93e5290ba125a290c1b0fe49d2ca",
+  "source_hash": "ffe8649adb16f24ba11620f2c55582df3e0d27498f369d0a97477f495a47a405",
   "target": "docs.en/atrinis-usage.md",
   "updated_at": 1789088877,
   "version": 2

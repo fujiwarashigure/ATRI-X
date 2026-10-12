@@ -168,20 +168,20 @@
       "translation": "input — Send Message",
       "updated_at": 1782901460
     },
-    "docs/frontend-api.md:list:3f9987fd6d5763471a809790928e57f06d01a80598abab313dad9434565dcb35": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ — 鉴权失败，连接关闭",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "3f9987fd6d5763471a809790928e57f06d01a80598abab313dad9434565dcb35",
-      "translation": "__ATRIX_CODE_0__ — Authentication failed, connection closed",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:list:b0c6a317c8bff1f97521ff2e8643e9417924fd3e72ec2525d37052533e8277e3": {
+    "docs/frontend-api.md:list:3f8d6d11337175ea5ac70148df493a05d1d37fb02c2611c60b9e13092600ac8b": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__ — 鉴权通过，可以开始交互",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "b0c6a317c8bff1f97521ff2e8643e9417924fd3e72ec2525d37052533e8277e3",
+      "source_hash": "3f8d6d11337175ea5ac70148df493a05d1d37fb02c2611c60b9e13092600ac8b",
       "translation": "__ATRIX_CODE_0__ — Authentication successful, interaction can begin",
+      "updated_at": 1782901460
+    },
+    "docs/frontend-api.md:list:d3cc222e1706bc58011b1843bf0d67bee9a894501240c8aa7c46d91fcd4ab224": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ — 鉴权失败，连接关闭",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "d3cc222e1706bc58011b1843bf0d67bee9a894501240c8aa7c46d91fcd4ab224",
+      "translation": "__ATRIX_CODE_0__ — Authentication failed, connection closed",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:07b5913353f1cfc85c936e91f62ef2c8f31d27746f18fd6f2f65d549eb9ce9f0": {
@@ -190,6 +190,14 @@
       "source_file": "docs/frontend-api.md",
       "source_hash": "07b5913353f1cfc85c936e91f62ef2c8f31d27746f18fd6f2f65d549eb9ce9f0",
       "translation": "An incremental piece of text streamed from the LLM. The frontend should append it to the end of the message currently being generated.\n",
+      "updated_at": 1782901460
+    },
+    "docs/frontend-api.md:paragraph:0850a1b138cc84795f54f986fe11a681e9be9584a6c65d10515bcb6afe37a6cc": {
+      "kind": "paragraph",
+      "source": "环境变量可从系统环境或配置目录 __ATRIX_CODE_0__ 读取。\n",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "0850a1b138cc84795f54f986fe11a681e9be9584a6c65d10515bcb6afe37a6cc",
+      "translation": "Environment variables can be read from the system environment or the configuration directory __ATRIX_CODE_0__.\n",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:08d5a3fcb505c98f34ecf262f0eb651b41628e3f9e32169f9165e4a3750863be": {
@@ -208,6 +216,22 @@
       "translation": "An error that occurred during processing.\n",
       "updated_at": 1782901460
     },
+    "docs/frontend-api.md:paragraph:10d6f8a90e5d5f6ed9ae2a7e9de318a26b3978506008cdcfb9f8e63882869717": {
+      "kind": "paragraph",
+      "source": "服务端回复 __ATRIX_CODE_0__。\n",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "10d6f8a90e5d5f6ed9ae2a7e9de318a26b3978506008cdcfb9f8e63882869717",
+      "translation": "The server responds with __ATRIX_CODE_0__.\n",
+      "updated_at": 1782901460
+    },
+    "docs/frontend-api.md:paragraph:1cdb34aade6d15c0c9f560fde0aab52c2e6b8f015f180ea73797da2db4df85a0": {
+      "kind": "paragraph",
+      "source": "在 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 中配置：\n",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "1cdb34aade6d15c0c9f560fde0aab52c2e6b8f015f180ea73797da2db4df85a0",
+      "translation": "Configure in __ATRIX_CODE_1__ of __ATRIX_CODE_0__:\n",
+      "updated_at": 1782901460
+    },
     "docs/frontend-api.md:paragraph:20595b74e8d8c160a3282602b9e0f1b7519133fd993639fb2c017a01f1d9f0a3": {
       "kind": "paragraph",
       "source": "支持推理输出的模型在生成过程中推送的推理文本。前端可选择展示或隐藏。\n",
@@ -216,20 +240,20 @@
       "translation": "Reasoning text pushed by models that support reasoning output during the generation process. The frontend can choose to display or hide it.\n",
       "updated_at": 1782901460
     },
-    "docs/frontend-api.md:paragraph:2e286a691b516cf7a4f664ce6a819ae7ddece62d6dc8f2cb561ee3ab85d979c1": {
+    "docs/frontend-api.md:paragraph:24a41f8ff916bf7a584e1bed12414fb6351d6c3c87043920dc72f29613843a4d": {
       "kind": "paragraph",
-      "source": "在 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 中配置：\n",
+      "source": "__ATRIX_CODE_0__ 可取 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__；",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "2e286a691b516cf7a4f664ce6a819ae7ddece62d6dc8f2cb561ee3ab85d979c1",
-      "translation": "Configure in __ATRIX_CODE_1__ of __ATRIX_CODE_0__:\n",
-      "updated_at": 1782901460
+      "source_hash": "24a41f8ff916bf7a584e1bed12414fb6351d6c3c87043920dc72f29613843a4d",
+      "translation": "__ATRIX_CODE_0__ can be __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, or __ATRIX_CODE_4__;",
+      "updated_at": 1785235280
     },
-    "docs/frontend-api.md:paragraph:2fc0902aa8673a668728cfd1db0c298a7d033d44a676a2e16043765275aeb295": {
+    "docs/frontend-api.md:paragraph:2f55b56e16536fa6a2d7fbc50e95aee4c9e1c2f36dadacb2d79dd51bdd446816": {
       "kind": "paragraph",
-      "source": "Token 在 __ATRIX_CODE_0__ 中按 client_id 映射到环境变量名，服务端从对应环境变量读取实际值。\n",
+      "source": "ATRI-X 前后端分离，CLI 远程协议是基于 WebSocket 的 JSON 消息协议。",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "2fc0902aa8673a668728cfd1db0c298a7d033d44a676a2e16043765275aeb295",
-      "translation": "Tokens are mapped to environment variable names by client_id in __ATRIX_CODE_0__, and the server reads the actual values from the corresponding environment variables.\n",
+      "source_hash": "2f55b56e16536fa6a2d7fbc50e95aee4c9e1c2f36dadacb2d79dd51bdd446816",
+      "translation": "ATRI-X uses a decoupled frontend and backend; the CLI remote protocol is a JSON messaging protocol based on WebSocket.",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:3dca443f29bdee748af053d019fd57f759fb7b0401673261d850673661493415": {
@@ -240,20 +264,12 @@
       "translation": "The server will respond after validating the token:\n",
       "updated_at": 1782901460
     },
-    "docs/frontend-api.md:paragraph:4e842da1ad9d6f0bbe875b1adb0c6fad1a7b86929891dd28bb6798bc67d0c36e": {
+    "docs/frontend-api.md:paragraph:558dd91369d19f46c2419ef9d764a76b2178377cd397a1e4e1a5fb6308dc5c40": {
       "kind": "paragraph",
-      "source": "ATRI-X 前后端分离，CLI 远程协议是基于 WebSocket 的 JSON 消息协议。",
+      "source": "Token 在 __ATRIX_CODE_0__ 中按 client_id 映射到环境变量名，服务端从对应环境变量读取实际值。\n",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "4e842da1ad9d6f0bbe875b1adb0c6fad1a7b86929891dd28bb6798bc67d0c36e",
-      "translation": "ATRI-X uses a decoupled frontend and backend; the CLI remote protocol is a JSON messaging protocol based on WebSocket.",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:paragraph:5a6db705fd1ed0883cbccd006faa75c3bb039679fcf08f1c145582eba34308ee": {
-      "kind": "paragraph",
-      "source": "补全候选列表，__ATRIX_CODE_0__ 对应请求时的 __ATRIX_CODE_1__。__ATRIX_CODE_2__/__ATRIX_CODE_3__ 指示应替换原输入文本的字节区间。\n",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "5a6db705fd1ed0883cbccd006faa75c3bb039679fcf08f1c145582eba34308ee",
-      "translation": "Completion candidate list, where __ATRIX_CODE_0__ corresponds to __ATRIX_CODE_1__ at the time of the request. __ATRIX_CODE_2__/__ATRIX_CODE_3__ indicates the byte range of the original input text to be replaced.\n",
+      "source_hash": "558dd91369d19f46c2419ef9d764a76b2178377cd397a1e4e1a5fb6308dc5c40",
+      "translation": "Tokens are mapped to environment variable names by client_id in __ATRIX_CODE_0__, and the server reads the actual values from the corresponding environment variables.\n",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:5ef8927fcc5d9ac94297051b2c239164249298fd75c4acb64ed10db7d30fe6d8": {
@@ -264,29 +280,21 @@
       "translation": "The server attempts to read token values from these environment variables in order and compares them with the token sent by the client.",
       "updated_at": 1782901460
     },
-    "docs/frontend-api.md:paragraph:6207569319205d9e1e4bc253dbd578cd7a489bcb074bc59ae11dc488cdeaca8e": {
-      "kind": "paragraph",
-      "source": "服务端回复 __ATRIX_CODE_0__。\n",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "6207569319205d9e1e4bc253dbd578cd7a489bcb074bc59ae11dc488cdeaca8e",
-      "translation": "The server responds with __ATRIX_CODE_0__.\n",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:paragraph:65871e3751ccda89ce7660fd203231fc57211d7a09301110b7304d272c4ca548": {
-      "kind": "paragraph",
-      "source": "默认地址 __ATRIX_CODE_0__。地址和端口在 __ATRIX_CODE_1__ 配置中修改。\n",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "65871e3751ccda89ce7660fd203231fc57211d7a09301110b7304d272c4ca548",
-      "translation": "Default address __ATRIX_CODE_0__. The address and port can be modified in the __ATRIX_CODE_1__ configuration.\n",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:paragraph:7eed2959946534c06d7d21426b2f96e69b3f122ae04870bbb4981c8bfe21d403": {
+    "docs/frontend-api.md:paragraph:5f20ec9ce5dfda7ae914eb564139d449d8f37d1dbb75c8d1a21999b114cb27c1": {
       "kind": "paragraph",
       "source": "运行状态快照，前端可用于状态栏展示。__ATRIX_CODE_0__ 取值：\n",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "7eed2959946534c06d7d21426b2f96e69b3f122ae04870bbb4981c8bfe21d403",
+      "source_hash": "5f20ec9ce5dfda7ae914eb564139d449d8f37d1dbb75c8d1a21999b114cb27c1",
       "translation": "A snapshot of the runtime status, which the frontend can use for status bar display. Possible values for __ATRIX_CODE_0__: \n",
       "updated_at": 1782901460
+    },
+    "docs/frontend-api.md:paragraph:64a98c62e52ed999cb1c1d013efeb8d25a5caa184e1039585e5a636259fc91d0": {
+      "kind": "paragraph",
+      "source": "省略时按 __ATRIX_CODE_0__ 处理。\n",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "64a98c62e52ed999cb1c1d013efeb8d25a5caa184e1039585e5a636259fc91d0",
+      "translation": "When omitted, it is handled as __ATRIX_CODE_0__.\n",
+      "updated_at": 1785235280
     },
     "docs/frontend-api.md:paragraph:9c8eb32c21d9df0b438fd23ffb2e38cc9a5fab3b0de47fa559d3e88da34aee1f": {
       "kind": "paragraph",
@@ -294,6 +302,22 @@
       "source_file": "docs/frontend-api.md",
       "source_hash": "9c8eb32c21d9df0b438fd23ffb2e38cc9a5fab3b0de47fa559d3e88da34aee1f",
       "translation": "Marks that the current streaming message has ended; the frontend can now pin this message.\n",
+      "updated_at": 1782901460
+    },
+    "docs/frontend-api.md:paragraph:9f0e824005196c26a8052d2171c9522484a41ba0a5b9bb8e54597ba67de20c12": {
+      "kind": "paragraph",
+      "source": "请求当前输入文本的命令补全候选。__ATRIX_CODE_0__ 用于匹配响应。__ATRIX_CODE_1__ 为光标在 __ATRIX_CODE_2__ 中的字节偏移，省略时取末尾。\n",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "9f0e824005196c26a8052d2171c9522484a41ba0a5b9bb8e54597ba67de20c12",
+      "translation": "Request command completion candidates for the current input text. __ATRIX_CODE_0__ is used to match the response. __ATRIX_CODE_1__ is the byte offset of the cursor in __ATRIX_CODE_2__, defaulting to the end if omitted.\n",
+      "updated_at": 1782901460
+    },
+    "docs/frontend-api.md:paragraph:a12cca8af76c9f0b2dc03031072ac0fef21a9e9134ae84f27136dba4db836a78": {
+      "kind": "paragraph",
+      "source": "默认地址 __ATRIX_CODE_0__。地址和端口在 __ATRIX_CODE_1__ 配置中修改。\n",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "a12cca8af76c9f0b2dc03031072ac0fef21a9e9134ae84f27136dba4db836a78",
+      "translation": "Default address __ATRIX_CODE_0__. The address and port can be modified in the __ATRIX_CODE_1__ configuration.\n",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:b7ec5aa79f7feac3899c5678ac8ae25ffaad189f22324caf4c4cfccea1c39825": {
@@ -304,44 +328,28 @@
       "translation": "The complete reply message sent after the Agent finishes processing.\n",
       "updated_at": 1782901460
     },
-    "docs/frontend-api.md:paragraph:b8e31331bd84054e76653ee0dda1f8175ceaf6f47f83ae5d25bc57d067a6c3fc": {
-      "kind": "paragraph",
-      "source": "非对话场景的通知消息，如 Cron 结果、Hook 输出、Atrinis 事件报告等。",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "b8e31331bd84054e76653ee0dda1f8175ceaf6f47f83ae5d25bc57d067a6c3fc",
-      "translation": "Notification messages for non-dialogue scenarios, such as Cron results, Hook output, Atrinis event reports, etc.",
-      "updated_at": 1785235280
-    },
-    "docs/frontend-api.md:paragraph:beddd3b0cb61ba1e2276cc7b9e8194ab03806e92e68e795fe0a9123f9de9d06c": {
-      "kind": "paragraph",
-      "source": "连接建立后，客户端必须立即发送一条 __ATRIX_CODE_0__ 消息：\n",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "beddd3b0cb61ba1e2276cc7b9e8194ab03806e92e68e795fe0a9123f9de9d06c",
-      "translation": "After the connection is established, the client must immediately send a __ATRIX_CODE_0__ message:\n",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:paragraph:c31d724cc5b0294c910c845d47f320bbab8a3a819fc057924c15735f07ce3553": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 可取 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__；",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "c31d724cc5b0294c910c845d47f320bbab8a3a819fc057924c15735f07ce3553",
-      "translation": "__ATRIX_CODE_0__ can be __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, or __ATRIX_CODE_4__;",
-      "updated_at": 1785235280
-    },
-    "docs/frontend-api.md:paragraph:c8861d11db55e8e2431a168019b157e859cf13ebee7ebcb34a2aef657aad39f1": {
+    "docs/frontend-api.md:paragraph:bce2aec9adc190e427b34d42940f4b7cddf7342cacbc82e482459bf676c2b4ed": {
       "kind": "paragraph",
       "source": "任何能连 WebSocket 的客户端都可以作为 ATRI-X 前端——TUI、Web、移动端、甚至另一台机器上的脚本。\n",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "c8861d11db55e8e2431a168019b157e859cf13ebee7ebcb34a2aef657aad39f1",
+      "source_hash": "bce2aec9adc190e427b34d42940f4b7cddf7342cacbc82e482459bf676c2b4ed",
       "translation": "Any client capable of connecting to a WebSocket can serve as an ATRI-X frontend—TUI, Web, mobile, or even a script on another machine.\n",
       "updated_at": 1782901460
     },
-    "docs/frontend-api.md:paragraph:d1abaeddc044b99ba2fc6cb16a5f4a9de092704d243ed70e7fdf2ae42b7dcabd": {
+    "docs/frontend-api.md:paragraph:c294fefb657b0bddd6ce99360f1b2c506989d6347bf4ee2238fc355bb0f3a58e": {
       "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 是 client_id 到环境变量名列表的映射。",
+      "source": "连接建立后，客户端必须立即发送一条 __ATRIX_CODE_0__ 消息：\n",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "d1abaeddc044b99ba2fc6cb16a5f4a9de092704d243ed70e7fdf2ae42b7dcabd",
-      "translation": "__ATRIX_CODE_0__ is a mapping from client_id to a list of environment variable names.",
+      "source_hash": "c294fefb657b0bddd6ce99360f1b2c506989d6347bf4ee2238fc355bb0f3a58e",
+      "translation": "After the connection is established, the client must immediately send a __ATRIX_CODE_0__ message:\n",
+      "updated_at": 1782901460
+    },
+    "docs/frontend-api.md:paragraph:cc5d386faab1a3607b5313392462e960f2c23249643bd65bc0ceee4c61d82538": {
+      "kind": "paragraph",
+      "source": "补全候选列表，__ATRIX_CODE_0__ 对应请求时的 __ATRIX_CODE_1__。__ATRIX_CODE_2__/__ATRIX_CODE_3__ 指示应替换原输入文本的字节区间。\n",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "cc5d386faab1a3607b5313392462e960f2c23249643bd65bc0ceee4c61d82538",
+      "translation": "Completion candidate list, where __ATRIX_CODE_0__ corresponds to __ATRIX_CODE_1__ at the time of the request. __ATRIX_CODE_2__/__ATRIX_CODE_3__ indicates the byte range of the original input text to be replaced.\n",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:d49cedeb924838e552674bb9b1dcf7f81c505541846bef91ace96aa613baecca": {
@@ -352,13 +360,21 @@
       "translation": "After streaming ends, replace the previously accumulated streaming content with the final complete text. This may differ from the result of streaming concatenation (Hooks may have modified the output).\n",
       "updated_at": 1782901460
     },
-    "docs/frontend-api.md:paragraph:d9c6b4dd1d784b8daad5cd325be4e121a4f67d315391c1631325c81d2f715810": {
+    "docs/frontend-api.md:paragraph:da740a5bd99978a106830a9a3a6a362170a2514c38e4003f768105245e3ff38e": {
       "kind": "paragraph",
-      "source": "省略时按 __ATRIX_CODE_0__ 处理。\n",
+      "source": "非对话场景的通知消息，如 Cron 结果、Hook 输出、Atrinis 事件报告等。",
       "source_file": "docs/frontend-api.md",
-      "source_hash": "d9c6b4dd1d784b8daad5cd325be4e121a4f67d315391c1631325c81d2f715810",
-      "translation": "When omitted, it is handled as __ATRIX_CODE_0__.\n",
+      "source_hash": "da740a5bd99978a106830a9a3a6a362170a2514c38e4003f768105245e3ff38e",
+      "translation": "Notification messages for non-dialogue scenarios, such as Cron results, Hook output, Atrinis event reports, etc.",
       "updated_at": 1785235280
+    },
+    "docs/frontend-api.md:paragraph:e48b5520977e91afb665009eca7e448a2f32dd8e7dd0c6029d21936c57aed3d5": {
+      "kind": "paragraph",
+      "source": "__ATRIX_CODE_0__ 是 client_id 到环境变量名列表的映射。",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "e48b5520977e91afb665009eca7e448a2f32dd8e7dd0c6029d21936c57aed3d5",
+      "translation": "__ATRIX_CODE_0__ is a mapping from client_id to a list of environment variable names.",
+      "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:ee24b5b4eaff5b66dfdc166fbea541a991b17968e5d2735a59d7b7ee0e1387c6": {
       "kind": "paragraph",
@@ -366,22 +382,6 @@
       "source_file": "docs/frontend-api.md",
       "source_hash": "ee24b5b4eaff5b66dfdc166fbea541a991b17968e5d2735a59d7b7ee0e1387c6",
       "translation": "For more frontend examples, see [elbot-showcase/frontend](https://github.com/Elfreese/elbot-showcase/tree/main/frontend).\n",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:paragraph:f8ef0da23137f3d5fa2083b4da97c426fab6d982a039be397799c18d82c3d519": {
-      "kind": "paragraph",
-      "source": "请求当前输入文本的命令补全候选。__ATRIX_CODE_0__ 用于匹配响应。__ATRIX_CODE_1__ 为光标在 __ATRIX_CODE_2__ 中的字节偏移，省略时取末尾。\n",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "f8ef0da23137f3d5fa2083b4da97c426fab6d982a039be397799c18d82c3d519",
-      "translation": "Request command completion candidates for the current input text. __ATRIX_CODE_0__ is used to match the response. __ATRIX_CODE_1__ is the byte offset of the cursor in __ATRIX_CODE_2__, defaulting to the end if omitted.\n",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:paragraph:f91264031fb65d397387ea450cbf17cb02f56254b7b0fe0b70f38ea1985b11c0": {
-      "kind": "paragraph",
-      "source": "环境变量可从系统环境或配置目录 __ATRIX_CODE_0__ 读取。\n",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "f91264031fb65d397387ea450cbf17cb02f56254b7b0fe0b70f38ea1985b11c0",
-      "translation": "Environment variables can be read from the system environment or the configuration directory __ATRIX_CODE_0__.\n",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:paragraph:f98e302254d6d3b6c50195bbf98f2f0801835dca84ec3d3889d88aedf42f626b": {
@@ -456,6 +456,14 @@
       "translation": "Cursor position (completion requests only)",
       "updated_at": 1782901460
     },
+    "docs/frontend-api.md:table:61be57b987a5853c901203a98af5e17e4ec4185ffb75c66c2715020e5bb0e22b": {
+      "kind": "table",
+      "source": "候选类型，如 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__",
+      "source_file": "docs/frontend-api.md",
+      "source_hash": "61be57b987a5853c901203a98af5e17e4ec4185ffb75c66c2715020e5bb0e22b",
+      "translation": "Candidate type, such as __ATRIX_CODE_0__, __ATRIX_CODE_1__, __ATRIX_CODE_2__",
+      "updated_at": 1782901460
+    },
     "docs/frontend-api.md:table:632c729cb4054930b5a56b3935f81457c532a2411954a9e1d1b73458f4b0d1fe": {
       "kind": "table",
       "source": "通知等级（仅 notice）",
@@ -486,14 +494,6 @@
       "source_file": "docs/frontend-api.md",
       "source_hash": "7a7e84c668e6ae8d23f4e7e732a4d941bf72530fc5819fdb9e70efa3c592159f",
       "translation": "Runtime status snapshot (status only)",
-      "updated_at": 1782901460
-    },
-    "docs/frontend-api.md:table:7aa7c7527d3961097579b37c8dbb41851cece5e4b71e01f717e899ce0a57ad82": {
-      "kind": "table",
-      "source": "候选类型，如 __ATRIX_CODE_0__、__ATRIX_CODE_1__、__ATRIX_CODE_2__",
-      "source_file": "docs/frontend-api.md",
-      "source_hash": "7aa7c7527d3961097579b37c8dbb41851cece5e4b71e01f717e899ce0a57ad82",
-      "translation": "Candidate type, such as __ATRIX_CODE_0__, __ATRIX_CODE_1__, __ATRIX_CODE_2__",
       "updated_at": 1782901460
     },
     "docs/frontend-api.md:table:7db8320094484bc3188ddedcdbda2740279b49693d164ff742aae4a164aeb93c": {
@@ -586,7 +586,7 @@
     }
   },
   "source": "docs/frontend-api.md",
-  "source_hash": "11b884639bc1362864f994701033b9bcff4510b871f0bd0e7120d081f1404880",
+  "source_hash": "19118ca6615d8a7dea946568227945acb01e749c2084b3c612390b568739a962",
   "target": "docs.en/frontend-api.md",
   "updated_at": 1785235280,
   "version": 2

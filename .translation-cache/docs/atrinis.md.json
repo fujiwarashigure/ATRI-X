@@ -1,28 +1,36 @@
 {
   "segments": {
-    "docs/atrinis.md:heading:4664cab7fa8df45e53b78d62ec243093287a3d7b64d5fd21af6a77b18d872ffc": {
+    "docs/atrinis.md:heading:130b8f16fd60db746c16c7f156080734ebf27f8e5d4f83a0af9ae7aa4151ddf6": {
       "kind": "heading",
-      "source": "Atriena（艾露维娜）：事件协议",
+      "source": "Atriwisp（艾露维丝）",
       "source_file": "docs/atrinis.md",
-      "source_hash": "4664cab7fa8df45e53b78d62ec243093287a3d7b64d5fd21af6a77b18d872ffc",
-      "translation": "Atriena: event protocol",
+      "source_hash": "130b8f16fd60db746c16c7f156080734ebf27f8e5d4f83a0af9ae7aa4151ddf6",
+      "translation": "Atriwisp",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:heading:5fb05e70fd529683471e8ea101f323fcfec09de231f533f42d7b61b732eda8ea": {
+    "docs/atrinis.md:heading:1c4b0220b6273e8f9e4072a9cf9e8cc9ba4855866852f7c3bec26c5a38ca4136": {
       "kind": "heading",
-      "source": "创建 Atriwisp 辅助工具",
+      "source": "Atrinis（艾露妮斯）",
       "source_file": "docs/atrinis.md",
-      "source_hash": "5fb05e70fd529683471e8ea101f323fcfec09de231f533f42d7b61b732eda8ea",
-      "translation": "Creating Atriwisp Auxiliary Tools",
-      "updated_at": 1781779501
+      "source_hash": "1c4b0220b6273e8f9e4072a9cf9e8cc9ba4855866852f7c3bec26c5a38ca4136",
+      "translation": "Atrinis",
+      "updated_at": 1781710746
     },
-    "docs/atrinis.md:heading:73a15cdd2349b3f4387dd75c70c8b5213b133fb426b0959ddd583d1801751908": {
+    "docs/atrinis.md:heading:4b56f02bb1be8c0143174b10c91383d869edc095fcc0b4ff553e8a1856d7fba7": {
       "kind": "heading",
       "source": "Atrinis 监听枢纽",
       "source_file": "docs/atrinis.md",
-      "source_hash": "73a15cdd2349b3f4387dd75c70c8b5213b133fb426b0959ddd583d1801751908",
+      "source_hash": "4b56f02bb1be8c0143174b10c91383d869edc095fcc0b4ff553e8a1856d7fba7",
       "translation": "Atrinis Listening Hub",
       "updated_at": 1781710746
+    },
+    "docs/atrinis.md:heading:629b277ed2752202ae799b3b354eda873cd970cd87770d6033fe7c2b3c559445": {
+      "kind": "heading",
+      "source": "查看 Atriwisp 日志",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "629b277ed2752202ae799b3b354eda873cd970cd87770d6033fe7c2b3c559445",
+      "translation": "View Atriwisp logs",
+      "updated_at": 1781753001
     },
     "docs/atrinis.md:heading:7f1dc02e6e98f119f6b1c6c3719205f2024a25fce5d92c5e3725f90678b92d49": {
       "kind": "heading",
@@ -30,22 +38,6 @@
       "source_file": "docs/atrinis.md",
       "source_hash": "7f1dc02e6e98f119f6b1c6c3719205f2024a25fce5d92c5e3725f90678b92d49",
       "translation": "Architecture Diagram",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:heading:98fa01cd580d047e89c8340614298ab37f6ff30e29c5b72b43bc8da64336947d": {
-      "kind": "heading",
-      "source": "查看 Atriwisp 日志",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "98fa01cd580d047e89c8340614298ab37f6ff30e29c5b72b43bc8da64336947d",
-      "translation": "View Atriwisp logs",
-      "updated_at": 1781753001
-    },
-    "docs/atrinis.md:heading:a43c34eead0953dedbd1109557677e5a64c8095ca120bf437d80c357dfe77308": {
-      "kind": "heading",
-      "source": "Atrinis（艾露妮斯）",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "a43c34eead0953dedbd1109557677e5a64c8095ca120bf437d80c357dfe77308",
-      "translation": "Atrinis",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:heading:a91b699f605492bd73ca4ef8878d1c3f633a222b09ebdb9c742d78688fae1559": {
@@ -72,14 +64,6 @@
       "translation": "How events are processed",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:heading:bfa75fa827da60af48eec188c3326dce25581ea00f03ee2897ff6621f1769875": {
-      "kind": "heading",
-      "source": "与 Cron、Atriyph 和 Skill 的关系",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "bfa75fa827da60af48eec188c3326dce25581ea00f03ee2897ff6621f1769875",
-      "translation": "Relationship with Cron, Atriyph, and Skill",
-      "updated_at": 1781710746
-    },
     "docs/atrinis.md:heading:caa0646035bef7c05d95dba7f72ac813e52db12ba414748fa30b5cf09f3bb46e": {
       "kind": "heading",
       "source": "下一步：配置与使用",
@@ -96,12 +80,36 @@
       "translation": "What problem does it solve",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:heading:f3016b8210cedb337d5f93d6a53737463de8e087807ced34ceb32a8d154dddaa": {
+    "docs/atrinis.md:heading:d5f5a4f342bb501a0adf15c238fc3f7334f1936934385182eb0cf25c536b7dc8": {
       "kind": "heading",
-      "source": "Atriwisp（艾露维丝）",
+      "source": "创建 Atriwisp 辅助工具",
       "source_file": "docs/atrinis.md",
-      "source_hash": "f3016b8210cedb337d5f93d6a53737463de8e087807ced34ceb32a8d154dddaa",
-      "translation": "Atriwisp",
+      "source_hash": "d5f5a4f342bb501a0adf15c238fc3f7334f1936934385182eb0cf25c536b7dc8",
+      "translation": "Creating Atriwisp Auxiliary Tools",
+      "updated_at": 1781779501
+    },
+    "docs/atrinis.md:heading:f039fcc78581d6e4cf46b3150daaa403af807786f8e531f4e4a79fef22434909": {
+      "kind": "heading",
+      "source": "与 Cron、Atriyph 和 Skill 的关系",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "f039fcc78581d6e4cf46b3150daaa403af807786f8e531f4e4a79fef22434909",
+      "translation": "Relationship with Cron, Atriyph, and Skill",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:heading:f459194b1bb78b29a37f3afdf32d685813c4c0eb21245005b49a29e7af41a8d7": {
+      "kind": "heading",
+      "source": "Atriena（艾露维娜）：事件协议",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "f459194b1bb78b29a37f3afdf32d685813c4c0eb21245005b49a29e7af41a8d7",
+      "translation": "Atriena: event protocol",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:list:02766f6fd4be6183f53b731a14558e7dce76c1724319da9e673719590e4df218": {
+      "kind": "list",
+      "source": "按事件模式执行 __ATRIX_CODE_0__、__ATRIX_CODE_1__ 或 __ATRIX_CODE_2__。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "02766f6fd4be6183f53b731a14558e7dce76c1724319da9e673719590e4df218",
+      "translation": "Execute __ATRIX_CODE_0__, __ATRIX_CODE_1__, or __ATRIX_CODE_2__ according to the event mode.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:list:100822820ce3d0c6696ceec5cb9dbdec49e326a514fe9eb748e7ce97cfd6118a": {
@@ -120,20 +128,12 @@
       "translation": "File and log changes.",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:list:1af8a2f5d1c3724c6f5927ec31bb9ae3edbef29b901c15625fcc9c15d2688334": {
+    "docs/atrinis.md:list:3102238a9f4bb47ae798027b901d9db54a2c7fce736f9d8358945f1efe9a43e7": {
       "kind": "list",
-      "source": "接收 Atriena 事件请求。",
+      "source": "游戏服务器产生事件时，让 ATRI-X 记录、通知或执行后台任务。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "1af8a2f5d1c3724c6f5927ec31bb9ae3edbef29b901c15625fcc9c15d2688334",
-      "translation": "Receiving Atriena event requests.",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:list:250f81f0375f39bbb7d38dd3fd177355ec3a1705e5d44febbb4b16e4b7f96d05": {
-      "kind": "list",
-      "source": "让 ATRI-X 掌控一切。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "250f81f0375f39bbb7d38dd3fd177355ec3a1705e5d44febbb4b16e4b7f96d05",
-      "translation": "Let ATRI-X control everything.",
+      "source_hash": "3102238a9f4bb47ae798027b901d9db54a2c7fce736f9d8358945f1efe9a43e7",
+      "translation": "When a game server generates an event, let ATRI-X record it, send a notification, or execute background tasks.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:list:32e2bcfc7bef15132f926e711ed2e89d5dec79d0937af7dd166a36cc25673649": {
@@ -142,6 +142,14 @@
       "source_file": "docs/atrinis.md",
       "source_hash": "32e2bcfc7bef15132f926e711ed2e89d5dec79d0937af7dd166a36cc25673649",
       "translation": "When an RSS feed updates, automatically summarize the content and push it to the target platform.",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:list:37750b3f56e6dc072abdaa0c1dc2f6719f4a800a0c6b6028f693c24e044798d2": {
+      "kind": "list",
+      "source": "[Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp 策略、发送 Atriena 请求，并了解请求字段和投递边界。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "37750b3f56e6dc072abdaa0c1dc2f6719f4a800a0c6b6028f693c24e044798d2",
+      "translation": "[Atrinis Configuration and Usage](atrinis-usage.md): Enable Atrinis, configure Atriwisp policies, send Atriena requests, and understand request fields and delivery boundaries.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:list:37838517f93283185c0c2304da20e58b52155540690a58ff88c0b95b887c1b3d": {
@@ -160,22 +168,6 @@
       "translation": "When a server anomaly occurs, let the LLM analyze the logs and determine whether to send a notification.",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:list:38813f19eca49d35932cdaf4a1b7f5d6d859a7e852443e07f02f207d0278734c": {
-      "kind": "list",
-      "source": "让 Atrinis 管理一切。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "38813f19eca49d35932cdaf4a1b7f5d6d859a7e852443e07f02f207d0278734c",
-      "translation": "Let Atrinis manage everything.",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:list:3beb6c84d50392afe4cfd99e9d941951ccc947967f55ac6cc40bbe2ad1284aec": {
-      "kind": "list",
-      "source": "按事件模式执行 __ATRIX_CODE_0__、__ATRIX_CODE_1__ 或 __ATRIX_CODE_2__。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "3beb6c84d50392afe4cfd99e9d941951ccc947967f55ac6cc40bbe2ad1284aec",
-      "translation": "Execute __ATRIX_CODE_0__, __ATRIX_CODE_1__, or __ATRIX_CODE_2__ according to the event mode.",
-      "updated_at": 1781710746
-    },
     "docs/atrinis.md:list:4d90c584b8f13fb9af4c65effbef88f3ace7a6777ebef5906886a55fd78da6d0": {
       "kind": "list",
       "source": "设备、传感器或本地脚本输出。",
@@ -184,36 +176,20 @@
       "translation": "Devices, sensors, or local script outputs.",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:list:560a2987aa48ec7c07051058a905f789a9db76c32c939f04c5fbe8e1e04078e7": {
-      "kind": "list",
-      "source": "本地脚本发现状态变化时，把结果送入 ATRI-X，而不是直接乱发消息。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "560a2987aa48ec7c07051058a905f789a9db76c32c939f04c5fbe8e1e04078e7",
-      "translation": "When a local script detects a state change, send the result to ATRI-X instead of sending messages haphazardly.",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:list:6909ca940c0ae17ec77b37275b4262729d3439672c820d0fe337a6e54d5cf36a": {
-      "kind": "list",
-      "source": "让 Atriwisp 观测一切。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "6909ca940c0ae17ec77b37275b4262729d3439672c820d0fe337a6e54d5cf36a",
-      "translation": "Let Atriwisp observe everything.",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:list:6df7762b9632af6fb51e74cbc56270eb494a5b9097caa4c74194020fd2f8b982": {
-      "kind": "list",
-      "source": "游戏服务器产生事件时，让 ATRI-X 记录、通知或执行后台任务。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "6df7762b9632af6fb51e74cbc56270eb494a5b9097caa4c74194020fd2f8b982",
-      "translation": "When a game server generates an event, let ATRI-X record it, send a notification, or execute background tasks.",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:list:756840f53fd4b284f4f2097dc6fc6572bacdca794af02be737c3b47c7a0e819a": {
+    "docs/atrinis.md:list:5848187f622924f196ed274598d2cc2ce993d217031f9839e842afcdd32685ca": {
       "kind": "list",
       "source": "记录 Atrinis 日志和审计信息。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "756840f53fd4b284f4f2097dc6fc6572bacdca794af02be737c3b47c7a0e819a",
+      "source_hash": "5848187f622924f196ed274598d2cc2ce993d217031f9839e842afcdd32685ca",
       "translation": "Record Atrinis logs and audit information.",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:list:6bb524a05f1ccaec2e08b7ec65c6073d4a02c57771cc94629fe52c7db9ed00d3": {
+      "kind": "list",
+      "source": "让 ATRI-X 掌控一切。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "6bb524a05f1ccaec2e08b7ec65c6073d4a02c57771cc94629fe52c7db9ed00d3",
+      "translation": "Let ATRI-X control everything.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:list:846e2e17bb9084fe9c776207a250250afade2c64f0512c0e7890411ca37b865a": {
@@ -224,20 +200,28 @@
       "translation": "Operating system events.",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:list:87119cc2e01a0390f10a58741cfc53e85bf7281ac34359fd964d730b219a02b6": {
+    "docs/atrinis.md:list:8f53b426221174693278b86695a7042aac2cb4ce6e8fa6768006d25821198edf": {
       "kind": "list",
       "source": "按 __ATRIX_CODE_0__ 持久化去重。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "87119cc2e01a0390f10a58741cfc53e85bf7281ac34359fd964d730b219a02b6",
+      "source_hash": "8f53b426221174693278b86695a7042aac2cb4ce6e8fa6768006d25821198edf",
       "translation": "Deduplicate persistence based on __ATRIX_CODE_0__.",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:list:95e04a0a5c219009dbc1c24acb81d5e0f2be572e47a984c906ac192114748602": {
+    "docs/atrinis.md:list:a517f9343314945306e5cb0234329ddf69796cd8b99755b22faab31ae1219f6d": {
       "kind": "list",
-      "source": "[Atrinis 配置与使用](atrinis-usage.md)：启用 Atrinis、配置 Atriwisp 策略、发送 Atriena 请求，并了解请求字段和投递边界。",
+      "source": "接收 Atriena 事件请求。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "95e04a0a5c219009dbc1c24acb81d5e0f2be572e47a984c906ac192114748602",
-      "translation": "[Atrinis Configuration and Usage](atrinis-usage.md): Enable Atrinis, configure Atriwisp policies, send Atriena requests, and understand request fields and delivery boundaries.",
+      "source_hash": "a517f9343314945306e5cb0234329ddf69796cd8b99755b22faab31ae1219f6d",
+      "translation": "Receiving Atriena event requests.",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:list:a549e5f3263364c293cd1bdf09b3ec5ce9ad6bccb2cfe21b8e2a1219c76afa31": {
+      "kind": "list",
+      "source": "本地脚本发现状态变化时，把结果送入 ATRI-X，而不是直接乱发消息。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "a549e5f3263364c293cd1bdf09b3ec5ce9ad6bccb2cfe21b8e2a1219c76afa31",
+      "translation": "When a local script detects a state change, send the result to ATRI-X instead of sending messages haphazardly.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:list:aaa581372e5ecd5fda5a54b105ceafccd8ade537da0f7521a7205df4877bd63d": {
@@ -248,12 +232,12 @@
       "translation": "Decide which platforms events can be delivered to.",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:list:bd9e5e4de631eeb8a5e388eecc4d02e8fc1fbece0e10f560e6fa21f32e84bb45": {
+    "docs/atrinis.md:list:b71689ddf2bc4a3d33b823395231281e14ee101903db4147414fc1405a38ca9a": {
       "kind": "list",
-      "source": "Webhook 收到业务告警时，先交给 ATRI-X 判断严重程度。",
+      "source": "让 Atriwisp 观测一切。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "bd9e5e4de631eeb8a5e388eecc4d02e8fc1fbece0e10f560e6fa21f32e84bb45",
-      "translation": "When a Webhook receives a business alert, pass it to ATRI-X first to determine the severity.",
+      "source_hash": "b71689ddf2bc4a3d33b823395231281e14ee101903db4147414fc1405a38ca9a",
+      "translation": "Let Atriwisp observe everything.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:list:c44142ffb7f241531e41fcf2e8c3a70c3e9a255e80c0211db9c8c27045be9286": {
@@ -264,12 +248,28 @@
       "translation": "Database or queue messages.",
       "updated_at": 1781710746
     },
+    "docs/atrinis.md:list:c50dacbccc50cd6e806b74381289ef4cb4eedf7143a8e2bbd84d97fc55d9647b": {
+      "kind": "list",
+      "source": "让 Atrinis 管理一切。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "c50dacbccc50cd6e806b74381289ef4cb4eedf7143a8e2bbd84d97fc55d9647b",
+      "translation": "Let Atrinis manage everything.",
+      "updated_at": 1781710746
+    },
     "docs/atrinis.md:list:cfbd74b6dad5bfea573ce8c007cbae0e664f8efe9af26ba6eb261d1b10c82c00": {
       "kind": "list",
       "source": "任何计算机能接收、读取、监听或生成的内容。",
       "source_file": "docs/atrinis.md",
       "source_hash": "cfbd74b6dad5bfea573ce8c007cbae0e664f8efe9af26ba6eb261d1b10c82c00",
       "translation": "Any content that a computer can receive, read, listen to, or generate.",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:list:e50f1ef229da82d560b03160c3e669a87d1d4ffc70367a9ccef19b3e0b2ff48b": {
+      "kind": "list",
+      "source": "Webhook 收到业务告警时，先交给 ATRI-X 判断严重程度。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "e50f1ef229da82d560b03160c3e669a87d1d4ffc70367a9ccef19b3e0b2ff48b",
+      "translation": "When a Webhook receives a business alert, pass it to ATRI-X first to determine the severity.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:list:f437bc1af1014664cd38da9def33f2c438ca93303546a3c9fae8c0ec55c292a5": {
@@ -288,22 +288,6 @@
       "translation": "RSS, web pages, Webhooks.",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:0347a4bb23fc59730f2f20263d4b6c809f0ebaf5fb802db7a1fb7a4a361c6d67": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 模式的 HTTP 请求会快速返回，实际处理由后台 worker 执行。LLM 最终需要返回结构化结果：\n",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "0347a4bb23fc59730f2f20263d4b6c809f0ebaf5fb802db7a1fb7a4a361c6d67",
-      "translation": "HTTP requests in __ATRIX_CODE_0__ mode will return quickly, and the actual processing is executed by a background worker. The LLM eventually needs to return a structured result:\n",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:paragraph:07529485e6fbd77e02db5d9b6bb485d19fc9024ddff4889e4a6dff0a454d098e": {
-      "kind": "paragraph",
-      "source": "真正进入 LLM、持久化报告或 direct 平台输出的媒体由共享 Media Center 管理，使用 __ATRIX_CODE_0__ 标识，不重复保留 direct 的 sandbox 下载副本。\n",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "07529485e6fbd77e02db5d9b6bb485d19fc9024ddff4889e4a6dff0a454d098e",
-      "translation": "Media that actually enters the LLM, persisted reports, or direct platform outputs are managed by a shared Media Center and identified using __ATRIX_CODE_0__, avoiding redundant sandbox download copies from direct platforms.\n",
-      "updated_at": 1789010179
-    },
     "docs/atrinis.md:paragraph:0927439e61f32efcc1dcee4fadaff5529509bfd7f3ff4bd2e767a56367f5ddb9": {
       "kind": "paragraph",
       "source": "它观察的“世界”不限定类型，包括但不限于：\n",
@@ -312,29 +296,29 @@
       "translation": "The \"world\" it observes is not limited by type, including but not limited to:\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:11bcb140fc54cdf3189e552a7ee8946ab8ef694dfea358940d6ebf0d964c2b67": {
+    "docs/atrinis.md:paragraph:094d12e4473650db02148fd164a229cb14131359e2f6cf657d30983e21ccf635": {
       "kind": "paragraph",
-      "source": "Atrinis 不是普通聊天平台，也不实现 PlatformAdapter。",
+      "source": "工作模式下，超级管理员可以让 ATRI-X 使用内置工具 __ATRIX_CODE_0__ 辅助创建 Atriwisp。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "11bcb140fc54cdf3189e552a7ee8946ab8ef694dfea358940d6ebf0d964c2b67",
-      "translation": "Atrinis is not an ordinary chat platform, nor does it implement PlatformAdapter.",
+      "source_hash": "094d12e4473650db02148fd164a229cb14131359e2f6cf657d30983e21ccf635",
+      "translation": "In work mode, the superadmin can let ATRI-X use the built-in tool __ATRIX_CODE_0__ to assist in creating Atriwisp.",
+      "updated_at": 1781779501
+    },
+    "docs/atrinis.md:paragraph:0e78720bd6635ff03ab729b955771a9a3879c52547aca7178f8d13d5ad4f1f8f": {
+      "kind": "paragraph",
+      "source": "简单说，Atrinis 把 ATRI-X 从“等用户说话的机器人”扩展成“能感知外部世界的 Agent 枢纽”。\n",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "0e78720bd6635ff03ab729b955771a9a3879c52547aca7178f8d13d5ad4f1f8f",
+      "translation": "Simply put, Atrinis expands ATRI-X from a \"bot that waits for users to speak\" into an \"Agent hub capable of perceiving the external world.\"\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:1306daf10aa549ad832115fe7fdec580a5fcf5418879f52e95b87369e5d467ff": {
+    "docs/atrinis.md:paragraph:168ee9895347a90244c4794aabba7f5e77da07fb459eaf53fe34ef090e10bf03": {
       "kind": "paragraph",
-      "source": "Atriena 是 Atriwisp 向 Atrinis 投递事件的 JSON over HTTP 协议。\n",
+      "source": "Atriwisp 是 ATRI-X 的眼睛，也像散布在外部世界的探机。它们可以很多、很小、很分散；职责只有一个：把外部世界发生了什么告诉 Atrinis。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "1306daf10aa549ad832115fe7fdec580a5fcf5418879f52e95b87369e5d467ff",
-      "translation": "Atriena is the JSON over HTTP protocol used by Atriwisp to deliver events to Atrinis.\n",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:paragraph:1588d1f607689f56671a35b3db8a2be89f4f22231d7e282053c9f3c62b6e5401": {
-      "kind": "paragraph",
-      "source": "它读取 __ATRIX_CODE_0__，支持按 Atriwisp 名称、事件来源、事件 ID、模式和时间范围过滤。\n",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "1588d1f607689f56671a35b3db8a2be89f4f22231d7e282053c9f3c62b6e5401",
-      "translation": "It reads __ATRIX_CODE_0__ and supports filtering by Atriwisp name, event source, event ID, mode, and time range.\n",
-      "updated_at": 1781753001
+      "source_hash": "168ee9895347a90244c4794aabba7f5e77da07fb459eaf53fe34ef090e10bf03",
+      "translation": "Atriwisp is the eyes of ATRI-X, acting like probes scattered across the external world. They can be numerous, small, and dispersed; they have only one responsibility: to tell Atrinis what is happening in the external world.\n",
+      "updated_at": 1781794504
     },
     "docs/atrinis.md:paragraph:1ff5ad7a790c585c4083e66c874fd07f1d57a76721909ae15dbd178cd77e554d": {
       "kind": "paragraph",
@@ -352,12 +336,28 @@
       "translation": "External events cannot bypass the Agent, Tool Runtime, Security Policy, and Output Layer.\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:34b5a3148b8753f6d0dea40c1a5debcb9de5a0682ba6c8f22094b615b1536246": {
+    "docs/atrinis.md:paragraph:3431ff6296868d08221f5ac105c39b4c6ec0657d98b8ebb93097eec776179cb1": {
       "kind": "paragraph",
-      "source": "Atrinis 收到事件后，会按 __ATRIX_CODE_0__ 决定处理方式。\n",
+      "source": "Atrinis 是 ATRI-X 的事件监听枢纽。它像一颗恒星，接住来自各处 Atriwisp 群星的信号，再由 ATRI-X 决定是否记录、通知、分析或执行后台任务。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "34b5a3148b8753f6d0dea40c1a5debcb9de5a0682ba6c8f22094b615b1536246",
-      "translation": "After receiving an event, Atrinis determines the processing method according to __ATRIX_CODE_0__.\n",
+      "source_hash": "3431ff6296868d08221f5ac105c39b4c6ec0657d98b8ebb93097eec776179cb1",
+      "translation": "Atrinis is the event listening hub of ATRI-X. Like a star, it catches signals from the constellation of Atriwisps, and ATRI-X then decides whether to record, notify, analyze, or execute background tasks.\n",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:paragraph:35c9938970a6a01cd829114f5b4d9653099a857ae61d5b50871b7da82119c5ca": {
+      "kind": "paragraph",
+      "source": "简单说：Cron 负责“什么时候做”，Atrinis 负责“外面发生了什么”，Atriyph 负责“任务怎么描述”，Skill 负责“能力怎么复用”。\n",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "35c9938970a6a01cd829114f5b4d9653099a857ae61d5b50871b7da82119c5ca",
+      "translation": "Simply put: Cron is responsible for \"when to do it\", Atrinis is responsible for \"what happened outside\", Atriyph is responsible for \"how the task is described\", and Skill is responsible for \"how capabilities are reused\".\n",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:paragraph:392ed881134e9d7e95629d5677a35875cfee2f528d7ec208331b1854a80fecc7": {
+      "kind": "paragraph",
+      "source": "它负责把“外面发生了什么”变成 Atrinis 能理解的统一事件：来源是谁、事件 ID 是什么、内容是什么、希望怎么处理、希望投递到哪里。\n",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "392ed881134e9d7e95629d5677a35875cfee2f528d7ec208331b1854a80fecc7",
+      "translation": "It is responsible for turning \"what happened outside\" into a unified event that Atrinis can understand: who the source is, what the event ID is, what the content is, how it should be handled, and where it should be delivered.\n",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:paragraph:3b4147c19d3df8615e65debb1dd498801d850b87456b1e73e93259afccbc2964": {
@@ -368,27 +368,35 @@
       "translation": "Ordinary chatbots usually only respond to user messages. Cron can respond to time, but it doesn't know what is happening in the outside world.\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:45c5931b1d976a6f207d4ef77b3f374398031cd36dcae8068a6986b3d5a5b83e": {
+    "docs/atrinis.md:paragraph:3d33cd0466eb95502e38091b018c2b40104cb8223772ae948e7d4dd5e0b60435": {
       "kind": "paragraph",
-      "source": "Atrinis 是 ATRI-X 的事件监听枢纽。它像一颗恒星，接住来自各处 Atriwisp 群星的信号，再由 ATRI-X 决定是否记录、通知、分析或执行后台任务。\n",
+      "source": "它读取 __ATRIX_CODE_0__，支持按 Atriwisp 名称、事件来源、事件 ID、模式和时间范围过滤。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "45c5931b1d976a6f207d4ef77b3f374398031cd36dcae8068a6986b3d5a5b83e",
-      "translation": "Atrinis is the event listening hub of ATRI-X. Like a star, it catches signals from the constellation of Atriwisps, and ATRI-X then decides whether to record, notify, analyze, or execute background tasks.\n",
-      "updated_at": 1781710746
+      "source_hash": "3d33cd0466eb95502e38091b018c2b40104cb8223772ae948e7d4dd5e0b60435",
+      "translation": "It reads __ATRIX_CODE_0__ and supports filtering by Atriwisp name, event source, event ID, mode, and time range.\n",
+      "updated_at": 1781753001
     },
-    "docs/atrinis.md:paragraph:45c5a49b04ad6e8abccf04c1709b8b0f82d03c12b794e3ed5b876e7fb40128aa": {
+    "docs/atrinis.md:paragraph:46d750c035d7c00da414b501d5451974259e29ff9807a2ee5b142c4f039cbb3b": {
       "kind": "paragraph",
-      "source": "它统一接收外部事件，把事件接到记录、通知或后台 LLM；它像一颗恒星，所有 Atriwisp 的信号都围绕它汇聚，但最终能量由 ATRI-X 控制。\n",
+      "source": "Atriwisp 不获得媒体管理 RPC，外部工具也不会收到宿主导出文件。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "45c5a49b04ad6e8abccf04c1709b8b0f82d03c12b794e3ed5b876e7fb40128aa",
-      "translation": "It uniformly receives external events and routes them to logs, notifications, or the background LLM; it is like a star around which all Atriwisp signals converge, but the ultimate energy is controlled by ATRI-X.\n",
-      "updated_at": 1781794504
+      "source_hash": "46d750c035d7c00da414b501d5451974259e29ff9807a2ee5b142c4f039cbb3b",
+      "translation": "Atriwisp does not obtain media management RPCs, and external tools will not receive host-exported files.",
+      "updated_at": 1789010179
     },
-    "docs/atrinis.md:paragraph:4f8681313667ed9eac34a07d361e17c89cddf624bd7975b7c1854158f0678d3f": {
+    "docs/atrinis.md:paragraph:4f2dbf38e9eafe451587709e823c6b7d671cdd872eebdd5f2db936481170f3ec": {
+      "kind": "paragraph",
+      "source": "Atriwisp 自己的文件由外部进程管理；",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "4f2dbf38e9eafe451587709e823c6b7d671cdd872eebdd5f2db936481170f3ec",
+      "translation": "Atriwisp's own files are managed by external processes;",
+      "updated_at": 1789010179
+    },
+    "docs/atrinis.md:paragraph:4fe2b9bae16c927057cc08e2d3385e3ba56e32ade546d85eedcafc5f447a96fe": {
       "kind": "paragraph",
       "source": "Atriena v3 的 image/file segment 在 __ATRIX_CODE_0__ 中填写 HTTP(S)、data URI 或完整 __ATRIX_CODE_1__，不新增独立 __ATRIX_CODE_2__ 字段。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "4f8681313667ed9eac34a07d361e17c89cddf624bd7975b7c1854158f0678d3f",
+      "source_hash": "4fe2b9bae16c927057cc08e2d3385e3ba56e32ade546d85eedcafc5f447a96fe",
       "translation": "In Atriena v3, the image/file segment fills HTTP(S), data URIs, or full __ATRIX_CODE_1__ in __ATRIX_CODE_0__, without adding a separate __ATRIX_CODE_2__ field.",
       "updated_at": 1789010179
     },
@@ -400,36 +408,60 @@
       "translation": "Core Idea:\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:553a11fc1053ba214de0c4f60cba055a78bfb071ece2965f544711b0d008de7d": {
+    "docs/atrinis.md:paragraph:564c53205942af90693913e59a02f51303d13cfa0c343595bb57851a3594316e": {
       "kind": "paragraph",
-      "source": "工作模式下，超级管理员可以让 ATRI-X 使用内置工具 __ATRIX_CODE_0__ 辅助创建 Atriwisp。",
+      "source": "如需参考现成的 Atriwisp 示例、协议文档和模板，可查看 [Atriwisp Showcase](https://github.com/Elfreese/elwisp-showcase)。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "553a11fc1053ba214de0c4f60cba055a78bfb071ece2965f544711b0d008de7d",
-      "translation": "In work mode, the superadmin can let ATRI-X use the built-in tool __ATRIX_CODE_0__ to assist in creating Atriwisp.",
-      "updated_at": 1781779501
+      "source_hash": "564c53205942af90693913e59a02f51303d13cfa0c343595bb57851a3594316e",
+      "translation": "For ready-made Atriwisp examples, protocol documentation, and templates, please refer to [Atriwisp Showcase](https://github.com/Elfreese/elwisp-showcase).\n",
+      "updated_at": 1782288638
     },
-    "docs/atrinis.md:paragraph:695148bdd3a5cccf1382ef265c97fe80863c1b0b09aa2727b1b892fc67855062": {
+    "docs/atrinis.md:paragraph:5b5dc2cae3cfb85728f6df3d73b56b901b4e91a1efc8ece9ce08a7ad92bf7987": {
       "kind": "paragraph",
-      "source": "该工具会返回创建指南、Atriena 事件模板、Atrinis 配置片段、监听器脚手架、curl 测试命令和安全检查清单；",
+      "source": "Atriwisp 只负责“看见并上报”。它不直接控制 ATRI-X，不直接向聊天平台发消息，也不决定最终是否调用 LLM 或工具。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "695148bdd3a5cccf1382ef265c97fe80863c1b0b09aa2727b1b892fc67855062",
-      "translation": "This tool returns creation guides, Atriena event templates, Atrinis configuration snippets, listener scaffolds, curl test commands, and security checklists;",
-      "updated_at": 1781779501
+      "source_hash": "5b5dc2cae3cfb85728f6df3d73b56b901b4e91a1efc8ece9ce08a7ad92bf7987",
+      "translation": "Atriwisp is only responsible for \"seeing and reporting.\" It does not directly control ATRI-X, does not send messages directly to chat platforms, and does not decide whether to ultimately call an LLM or a tool.\n",
+      "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:714ef44c42fc0faa0c3240b2a8ba5709141652c87514b13f9be575007f13dd20": {
+    "docs/atrinis.md:paragraph:5c1a14e989995c5cd509de15968b8069e736924826aebc17b4da5d5333ace599": {
+      "kind": "paragraph",
+      "source": "Atrinis 不是普通聊天平台，也不实现 PlatformAdapter。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "5c1a14e989995c5cd509de15968b8069e736924826aebc17b4da5d5333ace599",
+      "translation": "Atrinis is not an ordinary chat platform, nor does it implement PlatformAdapter.",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:paragraph:5eaf3c22b8a2822b67f094fe3551638125fe2e3af574b041b53264f8c41a029a": {
+      "kind": "paragraph",
+      "source": "Atrinis 负责：\n",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "5eaf3c22b8a2822b67f094fe3551638125fe2e3af574b041b53264f8c41a029a",
+      "translation": "Atrinis is responsible for:\n",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:paragraph:80ed1d7a5c1aa3650d80016b8e691bd010bd107120cd3ce378a1cf02fc96aaa0": {
+      "kind": "paragraph",
+      "source": "可以用 __ATRIX_CODE_0__ 查看 Atrinis/Atriwisp 事件日志。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "80ed1d7a5c1aa3650d80016b8e691bd010bd107120cd3ce378a1cf02fc96aaa0",
+      "translation": "You can use __ATRIX_CODE_0__ to view Atrinis/Atriwisp event logs.",
+      "updated_at": 1781753001
+    },
+    "docs/atrinis.md:paragraph:86a53719897933faf32546cc2efcecfea7080f3197d3863f6b7f5ad53d0ed4c0": {
       "kind": "paragraph",
       "source": "Atrinis workspace 保存临时计算和普通工作文件。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "714ef44c42fc0faa0c3240b2a8ba5709141652c87514b13f9be575007f13dd20",
+      "source_hash": "86a53719897933faf32546cc2efcecfea7080f3197d3863f6b7f5ad53d0ed4c0",
       "translation": "The Atrinis workspace stores temporary computations and general work files.",
       "updated_at": 1789010179
     },
-    "docs/atrinis.md:paragraph:7ff9d0ef9e57e4c67efc6620f4d2c83e0d1d68c8430e82eb68b1057fd5e7968d": {
+    "docs/atrinis.md:paragraph:8bc12ecabfdf3215084be7eaa4e23539186cf82af439a4fe57f44a7775fc8951": {
       "kind": "paragraph",
-      "source": "简单说，Atrinis 把 ATRI-X 从“等用户说话的机器人”扩展成“能感知外部世界的 Agent 枢纽”。\n",
+      "source": "__ATRIX_CODE_0__ 模式的 HTTP 请求会快速返回，实际处理由后台 worker 执行。LLM 最终需要返回结构化结果：\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "7ff9d0ef9e57e4c67efc6620f4d2c83e0d1d68c8430e82eb68b1057fd5e7968d",
-      "translation": "Simply put, Atrinis expands ATRI-X from a \"bot that waits for users to speak\" into an \"Agent hub capable of perceiving the external world.\"\n",
+      "source_hash": "8bc12ecabfdf3215084be7eaa4e23539186cf82af439a4fe57f44a7775fc8951",
+      "translation": "HTTP requests in __ATRIX_CODE_0__ mode will return quickly, and the actual processing is executed by a background worker. The LLM eventually needs to return a structured result:\n",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:paragraph:9986537e133dc0f6ed3dffddebe35416063688bd89421f1028b57d137f2261a9": {
@@ -448,53 +480,29 @@
       "translation": "The report outbox uses stable media sources; references for retries are independent of the time-limited sent cache.",
       "updated_at": 1789010179
     },
-    "docs/atrinis.md:paragraph:aaea27431774bcd2c2b77ff06bfc1295f948331b590d2808f2bb0e72aace31d5": {
-      "kind": "paragraph",
-      "source": "可以用 __ATRIX_CODE_0__ 查看 Atrinis/Atriwisp 事件日志。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "aaea27431774bcd2c2b77ff06bfc1295f948331b590d2808f2bb0e72aace31d5",
-      "translation": "You can use __ATRIX_CODE_0__ to view Atrinis/Atriwisp event logs.",
-      "updated_at": 1781753001
-    },
-    "docs/atrinis.md:paragraph:adef3d9013f4f87cbcd06bb22cf5a2535a1649b89d32a882c4fd4aa22aea893d": {
-      "kind": "paragraph",
-      "source": "Atrinis 让 ATRI-X 可以响应外部世界。\n",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "adef3d9013f4f87cbcd06bb22cf5a2535a1649b89d32a882c4fd4aa22aea893d",
-      "translation": "Atrinis allows ATRI-X to respond to the external world.\n",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:paragraph:b3a11302390f0fe1b098f268e2c006c8c6fcfd2397c7cf6a18dae3609c3980c5": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 时，Atrinis 会按裁决后的目标发送 __ATRIX_CODE_1__。\n",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "b3a11302390f0fe1b098f268e2c006c8c6fcfd2397c7cf6a18dae3609c3980c5",
-      "translation": "During __ATRIX_CODE_0__, Atrinis will send __ATRIX_CODE_1__ according to the adjudicated target.\n",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:paragraph:b6a7786f7bade05cc424e23f71fbffde88e8dd767455f668ea54c1aa0fb87d08": {
-      "kind": "paragraph",
-      "source": "如需参考现成的 Atriwisp 示例、协议文档和模板，可查看 [Atriwisp Showcase](https://github.com/Elfreese/elwisp-showcase)。\n",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "b6a7786f7bade05cc424e23f71fbffde88e8dd767455f668ea54c1aa0fb87d08",
-      "translation": "For ready-made Atriwisp examples, protocol documentation, and templates, please refer to [Atriwisp Showcase](https://github.com/Elfreese/elwisp-showcase).\n",
-      "updated_at": 1782288638
-    },
-    "docs/atrinis.md:paragraph:c235f80b7fef92338972f15c874cba0d2e2410167f4ef2eb2e6db6e4ec5ce465": {
-      "kind": "paragraph",
-      "source": "Atriwisp 是外部子监听器。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "c235f80b7fef92338972f15c874cba0d2e2410167f4ef2eb2e6db6e4ec5ce465",
-      "translation": "Atriwisp is an external sub-listener.",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:paragraph:c74ba82a41c93659cbfca093593692d14c8e1dc29d662851ca5e752244f309d5": {
+    "docs/atrinis.md:paragraph:b1696c8d7ceff86748c08fb4fed1b56a4cd1edff2880d3fc51eb32478d2d3c0f": {
       "kind": "paragraph",
       "source": "详见 [媒体使用与清理](atrinis-usage.md#下载与存储)。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "c74ba82a41c93659cbfca093593692d14c8e1dc29d662851ca5e752244f309d5",
+      "source_hash": "b1696c8d7ceff86748c08fb4fed1b56a4cd1edff2880d3fc51eb32478d2d3c0f",
       "translation": "See [Media Usage and Cleanup](atrinis-usage.md#下载与存储) for details.\n",
       "updated_at": 1789010179
+    },
+    "docs/atrinis.md:paragraph:b3c0c46904e760df071eb8218f140c51361400e825e71959757f78a5adfb3728": {
+      "kind": "paragraph",
+      "source": "__ATRIX_CODE_0__ 时，Atrinis 会按裁决后的目标发送 __ATRIX_CODE_1__。\n",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "b3c0c46904e760df071eb8218f140c51361400e825e71959757f78a5adfb3728",
+      "translation": "During __ATRIX_CODE_0__, Atrinis will send __ATRIX_CODE_1__ according to the adjudicated target.\n",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:paragraph:c67ab4eabd067ee764722a484f910e2fb22467bde3ea709b9f4c707925b78556": {
+      "kind": "paragraph",
+      "source": "Atrinis 是 ATRI-X 内部的事件入口 runtime，和平台 runtime、Cron runtime 同级装配。\n",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "c67ab4eabd067ee764722a484f910e2fb22467bde3ea709b9f4c707925b78556",
+      "translation": "Atrinis is the event entry runtime within ATRI-X, assembled at the same level as the platform runtime and Cron runtime.\n",
+      "updated_at": 1781710746
     },
     "docs/atrinis.md:paragraph:c9622566443e8cfc57507fb93091b584ea8d7763303696b4c1b4ed7b32f3276b": {
       "kind": "paragraph",
@@ -504,20 +512,20 @@
       "translation": "Initial endpoint:\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:cf774143d47dd2b435fd5c750f0880c18fbc63b05666003eee4511241cfe5f97": {
+    "docs/atrinis.md:paragraph:cbd18a435c010908bf8a0e3acaac72da230715b253e81634592083e312dc2811": {
       "kind": "paragraph",
-      "source": "简单说：Cron 负责“什么时候做”，Atrinis 负责“外面发生了什么”，Atriyph 负责“任务怎么描述”，Skill 负责“能力怎么复用”。\n",
+      "source": "它统一接收外部事件，把事件接到记录、通知或后台 LLM；它像一颗恒星，所有 Atriwisp 的信号都围绕它汇聚，但最终能量由 ATRI-X 控制。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "cf774143d47dd2b435fd5c750f0880c18fbc63b05666003eee4511241cfe5f97",
-      "translation": "Simply put: Cron is responsible for \"when to do it\", Atrinis is responsible for \"what happened outside\", Atriyph is responsible for \"how the task is described\", and Skill is responsible for \"how capabilities are reused\".\n",
-      "updated_at": 1781710746
+      "source_hash": "cbd18a435c010908bf8a0e3acaac72da230715b253e81634592083e312dc2811",
+      "translation": "It uniformly receives external events and routes them to logs, notifications, or the background LLM; it is like a star around which all Atriwisp signals converge, but the ultimate energy is controlled by ATRI-X.\n",
+      "updated_at": 1781794504
     },
-    "docs/atrinis.md:paragraph:d1d703d1c38cf406edff8772cba0bc08f905ff44a5e9d6fcd59fb9c4e26bdc01": {
+    "docs/atrinis.md:paragraph:d4557e74d56d410bc5b4805f8bb8cdbd1e8e70d0dd585ef83e432cb637b744d6": {
       "kind": "paragraph",
-      "source": "Atriwisp 只负责“看见并上报”。它不直接控制 ATRI-X，不直接向聊天平台发消息，也不决定最终是否调用 LLM 或工具。\n",
+      "source": "Atriwisp 是外部子监听器。",
       "source_file": "docs/atrinis.md",
-      "source_hash": "d1d703d1c38cf406edff8772cba0bc08f905ff44a5e9d6fcd59fb9c4e26bdc01",
-      "translation": "Atriwisp is only responsible for \"seeing and reporting.\" It does not directly control ATRI-X, does not send messages directly to chat platforms, and does not decide whether to ultimately call an LLM or a tool.\n",
+      "source_hash": "d4557e74d56d410bc5b4805f8bb8cdbd1e8e70d0dd585ef83e432cb637b744d6",
+      "translation": "Atriwisp is an external sub-listener.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:paragraph:d706f949eac50f5bc58d7b9ac40cc44b423397621971992014de8732f8a0b58f": {
@@ -528,36 +536,44 @@
       "translation": "It can be a shell script, a resident process, an RSS poller, a Webhook forwarder, a game server plugin, a log listener, a hardware status collector, or any program that can convert external signals into HTTP JSON.\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:d9720267703ebc0d4400e602eca4bff5f47d953919a5587b692952c84d177fb8": {
+    "docs/atrinis.md:paragraph:da922c13b771b0d0356cfacad61a9c3ae609e78fa618943dc38ca04cd29598fc": {
       "kind": "paragraph",
-      "source": "Atrinis 是 ATRI-X 内部的事件入口 runtime，和平台 runtime、Cron runtime 同级装配。\n",
+      "source": "Atriena 是 Atriwisp 向 Atrinis 投递事件的 JSON over HTTP 协议。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "d9720267703ebc0d4400e602eca4bff5f47d953919a5587b692952c84d177fb8",
-      "translation": "Atrinis is the event entry runtime within ATRI-X, assembled at the same level as the platform runtime and Cron runtime.\n",
+      "source_hash": "da922c13b771b0d0356cfacad61a9c3ae609e78fa618943dc38ca04cd29598fc",
+      "translation": "Atriena is the JSON over HTTP protocol used by Atriwisp to deliver events to Atrinis.\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:e4dca4da13020e3b19785f32c8b200b0920a028bc4036a95fa5551faef12ce44": {
+    "docs/atrinis.md:paragraph:e045e71513a9b3e5c281ae4fb6e86273c46b78b99197092b91dc96e47007a04e": {
       "kind": "paragraph",
-      "source": "它负责把“外面发生了什么”变成 Atrinis 能理解的统一事件：来源是谁、事件 ID 是什么、内容是什么、希望怎么处理、希望投递到哪里。\n",
+      "source": "该工具会返回创建指南、Atriena 事件模板、Atrinis 配置片段、监听器脚手架、curl 测试命令和安全检查清单；",
       "source_file": "docs/atrinis.md",
-      "source_hash": "e4dca4da13020e3b19785f32c8b200b0920a028bc4036a95fa5551faef12ce44",
-      "translation": "It is responsible for turning \"what happened outside\" into a unified event that Atrinis can understand: who the source is, what the event ID is, what the content is, how it should be handled, and where it should be delivered.\n",
+      "source_hash": "e045e71513a9b3e5c281ae4fb6e86273c46b78b99197092b91dc96e47007a04e",
+      "translation": "This tool returns creation guides, Atriena event templates, Atrinis configuration snippets, listener scaffolds, curl test commands, and security checklists;",
+      "updated_at": 1781779501
+    },
+    "docs/atrinis.md:paragraph:ea88bef1af4b8e376d7171b961d2cee55f98470086955d7795faacf31cd458aa": {
+      "kind": "paragraph",
+      "source": "Atrinis 让 ATRI-X 可以响应外部世界。\n",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "ea88bef1af4b8e376d7171b961d2cee55f98470086955d7795faacf31cd458aa",
+      "translation": "Atrinis allows ATRI-X to respond to the external world.\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:e8ed8ec34748c1b2669ebd41ac9693b4a8ad42b4d79dd6520d28147f0ab44a25": {
+    "docs/atrinis.md:paragraph:f349ebc28545e695a063a8a58e691b5980d9d3a9fe1d2772690d3e15341d4c4b": {
       "kind": "paragraph",
-      "source": "Atrinis 负责：\n",
+      "source": "Atrinis 收到事件后，会按 __ATRIX_CODE_0__ 决定处理方式。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "e8ed8ec34748c1b2669ebd41ac9693b4a8ad42b4d79dd6520d28147f0ab44a25",
-      "translation": "Atrinis is responsible for:\n",
+      "source_hash": "f349ebc28545e695a063a8a58e691b5980d9d3a9fe1d2772690d3e15341d4c4b",
+      "translation": "After receiving an event, Atrinis determines the processing method according to __ATRIX_CODE_0__.\n",
       "updated_at": 1781710746
     },
-    "docs/atrinis.md:paragraph:edfa67e8209c68e6f952490b26b1ce591abcd3211cba6d962a553fc97a6519d7": {
+    "docs/atrinis.md:paragraph:f4a3fe311a23a83bce64730389437fb8e16736aba8d5d442eafe6a53864a1e34": {
       "kind": "paragraph",
-      "source": "Atriwisp 不获得媒体管理 RPC，外部工具也不会收到宿主导出文件。",
+      "source": "真正进入 LLM、持久化报告或 direct 平台输出的媒体由共享 Media Center 管理，使用 __ATRIX_CODE_0__ 标识，不重复保留 direct 的 sandbox 下载副本。\n",
       "source_file": "docs/atrinis.md",
-      "source_hash": "edfa67e8209c68e6f952490b26b1ce591abcd3211cba6d962a553fc97a6519d7",
-      "translation": "Atriwisp does not obtain media management RPCs, and external tools will not receive host-exported files.",
+      "source_hash": "f4a3fe311a23a83bce64730389437fb8e16736aba8d5d442eafe6a53864a1e34",
+      "translation": "Media that actually enters the LLM, persisted reports, or direct platform outputs are managed by a shared Media Center and identified using __ATRIX_CODE_0__, avoiding redundant sandbox download copies from direct platforms.\n",
       "updated_at": 1789010179
     },
     "docs/atrinis.md:paragraph:f79441b74e80c8b88c96cfbb9143ba9d9d314d8576e77e9883f0450f86b7c54f": {
@@ -567,22 +583,6 @@
       "source_hash": "f79441b74e80c8b88c96cfbb9143ba9d9d314d8576e77e9883f0450f86b7c54f",
       "translation": "Example:\n",
       "updated_at": 1781753001
-    },
-    "docs/atrinis.md:paragraph:f8aa823d9abed3a8516ae94bd50fb98b2ffba1ba012bc76c362c91653e6e3855": {
-      "kind": "paragraph",
-      "source": "Atriwisp 自己的文件由外部进程管理；",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "f8aa823d9abed3a8516ae94bd50fb98b2ffba1ba012bc76c362c91653e6e3855",
-      "translation": "Atriwisp's own files are managed by external processes;",
-      "updated_at": 1789010179
-    },
-    "docs/atrinis.md:paragraph:fc6b6e2ffe62b78a01706f31174bc10ba0d391abd6b5f337ec4b25057ab65e0f": {
-      "kind": "paragraph",
-      "source": "Atriwisp 是 ATRI-X 的眼睛，也像散布在外部世界的探机。它们可以很多、很小、很分散；职责只有一个：把外部世界发生了什么告诉 Atrinis。\n",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "fc6b6e2ffe62b78a01706f31174bc10ba0d391abd6b5f337ec4b25057ab65e0f",
-      "translation": "Atriwisp is the eyes of ATRI-X, acting like probes scattered across the external world. They can be numerous, small, and dispersed; they have only one responsibility: to tell Atrinis what is happening in the external world.\n",
-      "updated_at": 1781794504
     },
     "docs/atrinis.md:table:047563285d4d325d5023f47c22f5c5f3e14100d30d569d73c91946b0524815e0": {
       "kind": "table",
@@ -624,6 +624,14 @@
       "translation": "Function",
       "updated_at": 1781710746
     },
+    "docs/atrinis.md:table:41fbcee13b4f028ae7f0ef81d2419b4875f8d5e7c1454e66d65cf8ece9082650": {
+      "kind": "table",
+      "source": "按 Atrinis 裁决后的目标直接发送文本通知。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "41fbcee13b4f028ae7f0ef81d2419b4875f8d5e7c1454e66d65cf8ece9082650",
+      "translation": "Directly send text notifications to the target determined by Atrinis.",
+      "updated_at": 1781710746
+    },
     "docs/atrinis.md:table:47a270081ab2892f63d740bc61cd7b17b04d9d3947b3123be8db9e0d97c12c83": {
       "kind": "table",
       "source": "模式",
@@ -646,6 +654,14 @@
       "source_file": "docs/atrinis.md",
       "source_hash": "5c5374dd958bcb79c1fe83a1b7a6c25df36603eec36f15f180a916af2022cee1",
       "translation": "Capability",
+      "updated_at": 1781710746
+    },
+    "docs/atrinis.md:table:727b8a2bad0e630134555f38b3d18d62a02ed23fd026c104ec8be6c6d745eb1b": {
+      "kind": "table",
+      "source": "接收 Atriwisp 投递的事件并分发处理。",
+      "source_file": "docs/atrinis.md",
+      "source_hash": "727b8a2bad0e630134555f38b3d18d62a02ed23fd026c104ec8be6c6d745eb1b",
+      "translation": "Receive events delivered by Atriwisp and distribute them for processing.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:table:81a4460ccdd5cc2ca9982051a399e70be967cb8f4978999f70649e269e9d0767": {
@@ -678,14 +694,6 @@
       "source_file": "docs/atrinis.md",
       "source_hash": "8b6ff498515bcc2ffdefa4f7b2efbe5edfcf8ba146e99308bc72024b52349ba0",
       "translation": "Time",
-      "updated_at": 1781710746
-    },
-    "docs/atrinis.md:table:91b6cecc8edcbd2a29709baaba20ef817048de0e3e2e5eb4639981918c45179e": {
-      "kind": "table",
-      "source": "接收 Atriwisp 投递的事件并分发处理。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "91b6cecc8edcbd2a29709baaba20ef817048de0e3e2e5eb4639981918c45179e",
-      "translation": "Receive events delivered by Atriwisp and distribute them for processing.",
       "updated_at": 1781710746
     },
     "docs/atrinis.md:table:99eefee9100ef3a2b30a7b8d310b5c0856946e8df2cfacbce6151a3dd6d7ec94": {
@@ -727,18 +735,10 @@
       "source_hash": "e1fa708a3c46e2d9bf859aff60328f139ca507b0c1cb56b567bb9f7dfe6edf63",
       "translation": "Describe tasks, steps, and constraints in a structured manner.",
       "updated_at": 1781710746
-    },
-    "docs/atrinis.md:table:f65dfca21fa9f0474ec6b213dff06887b240535fea1723dbb4372eb9da0cd829": {
-      "kind": "table",
-      "source": "按 Atrinis 裁决后的目标直接发送文本通知。",
-      "source_file": "docs/atrinis.md",
-      "source_hash": "f65dfca21fa9f0474ec6b213dff06887b240535fea1723dbb4372eb9da0cd829",
-      "translation": "Directly send text notifications to the target determined by Atrinis.",
-      "updated_at": 1781710746
     }
   },
   "source": "docs/atrinis.md",
-  "source_hash": "167b0cd036b4966d1db2c2d8e0cd07344ce8c2160aadff474dcfddd9a4da80f5",
+  "source_hash": "48878a37f63ff146b547adf84eb84027b79bc42c061b7475f46d4f87a54b561d",
   "target": "docs.en/atrinis.md",
   "updated_at": 1789010179,
   "version": 2

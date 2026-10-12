@@ -80,14 +80,6 @@
       "translation": "Environment Requirements",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:heading:734b0c430c1eb7ae6771592403486ad3daa887e46217bd7effafaf3194cc7d3b": {
-      "kind": "heading",
-      "source": "启动 ATRI-X",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "734b0c430c1eb7ae6771592403486ad3daa887e46217bd7effafaf3194cc7d3b",
-      "translation": "Start ATRI-X",
-      "updated_at": 1781575108
-    },
     "docs/getting-started.md:heading:85d7e1b72989d1fa70e30d7c80d4266b7a5942f868458637157436987551a3ec": {
       "kind": "heading",
       "source": "配置 Provider",
@@ -120,6 +112,14 @@
       "translation": "Get the Code",
       "updated_at": 1781515975
     },
+    "docs/getting-started.md:heading:e097be3e08b7eba14459565f4c2bc96d66c38cc244327a547b812294759e0217": {
+      "kind": "heading",
+      "source": "启动 ATRI-X",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "e097be3e08b7eba14459565f4c2bc96d66c38cc244327a547b812294759e0217",
+      "translation": "Start ATRI-X",
+      "updated_at": 1781575108
+    },
     "docs/getting-started.md:heading:eb7300efb1b8c7ff200a24f29e2115eb3ac3a697745e43dbec68f085a7ccd59e": {
       "kind": "heading",
       "source": "启动时报 API Key 缺失",
@@ -136,6 +136,22 @@
       "translation": "First Conversation",
       "updated_at": 1781515975
     },
+    "docs/getting-started.md:list:013f7e46f7ebc591f94c23a55b8c1957f065f03618f92b29f5293cd0b52f43c1": {
+      "kind": "list",
+      "source": "平台配置目录，例如 Windows __ATRIX_CODE_0__，Linux XDG 配置目录。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "013f7e46f7ebc591f94c23a55b8c1957f065f03618f92b29f5293cd0b52f43c1",
+      "translation": "Platform configuration directory, such as Windows __ATRIX_CODE_0__ or Linux XDG configuration directory.",
+      "updated_at": 1781515975
+    },
+    "docs/getting-started.md:list:016020386c37e809515595a71c549902e814669ce4614360d74389f8162db689": {
+      "kind": "list",
+      "source": "一个 OpenAI-compatible LLM 服务，例如 DeepSeek、OpenAI 或其他兼容 __ATRIX_CODE_0__ 的服务。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "016020386c37e809515595a71c549902e814669ce4614360d74389f8162db689",
+      "translation": "An OpenAI-compatible LLM service, such as DeepSeek, OpenAI, or other services compatible with __ATRIX_CODE_0__.",
+      "updated_at": 1781515975
+    },
     "docs/getting-started.md:list:02dc2d90c109c9438660c7439d88c3dee386900475cfc940387b37c586ee6e00": {
       "kind": "list",
       "source": "宽屏模式下可按住聊天区与通知区之间的竖线拖动，调整两侧宽度；本次运行期间会保留调整结果。",
@@ -144,45 +160,29 @@
       "translation": "In wide-screen mode, you can click and drag the vertical line between the chat area and the notification area to adjust the width of both sides; the adjustment will be preserved during the current run.",
       "updated_at": 1784085266
     },
-    "docs/getting-started.md:list:03f23bf71005b97dc0de2f80114892fe77616fa554227c539d318cae4a26ad45": {
+    "docs/getting-started.md:list:19797cf611d99f2af83db6cef3b37974b8ebc9bd1d6b3411e43e23a9a00e74f3": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 切换模型。",
+      "source": "__ATRIX_CODE_0__ 指定的路径。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "03f23bf71005b97dc0de2f80114892fe77616fa554227c539d318cae4a26ad45",
-      "translation": "__ATRIX_CODE_0__ Switch models.",
+      "source_hash": "19797cf611d99f2af83db6cef3b37974b8ebc9bd1d6b3411e43e23a9a00e74f3",
+      "translation": "The path specified by __ATRIX_CODE_0__.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:04cc698eb3c37791224ae21f8bd2d3297627f1b080868b7cb47faddb41a7f268": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__：小幅滚动聊天输出；__ATRIX_CODE_2__ / __ATRIX_CODE_3__ 滚动通知区。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "04cc698eb3c37791224ae21f8bd2d3297627f1b080868b7cb47faddb41a7f268",
-      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__: Scroll chat output slightly; __ATRIX_CODE_2__ / __ATRIX_CODE_3__: Scroll notification area.",
-      "updated_at": 1782117183
-    },
-    "docs/getting-started.md:list:09d2cb5594775ab88930d126283fa7afdaf5eee91cfef93a806cf9f77133b418": {
-      "kind": "list",
-      "source": "copy mode 中可用 __ATRIX_CODE_0__ 与 __ATRIX_CODE_1__ 移动，__ATRIX_CODE_2__ / __ATRIX_CODE_3__ 选择，__ATRIX_CODE_4__ 复制，__ATRIX_CODE_5__ 搜索，__ATRIX_CODE_6__ 或 __ATRIX_CODE_7__ 返回输入。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "09d2cb5594775ab88930d126283fa7afdaf5eee91cfef93a806cf9f77133b418",
-      "translation": "In copy mode, use __ATRIX_CODE_0__ and __ATRIX_CODE_1__ to move, __ATRIX_CODE_2__ / __ATRIX_CODE_3__ to select, __ATRIX_CODE_4__ to copy, __ATRIX_CODE_5__ to search, and __ATRIX_CODE_6__ or __ATRIX_CODE_7__ to return to input.",
-      "updated_at": 1782117183
-    },
-    "docs/getting-started.md:list:1a12b3e94a4d4ea9d8fec655f81c012d9b412b3614c3f937620b96b94cec6273": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 切到低成本聊天模式。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "1a12b3e94a4d4ea9d8fec655f81c012d9b412b3614c3f937620b96b94cec6273",
-      "translation": "__ATRIX_CODE_0__ Switch to low-cost chat mode.",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:list:1c58540749edfc0c2f4a9e4b1fcc1d980357a0015b51fe3564b79fd675439524": {
+    "docs/getting-started.md:list:1bc18e14e8f17afacbced737d412e6201b88bbf2948a82035c0585061f3b7902": {
       "kind": "list",
       "source": "系统环境变量或配置目录 __ATRIX_CODE_0__ 是否包含对应 Key。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "1c58540749edfc0c2f4a9e4b1fcc1d980357a0015b51fe3564b79fd675439524",
+      "source_hash": "1bc18e14e8f17afacbced737d412e6201b88bbf2948a82035c0585061f3b7902",
       "translation": "Whether the system environment variables or the configuration directory __ATRIX_CODE_0__ contain the corresponding Key.",
       "updated_at": 1781515975
+    },
+    "docs/getting-started.md:list:263595e6446fc84b8eedae9a78decb7212cb913c6d4f9e535bcb376100b3604a": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__：进入聊天区 / 通知区 copy mode。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "263595e6446fc84b8eedae9a78decb7212cb913c6d4f9e535bcb376100b3604a",
+      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__: Enter copy mode for chat area / notification area.",
+      "updated_at": 1782117183
     },
     "docs/getting-started.md:list:2ceebaa4be6d81b2e457d69046e3fa2eac2b5b6ef7106b6e1799a406f497d253": {
       "kind": "list",
@@ -192,99 +192,107 @@
       "translation": "Whether the current shell can read these environment variables.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:43c75801d01df665811feb330700c7712c87b6d89a9afea15bf8ffe290ad5e08": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 查看可用模型列表。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "43c75801d01df665811feb330700c7712c87b6d89a9afea15bf8ffe290ad5e08",
-      "translation": "__ATRIX_CODE_0__ View the list of available models.",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:list:47d21cada652323c14884225b24ffb1055d586fbbf55c29f5b404b1d3ed02c8c": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 中的 __ATRIX_CODE_1__ 是否写对。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "47d21cada652323c14884225b24ffb1055d586fbbf55c29f5b404b1d3ed02c8c",
-      "translation": "Whether __ATRIX_CODE_1__ in __ATRIX_CODE_0__ is written correctly.",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:list:5c1ee4efcb90e0999f77fda34e78d255e8abdc071f7d846f7782569067269cc0": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 查看可用命令。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "5c1ee4efcb90e0999f77fda34e78d255e8abdc071f7d846f7782569067269cc0",
-      "translation": "__ATRIX_CODE_0__ View available commands.",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:list:674118ffe7bacd1c25f1ae67f8d8943386b45e66844b34eca75b84a12b2b1032": {
+    "docs/getting-started.md:list:35d2cdb02b211b1b685aae925bea64008af2c2c90686060ed800cc950146c409": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__ 切到可使用工具的工作模式。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "674118ffe7bacd1c25f1ae67f8d8943386b45e66844b34eca75b84a12b2b1032",
+      "source_hash": "35d2cdb02b211b1b685aae925bea64008af2c2c90686060ed800cc950146c409",
       "translation": "__ATRIX_CODE_0__ Switch to work mode where tools can be used.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:7616042ea6e05162fae6dd4fe360bba1503a7c888297476e0182f5d8f0bf2b34": {
+    "docs/getting-started.md:list:421562d03b77217daf8392f9cbb5669d69f63c1058eef6a292a955f096234a7c": {
       "kind": "list",
-      "source": "平台配置目录，例如 Windows __ATRIX_CODE_0__，Linux XDG 配置目录。",
+      "source": "__ATRIX_CODE_0__ 查看可用命令。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "7616042ea6e05162fae6dd4fe360bba1503a7c888297476e0182f5d8f0bf2b34",
-      "translation": "Platform configuration directory, such as Windows __ATRIX_CODE_0__ or Linux XDG configuration directory.",
+      "source_hash": "421562d03b77217daf8392f9cbb5669d69f63c1058eef6a292a955f096234a7c",
+      "translation": "__ATRIX_CODE_0__ View available commands.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:7dd7ed525047ee8728fc6e0dac6680e223e8396e8769fa1648eee8e6c923ea06": {
+    "docs/getting-started.md:list:49ebd7a87a2577a4d3bba3ce863bb9d21bfa2a352880740feef27d99ee3237fd": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__：进入聊天区 / 通知区 copy mode。",
+      "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__：小幅滚动聊天输出；__ATRIX_CODE_2__ / __ATRIX_CODE_3__ 滚动通知区。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "7dd7ed525047ee8728fc6e0dac6680e223e8396e8769fa1648eee8e6c923ea06",
-      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__: Enter copy mode for chat area / notification area.",
+      "source_hash": "49ebd7a87a2577a4d3bba3ce863bb9d21bfa2a352880740feef27d99ee3237fd",
+      "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__: Scroll chat output slightly; __ATRIX_CODE_2__ / __ATRIX_CODE_3__: Scroll notification area.",
       "updated_at": 1782117183
     },
-    "docs/getting-started.md:list:82450adf1eba38f68cb8b3513e63984b30423e719aff68888a09d8aabcdfa99b": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 指定的路径。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "82450adf1eba38f68cb8b3513e63984b30423e719aff68888a09d8aabcdfa99b",
-      "translation": "The path specified by __ATRIX_CODE_0__.",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:list:87c2c9b3c3208542c76ef117cc755d1027d2869c9f801c15480ad9bde7ed697f": {
+    "docs/getting-started.md:list:516a070aa21289f647054856a0ef91b65f7118aa97eee9c8828b5ab8e0ba46ee": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__ 查看当前 Session、模型、上下文和请求状态。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "87c2c9b3c3208542c76ef117cc755d1027d2869c9f801c15480ad9bde7ed697f",
+      "source_hash": "516a070aa21289f647054856a0ef91b65f7118aa97eee9c8828b5ab8e0ba46ee",
       "translation": "__ATRIX_CODE_0__ View current Session, model, context, and request status.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:87eb21292291e36f411ef02c73fd182f76f6cd486aa406d51980016fab8916ca": {
-      "kind": "list",
-      "source": "一个 OpenAI-compatible LLM 服务，例如 DeepSeek、OpenAI 或其他兼容 __ATRIX_CODE_0__ 的服务。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "87eb21292291e36f411ef02c73fd182f76f6cd486aa406d51980016fab8916ca",
-      "translation": "An OpenAI-compatible LLM service, such as DeepSeek, OpenAI, or other services compatible with __ATRIX_CODE_0__.",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:list:ab0f21e0de018659604ea9bb26f07d46d5bb0d6c0d1df2fcaa6c819113e2a58f": {
+    "docs/getting-started.md:list:5594c04905d03cf23dade47268d045d231b9831240669c17bdb0850ae7c3f5ea": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__ 中的 __ATRIX_CODE_1__ 是否存在于 __ATRIX_CODE_2__。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "ab0f21e0de018659604ea9bb26f07d46d5bb0d6c0d1df2fcaa6c819113e2a58f",
+      "source_hash": "5594c04905d03cf23dade47268d045d231b9831240669c17bdb0850ae7c3f5ea",
       "translation": "Whether __ATRIX_CODE_1__ in __ATRIX_CODE_0__ exists in __ATRIX_CODE_2__.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:ad2fbc4224ef34bbd570cdf3d780d40e7eaf4cf9dcaad5895b4b3eaf22f59ae6": {
+    "docs/getting-started.md:list:69ae0d95d6e2dcf192d6dca965c82856f94ad47bebf4f31d26f397e8b8bfd2a4": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 切换模型。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "69ae0d95d6e2dcf192d6dca965c82856f94ad47bebf4f31d26f397e8b8bfd2a4",
+      "translation": "__ATRIX_CODE_0__ Switch models.",
+      "updated_at": 1781515975
+    },
+    "docs/getting-started.md:list:7d84630c8c519c94b0001de9d0a97d762a05b8bfdb0f5ed097064b8094aabac3": {
+      "kind": "list",
+      "source": "copy mode 中可用 __ATRIX_CODE_0__ 与 __ATRIX_CODE_1__ 移动，__ATRIX_CODE_2__ / __ATRIX_CODE_3__ 选择，__ATRIX_CODE_4__ 复制，__ATRIX_CODE_5__ 搜索，__ATRIX_CODE_6__ 或 __ATRIX_CODE_7__ 返回输入。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "7d84630c8c519c94b0001de9d0a97d762a05b8bfdb0f5ed097064b8094aabac3",
+      "translation": "In copy mode, use __ATRIX_CODE_0__ and __ATRIX_CODE_1__ to move, __ATRIX_CODE_2__ / __ATRIX_CODE_3__ to select, __ATRIX_CODE_4__ to copy, __ATRIX_CODE_5__ to search, and __ATRIX_CODE_6__ or __ATRIX_CODE_7__ to return to input.",
+      "updated_at": 1782117183
+    },
+    "docs/getting-started.md:list:82d259248175a43f0e184a8d445a7e6df4867f2519c8e721051e566e8b194539": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 查看可用模型列表。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "82d259248175a43f0e184a8d445a7e6df4867f2519c8e721051e566e8b194539",
+      "translation": "__ATRIX_CODE_0__ View the list of available models.",
+      "updated_at": 1781515975
+    },
+    "docs/getting-started.md:list:aed5ea8b414ab4aea25fe1e72930610e1e708b38c0c66f50ee8e3f9cfa4d0cc6": {
       "kind": "list",
       "source": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ / __ATRIX_CODE_2__ / __ATRIX_CODE_3__：滚动聊天输出。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "ad2fbc4224ef34bbd570cdf3d780d40e7eaf4cf9dcaad5895b4b3eaf22f59ae6",
+      "source_hash": "aed5ea8b414ab4aea25fe1e72930610e1e708b38c0c66f50ee8e3f9cfa4d0cc6",
       "translation": "__ATRIX_CODE_0__ / __ATRIX_CODE_1__ / __ATRIX_CODE_2__ / __ATRIX_CODE_3__: Scroll chat output.",
       "updated_at": 1782117183
     },
-    "docs/getting-started.md:list:cf8e65e5c3131db0a92f17cc70c72fde24253e12242164ff3955f59aaa8c3f0c": {
+    "docs/getting-started.md:list:b1afb1c1a17ed5cb69269128911779a58952d522bc6b8149bd41dbed099ad1d6": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__：补全并引用本地文件；文件不存在时保留原文，按普通 __ATRIX_CODE_1__ 文本发送。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "b1afb1c1a17ed5cb69269128911779a58952d522bc6b8149bd41dbed099ad1d6",
+      "translation": "__ATRIX_CODE_0__: Complete and reference local files; if the file does not exist, keep the original text and send it as plain __ATRIX_CODE_1__ text.",
+      "updated_at": 1786532727
+    },
+    "docs/getting-started.md:list:b521ce2b716bed70b8d29f5fabc283e9f26d70a60b3dfaaa35ef48a4fdd7f923": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 环境变量。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "b521ce2b716bed70b8d29f5fabc283e9f26d70a60b3dfaaa35ef48a4fdd7f923",
+      "translation": "__ATRIX_CODE_0__ environment variable.",
+      "updated_at": 1781515975
+    },
+    "docs/getting-started.md:list:cbc02bf53c196fd06268a936b9c5602b4497b266e0e92d75d4ba2daab86f7632": {
+      "kind": "list",
+      "source": "__ATRIX_CODE_0__ 切到低成本聊天模式。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "cbc02bf53c196fd06268a936b9c5602b4497b266e0e92d75d4ba2daab86f7632",
+      "translation": "__ATRIX_CODE_0__ Switch to low-cost chat mode.",
+      "updated_at": 1781515975
+    },
+    "docs/getting-started.md:list:d9e8aa46f0eda47a21b3e40f05da4130e8d70982d1033bd75c311b2e014d0a9a": {
       "kind": "list",
       "source": "可以启动后用 __ATRIX_CODE_0__ 或 __ATRIX_CODE_1__ 刷新模型列表。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "cf8e65e5c3131db0a92f17cc70c72fde24253e12242164ff3955f59aaa8c3f0c",
+      "source_hash": "d9e8aa46f0eda47a21b3e40f05da4130e8d70982d1033bd75c311b2e014d0a9a",
       "translation": "After starting, you can use __ATRIX_CODE_0__ or __ATRIX_CODE_1__ to refresh the model list.",
       "updated_at": 1781580008
     },
@@ -296,13 +304,13 @@
       "translation": "Go 1.26 or a newer version.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:e05e6153c4ec26ed0c64e051f183aa413edc4ee471e2afe7e9f8f5357eadc33b": {
+    "docs/getting-started.md:list:dceabe571576a9d16446ba8456372ca33dbd4b84eed7abf26d3792a457fe83d7": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__：补全并引用本地文件；文件不存在时保留原文，按普通 __ATRIX_CODE_1__ 文本发送。",
+      "source": "__ATRIX_CODE_0__ 名称是否被 Provider 支持。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "e05e6153c4ec26ed0c64e051f183aa413edc4ee471e2afe7e9f8f5357eadc33b",
-      "translation": "__ATRIX_CODE_0__: Complete and reference local files; if the file does not exist, keep the original text and send it as plain __ATRIX_CODE_1__ text.",
-      "updated_at": 1786532727
+      "source_hash": "dceabe571576a9d16446ba8456372ca33dbd4b84eed7abf26d3792a457fe83d7",
+      "translation": "Whether the name __ATRIX_CODE_0__ is supported by the Provider.",
+      "updated_at": 1781515975
     },
     "docs/getting-started.md:list:e1ec1575bc49350a0fe1fc39ad8c49f38572ade712b11cb8270e3febcae20b8b": {
       "kind": "list",
@@ -312,12 +320,12 @@
       "translation": "At least one available API Key.",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:list:e43ea7f2daae3599784c448c6d24f55d4706e8b1c2e9c948c67db0afd3df9a3c": {
+    "docs/getting-started.md:list:e96facbd8ae43d59d1acbfc1e2f9a1510a5e1e8aa0b57e2430a86ee9cf6706a7": {
       "kind": "list",
-      "source": "__ATRIX_CODE_0__ 环境变量。",
+      "source": "__ATRIX_CODE_0__ 中的 __ATRIX_CODE_1__ 是否写对。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "e43ea7f2daae3599784c448c6d24f55d4706e8b1c2e9c948c67db0afd3df9a3c",
-      "translation": "__ATRIX_CODE_0__ environment variable.",
+      "source_hash": "e96facbd8ae43d59d1acbfc1e2f9a1510a5e1e8aa0b57e2430a86ee9cf6706a7",
+      "translation": "Whether __ATRIX_CODE_1__ in __ATRIX_CODE_0__ is written correctly.",
       "updated_at": 1781515975
     },
     "docs/getting-started.md:list:f4a5e6e2757a9f3ae2bb7cc4b22383fb40ac9b38a4224629546f3629d9a29b15": {
@@ -328,36 +336,12 @@
       "translation": "If the platform configuration does not exist, the platform default configuration will be automatically generated.",
       "updated_at": 1781854929
     },
-    "docs/getting-started.md:list:fc54b80a3237d2ff4ea96a5af6943f5c3f1a0ce8327d8b6c40671153f194c41c": {
-      "kind": "list",
-      "source": "__ATRIX_CODE_0__ 名称是否被 Provider 支持。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "fc54b80a3237d2ff4ea96a5af6943f5c3f1a0ce8327d8b6c40671153f194c41c",
-      "translation": "Whether the name __ATRIX_CODE_0__ is supported by the Provider.",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:paragraph:04e83af1e2857c30347a0be056a64578c131a82ec257e5edd445a00ecf974805": {
-      "kind": "paragraph",
-      "source": "把 __ATRIX_CODE_0__ 中的默认模式改为 chat：\n",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "04e83af1e2857c30347a0be056a64578c131a82ec257e5edd445a00ecf974805",
-      "translation": "Change the default mode in __ATRIX_CODE_0__ to chat:\n",
-      "updated_at": 1781515975
-    },
     "docs/getting-started.md:paragraph:101973e91c104135121a751d01e1715126d62715c3741e886f94ab3245daf7b8": {
       "kind": "paragraph",
       "source": "开发期可以直接运行：\n",
       "source_file": "docs/getting-started.md",
       "source_hash": "101973e91c104135121a751d01e1715126d62715c3741e886f94ab3245daf7b8",
       "translation": "During development, you can run it directly:\n",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:paragraph:1204a3eb9a309b78062a73635764e483c9f4b7cddb4a3d9bf30c737306f1d5fd": {
-      "kind": "paragraph",
-      "source": "如果使用其他 Provider，需要同步修改 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__。\n",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "1204a3eb9a309b78062a73635764e483c9f4b7cddb4a3d9bf30c737306f1d5fd",
-      "translation": "If using other Providers, you need to synchronously modify __ATRIX_CODE_0__ and __ATRIX_CODE_1__.\n",
       "updated_at": 1781515975
     },
     "docs/getting-started.md:paragraph:196b8190cdc27860f073549b9b80c13718beb92ba249e8313b93b64fe256b364": {
@@ -368,6 +352,14 @@
       "translation": "To use a temporary configuration file, you can specify it explicitly:\n",
       "updated_at": 1781854929
     },
+    "docs/getting-started.md:paragraph:1afd25d61819bfc2f59ee4a57260605d310f76302eb7d9b25b133308707bc8b9": {
+      "kind": "paragraph",
+      "source": "也可以用 __ATRIX_CODE_0__ 按当前环境变量猜测 shell：\n",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "1afd25d61819bfc2f59ee4a57260605d310f76302eb7d9b25b133308707bc8b9",
+      "translation": "You can also use __ATRIX_CODE_0__ to guess the shell based on current environment variables:\n",
+      "updated_at": 1781575108
+    },
     "docs/getting-started.md:paragraph:1cd2a61a3475c406a1a17b9d721ffca75eca0831ee63ddbdf0529006d09d2c9c": {
       "kind": "paragraph",
       "source": "default_mode 手动设置，其他设置可以在cli中使用命令设置。\n",
@@ -376,29 +368,37 @@
       "translation": "`default_mode` is set manually; other settings can be configured using commands in the CLI.\n",
       "updated_at": 1781534482
     },
-    "docs/getting-started.md:paragraph:3e97c8a4c9446e8764d1ca5d0c848311f5ab7e560adbbb4cad042f9ff066e804": {
+    "docs/getting-started.md:paragraph:2edb83ba4341a52f9411dc4ed6d689f1f145640e21045e3ad2d6fc65d4fe9cb0": {
       "kind": "paragraph",
-      "source": "需要继续历史会话时，可用 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__。\n",
+      "source": "ATRI-X 可以生成常见 shell 的补全脚本：\n",
       "source_file": "docs/getting-started.md",
-      "source_hash": "3e97c8a4c9446e8764d1ca5d0c848311f5ab7e560adbbb4cad042f9ff066e804",
-      "translation": "When you need to continue a historical Session, you can use __ATRIX_CODE_0__ and __ATRIX_CODE_1__.\n",
+      "source_hash": "2edb83ba4341a52f9411dc4ed6d689f1f145640e21045e3ad2d6fc65d4fe9cb0",
+      "translation": "ATRI-X can generate completion scripts for common shells:\n",
       "updated_at": 1781575108
     },
-    "docs/getting-started.md:paragraph:447a0b6ec8d5e3e1886ee9faff3b1dc56b70d4acc72769b0d3e5f0fac2e92d21": {
+    "docs/getting-started.md:paragraph:37664db98214665a1584fb2b16e21beb05cf1f8d8a186cd8c43d3f48096af538": {
       "kind": "paragraph",
-      "source": "需要工具时再输入 __ATRIX_CODE_0__。\n",
+      "source": "示例 __ATRIX_CODE_0__：\n",
       "source_file": "docs/getting-started.md",
-      "source_hash": "447a0b6ec8d5e3e1886ee9faff3b1dc56b70d4acc72769b0d3e5f0fac2e92d21",
-      "translation": "Enter __ATRIX_CODE_0__ when tools are needed.\n",
+      "source_hash": "37664db98214665a1584fb2b16e21beb05cf1f8d8a186cd8c43d3f48096af538",
+      "translation": "Example __ATRIX_CODE_0__:\n",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:paragraph:4b95664aa48d143632330cf84d78b59ad4c131df148633d0a3a5e384a3840a0f": {
+    "docs/getting-started.md:paragraph:3b9941f62214e3be096577bf81bff9ee7725c3b2d4c0075a7638c4e41a817066": {
       "kind": "paragraph",
       "source": "自动模式下，Linux 如果检测到当前用户已有 __ATRIX_CODE_0__ 在运行，会进入本地 CLI-only，避免重复连接平台或重复运行 Cron；",
       "source_file": "docs/getting-started.md",
-      "source_hash": "4b95664aa48d143632330cf84d78b59ad4c131df148633d0a3a5e384a3840a0f",
+      "source_hash": "3b9941f62214e3be096577bf81bff9ee7725c3b2d4c0075a7638c4e41a817066",
       "translation": "In automatic mode, if Linux detects that the current user already has __ATRIX_CODE_0__ running, it will enter local CLI-only mode to avoid duplicate platform connections or duplicate Cron executions;",
       "updated_at": 1781575108
+    },
+    "docs/getting-started.md:paragraph:4b91b9b14ecae821976d1d8bb04d7fa5f5871cb565676c9bbf7d8ff79d25974c": {
+      "kind": "paragraph",
+      "source": "把 __ATRIX_CODE_0__ 中的默认模式改为 chat：\n",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "4b91b9b14ecae821976d1d8bb04d7fa5f5871cb565676c9bbf7d8ff79d25974c",
+      "translation": "Change the default mode in __ATRIX_CODE_0__ to chat:\n",
+      "updated_at": 1781515975
     },
     "docs/getting-started.md:paragraph:56825f21d0020609b6800ca52ac2da0e9f6bd8d80f29875e20a63f7d62fb1ccf": {
       "kind": "paragraph",
@@ -416,6 +416,14 @@
       "translation": "Otherwise, it will enter full foreground mode.",
       "updated_at": 1781575108
     },
+    "docs/getting-started.md:paragraph:66f2b523f50e8592d18598dfa3e28d72ade29a798c357d807d26d0cb001153c2": {
+      "kind": "paragraph",
+      "source": "首次运行且平台配置目录没有 __ATRIX_CODE_0__ 时，会在平台配置目录自动生成 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__、__ATRIX_CODE_5__ 和 __ATRIX_CODE_6__；",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "66f2b523f50e8592d18598dfa3e28d72ade29a798c357d807d26d0cb001153c2",
+      "translation": "During the first run, if __ATRIX_CODE_0__ does not exist in the platform configuration directory, __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, __ATRIX_CODE_4__, __ATRIX_CODE_5__, and __ATRIX_CODE_6__ will be automatically generated in the platform configuration directory;",
+      "updated_at": 1781854929
+    },
     "docs/getting-started.md:paragraph:68d560c5bd914873c5becf526acf5148658b37581a10f1b69fbd54ea3e975f23": {
       "kind": "paragraph",
       "source": "检查：\n",
@@ -423,14 +431,6 @@
       "source_hash": "68d560c5bd914873c5becf526acf5148658b37581a10f1b69fbd54ea3e975f23",
       "translation": "Check:\n",
       "updated_at": 1781515975
-    },
-    "docs/getting-started.md:paragraph:6a372b0655fa5e7026bfb1ed14677ec22d9ca28c038bcdb85610c303a26c1c90": {
-      "kind": "paragraph",
-      "source": "默认运行态模型写在配置目录的 __ATRIX_CODE_0__：\n",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "6a372b0655fa5e7026bfb1ed14677ec22d9ca28c038bcdb85610c303a26c1c90",
-      "translation": "The default runtime model is specified in __ATRIX_CODE_0__ of the configuration directory:\n",
-      "updated_at": 1781854929
     },
     "docs/getting-started.md:paragraph:744e3cd370ff77c3f4325fc5f0da6ded94bd37526832f5063a08be3cf8df4728": {
       "kind": "paragraph",
@@ -448,6 +448,14 @@
       "translation": "Example: nushell\n",
       "updated_at": 1781575108
     },
+    "docs/getting-started.md:paragraph:8414ad388dd93fa332b6a3c1976677dc6212bd6aa80d67b5e29a7740459720ea": {
+      "kind": "paragraph",
+      "source": "__ATRIX_CODE_0__ 是独立本地进程，会使用同一套配置和 SQLite 数据，但不会接管 service 进程中的当前请求、确认状态或内存里的当前 Session。",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "8414ad388dd93fa332b6a3c1976677dc6212bd6aa80d67b5e29a7740459720ea",
+      "translation": "__ATRIX_CODE_0__ is an independent local process that uses the same set of configurations and SQLite data, but it will not take over current requests, confirmation states, or the current Session in memory from the service process.",
+      "updated_at": 1781575108
+    },
     "docs/getting-started.md:paragraph:8429e5040d047904b63a1e7135a5b45e7348f29018bd9dd79f6cb7deca6c39bd": {
       "kind": "paragraph",
       "source": "运行数据默认进入平台数据目录，例如 SQLite、日志和 sandbox。具体规则见 [配置说明](configuration.md)。\n",
@@ -456,21 +464,13 @@
       "translation": "Runtime data is stored in the platform data directory by default, such as SQLite, logs, and sandbox. For specific rules, see [Configuration Instructions](configuration.md).\n",
       "updated_at": 1781949103
     },
-    "docs/getting-started.md:paragraph:84e2b7f0aded1d7c0715409f35b94fbc2d27dc6b7e4f457cc990a3be5c42b2fd": {
+    "docs/getting-started.md:paragraph:9c57cbce93696123ff2c6d25a9b6519acf663e046ca16065a83e742cce1de1ae": {
       "kind": "paragraph",
-      "source": "本文档用于把 ATRI-X 跑起来，并完成第一次 CLI 对话。\n",
+      "source": "启动后直接输入消息即可。默认示例中 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 是 __ATRIX_CODE_2__，会启用工具发现能力。\n",
       "source_file": "docs/getting-started.md",
-      "source_hash": "84e2b7f0aded1d7c0715409f35b94fbc2d27dc6b7e4f457cc990a3be5c42b2fd",
-      "translation": "This document is used to get ATRI-X up and running and complete your first CLI conversation.\n",
+      "source_hash": "9c57cbce93696123ff2c6d25a9b6519acf663e046ca16065a83e742cce1de1ae",
+      "translation": "After starting, simply enter your message. In the default example, the __ATRIX_CODE_1__ of __ATRIX_CODE_0__ is __ATRIX_CODE_2__, which enables tool discovery capabilities.\n",
       "updated_at": 1781515975
-    },
-    "docs/getting-started.md:paragraph:9b0c1147a651a1dbbb1367c6e9951c9f39626a4f42c34d0952eb5d63cfcf94f9": {
-      "kind": "paragraph",
-      "source": "__ATRIX_CODE_0__ 是独立本地进程，会使用同一套配置和 SQLite 数据，但不会接管 service 进程中的当前请求、确认状态或内存里的当前 Session。",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "9b0c1147a651a1dbbb1367c6e9951c9f39626a4f42c34d0952eb5d63cfcf94f9",
-      "translation": "__ATRIX_CODE_0__ is an independent local process that uses the same set of configurations and SQLite data, but it will not take over current requests, confirmation states, or the current Session in memory from the service process.",
-      "updated_at": 1781575108
     },
     "docs/getting-started.md:paragraph:9c79075c1d42ffa41b8f0a6ac4efe5e40520193862e33bbf95520baa73dd4b14": {
       "kind": "paragraph",
@@ -488,14 +488,6 @@
       "translation": "Example: fish\n",
       "updated_at": 1781575108
     },
-    "docs/getting-started.md:paragraph:a18886edfbefc7fdb7a8a2ee214bc38c9b5854fde15969e995574e2fae1102a8": {
-      "kind": "paragraph",
-      "source": "首次运行且平台配置目录没有 __ATRIX_CODE_0__ 时，会在平台配置目录自动生成 __ATRIX_CODE_1__、__ATRIX_CODE_2__、__ATRIX_CODE_3__、__ATRIX_CODE_4__、__ATRIX_CODE_5__ 和 __ATRIX_CODE_6__；",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "a18886edfbefc7fdb7a8a2ee214bc38c9b5854fde15969e995574e2fae1102a8",
-      "translation": "During the first run, if __ATRIX_CODE_0__ does not exist in the platform configuration directory, __ATRIX_CODE_1__, __ATRIX_CODE_2__, __ATRIX_CODE_3__, __ATRIX_CODE_4__, __ATRIX_CODE_5__, and __ATRIX_CODE_6__ will be automatically generated in the platform configuration directory;",
-      "updated_at": 1781854929
-    },
     "docs/getting-started.md:paragraph:a611d499cca4918706780e022d66f0e1543051cc10c1a4b98af5341d36626dc7": {
       "kind": "paragraph",
       "source": "Windows 下：\n",
@@ -504,21 +496,21 @@
       "translation": "On Windows:\n",
       "updated_at": 1781534482
     },
-    "docs/getting-started.md:paragraph:aaa55b4b19d9e20affdff31c06781a5f9d0cad453afbc7950bc1c9127dfb9bc6": {
+    "docs/getting-started.md:paragraph:b0a176cbc38d1da8a1eb7c7c8e6b99885c969b7e33ebb2913662b8cea15dead7": {
       "kind": "paragraph",
-      "source": "推荐把密钥放在系统环境变量，或把自动生成的 __ATRIX_CODE_0__ 复制为配置目录下的 __ATRIX_CODE_1__ 后填写，不要直接写进 __ATRIX_CODE_2__。\n",
+      "source": "本文档用于把 ATRI-X 跑起来，并完成第一次 CLI 对话。\n",
       "source_file": "docs/getting-started.md",
-      "source_hash": "aaa55b4b19d9e20affdff31c06781a5f9d0cad453afbc7950bc1c9127dfb9bc6",
-      "translation": "It is recommended to place the keys in system environment variables, or copy the automatically generated __ATRIX_CODE_0__ to __ATRIX_CODE_1__ in the configuration directory before filling it in; do not write them directly into __ATRIX_CODE_2__.\n",
-      "updated_at": 1781786456
+      "source_hash": "b0a176cbc38d1da8a1eb7c7c8e6b99885c969b7e33ebb2913662b8cea15dead7",
+      "translation": "This document is used to get ATRI-X up and running and complete your first CLI conversation.\n",
+      "updated_at": 1781515975
     },
-    "docs/getting-started.md:paragraph:b43f86dd2955d50c5f39b7cda8a09189740b1bedf8b93c3310e37c3b792eb211": {
+    "docs/getting-started.md:paragraph:b0e6e05d601e1eeb1248887d741b3c7f0699011c47618587a1a1681061470b52": {
       "kind": "paragraph",
-      "source": "也可以用 __ATRIX_CODE_0__ 按当前环境变量猜测 shell：\n",
+      "source": "ATRI-X 默认按配置查找顺序读取主配置。",
       "source_file": "docs/getting-started.md",
-      "source_hash": "b43f86dd2955d50c5f39b7cda8a09189740b1bedf8b93c3310e37c3b792eb211",
-      "translation": "You can also use __ATRIX_CODE_0__ to guess the shell based on current environment variables:\n",
-      "updated_at": 1781575108
+      "source_hash": "b0e6e05d601e1eeb1248887d741b3c7f0699011c47618587a1a1681061470b52",
+      "translation": "ATRI-X reads the main configuration by default according to the configuration lookup order.",
+      "updated_at": 1781786456
     },
     "docs/getting-started.md:paragraph:b542c9d7ce8593d0cfb5a79002986f5e89617f64f638eea577bd7871bbaaebe1": {
       "kind": "paragraph",
@@ -536,20 +528,36 @@
       "translation": "Windows does not perform service detection and starts in full foreground mode by default.\n",
       "updated_at": 1781575108
     },
-    "docs/getting-started.md:paragraph:ca06fb90bcd4b3e173b5bd045a6bf8bbe420d845cff54311c73e663f331ba48b": {
+    "docs/getting-started.md:paragraph:bc929dc5a470512b4bee4c2533babe0032cd1ca61eb64a06d93c708788fe9155": {
       "kind": "paragraph",
-      "source": "启动后直接输入消息即可。默认示例中 __ATRIX_CODE_0__ 的 __ATRIX_CODE_1__ 是 __ATRIX_CODE_2__，会启用工具发现能力。\n",
+      "source": "推荐把密钥放在系统环境变量，或把自动生成的 __ATRIX_CODE_0__ 复制为配置目录下的 __ATRIX_CODE_1__ 后填写，不要直接写进 __ATRIX_CODE_2__。\n",
       "source_file": "docs/getting-started.md",
-      "source_hash": "ca06fb90bcd4b3e173b5bd045a6bf8bbe420d845cff54311c73e663f331ba48b",
-      "translation": "After starting, simply enter your message. In the default example, the __ATRIX_CODE_1__ of __ATRIX_CODE_0__ is __ATRIX_CODE_2__, which enables tool discovery capabilities.\n",
+      "source_hash": "bc929dc5a470512b4bee4c2533babe0032cd1ca61eb64a06d93c708788fe9155",
+      "translation": "It is recommended to place the keys in system environment variables, or copy the automatically generated __ATRIX_CODE_0__ to __ATRIX_CODE_1__ in the configuration directory before filling it in; do not write them directly into __ATRIX_CODE_2__.\n",
+      "updated_at": 1781786456
+    },
+    "docs/getting-started.md:paragraph:cf70d4905b40a4b5a1209156d3e418a65734b4312c963a352474bbc8d891615c": {
+      "kind": "paragraph",
+      "source": "需要工具时再输入 __ATRIX_CODE_0__。\n",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "cf70d4905b40a4b5a1209156d3e418a65734b4312c963a352474bbc8d891615c",
+      "translation": "Enter __ATRIX_CODE_0__ when tools are needed.\n",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:paragraph:ccadb6024e5c66db566b18d85e16f45021630c35aa5184b90fb336f178114d57": {
+    "docs/getting-started.md:paragraph:d737b79717ba9d0f52ffa58ed4573cfecc2d426dfa706a1163d17f42dac22cd3": {
       "kind": "paragraph",
-      "source": "ATRI-X 可以生成常见 shell 的补全脚本：\n",
+      "source": "如果使用其他 Provider，需要同步修改 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__。\n",
       "source_file": "docs/getting-started.md",
-      "source_hash": "ccadb6024e5c66db566b18d85e16f45021630c35aa5184b90fb336f178114d57",
-      "translation": "ATRI-X can generate completion scripts for common shells:\n",
+      "source_hash": "d737b79717ba9d0f52ffa58ed4573cfecc2d426dfa706a1163d17f42dac22cd3",
+      "translation": "If using other Providers, you need to synchronously modify __ATRIX_CODE_0__ and __ATRIX_CODE_1__.\n",
+      "updated_at": 1781515975
+    },
+    "docs/getting-started.md:paragraph:de0e1db6f650f887716a0a704b8dd67be0cbb26aa59a05646a1909503fa176bf": {
+      "kind": "paragraph",
+      "source": "需要继续历史会话时，可用 __ATRIX_CODE_0__ 和 __ATRIX_CODE_1__。\n",
+      "source_file": "docs/getting-started.md",
+      "source_hash": "de0e1db6f650f887716a0a704b8dd67be0cbb26aa59a05646a1909503fa176bf",
+      "translation": "When you need to continue a historical Session, you can use __ATRIX_CODE_0__ and __ATRIX_CODE_1__.\n",
       "updated_at": 1781575108
     },
     "docs/getting-started.md:paragraph:e192922e01b47e51032fd06b39048ef3f82aa6c4b551a3fa3f1950e62ac0ff52": {
@@ -568,13 +576,13 @@
       "translation": "Common getting started commands:\n",
       "updated_at": 1781515975
     },
-    "docs/getting-started.md:paragraph:f1ff6debe01f55961aed661e0b289339794a13da0ec5c2cff27e70d3c331b48d": {
+    "docs/getting-started.md:paragraph:f207d7e4560e22a2d139fc190946239eb97fdac26982d38d85d0d39454a9405e": {
       "kind": "paragraph",
-      "source": "ATRI-X 默认按配置查找顺序读取主配置。",
+      "source": "默认运行态模型写在配置目录的 __ATRIX_CODE_0__：\n",
       "source_file": "docs/getting-started.md",
-      "source_hash": "f1ff6debe01f55961aed661e0b289339794a13da0ec5c2cff27e70d3c331b48d",
-      "translation": "ATRI-X reads the main configuration by default according to the configuration lookup order.",
-      "updated_at": 1781786456
+      "source_hash": "f207d7e4560e22a2d139fc190946239eb97fdac26982d38d85d0d39454a9405e",
+      "translation": "The default runtime model is specified in __ATRIX_CODE_0__ of the configuration directory:\n",
+      "updated_at": 1781854929
     },
     "docs/getting-started.md:paragraph:f3f9d35759ef03c1c5349e0c85f3b9e88684f3f7f00d9f25cb2092778a9e28c1": {
       "kind": "paragraph",
@@ -582,14 +590,6 @@
       "source_file": "docs/getting-started.md",
       "source_hash": "f3f9d35759ef03c1c5349e0c85f3b9e88684f3f7f00d9f25cb2092778a9e28c1",
       "translation": "If you are already in this repository, you can proceed directly to the next step.\n",
-      "updated_at": 1781515975
-    },
-    "docs/getting-started.md:paragraph:f61e63ed3a3f556ca6c37c5f4846f38b7d76c04fe1bc672058525c98c1f69b91": {
-      "kind": "paragraph",
-      "source": "示例 __ATRIX_CODE_0__：\n",
-      "source_file": "docs/getting-started.md",
-      "source_hash": "f61e63ed3a3f556ca6c37c5f4846f38b7d76c04fe1bc672058525c98c1f69b91",
-      "translation": "Example __ATRIX_CODE_0__:\n",
       "updated_at": 1781515975
     },
     "docs/getting-started.md:paragraph:f7a7174e218a8ec25f40398ccb02bbc8193da66940c02bdac78225072f4dd4f9": {
@@ -618,7 +618,7 @@
     }
   },
   "source": "docs/getting-started.md",
-  "source_hash": "969377bc95ac7d1c57d4a8444a8c7465e9a9fd061e2b593887b159d907676f1e",
+  "source_hash": "557a7afae5417b13ec06612e773310d1c6434651d9c0c16847bd89a0d17b46a5",
   "target": "docs.en/getting-started.md",
   "updated_at": 1786532727,
   "version": 2
