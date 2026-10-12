@@ -284,7 +284,7 @@ func TestModelCommandSnapshotOptionsAreCompleted(t *testing.T) {
 
 func TestModelCommandCompletesAtriwispOptions(t *testing.T) {
 	completer := NewModel(Deps{Models: &fakeModelService{}}).(command.Completer)
-	got := completer.Complete(context.Background(), command.CompletionRequest{Raw: "/model --elw", Prefix: "/", Name: "model", Args: "--elw", Cursor: len("/model --elw")})
+	got := completer.Complete(context.Background(), command.CompletionRequest{Raw: "/model --atriw", Prefix: "/", Name: "model", Args: "--atriw", Cursor: len("/model --atriw")})
 	if len(got) != 3 {
 		t.Fatalf("Complete atriwisp options = %#v", got)
 	}
