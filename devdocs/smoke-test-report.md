@@ -120,7 +120,7 @@ atri-x.exe service run                          # 不传 --config，走平台默
 ### 6.1 平台连接信号（后续追加）
 
 平台连接事实从"连接回调直接转给 Agent（`Agent.NotifyPlatformConnected`）"改成"适配器发布全局信号
-`platform.PlatformConnected` + hook 侧订阅后按平台排队执行"（`e211478c`）之后，同样补了一次进程级
+`platform.PlatformConnected` + hook 侧订阅后按平台排队执行"（`0247c90f`）之后，同样补了一次进程级
 冒烟（无 Docker，直接跑构建产物）：
 
 ```
@@ -164,7 +164,7 @@ atri-x.exe service run
 
 ### 6.3 平台失败隔离、service 保活与跨平台超管通知（后续追加）
 
-项2（平台失败隔离 + service 保活 + 超管通知 `ebec185`）改的是进程生命周期与 health 语义，因此专门做了一次**能真正触发平台失败**的进程级冒烟：把 CLI WebSocket 服务端指向一个已被占用的端口，让唯一的平台运行时以 `bind: address already in use` 立刻退出；同时启用一个只会重连退避、不会退出的 Telegram 适配器（bogus token）作为"另一个仍在运行"的平台，`security.superadmins.telegram = ["999"]`。
+项2（平台失败隔离 + service 保活 + 超管通知 `fe98bba`）改的是进程生命周期与 health 语义，因此专门做了一次**能真正触发平台失败**的进程级冒烟：把 CLI WebSocket 服务端指向一个已被占用的端口，让唯一的平台运行时以 `bind: address already in use` 立刻退出；同时启用一个只会重连退避、不会退出的 Telegram 适配器（bogus token）作为"另一个仍在运行"的平台，`security.superadmins.telegram = ["999"]`。
 
 ```
 go build -o <临时目录>\atri-x-smoke\atri-x.exe ./cmd/atri-x

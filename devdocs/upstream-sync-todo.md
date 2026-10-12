@@ -13,24 +13,24 @@
 
 ## 0. 现状快照
 
-- 基线：fork `main` @ `22ed7ed0`；上游 `refs/remotes/upstream/main` @ `a0304ad4`；共同祖先 `3fb1234`。
-- 已落地：命名对齐（`api` → `api_mode`）、P0 全部 8 项、P1#3 工具发现/预载事务化、P1#5 会话整行快照 → 事务内字段更新、P1#4 后台接管（fork 原生最小版，`10fe9ab`）、P1#2 模型/会话服务化（`state.toml` 写回串行化，`a548f05`）。
-- 已落地（P1#1 最小版 A）：契约与事实丢失修复 `05458e9`、结果契约两批 `ad1594b` / `5e67bbf`、收尾事件 `5f8cfc2`、app 来源标识 `e5cc44d`、端到端验证 `f358841` → 见任务 2。
-- 已落地（P1#6）：工具预览识别规则集中到交付层 `5cd3d32`、群聊跳过规则整体集中 `c32a87d` → 见任务 4。
-- 已落地（P2 决策后按路线 D 补的接缝）：`70468b7` → 见任务 5。
-- 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `710eb6c`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `b3289b6` → 见任务 3。
-- 其他台账：Windows 部署文档修正 `d53d203`、待办哈希回填 `a6c1aa0`、进程级冒烟记录 `0fe1114`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
-- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `f7d6a838`；移植 `internal/signal` 并接管平台连接扇出 `ed501003` / `e211478c`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则；通知队列与背压 `88321da6`。**§8 五项全部完成。**
-- 已落地（§9 上游查询层搬运）：`--raw` 解耦与移除 `/log -t` `1e7ee102`、`/usage` null 容错 `abd79959`。
+- 基线：fork `main` @ `aaeb5911`；上游 `refs/remotes/upstream/main` @ `a0304ad4`；共同祖先 `d812628`。
+- 已落地：命名对齐（`api` → `api_mode`）、P0 全部 8 项、P1#3 工具发现/预载事务化、P1#5 会话整行快照 → 事务内字段更新、P1#4 后台接管（fork 原生最小版，`345a1c1`）、P1#2 模型/会话服务化（`state.toml` 写回串行化，`7e5ab0e`）。
+- 已落地（P1#1 最小版 A）：契约与事实丢失修复 `5964838`、结果契约两批 `c61a670` / `dde3253`、收尾事件 `8f5c52e`、app 来源标识 `2862ea3`、端到端验证 `9a8a1f4` → 见任务 2。
+- 已落地（P1#6）：工具预览识别规则集中到交付层 `59d7234`、群聊跳过规则整体集中 `e141bdd` → 见任务 4。
+- 已落地（P2 决策后按路线 D 补的接缝）：`d531763` → 见任务 5。
+- 已落地（P1#2 之后的追加能力）：`/model --profiles` 命名模型选择列表 `82c18d4`、命名模型快照 `/model --save|--snapshots|--apply|--delete` `a293eed` → 见任务 3。
+- 其他台账：Windows 部署文档修正 `d449da0`、待办哈希回填 `48680d9`、进程级冒烟记录 `4247d5f`（见 [`smoke-test-report.md`](smoke-test-report.md) §6）。
+- 已落地（上游借鉴项，§8）：模型切换兼容性裁决 `6b0a5823`；移植 `internal/signal` 并接管平台连接扇出 `d656f689` / `0247c90f`；上游 CHANGELOG × fork 现状核对单（[`upstream-changelog-cross-check.md`](upstream-changelog-cross-check.md)）；信号/日志边界表（[`signals-and-logging.md`](signals-and-logging.md)）+ `AGENTS.md` mermaid 规则；通知队列与背压 `6e023db1`。**§8 五项全部完成。**
+- 已落地（§9 上游查询层搬运）：`--raw` 解耦与移除 `/log -t` `803de2ab`、`/usage` null 容错 `25cf1bad`。
 - 已研究未落地：上游最新 5 个提交（`1aa10fd9..a0304ad4`）与 §9 剩余项的**逐项判定（直接移植 / 改造 / 不搬）**见 §9.1 与 §10。
 - 已落地（本轮按 §10.5 顺序执行，6 项 6 个提交）：
-  1. `/rollback` 新建文件冲突校验 `27f39a06`（§10.6 E，数据丢失级缺陷）；
-  2. 平台失败隔离 + service 模式保活 + 跨平台超管通知 + health 断开 + `errors.Is` 口径 `ebec185`（§10.1 / §10.4.1）；
-  3. 后台接管检查失败保守停下 + 两处漏检窗口 `4322e31`（§10.2）；
-  4. 启动阶段 Hook 加载告警改到平台发送器就绪后投递 `1f9cd9dc`（§9.1）；
-  5. `shell` 输出上限 256 KiB `fac0126`、工具审计正文按类别限长 `8d479cc`、`/audit --run_source` `747677a`（§9.1）；
-  6. 日志查询跳过损坏行并计数 `e9b0bbd8`（§9.1）。
-  研究结论本身记录在 `44cf691`。
+  1. `/rollback` 新建文件冲突校验 `9ae9c404`（§10.6 E，数据丢失级缺陷）；
+  2. 平台失败隔离 + service 模式保活 + 跨平台超管通知 + health 断开 + `errors.Is` 口径 `fe98bba`（§10.1 / §10.4.1）；
+  3. 后台接管检查失败保守停下 + 两处漏检窗口 `a85f330`（§10.2）；
+  4. 启动阶段 Hook 加载告警改到平台发送器就绪后投递 `bbc3a185`（§9.1）；
+  5. `shell` 输出上限 256 KiB `40930f3`、工具审计正文按类别限长 `d85cad7`、`/audit --run_source` `74b3275`（§9.1）；
+  6. 日志查询跳过损坏行并计数 `04265c28`（§9.1）。
+  研究结论本身记录在 `bcef580`。
 - **仍留在 §10.6 的独立小项**：`/rollback` 的符号链接目标复核（F）、有界读取（G）、编辑备份 TOCTOU（B）、`Forget` 文案与实现不一致（A）、同目标锁（H）；§10.4.2 的 cron 取消分类。这些都在 §10.5 的"可选"档，未开工。
 - **状态**：任务 1–5（P1#4 / P1#1 / P1#2 / P1#6 / P2 决策）在 fork 选定范围内均已完成，无未勾选项。以下三项是**仍留给用户的决策/建议**，不做也不影响上述任务的完成度：
   1. P1#1 是否要完整对齐上游九字段契约（含 JSONL 落盘与 Reader 改写）——会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp`、维护报告的解析端。**建议不做**：最小版 A 已让来源与结果可筛选，额外收益主要是内部整洁，代价是破坏现有日志查询。
@@ -39,7 +39,7 @@
 
 ---
 
-## 1. [x] P1#4 后台会话被前台接管（fork 原生最小版）— 提交 `10fe9ab`
+## 1. [x] P1#4 后台会话被前台接管（fork 原生最小版）— 提交 `345a1c1`
 
 **目标**：前台用户 `/resume`（或 `/unarchive`）进入一个正在跑的后台 Session（cron / Atrinis）时，
 该后台 Session 被提升为前台会话，在途后台 turn 在最近的安全点自行取消并返回"已被接管"，
@@ -80,7 +80,7 @@
 - [x] `CHANGELOG.md` 按补丁式（旧状态 → 新状态）追加"后台会话可被前台接管"条目。
 - [x] `devdocs/code-map.md` 的 Session 段补 `internal/session/promotion.go`（提升/接管判定）与 agent 侧接管检查点；Agent 对话流程段补 `RunBackground` 的 `TakenOver` 出口。
 - [x] `docs/commands.md` 的 `/resume` 行为说明补一句：恢复后台（cron/Atrinis）Session 会中断该 Session 在途的后台任务；并同步 `docs/concepts.md` 第 194 行附近的 cron 后台 Session 说明（`docs.en/`、`README.md`、`CHANGELOG.en.md` 未手改）。
-- [x] 提交 `10fe9ab`：中文 `feat:` 前缀 + 说明"提升事务化 + 安全点取消 + cron/Atrinis 不投递"的正文，提交信息写无 BOM 文件；提交前核对 `git status` 只包含本任务改动（提交后工作区干净）。
+- [x] 提交 `345a1c1`：中文 `feat:` 前缀 + 说明"提升事务化 + 安全点取消 + cron/Atrinis 不投递"的正文，提交信息写无 BOM 文件；提交前核对 `git status` 只包含本任务改动（提交后工作区干净）。
 - [!] 回写 `<仓库外目录>\atri-x-upstream-sync-plan.md` 台账与表 5.4 第 4 行：**本机没有该盘符**，该仓库外方案文件在此环境中不存在，无法回写。已改为在本文件内维护完成状态；若需要台账，请在持有该文件的机器上同步，或在仓库内新建台账文件。
 
 **验收标准**：
@@ -91,7 +91,7 @@
 
 ---
 
-## 2. [x] P1#1 日志与信号整改（fork 最小版 A 已完成）— 提交 `05458e9` / `ad1594b` / `5e67bbf` / `5f8cfc2` / `e5cc44d`
+## 2. [x] P1#1 日志与信号整改（fork 最小版 A 已完成）— 提交 `5964838` / `c61a670` / `dde3253` / `8f5c52e` / `2862ea3`
 
 **范围已与用户确认（取 fork 最小版 A）**：只做"最小契约 + 修事实丢失缺陷"，**不改日志文件格式、不改 `LogEntry.Fields` 查询契约**；上游的九字段 `LogRecord`、JSONL 落盘、`internal/events` / `internal/signal` 全量迁移列入"不做/待决策"，不在本项范围内。
 
@@ -120,7 +120,7 @@
 
 **未做且需用户决策**：上游九字段 `LogRecord`（含 JSONL 落盘与 Reader 兼读新旧格式）。它超出已确认的最小版 A 范围，会改日志文件格式并连带重写 `/log`、`/audit`、`/usage`、`/atriwisp` 与维护报告的解析端。
 
-## 3. [x] P1#2 模型/会话服务化（四项能力全部落实，含后续追加的命名模型快照）— 提交 `a548f05` / `b3289b6`
+## 3. [x] P1#2 模型/会话服务化（四项能力全部落实，含后续追加的命名模型快照）— 提交 `7e5ab0e` / `a293eed`
 
 > 四项能力中一项（`state.toml` 并发写回）已修复，另三项（写盘原子性、运行中会话拒绝切离、会话绑定统一失效）经核对 fork 原本就具备。表中"命名模型快照"一行原本单列等用户决策，**用户已批准后已实施**（见本节的"命名快照（后续追加）"）。
 
@@ -152,7 +152,7 @@
 - **注意**：fork 没有上游的 `session.Binding`；本项是"忠实移植上游后台接管"（P1#4 的完整版）的前置，若将来要把接管语义对齐上游，先做本项。
 - **验收**：并发切换模型/新建会话不再出现半写 `state.toml`（写盘原子性已有，并发写回已串行化并手工复现验证：修前 8 个并发写入者只剩 1 个分片，修后稳定保留全部分片；该缺陷无法做成确定性单元测试，因为要暴露它需要在锁内部插桩）；运行中会话切模型/切模式给出明确拒绝而非静默生效（已有行为，测试覆盖）；命名快照的保存/应用/删除有落盘级测试，且"外部编辑后紧接着的内部改动不被吞掉"有专门测试；相关包测试 + `internal/app` 全绿。
 
-## 4. [x] P1#6 通知规则集中化（两轮已完成：`5cd3d32` + `c32a87d`）
+## 4. [x] P1#6 通知规则集中化（两轮已完成：`59d7234` + `e141bdd`）
 
 - **上游来源**：`internal/notification/*`。
 - **前置**：P1#1 日志与信号整改（通知规则建立在统一来源/事件契约之上）。
@@ -174,7 +174,7 @@
 - "通知被禁用时不投递"的负向测试已有：`internal/agent/group_runtime_test.go` 的 `TestSelfMutePausesGroupCallsOutputAndPersists` 断言被静音群里显式群通知被丢弃、只有状态变更通知发出一次。没有再做"某个通知目标被禁用"矩阵——禁用维度（群运行状态 / 通知目标开关 / 平台能力）里的目标开关与平台能力目前各自只有一处实现，做成矩阵只是把同一判定抄成表，不增加保护。
 - 其余平台级跳过规则已逐个盘点（第二轮），结果见下面的表。
 
-**第二轮：平台级跳过规则盘点与合并（提交 `c32a87d`）**：
+**第二轮：平台级跳过规则盘点与合并（提交 `e141bdd`）**：
 
 | 规则 | 出现位置 | 语义 | 处置 |
 | --- | --- | --- | --- |
@@ -182,13 +182,13 @@
 | 空白文本不发 | `qq-onebot`、`qqofficial`、`telegram` 各自的 `sendText` / `sendContextText` | 语义相同（`strings.TrimSpace(text) == ""` ⇒ 空回执），但只有一行、无共享状态 | **不合并**：抽成公共函数不增加任何保护，只是把 `TrimSpace` 换个名字；三处已用同一写法 |
 | 主动消息被禁用时报错 | `qqofficial`（`Proactive && !allowProactive()`） | 平台配置特有 | **保持平台内**：只有 QQ 官方有"主动消息"概念 |
 | 本地 CLI / headless 不过滤 | `cli`、`headless` | CLI 的预览就是终端输出；headless 无投递 | **不改** |
-| Telegram 不过滤群聊预览 | `telegram` | **与 QQ 两处不同**：Telegram 从未有这条规则（QQ 侧来自 `8129dd8 "qqonebot will not send notify in group"`） | **未统一**：无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，按"不同语义不强行统一"保留原行为，**留给用户决策**（若确认要一致，加一行 `delivery.ShouldDropGroupToolPreview(...)` + 目标是否群聊的判断即可） |
+| Telegram 不过滤群聊预览 | `telegram` | **与 QQ 两处不同**：Telegram 从未有这条规则（QQ 侧来自 `356141b "qqonebot will not send notify in group"`） | **未统一**：无法从代码断定是"漏移植"还是"Telegram 群聊就是要看进度"，按"不同语义不强行统一"保留原行为，**留给用户决策**（若确认要一致，加一行 `delivery.ShouldDropGroupToolPreview(...)` + 目标是否群聊的判断即可） |
 
 **验收**：通知目标的裁决逻辑只有一处入口（`Agent.SendNotice`，已确认）；cron / Atrinis / Hook 三条投递路径都走它（已确认）；平台级跳过规则中"语义相同"的那条已只有一份实现，且边界（群聊普通通知照发、私聊预览照发、显式目标预览照发、多输出不算预览）都有测试固定。
 
 ## 5. [x] P2 决策：**不换基，走路线 D（按需补接口）**——三个接缝已实施
 
-**决策材料：[`p2-native-responses-decision.md`](p2-native-responses-decision.md)**（提交 `1c9c923`）。**用户已决策：本轮按路线 D 补接口，不做换基（路线 B/C 暂不启动）。**
+**决策材料：[`p2-native-responses-decision.md`](p2-native-responses-decision.md)**（提交 `462091d`）。**用户已决策：本轮按路线 D 补接口，不做换基（路线 B/C 暂不启动）。**
 
 - **目标收益**：服务端续链（`previous_response_id`）、原生压缩、reasoning 加密内容、`additional_tools` 增量工具定义、原生 checkpoint。
 - **现实结论**：这不是"再写一个客户端"，而是换内核——LLM 分层（fork 的 `internal/llm/openai` 在上游已删除）、agent 路由（会替换 fork 的 `chat.go` / `chat_llm.go` / `chat_tools.go` / `core.go`，正是 P0/P1 刚加固过的地方）、压缩、存储（3 个新迁移：`session_llm_origin`、`native_dialogue`、`native_material_roots`）、模型来源、工具可用性。
@@ -221,7 +221,7 @@
 
 - `internal/agent`：2 个 `TestEmoticonHook*`（`exec: "sh": executable file not found`）。
 - `internal/agent`：`TestMemberPanelShowsOwnTasksAndQuota` / `TestGroupServicesCommandIntegration` / `TestModelsGroupsProvidersAndSwitchPersistsState` / `TestGroupKnowledge*` / `TestReminderCreateListRemoveAndDispatch` / `TestLearningModerationActionsAreGranularAndRevocable` 等**偶发**失败，报错是 `TempDir RemoveAll cleanup: unlinkat ...: The directory is not empty` —— 测试返回后仍有迟到的 `state.toml` 写入落在那次 `t.TempDir()` 里，属于测试夹具的清理竞态，与 `stateWriteMu`（只串行化同一实例的写回）无关；单独跑这些测试稳定通过，全包连跑约每次命中 1 例。
-  - **归属已实测**：用 `git worktree add` 检出改动前的 `710eb6c`，在同样的并行负载下（`./internal/agent/ ./internal/tool/builtin/ ./internal/platform/refcontext/`）跑 4 轮，同样出现 `TestLearningModerationActionsAreGranularAndRevocable` / `TestModelsGroupsProvidersAndSwitchPersistsState` 等偶发失败；单独跑 `./internal/agent/` 3 轮则稳定只有 2 个 `TestEmoticonHook*`。因此这些 flake 是既有的负载敏感问题，不是本次改动引入。
+  - **归属已实测**：用 `git worktree add` 检出改动前的 `82c18d4`，在同样的并行负载下（`./internal/agent/ ./internal/tool/builtin/ ./internal/platform/refcontext/`）跑 4 轮，同样出现 `TestLearningModerationActionsAreGranularAndRevocable` / `TestModelsGroupsProvidersAndSwitchPersistsState` 等偶发失败；单独跑 `./internal/agent/` 3 轮则稳定只有 2 个 `TestEmoticonHook*`。因此这些 flake 是既有的负载敏感问题，不是本次改动引入。
   - **本轮（§8.2 / §8.5 之后）追加观察**：连跑 8 轮 `./internal/agent/`，每轮固定只有 2 个 `TestEmoticonHook*`，另外每轮随机命中 **1 例** `TempDir RemoveAll cleanup: ... The directory is not empty`，命中的用例在三轮里分别是 `TestBudgetLedgerPersistsAndIsIdempotent`、`TestLearningModerationActionsAreGranularAndRevocable`、`TestModelsGroupsProvidersAndSwitchPersistsState`；另有一次扫描命中 `TestSaveModelSnapshotKeepsSnapshotWithConcurrentExternalEdit`（该用例随后单独跑 3/3、全包再跑 8 轮均通过）。这些用例都往 `t.TempDir()` 里写 `state.toml`，命中对象随机 → 与上面的"迟到写入落在已删除临时目录"是同一类，不是本次改动引入。
   - **本轮（§10.5 六项落地后）追加观察**：完整 `go test -count=1 -vet=off -p 1 ./...` 过一遍，全仓没有新失败；`internal/agent` 除 2 个 `TestEmoticonHook*` 外仍随机命中 1 例 `state.toml` 临时目录清理竞态（本轮命中 `TestApplyModelSnapshotMergesExternalEditFirst`，单独跑 1/1 通过），`internal/character` 与 `internal/request` 仍因写测试二进制 `Access is denied` 报 `[build failed]`。
 - `internal/tool/builtin`：4 个 `TestAnalyzeBashShellAdvice*`，以及 `TestShellToolUsesConfiguredEnvironment` / `TestResolveWindowsShellCachedAndValid` / `TestShellMediaInputsAndCleanup`（本机 `bash` 来自 WSL 但 `sh` 不存在、且 shell 解析结果随 PATH 变化）。
@@ -256,9 +256,9 @@
 
 除"挑拣上游新功能"之外，本轮还把上游整库盘了一遍，找出 4 类值得借鉴的东西。执行顺序与状态：
 
-### 8.1 [x] 模型切换兼容性裁决（借鉴上游 `modelmgr.CanSwitch`）— 提交 `f7d6a838`
+### 8.1 [x] 模型切换兼容性裁决（借鉴上游 `modelmgr.CanSwitch`）— 提交 `6b0a5823`
 
-**为什么值得借鉴**：上游 `modelmgr/compatibility.go` 的 `CanSwitch` 只有 30 行，却把"这段历史能不能交给目标模型"做成一个明确的裁决入口。fork 在 P2 路线 D 已经记下同样的事实（会话 metadata 的 `llm_origin`，`70468b7`），却**只记不用**：`/model` 能把一个 Responses 会话切到别的厂商的 Responses 模型、或直接切到 Chat Completions，切完才发现上下文续不上。这是"借鉴裁决而不是搬实现"的低成本样例。
+**为什么值得借鉴**：上游 `modelmgr/compatibility.go` 的 `CanSwitch` 只有 30 行，却把"这段历史能不能交给目标模型"做成一个明确的裁决入口。fork 在 P2 路线 D 已经记下同样的事实（会话 metadata 的 `llm_origin`，`d531763`），却**只记不用**：`/model` 能把一个 Responses 会话切到别的厂商的 Responses 模型、或直接切到 Chat Completions，切完才发现上下文续不上。这是"借鉴裁决而不是搬实现"的低成本样例。
 
 | 改动 | 位置 |
 | --- | --- |
@@ -277,8 +277,8 @@
 
 上游 `internal/signal`（857 行源码 + 933 行测试 + 10 个 benchmark）**零 `atri-x/internal/*` 依赖**，只用标准库，是这次盘出来的唯一"可以整包搬"的东西。
 
-- [x] **1a 只落包** — 提交 `ed501003`：8 个源文件 + 7 个测试文件原样移植（`git checkout refs/remotes/upstream/main -- internal/signal`，字节级一致），不改任何现有行为。验证：`gofmt -l internal/signal` 无输出、`go vet ./internal/signal/...` 通过、`go build ./...` 通过、`go test -count=1 -p 1 ./internal/signal/...` 通过。`devdocs/code-map.md` 的 Hook 与插件段已登记。
-- [x] **1b 接管平台连接扇出** — 提交 `e211478c`（+ 断言测试与冒烟记录 `00ea4a8e`）。
+- [x] **1a 只落包** — 提交 `d656f689`：8 个源文件 + 7 个测试文件原样移植（`git checkout refs/remotes/upstream/main -- internal/signal`，字节级一致），不改任何现有行为。验证：`gofmt -l internal/signal` 无输出、`go vet ./internal/signal/...` 通过、`go build ./...` 通过、`go test -count=1 -p 1 ./internal/signal/...` 通过。`devdocs/code-map.md` 的 Hook 与插件段已登记。
+- [x] **1b 接管平台连接扇出** — 提交 `0247c90f`（+ 断言测试与冒烟记录 `014e2fc2`）。
   - **改动前的问题**：`internal/app/platforms.go` 的 connect notifier 直接把平台连接事实同步转给 `Agent.NotifyPlatformConnected`，由 hook 管理器在**同一条 goroutine** 上跑完所有 `platform.connected` 处理器，其中 `builtin.cron.missed_once` 会调模型并发送消息——等于把一次 LLM 补投递压在平台连接回调上，而且没有队列、超时和关闭预算。
   - **已确认的两个决策**（用户选定）：全局信号放 `internal/platform`（不新开 `internal/events`，避免与"不引入上游九字段日志契约"的既有决策混淆）；范围只改 hook 侧，cron 继续挂在 hook 点 `builtin.cron.missed_once` 上。
   - **落地**：`internal/platform/platform.go` 新增 `ConnectedEvent{Platform}` + `PlatformConnected`；`internal/agent/platform_signals.go`（新）里 `StartPlatformEvents` 订阅并按平台建 `signal.Queue`（默认 256 等待 / 1 并发），worker 上跑 `handlePlatformConnected`，`ClosePlatformEvents` 先停止接纳再排空；`internal/app/integrations.go` 在适配器启动前订阅（信号不缓存、不重放）；`internal/app/runtime.go` 的 `hookRuntimeLifecycle` 先关平台连接订阅、再关 hook 运行时。
@@ -305,7 +305,7 @@
 - **本项为纯 devdocs/规则文档交付，没有用户可见行为变化，因此按仓库规则不写 `CHANGELOG.md`。**
 - **遗留待确认**：本次会话收到的 `AGENTS.md` 指令里还有两条本仓库文件里**没有**的规则——"所有包、文件位置、包名、文件名、函数名、变量名不能自作主张，必须和用户讨论"与"对于比较底层的定义型字段，需在代码的注释中说明字段作用"（这两条在上游 `AGENTS.md` 里存在）。按约定只采纳了 mermaid 规则，是否把这两条也补进本仓库请用户决定。
 
-### 8.5 [x] 通知队列与背压 — 提交 `88321da6`
+### 8.5 [x] 通知队列与背压 — 提交 `6e023db1`
 
 **改动前的问题**：`agentOutputSender.SendNotice`（`internal/agent/output.go`）同步直达平台适配器，这一层没有队列与容量上限（只有 OneBot 适配器内部另有 normal/high 队列）；一个发不动的平台会让所有通知无限堆在它上面。上游 `notification.Manager` 的做法是每平台 8 个发送槽 / 256 等待、同目标串行、队列满返回 `ErrQueueFull` 且不自动重试。
 
@@ -327,14 +327,14 @@
 
 | # | 功能 | 落点 | 状态 |
 | --- | --- | --- | --- |
-| 1 | `--raw` 与 `-d` 解耦（`/log` `/audit` `/atriwisp`）+ 补全项 | `internal/agent/commands/log.go` | `[x]` 提交 `1e7ee102`（与第 2 项同一提交） |
-| 2 | 移除 `/log -t`（保留 `/audit -t`）+ 补全表更新 | 同上 | `[x]` 提交 `1e7ee102`；`--event` 补全的事件改名**未采纳**（fork 的事件名与命名流程不同），改为补上一直缺失的 `--tag` 补全 |
+| 1 | `--raw` 与 `-d` 解耦（`/log` `/audit` `/atriwisp`）+ 补全项 | `internal/agent/commands/log.go` | `[x]` 提交 `803de2ab`（与第 2 项同一提交） |
+| 2 | 移除 `/log -t`（保留 `/audit -t`）+ 补全表更新 | 同上 | `[x]` 提交 `803de2ab`；`--event` 补全的事件改名**未采纳**（fork 的事件名与命名流程不同），改为补上一直缺失的 `--tag` 补全 |
 | 3 | 损坏行计数与提示（`Reader.Query` 返回 `{Entries, DamagedCount, DamagedLines}`） | `internal/logging/reader.go` + `log.go` + `usage.go` + `maintenance/report.go` + `agent/logging.go` | `[ ]` |
 | 4 | `/audit --run_source foreground\|cron\|atrinis`（需先在 `tool_call` 审计写入侧加稳定字段） | `internal/agent/chat_tools.go` 等写入点 + `log.go` | `[ ]` |
 | 5 | 工具日志正文按类别限长（读/查/说明 ≤128、执行/编辑/写入/媒体 ≤256） | 工具日志写入侧 | `[ ]` |
-| 6 | `/usage` 未知/非法/溢出显示 `null`（原来 `atoiSafe` 把非法值当 0） | `internal/agent/commands/usage.go` | `[x]` 提交 `abd79959` |
+| 6 | `/usage` 未知/非法/溢出显示 `null`（原来 `atoiSafe` 把非法值当 0） | `internal/agent/commands/usage.go` | `[x]` 提交 `25cf1bad` |
 | 7 | `/audit` 不再显示 JSON 转义 | 需先复现：fork 存的是 `body_json` 文本字段并在 raw 视图里缩进，可能不存在该缺陷 | `[ ]` |
-| 8 | `/atriwisp --tag` | — | `[x]` fork 早已有（`f15924be`），上游只是换了实现；本次补上了它的选项补全 |
+| 8 | `/atriwisp --tag` | — | `[x]` fork 早已有（`e94f1adb`），上游只是换了实现；本次补上了它的选项补全 |
 
 **不搬**：上游的 `ContentFields` / `ContentFieldContains`（那是"字段被塞进 JSON content 里"的补偿机制；fork 的 `key=value` 文本属性本来就能直接按字段筛 `risk` / `tool` / `actor_id`）、九字段 `LogRecord`、`ContentLimit` 强约束。**若要做，只搬查询层与写入侧的加法式字段**。
 
@@ -342,7 +342,7 @@
 
 ### 9.1 逐项判定（本轮研究结论）
 
-**本轮执行结果（6 项 6 个提交）**：第 3 项损坏行 `e9b0bbd8`；第 4 项 `/audit --run_source` `747677a`；第 5 项工具正文分类限长 `8d479cc`；第 7 项判定"不搬"（fork 无该缺陷）；`shell` 上限 `fac0126`；启动插件告警 `1f9cd9dc`；`internal/fileops/rollback.go` 整文件不搬，但其中核对出的真缺陷 E 已修 `27f39a06`。
+**本轮执行结果（6 项 6 个提交）**：第 3 项损坏行 `04265c28`；第 4 项 `/audit --run_source` `74b3275`；第 5 项工具正文分类限长 `d85cad7`；第 7 项判定"不搬"（fork 无该缺陷）；`shell` 上限 `40930f3`；启动插件告警 `bbc3a185`；`internal/fileops/rollback.go` 整文件不搬，但其中核对出的真缺陷 E 已修 `9ae9c404`。
 
 判定分三档：**直接移植**（可整段照抄）· **改造**（只搬行为，在 fork 的等价落点重写）· **不搬**（依赖上游骨架，或 fork 不存在该缺陷）。
 
@@ -425,7 +425,7 @@
 | 7 | §9.1 `shell` 上限 1 行 + 工具日志分类限长 | 行为对齐 / 整洁性 | 很小 |
 | 8 | §9.1 损坏行跳过与计数 | 行为对齐（中成本，涉及 `Reader.Query` 签名与 4 个消费点） | 中 |
 
-**执行结果**：1 → `27f39a06`；2 → `ebec185`（含 §10.4.1 的 `errors.Is` 口径）；3 → `4322e31`；4 → `1f9cd9dc`；5 → `747677a`；6 → `8d479cc`；7（与 5 同项）→ `fac0126`；8 → `e9b0bbd8`。未开工：§10.4.2（cron 取消分类）与 §10.6 的 F / G / B / A / H。
+**执行结果**：1 → `9ae9c404`；2 → `fe98bba`（含 §10.4.1 的 `errors.Is` 口径）；3 → `a85f330`；4 → `bbc3a185`；5 → `74b3275`；6 → `d85cad7`；7（与 5 同项）→ `40930f3`；8 → `04265c28`。未开工：§10.4.2（cron 取消分类）与 §10.6 的 F / G / B / A / H。
 
 **明确不做**：§9.1 的 `/audit` JSON 转义（fork 无此缺陷，已有回归测试）、`internal/fileops/rollback.go` 的整文件替换（结构不同；只搬 §10.6 列出的几条独立缺陷）、§10.3（无对应结构）、§10.2 的局部信号与 `Execution` 快照（依赖 fork 没有的骨架）。
 
@@ -435,7 +435,7 @@
 
 | # | 上游行为 | fork 现状 | 判定 |
 | --- | --- | --- | --- |
-| **E** | 提交前对**新建**路径同样复核 `RevisionAfter`（上游 `inspectFileState`，覆盖新建与覆盖两条路径） | 已在删除前先 `os.ReadFile` 并比对 `ContentRevision(current) != record.RevisionAfter`（不一致返回 `ErrRollbackConflict`） | **已修 `27f39a06`（数据丢失）**：此前 `!existed` 分支只看文件是否存在就删除，用户改过 ATRI-X 新建的文件后再回滚会静默删掉那些改动；也与工具自述"不覆盖 Shell 或外部程序在编辑之后做的修改"矛盾。新增 `TestRollbackStoreKeepsCreatedFileChangedAfterTheEdit` 与 `TestRollbackStoreReportsMissingCreatedFile`。 |
+| **E** | 提交前对**新建**路径同样复核 `RevisionAfter`（上游 `inspectFileState`，覆盖新建与覆盖两条路径） | 已在删除前先 `os.ReadFile` 并比对 `ContentRevision(current) != record.RevisionAfter`（不一致返回 `ErrRollbackConflict`） | **已修 `9ae9c404`（数据丢失）**：此前 `!existed` 分支只看文件是否存在就删除，用户改过 ATRI-X 新建的文件后再回滚会静默删掉那些改动；也与工具自述"不覆盖 Shell 或外部程序在编辑之后做的修改"矛盾。新增 `TestRollbackStoreKeepsCreatedFileChangedAfterTheEdit` 与 `TestRollbackStoreReportsMissingCreatedFile`。 |
 | **F** | 记录"解析后的真实目标"并在回滚前复核（`ResolveFileTarget` / `checkFileTarget` / "file target changed; rollback refused"） | 直接对 `record.Path` 做 `os.ReadFile` / `os.Remove` / `AtomicWriteFile`（`:187/205/211/201`），而 `AtomicWriteFile` 明确**会写穿符号链接**（`internal/utils/fileops/atomic_write.go:10-12`） | **建议做**：记录后该路径的符号链接被改指别处时，回滚会读/写新目标，可能覆盖用户没编辑过的文件。需要在 `rollbackRecord` 里存下解析后的目标（会改 `RollbackInfo` 结构与 `Record` 签名，调用点 4 处），约 20–30 行。 |
 | **G** | 有界读取 `readRevisionBytes`（先 stat 判普通文件与大小，再 `io.LimitReader`） | `os.ReadFile` 整文件入内存，无类型/大小前置（`rollback.go:187`） | **建议做**：外部把该路径换成超大文件时 `/rollback` 会读满内存。约 20 行（需在记录里存 after 大小）。 |
 | **B** | 备份取自**编辑自己那次读取**的字节（`options.beforeWrite`，上游 `:189-231`） | 编辑**之前另做一次** `captureEditBackup`（`internal/tool/builtin/file_tools.go:530`、`:542-554`）再调 `EditFileWithOptions`（`:531`）：两次读取之间有 TOCTOU 窗口，期间被并发改写时记下的"编辑前内容"不是紧邻编辑前的版本 | **单独排期**（要动编辑核心，给 `fileops.EditFileOptions` 加钩子，约 50–70 行）。今天的两次读取用同一个 100 MiB 上限，所以不存在"采集失败被当成新建"的问题。 |
