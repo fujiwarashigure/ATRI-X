@@ -22,14 +22,14 @@ type AtriwispCreatorTool struct {
 }
 
 type atriwispCreatorConfigSnapshot struct {
-	AppConfigPath   string
+	AppConfigPath     string
 	AtrinisConfigPath string
-	Enabled         bool
-	Addr            string
-	TokenNames      []string
-	TokenEnvNames   []string
-	AllowedTools    []string
-	Warnings        []string
+	Enabled           bool
+	Addr              string
+	TokenNames        []string
+	TokenEnvNames     []string
+	AllowedTools      []string
+	Warnings          []string
 }
 
 func NewAtriwispCreatorTool(infos ...runtimeinfo.Info) AtriwispCreatorTool {
@@ -101,13 +101,13 @@ func loadAtriwispCreatorConfig(info runtimeinfo.Info) atriwispCreatorConfigSnaps
 	sort.Strings(tokenEnvNames)
 
 	snapshot := atriwispCreatorConfigSnapshot{
-		AppConfigPath:   cfg.ConfigPath,
+		AppConfigPath:     cfg.ConfigPath,
 		AtrinisConfigPath: cfg.AtrinisConfigPath,
-		Enabled:         cfg.Atrinis.Enabled,
-		Addr:            strings.TrimSpace(cfg.Atrinis.HTTP.Addr),
-		TokenNames:      tokenNames,
-		TokenEnvNames:   tokenEnvNames,
-		AllowedTools:    append([]string(nil), cfg.Atrinis.AllowedTools...),
+		Enabled:           cfg.Atrinis.Enabled,
+		Addr:              strings.TrimSpace(cfg.Atrinis.HTTP.Addr),
+		TokenNames:        tokenNames,
+		TokenEnvNames:     tokenEnvNames,
+		AllowedTools:      append([]string(nil), cfg.Atrinis.AllowedTools...),
 	}
 	sort.Strings(snapshot.AllowedTools)
 

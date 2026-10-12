@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/atrinis"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
-	"github.com/fujiwarashigure/ATRI-X/internal/atrinis"
 )
 
 type defaultIntegrationFactory struct{}

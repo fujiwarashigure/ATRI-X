@@ -2,8 +2,8 @@ package session
 
 import (
 	"context"
-	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"errors"
+	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"testing"
 )
 

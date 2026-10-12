@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
-	"github.com/aws/aws-sdk-go-v2/credentials"
 )
 
 func TestNewS3BackendRequiresCredentials(t *testing.T) {

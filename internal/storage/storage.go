@@ -106,7 +106,7 @@ type AtrinisEvent struct {
 	ID               string
 	EventKey         string
 	TokenName        string
-	AtriwispName       string
+	AtriwispName     string
 	Source           string
 	SourceID         string
 	Tags             string
@@ -276,7 +276,7 @@ type CreateAtrinisEventRequest struct {
 	MediaIDs         []string
 	EventKey         string
 	TokenName        string
-	AtriwispName       string
+	AtriwispName     string
 	Source           string
 	SourceID         string
 	Tags             string

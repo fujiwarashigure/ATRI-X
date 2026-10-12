@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
-	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )

@@ -2,6 +2,7 @@ package agent
 
 import (
 	"context"
+	"fmt"
 	agentcommands "github.com/fujiwarashigure/ATRI-X/internal/agent/commands"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
@@ -9,7 +10,6 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"

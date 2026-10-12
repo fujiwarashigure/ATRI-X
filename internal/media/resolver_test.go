@@ -19,13 +19,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/credentials"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 type resolverRemote struct {

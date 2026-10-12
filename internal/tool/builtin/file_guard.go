@@ -11,8 +11,8 @@ import (
 const (
 	warnUseReadFile         = "读取本地文件请优先使用 read_file 工具。"
 	warnUseEditFile         = "编辑本地文件请优先使用 edit_file 工具。"
-	warnUseReadAtrixSkill      = "读取 ATRI-X Skill 文件请使用 read_atrix_skill。"
-	warnUseModifyAtrixSkill    = "ATRI-X Skill 文件请使用 modify_atrix_skill 修改。"
+	warnUseReadAtrixSkill   = "读取 ATRI-X Skill 文件请使用 read_atrix_skill。"
+	warnUseModifyAtrixSkill = "ATRI-X Skill 文件请使用 modify_atrix_skill 修改。"
 	warnUseReadMemory       = "读取常驻记忆请使用 resident_memory_read。"
 	warnUseModifyMemory     = "常驻记忆文件请使用 resident_memory_normal 或 resident_memory_core 修改。"
 	warnUseReadLongMemory   = "读取长期记忆请使用 long_memory_search。"

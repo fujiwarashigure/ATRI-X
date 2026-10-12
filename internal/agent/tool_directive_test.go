@@ -2,6 +2,7 @@ package agent
 
 import (
 	"context"
+	"errors"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
@@ -9,7 +10,6 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/builtin"
-	"errors"
 	"os"
 	"path/filepath"
 	"strings"

@@ -13,13 +13,13 @@ import (
 type fakeLogManager struct {
 	runtime *slog.Logger
 	audit   *slog.Logger
-	atrinis   *slog.Logger
+	atrinis *slog.Logger
 	dir     string
 }
 
 func (m fakeLogManager) Runtime() *slog.Logger { return m.runtime }
 func (m fakeLogManager) Audit() *slog.Logger   { return m.audit }
-func (m fakeLogManager) Atrinis() *slog.Logger   { return m.atrinis }
+func (m fakeLogManager) Atrinis() *slog.Logger { return m.atrinis }
 func (m fakeLogManager) LogDir() string        { return m.dir }
 func (m fakeLogManager) Close() error          { return nil }
 

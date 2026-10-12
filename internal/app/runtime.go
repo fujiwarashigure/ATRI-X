@@ -10,12 +10,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/fujiwarashigure/ATRI-X/internal/agent"
+	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/command"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
-	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/groupanalysis"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	hookbuiltin "github.com/fujiwarashigure/ATRI-X/internal/hook/builtin"
@@ -32,8 +34,6 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/builtin"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/runtimeinfo"
 	"github.com/fujiwarashigure/ATRI-X/internal/utils/fileops"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/credentials"
 )
 
 type defaultRuntimeFactory struct{}
@@ -284,7 +284,7 @@ func (defaultRuntimeFactory) Build(ctx context.Context, req RuntimeRequest) (*Ru
 		Agent:        agt,
 		Handler:      agt,
 		CronService:  cronService,
-		AtrienaBus:    atrienaBus,
+		AtrienaBus:   atrienaBus,
 		ImageLimiter: toolRuntime.ImageLimiter,
 		VisionStats:  visionMetrics.snapshot,
 		HookNotices:  hookNotices,

@@ -18,7 +18,7 @@ import (
 type SourceKind string
 
 const (
-	SourceKindNative SourceKind = "native"
+	SourceKindNative   SourceKind = "native"
 	SourceKindAtriwisp SourceKind = "atriwisp"
 )
 
@@ -42,7 +42,7 @@ type CachedTool struct {
 	Source         SourceKind     `json:"source"`
 	Description    string         `json:"description,omitempty"`
 	Schema         llm.ToolSchema `json:"schema"`
-	AtriwispName     string         `json:"atriwisp_name,omitempty"`
+	AtriwispName   string         `json:"atriwisp_name,omitempty"`
 	EventKey       string         `json:"event_key,omitempty"`
 	Endpoint       string         `json:"endpoint,omitempty"`
 	TimeoutSeconds int            `json:"timeout_seconds,omitempty"`

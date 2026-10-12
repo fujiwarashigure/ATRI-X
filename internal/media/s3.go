@@ -9,10 +9,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 
-	"github.com/fujiwarashigure/ATRI-X/internal/config"
-	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	awsconfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/fujiwarashigure/ATRI-X/internal/config"
+	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
 
 type S3Backend struct {

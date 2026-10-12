@@ -29,7 +29,7 @@ func TestCreateAtrixSkillCreatesBuildsAndReloads(t *testing.T) {
 		"name":        "hello_skill",
 		"description": "Echo reusable text.",
 		"risk":        "low",
-		"atriyph":       "#skill hello_skill - Echo reusable text.\n<- $text:str!\n-> $result:str\n",
+		"atriyph":     "#skill hello_skill - Echo reusable text.\n<- $text:str!\n-> $result:str\n",
 		"go_source":   goSource,
 	})
 	result, err := creator.Call(context.Background(), tool.CallRequest{Arguments: args})
@@ -88,7 +88,7 @@ func TestCreateAtrixSkillReturnsAtriyphWarnings(t *testing.T) {
 		"name":        "warn_skill",
 		"description": "Warn workflow.",
 		"risk":        "low",
-		"atriyph":       "#skill warn_skill - Warn workflow.\n** 清单：\n",
+		"atriyph":     "#skill warn_skill - Warn workflow.\n** 清单：\n",
 	})
 	result, err := creator.Call(context.Background(), tool.CallRequest{Arguments: args})
 	if err != nil {
@@ -108,7 +108,7 @@ func TestCreateAtrixSkillCanCreateTextOnlySkill(t *testing.T) {
 		"name":        "workflow",
 		"description": "Reusable workflow.",
 		"risk":        "low",
-		"atriyph":       "#skill workflow - Reusable workflow.\n<- $text:str!\n-> $result:str\n",
+		"atriyph":     "#skill workflow - Reusable workflow.\n<- $text:str!\n-> $result:str\n",
 	})
 	if _, err := creator.Call(context.Background(), tool.CallRequest{Arguments: args}); err != nil {
 		t.Fatal(err)

@@ -31,7 +31,7 @@ type createAtrixSkillArgs struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Risk        string `json:"risk"`
-	Atriyph       string `json:"atriyph"`
+	Atriyph     string `json:"atriyph"`
 	GoSource    string `json:"go_source"`
 	TimeoutMS   int    `json:"timeout_ms"`
 }

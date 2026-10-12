@@ -43,7 +43,7 @@ type Config struct {
 	FileDelivery        FileDeliveryConfig               `toml:"file_delivery"`
 	PlatformFiles       PlatformFilesConfig              `toml:"platform_files"`
 	Platform            PlatformConfig                   `toml:"platform"`
-	Atrinis               AtrinisConfig                      `toml:"atrinis"`
+	Atrinis             AtrinisConfig                    `toml:"atrinis"`
 	Soul                SoulConfig                       `toml:"soul"`
 	CharacterLibrary    CharacterLibraryConfig           `toml:"character_library"`
 	ImageGeneration     ImageGenerationConfig            `toml:"image_generation"`
@@ -65,7 +65,7 @@ type Config struct {
 	ProvidersConfigPath string                           `toml:"-"`
 	ServicesConfigPath  string                           `toml:"-"`
 	StateConfigPath     string                           `toml:"-"`
-	AtrinisConfigPath     string                           `toml:"-"`
+	AtrinisConfigPath   string                           `toml:"-"`
 	ToolTagsConfigPath  string                           `toml:"-"`
 }
 
@@ -76,7 +76,7 @@ type ConfigFilesConfig struct {
 	Services  string `toml:"services"`
 	Providers string `toml:"providers"`
 	State     string `toml:"state"`
-	Atrinis     string `toml:"atrinis"`
+	Atrinis   string `toml:"atrinis"`
 	ToolTags  string `toml:"tool_tags"`
 }
 
@@ -1290,13 +1290,13 @@ type PlatformFilesConfig struct {
 }
 
 type AtrinisConfig struct {
-	Enabled          bool                         `toml:"enabled"`
-	AllowedTools     []string                     `toml:"allowed_tools"`
-	HTTP             AtrinisHTTPConfig              `toml:"http"`
-	Tokens           map[string]AtrinisTokenConfig  `toml:"tokens"`
-	DeliveryDisabled AtrinisDeliveryDisabledConfig  `toml:"delivery_disabled"`
-	Segment          AtrinisSegmentConfig           `toml:"segment"`
-	Atriwisps          map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
+	Enabled          bool                             `toml:"enabled"`
+	AllowedTools     []string                         `toml:"allowed_tools"`
+	HTTP             AtrinisHTTPConfig                `toml:"http"`
+	Tokens           map[string]AtrinisTokenConfig    `toml:"tokens"`
+	DeliveryDisabled AtrinisDeliveryDisabledConfig    `toml:"delivery_disabled"`
+	Segment          AtrinisSegmentConfig             `toml:"segment"`
+	Atriwisps        map[string]AtrinisAtriwispConfig `toml:"atriwisps"`
 }
 
 type AtrinisSegmentConfig struct {
@@ -1330,10 +1330,10 @@ type AtrinisTargetConfig struct {
 }
 
 type AtrinisAtriwispConfig struct {
-	Enabled               *bool               `toml:"enabled"`
-	AllowedTokens         []string            `toml:"allowed_tokens"`
-	AllowedTools          []string            `toml:"allowed_tools"`
-	DisabledExternalTools []string            `toml:"disabled_external_tools"`
+	Enabled               *bool                 `toml:"enabled"`
+	AllowedTokens         []string              `toml:"allowed_tokens"`
+	AllowedTools          []string              `toml:"allowed_tools"`
+	DisabledExternalTools []string              `toml:"disabled_external_tools"`
 	DisabledTargets       []AtrinisTargetConfig `toml:"disabled_targets"`
 }
 

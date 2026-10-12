@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/fujiwarashigure/ATRI-X/internal/agent"
+	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	elcron "github.com/fujiwarashigure/ATRI-X/internal/cron"
-	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/health"
 	"github.com/fujiwarashigure/ATRI-X/internal/historygate"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
@@ -117,7 +117,7 @@ type RuntimeComponents struct {
 	Agent        *agent.Agent
 	Handler      platform.PlatformHandler
 	CronService  *elcron.Service
-	AtrienaBus    *atriena.Bus
+	AtrienaBus   *atriena.Bus
 	ImageLimiter *concurrency.Limiter
 	// HookNotices are the Hook load warnings collected while the Agent was still
 	// being built. Platform senders only exist after Integrations.Attach, so the

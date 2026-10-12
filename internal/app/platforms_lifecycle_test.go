@@ -224,7 +224,7 @@ func TestNotifyPlatformFailureNotifiesOtherPlatformSuperadmins(t *testing.T) {
 		"qqonebot":   {"admin", " admin ", "", "admin"},
 		"telegram":   {},
 		"qqofficial": {"ops"},
-		"atrinis":      {"ops"},
+		"atrinis":    {"ops"},
 	}}}
 	sender := &recordingNoticeSender{}
 	notifyPlatformFailure(context.Background(), cfg, sender,

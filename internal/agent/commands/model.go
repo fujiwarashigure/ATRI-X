@@ -443,9 +443,9 @@ const (
 	modelTargetDelete    modelTarget = "delete"
 	modelTargetChat      modelTarget = "chat"
 	modelTargetWork      modelTarget = "work"
-	modelTargetAtriwisp1   modelTarget = "atriwisp1"
-	modelTargetAtriwisp2   modelTarget = "atriwisp2"
-	modelTargetAtriwisp3   modelTarget = "atriwisp3"
+	modelTargetAtriwisp1 modelTarget = "atriwisp1"
+	modelTargetAtriwisp2 modelTarget = "atriwisp2"
+	modelTargetAtriwisp3 modelTarget = "atriwisp3"
 	modelTargetCompact   modelTarget = "compact"
 	modelTargetNaming    modelTarget = "naming"
 )

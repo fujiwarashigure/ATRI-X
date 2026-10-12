@@ -19,7 +19,7 @@ const (
 	ReadAtrixSkillName   = "read_atrix_skill"
 	ModifyAtrixSkillName = "modify_atrix_skill"
 
-	atrixSkillTargetAtriyph      = "skill_atriyph"
+	atrixSkillTargetAtriyph    = "skill_atriyph"
 	atrixSkillTargetCodeSource = "code_source"
 )
 

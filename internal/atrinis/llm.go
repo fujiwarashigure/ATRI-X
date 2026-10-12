@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
-	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
 )
 
 func (s *Service) RunLLMEvent(ctx context.Context, event Event, eventID string) error {

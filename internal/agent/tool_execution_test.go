@@ -2,6 +2,7 @@ package agent
 
 import (
 	"context"
+	"fmt"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
@@ -13,7 +14,6 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"

@@ -19,7 +19,7 @@ type Store struct {
 	contextSummaries *ContextSummaryRepository
 	toolCalls        *ToolCallRepository
 	cronJobs         *CronJobRepository
-	atrinisEvents      *AtrinisEventRepository
+	atrinisEvents    *AtrinisEventRepository
 	media            *MediaRepository
 	mediaReferences  *MediaReferenceRepository
 }

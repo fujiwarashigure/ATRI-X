@@ -27,7 +27,7 @@ func (r *AtrinisEventRepository) Create(ctx context.Context, req storage.CreateA
 		ID:               storage.NewID(),
 		EventKey:         req.EventKey,
 		TokenName:        req.TokenName,
-		AtriwispName:       req.AtriwispName,
+		AtriwispName:     req.AtriwispName,
 		Source:           req.Source,
 		SourceID:         req.SourceID,
 		Tags:             req.Tags,

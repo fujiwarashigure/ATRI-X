@@ -123,9 +123,9 @@ func NewLog(deps Deps) command.Handler {
 }
 
 type logCommand struct {
-	deps   Deps
-	info   command.Info
-	audit  bool
+	deps     Deps
+	info     command.Info
+	audit    bool
 	atriwisp bool
 }
 

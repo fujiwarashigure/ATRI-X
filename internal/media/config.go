@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
-	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 // NewConfigured shares one local content store and an optional lazy S3-compatible backend.

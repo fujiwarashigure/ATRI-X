@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
+	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/platform"
 )
 

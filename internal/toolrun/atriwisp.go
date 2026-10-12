@@ -21,8 +21,8 @@ type AtriwispToolDeclaration struct {
 
 type AtriwispInjection struct {
 	AtriwispName string
-	EventKey   string
-	Tools      []AtriwispToolDeclaration
+	EventKey     string
+	Tools        []AtriwispToolDeclaration
 }
 
 func CachedToolsFromAtriwisp(injection AtriwispInjection) []CachedTool {
@@ -43,7 +43,7 @@ func CachedToolsFromAtriwisp(injection AtriwispInjection) []CachedTool {
 			Source:         SourceKindAtriwisp,
 			Description:    declared.Description,
 			Schema:         llm.ToolSchema{Type: "function", Function: llm.ToolFunctionSchema{Name: canonical, Description: declared.Description, Parameters: declared.Schema}},
-			AtriwispName:     atriwispName,
+			AtriwispName:   atriwispName,
 			EventKey:       injection.EventKey,
 			Endpoint:       strings.TrimSpace(declared.Endpoint),
 			TimeoutSeconds: declared.TimeoutSeconds,

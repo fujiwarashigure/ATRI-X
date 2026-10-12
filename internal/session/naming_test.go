@@ -2,9 +2,9 @@ package session
 
 import (
 	"context"
-	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"encoding/json"
 	"fmt"
+	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"testing"
 	"time"
 )

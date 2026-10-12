@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
+	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )

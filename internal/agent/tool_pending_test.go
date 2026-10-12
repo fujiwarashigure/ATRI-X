@@ -2,13 +2,13 @@ package agent
 
 import (
 	"context"
+	"errors"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/security"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
-	"errors"
 	"strings"
 	"testing"
 	"time"

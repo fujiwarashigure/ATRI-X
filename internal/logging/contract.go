@@ -58,7 +58,7 @@ var logModules = map[string]struct{}{
 	ModulePlatform:    {},
 	ModuleDelivery:    {},
 	ModuleCron:        {},
-	ModuleAtrinis:       {},
+	ModuleAtrinis:     {},
 	ModuleModel:       {},
 	ModuleStorage:     {},
 	ModuleMedia:       {},
@@ -133,7 +133,7 @@ const (
 var runSources = map[string]struct{}{
 	RunSourceForeground: {},
 	RunSourceCron:       {},
-	RunSourceAtrinis:      {},
+	RunSourceAtrinis:    {},
 }
 
 // ValidRunSource 报告运行来源取值是否合法。

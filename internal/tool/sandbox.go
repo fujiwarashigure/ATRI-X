@@ -13,7 +13,7 @@ type sandboxContextKey struct{}
 type BackgroundKind string
 
 const (
-	BackgroundKindCron  BackgroundKind = "cron"
+	BackgroundKindCron    BackgroundKind = "cron"
 	BackgroundKindAtrinis BackgroundKind = "atrinis"
 )
 

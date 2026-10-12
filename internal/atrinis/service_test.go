@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
-	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
 	"github.com/fujiwarashigure/ATRI-X/internal/toolrun"
@@ -1062,13 +1062,13 @@ func (r *fakeBackgroundRunner) RunBackground(ctx context.Context, req background
 
 func testRequest(mode string) Request {
 	return Request{
-		Version: "atriena.v2",
-		Atriwisp:  Atriwisp{Name: "watcher", Tags: []string{"test"}},
-		Source:  "source",
-		ID:      "event-1",
-		Mode:    mode,
-		Format:  "text",
-		Content: "hello",
-		Targets: []Target{{Platform: "cli"}},
+		Version:  "atriena.v2",
+		Atriwisp: Atriwisp{Name: "watcher", Tags: []string{"test"}},
+		Source:   "source",
+		ID:       "event-1",
+		Mode:     mode,
+		Format:   "text",
+		Content:  "hello",
+		Targets:  []Target{{Platform: "cli"}},
 	}
 }

@@ -2,10 +2,10 @@ package atrinis
 
 import (
 	"context"
+	"errors"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
-	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"

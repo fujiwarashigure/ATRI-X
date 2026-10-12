@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/atriyph"
+	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 )
 

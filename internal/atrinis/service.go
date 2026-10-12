@@ -7,10 +7,10 @@ import (
 	"log/slog"
 	"path/filepath"
 
+	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/background"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
-	"github.com/fujiwarashigure/ATRI-X/internal/atriena"
 	"github.com/fujiwarashigure/ATRI-X/internal/media"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 )
@@ -151,7 +151,7 @@ func (s *Service) handlePreparedEvent(ctx context.Context, event Event) (Respons
 		MediaIDs:         mediaIDs,
 		EventKey:         event.EventKey,
 		TokenName:        event.Origin.Label(),
-		AtriwispName:       req.Atriwisp.Name,
+		AtriwispName:     req.Atriwisp.Name,
 		Source:           req.Source,
 		SourceID:         req.ID,
 		Tags:             event.TagsJSON,

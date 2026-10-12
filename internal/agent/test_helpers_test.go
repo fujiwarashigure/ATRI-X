@@ -2,6 +2,8 @@ package agent
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
@@ -14,8 +16,6 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/storage/sqlite"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool/builtin"
-	"errors"
-	"fmt"
 	"strings"
 	"sync"
 	"testing"

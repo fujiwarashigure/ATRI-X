@@ -2,12 +2,12 @@ package rules
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
 	"github.com/fujiwarashigure/ATRI-X/internal/llm"
 	"github.com/fujiwarashigure/ATRI-X/internal/tool"
-	"encoding/base64"
-	"fmt"
 	"reflect"
 	"strings"
 	"testing"

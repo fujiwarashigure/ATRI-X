@@ -18,7 +18,7 @@ const DefaultRetentionDays = 30
 type Manager struct {
 	runtime       *slog.Logger
 	audit         *slog.Logger
-	atrinis         *slog.Logger
+	atrinis       *slog.Logger
 	logDir        string
 	retentionDays int
 	writers       []*dailyFileWriter

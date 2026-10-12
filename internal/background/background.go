@@ -11,7 +11,7 @@ import (
 type Kind string
 
 const (
-	KindCron  Kind = "cron"
+	KindCron    Kind = "cron"
 	KindAtrinis Kind = "atrinis"
 )
 

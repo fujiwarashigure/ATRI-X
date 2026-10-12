@@ -3,6 +3,7 @@ package agent
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"github.com/fujiwarashigure/ATRI-X/internal/config"
 	"github.com/fujiwarashigure/ATRI-X/internal/delivery"
 	"github.com/fujiwarashigure/ATRI-X/internal/hook"
@@ -12,7 +13,6 @@ import (
 	"github.com/fujiwarashigure/ATRI-X/internal/session"
 	"github.com/fujiwarashigure/ATRI-X/internal/storage"
 	"github.com/fujiwarashigure/ATRI-X/internal/turn"
-	"fmt"
 	"io"
 	"log/slog"
 	"net/http"

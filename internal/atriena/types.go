@@ -26,23 +26,23 @@ const (
 )
 
 type Request struct {
-	Version       string                          `json:"version"`
-	Atriwisp        Atriwisp                          `json:"atriwisp"`
-	Source        string                          `json:"source"`
-	ID            string                          `json:"id"`
-	CreatedAt     string                          `json:"created_at"`
-	Mode          string                          `json:"mode"`
-	Title         string                          `json:"title"`
-	Format        string                          `json:"format"`
-	Content       string                          `json:"content"`
-	ModelSlot     string                          `json:"model_slot"`
-	SessionMode   string                          `json:"session_mode"`
-	ToolListNames []string                        `json:"tool_list_names"`
+	Version       string                            `json:"version"`
+	Atriwisp      Atriwisp                          `json:"atriwisp"`
+	Source        string                            `json:"source"`
+	ID            string                            `json:"id"`
+	CreatedAt     string                            `json:"created_at"`
+	Mode          string                            `json:"mode"`
+	Title         string                            `json:"title"`
+	Format        string                            `json:"format"`
+	Content       string                            `json:"content"`
+	ModelSlot     string                            `json:"model_slot"`
+	SessionMode   string                            `json:"session_mode"`
+	ToolListNames []string                          `json:"tool_list_names"`
 	Tools         []toolrun.AtriwispToolDeclaration `json:"tools"`
-	Segments      []Segment                       `json:"segments,omitempty"`
-	Targets       []Target                        `json:"targets"`
-	Calls         []Call                          `json:"calls,omitempty"`
-	Meta          map[string]any                  `json:"meta"`
+	Segments      []Segment                         `json:"segments,omitempty"`
+	Targets       []Target                          `json:"targets"`
+	Calls         []Call                            `json:"calls,omitempty"`
+	Meta          map[string]any                    `json:"meta"`
 }
 
 type Atriwisp struct {

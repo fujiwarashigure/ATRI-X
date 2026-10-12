@@ -998,7 +998,7 @@ func (s fakeCronStore) MediaReferences() storage.MediaReferenceRepository  { ret
 func (s fakeCronStore) ContextSummaries() storage.ContextSummaryRepository { return nil }
 func (s fakeCronStore) ToolCalls() storage.ToolCallRepository              { return nil }
 func (s fakeCronStore) CronJobs() storage.CronJobRepository                { return s.cron }
-func (s fakeCronStore) AtrinisEvents() storage.AtrinisEventRepository          { return nil }
+func (s fakeCronStore) AtrinisEvents() storage.AtrinisEventRepository      { return nil }
 func (s fakeCronStore) Close() error                                       { return nil }
 
 type fakeCronRunner struct {

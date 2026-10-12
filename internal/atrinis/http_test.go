@@ -111,14 +111,14 @@ func TestAtrinisHTTPPreservesRoutesAuthAndBodyLimit(t *testing.T) {
 
 func validHTTPEvent(id string) map[string]any {
 	return map[string]any{
-		"version": "atriena.v2",
-		"atriwisp":  map[string]any{"name": "watcher", "tags": []string{"test"}},
-		"source":  "http-test",
-		"id":      id,
-		"mode":    "record",
-		"format":  "text",
-		"content": "hello",
-		"targets": []map[string]any{{"platform": "cli"}},
+		"version":  "atriena.v2",
+		"atriwisp": map[string]any{"name": "watcher", "tags": []string{"test"}},
+		"source":   "http-test",
+		"id":       id,
+		"mode":     "record",
+		"format":   "text",
+		"content":  "hello",
+		"targets":  []map[string]any{{"platform": "cli"}},
 	}
 }
 
