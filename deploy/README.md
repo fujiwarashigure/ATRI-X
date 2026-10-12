@@ -17,6 +17,59 @@ ATRI-X 是单实例、有状态（SQLite + 本地文件）服务，**只允许 1
 
 ---
 
+## 改名迁移：从 elbot_mk.2 到 ATRI-X（已有部署必读）
+
+本项目已从 `elbot_mk.2` 整体改名为 **ATRI-X**，仓库地址变为 <https://github.com/fujiwarashigure/ATRI-X>。
+**代码不提供旧名兼容回退**：启动时不会去读旧目录、旧文件名或旧环境变量，名字对不上就是"配置丢失 / 数据为空"。
+升级已有部署之前，先按下表把名字改过来。
+
+| 类别 | 旧名 | 新名 |
+| --- | --- | --- |
+| 二进制 / 镜像 | `elbot`、`elbot:0.6.8` | `atri-x`、`atri-x:0.6.8` |
+| systemd 单元 / 脚本 / Nginx 片段 | `elbot.service`、`elbot-watchdog.{sh,service,timer}`、`nginx-elbot.conf` | `atri-x.service`、`atri-x-watchdog.{sh,service,timer}`、`nginx-atri-x.conf` |
+| 环境变量前缀 | `ELBOT_*`（`ELBOT_OPS_TOKEN`、`ELBOT_IMAGE`、`ELBOT_CLI_*`、`ELBOT_HEALTH_*`、`ELBOT_S3_*` …） | `ATRIX_*`（`_` 之后的部分不变） |
+| 配置目录 | `/data/config/elbot/`、`~/.config/elbot/`、`%APPDATA%\ElBot\data\` | `/data/config/atri-x/`、`~/.config/atri-x/`、`%APPDATA%\ATRI-X\data\` |
+| 数据目录 | `/data/elbot/`、`~/.local/share/elbot/` | `/data/atri-x/`、`~/.local/share/atri-x/` |
+| 数据文件 | `elbot_sessions.db`、`elbot_chat_history.db` | `atrix_sessions.db`、`atrix_chat_history.db` |
+| 运行时文件 | `/data/run/elbot/elbot.pid`、`…/last_restart_reason` | `/data/run/atri-x/atri-x.pid`、`…/last_restart_reason` |
+| 运维接口请求头 | `X-Elbot-Ops-Token` | `X-Atrix-Ops-Token` |
+| 子系统 | `Elnis`、`Elwisp`、`Elvena`、`ELyph`（`SKILL.elyph`）、`EL Skill` | `Atrinis`、`Atriwisp`、`Atriena`、`Atriyph`（`SKILL.atriyph`）、`ATRI-X Skill` |
+| 配置文件名 / 配置节 / 模型槽位 | `elnis.toml`、`[elnis]`、`elwisp1`–`elwisp3` | `atrinis.toml`、`[atrinis]`、`atriwisp1`–`atriwisp3` |
+| 内置 skill / 工具名 | `write_elbot_hook/`、`ELBOT_SKILL.toml`、`create_el_skill` / `read_el_skill` / `modify_el_skill` / `finalize_el_skill` | `write_atrix_hook/`、`ATRIX_SKILL.toml`、`create_atrix_skill` / `read_atrix_skill` / `modify_atrix_skill` / `finalize_atrix_skill` |
+
+Docker 部署（在服务器上执行，路径按你的实际部署位置调整；先停容器，避免边写 SQLite 边改名）：
+
+```bash
+cd /opt/elbot && docker compose -f deploy/docker-compose.yml down
+
+git remote set-url origin https://github.com/fujiwarashigure/ATRI-X.git
+git fetch origin && git checkout main && git pull --ff-only
+
+D=deploy/data
+mv "$D/config/elbot" "$D/config/atri-x"                                  # 配置目录
+mv "$D/elbot"        "$D/atri-x"                                         # 运行数据目录
+mv "$D/config/atri-x/elbot_sessions.db"     "$D/config/atri-x/atrix_sessions.db"
+mv "$D/config/atri-x/elbot_chat_history.db" "$D/config/atri-x/atrix_chat_history.db"
+mv "$D/run/elbot"    "$D/run/atri-x"                                     # PID / 重启原因
+
+sed -i 's/\bELBOT_/ATRIX_/g'            deploy/.env                      # 环境变量前缀
+sed -i 's/\belbot:/atri-x:/g'           deploy/.env                      # 默认镜像名
+sed -i 's/X-Elbot-Ops-Token/X-Atrix-Ops-Token/g' deploy/.env deploy/docker-compose.yml
+```
+
+> 迁移时最容易漏的不是数据目录，而是**名字散落在多处**：`.env`、`docker-compose.yml` 的 `environment:`、
+> systemd 单元的 `Environment=` / `EnvironmentFile=` / `User=`，以及宝塔计划任务里手写的请求头。
+> 漏一处通常不会报错，而是静默失效（例如带 `X-Elbot-Ops-Token` 的探活被当成无鉴权请求而 401）。
+
+- **原生 systemd 部署**：把 `/opt/elbot` 整个改名成 `/opt/atri-x`，再重新安装 `atri-x.service` 与
+  `atri-x-watchdog.{service,timer}`（旧单元里的 `User=elbot`、`ExecStart=/opt/elbot/...` 都要跟着变）。
+- **Windows 本地容器部署**：数据在 `%APPDATA%\ElBot\data\`，改名到 `%APPDATA%\ATRI-X\data\` 后同样要改两个
+  `.db` 文件名；计划任务名已从 `ElBot-Docker` 变成 `ATRI-X-Docker`，重新执行 `deploy/windows/atri-x.ps1 init`
+  会注册新任务名，旧的 `ElBot-Docker` 任务需要手动删除（`Unregister-ScheduledTask -TaskName ElBot-Docker`）。
+- **宝塔 Nginx 反代**：片段文件名与内容都换成 `deploy/nginx-atri-x.conf`，站点配置里的 `include` 路径要一起改。
+
+---
+
 ## 0. 目录说明
 
 ```
